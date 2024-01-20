@@ -9,12 +9,17 @@
                 <select></select>
                 <canvas ref="myCanvas"></canvas>
                 <div class="sliders">
-                    <input type="range" v-model="wave.amplitude" placeholder="amplitude" @change="paintWave(w)">
-                    <input type="range" v-model="wave.frecuency" placeholder="frecuency" @dragleave="paintWave(w)">
+                    <!-- <input 
+                    type="range"
+                    v-model="wave.amplitude"
+                    @input="paintWave(wave)">
+                    <label>{{ wave.amplitude }}</label> -->
+
+                    <input type="range" v-model="wave.frequency" placeholder="frecuency" @input="paintWave(wave), emit('updateWave')">
+                    <label>{{ wave.frequency }}</label>
                 </div>
             </div>
         </div>
-        <button @click="paintWave(wave,context)">paint</button>
     </div>
 </template>
 
@@ -31,7 +36,6 @@ let amp = ref(2);
 
 
 function paintWave(w,ctx=context){
-    console.log(w);
     let cWidth = ctx.canvas.width;
     let cHeight = ctx.canvas.height;
     let middle = cHeight/2;
@@ -42,19 +46,24 @@ function paintWave(w,ctx=context){
     let points = w.calculatePoints(cWidth);
     for(let x=0; x<cWidth; x++){
         ctx.lineTo(x, (middle + points[x]));
-        console.log(middle + points[x]);
+        // console.log(middle + points[x]);
     }
     ctx.stroke();
 }
 
 onMounted(()=>{
     context = myCanvas.value.getContext("2d");
-    paintWave();
+    paintWave(props.wave, context);
 })
 
 </script>
 
 <style scoped>
+
+    input[type=checkbox]{
+        border-radius: 10px;
+    }
+
     .waveCard{
         border-radius:5px;
         display: grid;
@@ -67,7 +76,7 @@ onMounted(()=>{
         max-width:500px;
 
         gap:10px;
-        padding:10px;
+        padding:15px 30px;
         /* padding:15px 20px; */
         /* margin:10px; */
     }
@@ -75,13 +84,13 @@ onMounted(()=>{
     .centerCol{
         display: flex;
         flex-direction: column;
-        gap:2px;
+        gap:10px;
     }
 
     canvas{
         background-color: rgb(78, 78, 78);
         width: 100%;
-        height:100%;
+        /* height:100%; */
     }
 
     .sliders{

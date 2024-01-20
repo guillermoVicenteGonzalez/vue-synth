@@ -6,9 +6,14 @@ module.exports = {
   'extends': [
     'plugin:vue/vue3-essential',
     'eslint:recommended',
-    '@vue/eslint-config-prettier/skip-formatting'
+    '@vue/eslint-config-prettier/skip-formatting',
   ],
   parserOptions: {
     ecmaVersion: 'latest'
+  },
+  rules:{
+    "vue/no-mutating-props": ["error", {
+      "shallowOnly": true
+    }]
   }
 }
