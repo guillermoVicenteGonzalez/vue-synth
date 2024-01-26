@@ -32,6 +32,7 @@
 
         display: grid;
         grid-template-rows:1fr 9fr 1.5fr;
+        grid-auto-flow: row;
     }
 
     .cardBody{

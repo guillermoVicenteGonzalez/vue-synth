@@ -11,9 +11,16 @@
                 :wave="wave"></WaveCanvas>
                 <div class="sliders">
                     <input type="range" 
+                    min="1"
+                    max="500"
                     v-model="wave.frequency" placeholder="frecuency" 
                     @input="emit('updateWave')">
                     <label>{{ wave.frequency }}</label>
+
+                    <input type="range" 
+                    v-model="wave.amplitude" placeholder="frecuency" 
+                    @input="emit('updateWave')">
+                    <label>{{ wave.amplitude }}</label>
                 </div>
             </div>
         </div>
@@ -76,6 +83,7 @@ let frames = 0;
     .sliders{
         /* padding:10px; */
         display: flex;
+        flex-direction: column;
         justify-content: space-around;
     }
 

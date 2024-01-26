@@ -19,14 +19,12 @@
                 
                 <template v-slot:actions>
                     <button class="btn"
-                    @click="playSound(mainWavePoints,440000)"
+                    @click="playSound(waves)"
                     >play sound</button>
                 </template>
             </GCard>
 
-            <button
-            @click="playSound(mainWavePoints,440000)"
-            >play sound</button>
+
         </section>
 
 
@@ -53,16 +51,22 @@ function onWaveUpdated(){
     // paintMainWave(waves.value, context);
 }
 
-function playSound(points,sampleRate=440){
-    console.log(points)
-    const audioContext = new AudioContext({sampleRate});
-    const audioBuffer = audioContext.createBuffer(1,points.length,sampleRate);
-    audioBuffer.copyToChannel(points,0);
 
-    const source = audioContext.createBufferSource();
-    source.connect(audioContext.destination);
-    source.buffer = audioBuffer;
-    source.start();
+function playSound(waves){
+    let audioContext = new AudioContext();
+    let oscillators = [];
+    let merger = audioContext.createChannelMerger(waves.length);
+    merger.connect(audioContext.destination)
+
+    for(let i=0; i<waves.length;i++){
+        let tempOsc = audioContext.createOscillator();
+        tempOsc.type = "sine";
+        tempOsc.frequency.value = waves[i].frequency;
+        tempOsc.connect(merger,0,i);
+        tempOsc.start();
+        oscillators.push(tempOsc);
+    }
+    // let audioContext =Ç
 }
 
 onMounted(()=>{
@@ -76,6 +80,7 @@ onMounted(()=>{
         width:100vw;
         height:100vh;
         display: grid;
+        grid-auto-flow: row;
         grid-template-columns:2fr 5fr 2fr;
     }
 
