@@ -2,11 +2,6 @@
     <div class="layout">
         <div class="leftControls">
             <div class="waveCardList">
-                <!-- <WaveDisplaVue 
-                @update-wave="onWaveUpdated"
-                v-for="(wave, index) in waves"
-                :key=index
-                :wave="wave"></WaveDisplaVue> -->
                 <waveList
                 :waves=waves
                 @refresh-waves="onWaveUpdated"></waveList>
@@ -16,10 +11,17 @@
         </div>
 
         <section class="mainSection">
-            <!-- <canvas id="mainCanvas" ref="mainCanvas"></canvas> -->
             <GCard>
-                <MainCanvas
-                :waves="waves"></MainCanvas>
+                <template v-slot:body>
+                    <MainCanvas
+                    :waves="waves"></MainCanvas>
+                </template>
+                
+                <template v-slot:actions>
+                    <button class="btn"
+                    @click="playSound(mainWavePoints,440000)"
+                    >play sound</button>
+                </template>
             </GCard>
 
             <button
