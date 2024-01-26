@@ -6,16 +6,12 @@
             </div>
 
             <div class="centerCol">
-                <select></select>
+                <select placeholder="waveform"></select>
                 <canvas ref="myCanvas"></canvas>
                 <div class="sliders">
-                    <!-- <input 
-                    type="range"
-                    v-model="wave.amplitude"
-                    @input="paintWave(wave)">
-                    <label>{{ wave.amplitude }}</label> -->
-
-                    <input type="range" v-model="wave.frequency" placeholder="frecuency" @input="paintWave(wave), emit('updateWave')">
+                    <input type="range" 
+                    v-model="wave.frequency" placeholder="frecuency" 
+                    @input="paintWave(wave), emit('updateWave')">
                     <label>{{ wave.frequency }}</label>
                 </div>
             </div>
@@ -33,9 +29,10 @@ const emit = defineEmits(["updateWave"]);
 const myCanvas = ref();
 let context;
 let amp = ref(2);
+let frames = 0;
 
 
-function paintWave(w,ctx=context){
+function paintWave(w,ctx=context, step=0){
     let cWidth = ctx.canvas.width;
     let cHeight = ctx.canvas.height;
     let middle = cHeight/2;
@@ -43,7 +40,7 @@ function paintWave(w,ctx=context){
     ctx.clearRect(0, 0, cWidth, cHeight);
     ctx.beginPath();
     
-    let points = w.calculatePoints(cWidth);
+    let points = w.calculatePoints(cWidth,step);
     for(let x=0; x<cWidth; x++){
         ctx.lineTo(x, (middle + points[x]));
         // console.log(middle + points[x]);
@@ -51,29 +48,45 @@ function paintWave(w,ctx=context){
     ctx.stroke();
 }
 
+
+function animateWave(){
+    console.log("animation")
+    frames += 0.2;
+    let ctx = myCanvas.value.getContext("2d");
+    let cWidth = ctx.canvas.width;
+    let cHeight = ctx.canvas.height;
+    // ctx.clearRect(0, 0, cWidth, cHeight);
+    paintWave(props.wave,ctx,frames);
+
+    window.requestAnimationFrame(animateWave)
+}
+
 onMounted(()=>{
     context = myCanvas.value.getContext("2d");
-    paintWave(props.wave, context);
+    // paintWave(props.wave, context,1);
+    requestAnimationFrame(animateWave);
+    emit("updateWave")
 })
 
 </script>
 
 <style scoped>
 
+
     input[type=checkbox]{
         border-radius: 10px;
     }
 
     .waveCard{
-        border-radius:5px;
+        border-radius:20px;
         display: grid;
         background-color:var(--card-color);
-        grid-template-columns:1fr 5fr;
+        grid-template-columns:1fr 8fr 1fr;
         width:100%;
         height:fit-content;
 
         max-height: 300px;
-        max-width:500px;
+        /* max-width:400px; */
 
         gap:10px;
         padding:15px 30px;
@@ -88,7 +101,8 @@ onMounted(()=>{
     }
 
     canvas{
-        background-color: rgb(78, 78, 78);
+        border-radius:10px;
+        background-color: var(--canvas-bg);
         width: 100%;
         /* height:100%; */
     }

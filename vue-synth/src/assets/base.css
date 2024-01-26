@@ -19,10 +19,6 @@
   --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
   --vt-c-text-dark-1: var(--vt-c-white);
   --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
-
-  --bg-default:#fff;
-  --card-color:#c2c2c2;
-  --card-detail:#696969;
 }
 
 /* semantic color variables for this project */
@@ -38,7 +34,13 @@
   --color-text: var(--vt-c-text-light-1);
 
   --section-gap: 160px;
+
+  --bg-default:#fff;
+  --card-color:#cdcdcd;
+  --card-detail:#696969;
+  --canvas-bg:#fff;
 }
+
 
 @media (prefers-color-scheme: dark) {
   :root {

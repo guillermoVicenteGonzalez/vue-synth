@@ -1,17 +1,10 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import {RouterView } from 'vue-router'
 </script>
 
 <template>
-  <div class="esto">
+  <div>
     <RouterView />
   </div>
 </template>
 
-<style scoped>
-  .esto{
-    /* min-width: 100%; */
-    /* min-height: 100%; */
-    /* background-color: blue; */
-  }
-</style>
