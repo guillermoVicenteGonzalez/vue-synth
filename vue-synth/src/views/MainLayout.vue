@@ -16,7 +16,12 @@
         </div>
 
         <section class="mainSection">
-            <canvas id="mainCanvas" ref="mainCanvas"></canvas>
+            <!-- <canvas id="mainCanvas" ref="mainCanvas"></canvas> -->
+            <GCard>
+                <MainCanvas
+                :waves="waves"></MainCanvas>
+            </GCard>
+
             <button
             @click="playSound(mainWavePoints,440000)"
             >play sound</button>
@@ -31,58 +36,11 @@ import { onMounted, ref } from 'vue';
 import WaveDisplaVue from "../components/WaveDisplay.vue"
 import {Wave} from "../models/wave"
 import waveList from "@/components/WaveList.vue"
+import MainCanvas from '@/components/MainCanvas.vue';
+import GCard from '@/components/GCard.vue';
 
-let mainCanvas = ref();
-let context;
 let waves = ref([]);
 let mainWavePoints = ref([]);
-
-function addWaves(w1,w2){
-    let nAmp = w1.amplitude;
-    let nFrec = 2 * Math.cos((w1.frequency + w2.frequency)/2) * Math.sin((w1.frequency + w2.frequency)/2);
-    console.log(nFrec)
-    nFrec = Math.asin(nFrec)
-    console.log(nFrec)
-
-    return new Wave(nAmp,nFrec,0);
-}
-
-
-// function generateMainWavePoints(waves,length){
-//     let points = [];
-//     for(let x=0;x<length; x++){
-//         let y = 0;
-//         waves.forEach(wave => {
-//             y += wave.amplitude * Math.sin(x * wave.getAngFrec()/length);
-//         });
-//         points.push(y);
-//     }
-
-//     console.log(points)
-//     return points;
-// }
-
-function paintMainWave(waves, ctx, phase=0){
-    console.log(waves)
-    let points = []
-    let height = ctx.canvas.height;
-    let length = ctx.canvas.width;
-    let middle = height/2;
-    ctx.clearRect(0, 0, length, height);
-    ctx.beginPath();
-    
-    for(let x=0;x<length; x++){
-        let y = 0;
-        waves.forEach(wave => {
-            y += wave.amplitude * Math.sin(x * wave.getAngFrec()/length);
-        });
-        ctx.lineTo(x,(middle + y));
-        mainWavePoints.value.push(y);
-    }
-    //desde 0 hasta longitud del canvas
-        //desde 0 hasta numero de ondas
-    ctx.stroke();
-}
 
 function createNewWave(){
     let wave = new Wave(50,1,0);
@@ -90,8 +48,7 @@ function createNewWave(){
 }
 
 function onWaveUpdated(){
-    paintMainWave(waves.value, context);
-
+    // paintMainWave(waves.value, context);
 }
 
 function playSound(points,sampleRate=440){
@@ -107,8 +64,8 @@ function playSound(points,sampleRate=440){
 }
 
 onMounted(()=>{
-    context = mainCanvas.value.getContext("2d");
-    context.width = 600;
+    // context = mainCanvas.value.getContext("2d");
+    // context.width = 600;
 })
 </script>
 

@@ -7,11 +7,12 @@
 
             <div class="centerCol">
                 <select placeholder="waveform"></select>
-                <canvas ref="myCanvas"></canvas>
+                <WaveCanvas
+                :wave="wave"></WaveCanvas>
                 <div class="sliders">
                     <input type="range" 
                     v-model="wave.frequency" placeholder="frecuency" 
-                    @input="paintWave(wave), emit('updateWave')">
+                    @input="emit('updateWave')">
                     <label>{{ wave.frequency }}</label>
                 </div>
             </div>
@@ -22,6 +23,7 @@
 <script setup>
 import {onMounted, ref} from "vue"
 import { Wave } from "../models/wave";
+import WaveCanvas from "@/components/WaveCanvas.vue";
 
 const props = defineProps(["wave"]);
 const emit = defineEmits(["updateWave"]);
@@ -31,42 +33,6 @@ let context;
 let amp = ref(2);
 let frames = 0;
 
-
-function paintWave(w,ctx=context, step=0){
-    let cWidth = ctx.canvas.width;
-    let cHeight = ctx.canvas.height;
-    let middle = cHeight/2;
-
-    ctx.clearRect(0, 0, cWidth, cHeight);
-    ctx.beginPath();
-    
-    let points = w.calculatePoints(cWidth,step);
-    for(let x=0; x<cWidth; x++){
-        ctx.lineTo(x, (middle + points[x]));
-        // console.log(middle + points[x]);
-    }
-    ctx.stroke();
-}
-
-
-function animateWave(){
-    console.log("animation")
-    frames += 0.2;
-    let ctx = myCanvas.value.getContext("2d");
-    let cWidth = ctx.canvas.width;
-    let cHeight = ctx.canvas.height;
-    // ctx.clearRect(0, 0, cWidth, cHeight);
-    paintWave(props.wave,ctx,frames);
-
-    window.requestAnimationFrame(animateWave)
-}
-
-onMounted(()=>{
-    context = myCanvas.value.getContext("2d");
-    // paintWave(props.wave, context,1);
-    requestAnimationFrame(animateWave);
-    emit("updateWave")
-})
 
 </script>
 
