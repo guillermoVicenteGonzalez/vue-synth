@@ -41,9 +41,24 @@ import GCard from '@/components/GCard.vue';
 
 let waves = ref([]);
 let mainWavePoints = ref([]);
+let isPlaying = false
+let audioContext 
+let merger 
+
+function deleteWaveCB(){
+
+}
 
 function createNewWave(){
     let wave = new Wave(50,1,0);
+    let oscillator = audioContext.createOscillator();
+    oscillator.type = "sine";
+    
+    let waveStructure= {
+        wave:wave,
+        ignore:false,
+        oscillator:undefined
+    };
     waves.value.push(wave);
 }
 
@@ -53,25 +68,30 @@ function onWaveUpdated(){
 
 
 function playSound(waves){
-    let audioContext = new AudioContext();
-    let oscillators = [];
-    let merger = audioContext.createChannelMerger(waves.length);
-    merger.connect(audioContext.destination)
+    if(!isPlaying){
+        isPlaying = true;
+        let audioContext = new AudioContext();
+        let oscillators = [];
+        let merger = audioContext.createChannelMerger(waves.length);
+        merger.connect(audioContext.destination)
 
-    for(let i=0; i<waves.length;i++){
-        let tempOsc = audioContext.createOscillator();
-        tempOsc.type = "sine";
-        tempOsc.frequency.value = waves[i].frequency;
-        tempOsc.connect(merger,0,i);
-        tempOsc.start();
-        oscillators.push(tempOsc);
+        for(let i=0; i < waves.length;i++){
+            let tempOsc = audioContext.createOscillator();
+            tempOsc.type = "sine";
+            tempOsc.frequency.value = waves[i].frequency;
+            tempOsc.connect(merger,0,i);
+            tempOsc.start();
+            oscillators.push(tempOsc);
+        }
+    }else{
+        isPlaying = false
     }
-    // let audioContext =Ç
 }
 
 onMounted(()=>{
-    // context = mainCanvas.value.getContext("2d");
-    // context.width = 600;
+    audioContext = new AudioContext();
+    merger = audioContext.createChannelMerger(10);
+    merger.connect(audioContext.destination)
 })
 </script>
 
@@ -81,7 +101,7 @@ onMounted(()=>{
         height:100vh;
         display: grid;
         grid-auto-flow: row;
-        grid-template-columns:2fr 5fr 2fr;
+        grid-template-columns:3.5fr 6.5fr;
     }
 
 

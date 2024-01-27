@@ -1,5 +1,6 @@
 <template>
-    <canvas ref="myCanvas"></canvas>
+    <canvas
+    ref="myCanvas"></canvas>
 </template>
 
 <script setup>
@@ -20,6 +21,10 @@ const props = defineProps({
 const emit = defineEmits("updateWave");
 
 function paintWave(w, ctx=context, step=0){
+    if(w == undefined){
+        return false;
+    }
+
     let cWidth = ctx.canvas.width;
     let cHeight = ctx.canvas.height;
     let middle = cHeight/2;
@@ -35,6 +40,10 @@ function paintWave(w, ctx=context, step=0){
 }
 
 function animateWave(){
+    if(myCanvas.value == undefined){
+        return false;
+    }
+
     frames += 0.1;
     let ctx = myCanvas.value.getContext("2d");
     paintWave(props.wave, ctx, frames);
@@ -53,5 +62,6 @@ onMounted(() => {
     canvas{
         width: 100%;
         height: 100%;
+        object-fit: contain;
     }
 </style>
