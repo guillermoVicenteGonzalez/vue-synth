@@ -71,7 +71,7 @@ function onFrequencyChangeCB(){
 }
 
 onMounted(()=>{
-    audioContext = new AudioContext;
+    audioContext = new AudioContext();
     audioContext.suspend();
     oscillator = audioContext.createOscillator();
     oscillator.type = "sine";
