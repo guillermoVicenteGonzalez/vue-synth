@@ -4,6 +4,7 @@
             <div class="waveCardList">
                 <waveList
                 :waves=waves
+                @waveDeleted="deleteWaveCB"
                 @refresh-waves="onWaveUpdated"></waveList>
             </div>
 
@@ -44,14 +45,16 @@ import PauseIcon from 'vue-material-design-icons/Pause.vue';
 import PlayIcon from 'vue-material-design-icons/Play.vue';
 
 let waves = ref([]);
-let mainWavePoints = ref([]);
 let isPlaying = ref(false);
 let audioContext 
 let merger 
 let oscillators = []
 
-function deleteWaveCB(){
-
+function deleteWaveCB(index){
+    oscillators[index].stop();
+    oscillators.splice(index,1);
+    console.log(oscillators);
+    updateOscillators(oscillators,waves.value);
 }
 
 function createNewWave(){
@@ -66,6 +69,7 @@ function createNewWave(){
     oscillators.push(tempOsc);
     updateOscillators(oscillators,waves.value);
 }
+
 
 
 function updateOscillators(osc,waves){
@@ -90,9 +94,6 @@ function onWaveUpdated(){
     updateOscillators(oscillators, waves.value);
 }
 
-function onWaveDeletedCB(){
-
-}
 
 // onBeforeMount(() => {
 //     audioContext = new AudioContext();
