@@ -19,8 +19,11 @@
                 
                 <template v-slot:actions>
                     <button class="btn"
-                    @click="playSound(waves)"
-                    >play sound</button>
+                    @click="playSound()"
+                    >
+                    <PauseIcon v-if="isPlaying"></PauseIcon>
+                    <PlayIcon v-else></PlayIcon>
+                    </button>
                 </template>
             </GCard>
 
@@ -33,17 +36,19 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import WaveDisplaVue from "../components/WaveDisplay.vue"
 import {Wave} from "../models/wave"
 import waveList from "@/components/WaveList.vue"
 import MainCanvas from '@/components/MainCanvas.vue';
 import GCard from '@/components/GCard.vue';
+import PauseIcon from 'vue-material-design-icons/Pause.vue';
+import PlayIcon from 'vue-material-design-icons/Play.vue';
 
 let waves = ref([]);
 let mainWavePoints = ref([]);
-let isPlaying = false
+let isPlaying = ref(false);
 let audioContext 
 let merger 
+let oscillators = []
 
 function deleteWaveCB(){
 
@@ -51,47 +56,55 @@ function deleteWaveCB(){
 
 function createNewWave(){
     let wave = new Wave(50,1,0);
-    let oscillator = audioContext.createOscillator();
-    oscillator.type = "sine";
-    
-    let waveStructure= {
-        wave:wave,
-        ignore:false,
-        oscillator:undefined
-    };
     waves.value.push(wave);
+
+    let tempOsc = audioContext.createOscillator();
+    tempOsc.frequency.value = wave.getFrequency();
+    tempOsc.connect(merger, 0,oscillators.length + 1);
+    tempOsc.start();
+    oscillators.push(tempOsc);
+    updateOscillators(oscillators,waves.value);
 }
+
+
+function updateOscillators(osc,waves){
+    waves.forEach((wave, index) => {
+        osc[index].frequency.value = wave.getFrequency();
+        console.log(osc[index].frequency.value)
+    });
+}
+
+
+function playSound(){
+    isPlaying.value ? audioContext.suspend():audioContext.resume();
+    isPlaying.value = !isPlaying.value
+}
+
+/**
+ * EVENT CALLBACKS
+ */
 
 function onWaveUpdated(){
-    // paintMainWave(waves.value, context);
+    updateOscillators(oscillators, waves.value);
 }
 
+function onWaveDeletedCB(){
 
-function playSound(waves){
-    if(!isPlaying){
-        isPlaying = true;
-        let audioContext = new AudioContext();
-        let oscillators = [];
-        let merger = audioContext.createChannelMerger(waves.length);
-        merger.connect(audioContext.destination)
-
-        for(let i=0; i < waves.length;i++){
-            let tempOsc = audioContext.createOscillator();
-            tempOsc.type = "sine";
-            tempOsc.frequency.value = waves[i].frequency;
-            tempOsc.connect(merger,0,i);
-            tempOsc.start();
-            oscillators.push(tempOsc);
-        }
-    }else{
-        isPlaying = false
-    }
 }
+
+// onBeforeMount(() => {
+//     audioContext = new AudioContext();
+//     merger = audioContext.createChannelMerger(10);
+//     merger.connect(audioContext.destination)
+// }),
+
 
 onMounted(()=>{
     audioContext = new AudioContext();
+    audioContext.suspend();
     merger = audioContext.createChannelMerger(10);
     merger.connect(audioContext.destination)
+
 })
 </script>
 

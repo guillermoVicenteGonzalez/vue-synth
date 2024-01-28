@@ -18,11 +18,11 @@
                     min="1"
                     max="500"
                     v-model="wave.frequency" placeholder="frecuency" 
-                    @input="updateOscillator">
+                    @input="onFrequencyChangeCB">
                     <label>Frec: {{ wave.frequency }}</label>
 
                     <input type="range" 
-                    v-model="wave.amplitude" placeholder="frecuency" 
+                    v-model="wave.amplitude" placeholder="amplitude" 
                     @input="emit('updateWave')">
                     <label>Amp: {{ wave.amplitude }}</label>
                 </div>
@@ -32,7 +32,7 @@
                 <button
                 class="icon-btn"
                 @click="playWaveBtn">
-                    <pause-icon size="30" class="icon" v-if="isPlaying"/>
+                    <pause-icon :size="30" class="icon" v-if="isPlaying"/>
                     <play-icon :size="30" class="icon" v-else/>
                 </button>
             </div>
@@ -56,25 +56,28 @@ let oscillator;
 let isPlaying = ref(false);
 
 function playWaveBtn(){
-    if(!isPlaying.value){
-        isPlaying.value = true;
-        oscillator.start();
-    }else{
-        isPlaying.value = false;
-        oscillator.stop();
-    }
+    isPlaying.value ? audioContext.suspend():audioContext.resume();
+    isPlaying.value = !isPlaying.value
 }
 
 function updateOscillator(){
+    console.log("i'm updating")
     oscillator.frequency.value = props.wave.getFrequency();
+}
+
+function onFrequencyChangeCB(){
+    updateOscillator();
+    emit("updateWave")
 }
 
 onMounted(()=>{
     audioContext = new AudioContext;
+    audioContext.suspend();
     oscillator = audioContext.createOscillator();
     oscillator.type = "sine";
     oscillator.frequency.value = props.wave.getFrequency();
-    oscillator.connect(audioContext.destination)
+    oscillator.connect(audioContext.destination);
+    oscillator.start();
 })
 </script>
 

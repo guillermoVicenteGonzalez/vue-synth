@@ -19,10 +19,11 @@ const props = defineProps({
     }
 });
 
-const emit = defineEmits(["refreshWaves"])
+const emit = defineEmits(["refreshWaves","waveDeleted"])
 
 function onWaveDeletedCB(index){
     props.waves.splice(index,1);
+    emit("waveDeleted",index)
 }
 
 function onWaveUpdatedCB(){
