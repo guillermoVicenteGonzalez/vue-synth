@@ -44,15 +44,11 @@ import PauseIcon from 'vue-material-design-icons/Pause.vue';
 import PlayIcon from 'vue-material-design-icons/Play.vue';
 
 let waves = ref([]);
-let mainWavePoints = ref([]);
 let isPlaying = ref(false);
 let audioContext 
 let merger 
 let oscillators = []
 
-function deleteWaveCB(){
-
-}
 
 function createNewWave(){
     let wave = new Wave(50,1,0);
@@ -90,15 +86,6 @@ function onWaveUpdated(){
     updateOscillators(oscillators, waves.value);
 }
 
-function onWaveDeletedCB(){
-
-}
-
-// onBeforeMount(() => {
-//     audioContext = new AudioContext();
-//     merger = audioContext.createChannelMerger(10);
-//     merger.connect(audioContext.destination)
-// }),
 
 
 onMounted(()=>{

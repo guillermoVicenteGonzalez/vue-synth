@@ -12,7 +12,13 @@ export class Wave{
                 return this.generateSinWave(length, step);
 
             case "square":
-                return this.generateSquareWave(length,step)
+                return this.generateSquareWave(length,step);
+
+            case "triangle":
+                return this.generateTriangleWave(length,step);
+
+            case "sawtooth":
+                return this.generateSawToothWave(length,step);
         }
     }
     generateSinWave(length=100,step=0){
@@ -38,6 +44,32 @@ export class Wave{
             y =  this.amplitude * Math.sign(Math.sin(x * angFrec + step)); // + height/2
             // y = Math.sign(y);
             points.push(y)
+        }
+
+        return points;
+    }
+
+    generateTriangleWave(length, step){
+        let points = [];
+        let y;
+        let angFrec = (this.frequency * 2 * Math.PI) / length;
+        
+        for(let x=0; x<length; x++){
+            y = (2 * this.amplitude /Math.PI) * Math.asin(Math.sin(angFrec * x + step));
+            points.push(y);
+        }
+
+        return points
+    }
+
+    generateSawToothWave(length,step){
+        let points = [];
+        let y;
+        let angFrec = (this.frequency * 2 * Math.PI) / length;
+
+        for(let x=0; x<length; x++){
+            y = (this.amplitude * (0.5 - (1/Math.PI))) * (Math.pow(-1,x) * ( (Math.sin(angFrec * x + step))/ x ));
+            points.push(y);
         }
 
         return points;

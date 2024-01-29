@@ -58,7 +58,7 @@ import GSelector from "./GSelector.vue";
 const props = defineProps(["wave","dense"]);
 const emit = defineEmits(["updateWave","waveDeleted"]);
 
-let waveForms = ["sine","square","triangle"];
+let waveForms = ["sine","square","triangle","sawtooth"];
 let audioContext;
 let oscillator;
 let isPlaying = ref(false);
