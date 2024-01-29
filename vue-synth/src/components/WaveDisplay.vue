@@ -11,7 +11,7 @@
 
             <div class="centerCol">
                 <GSelector
-                @change="updateOscillator"
+                @change="onWaveChangeCB"
                 v-model="wave.form"
                 :items="waveForms"></GSelector>
 
@@ -22,14 +22,14 @@
                     min="1"
                     max="500"
                     v-model="wave.frequency" placeholder="frecuency" 
-                    @input="onFrequencyChangeCB">
+                    @input="onWaveChangeCB">
                     <label>Frec: {{ wave.frequency }}</label>
 
                     <input 
                     v-if="dense"
                     type="range" 
                     v-model="wave.amplitude" placeholder="amplitude" 
-                    @input="emit('updateWave')">
+                    @input="onWaveChangeCB">
                     <label v-if="dense">Amp: {{ wave.amplitude }}</label>
                 </div>
             </div>
@@ -69,16 +69,15 @@ function playWaveBtn(){
 }
 
 function updateOscillator(){
-    console.log("i'm updating")
     oscillator.frequency.value = props.wave.getFrequency();
     oscillator.type= props.wave.getForm();
-    console.log(oscillator.type);
 }
 
-function onFrequencyChangeCB(){
+function onWaveChangeCB(){
     updateOscillator();
     emit("updateWave")
 }
+
 
 onMounted(()=>{
     audioContext = new AudioContext();

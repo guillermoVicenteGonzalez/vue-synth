@@ -70,6 +70,8 @@ function createNewWave(){
 function updateOscillators(osc,waves){
     waves.forEach((wave, index) => {
         osc[index].frequency.value = wave.getFrequency();
+        osc[index].type = wave.getForm();
+        console.log(osc[index].type);
     });
 }
 
