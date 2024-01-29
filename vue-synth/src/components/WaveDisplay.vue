@@ -1,10 +1,9 @@
 <template>
-    <div>
-        <div class="waveCard">
-            <div class="firstRow">
+        <div class="card waveCard">
+            <div class="firstRow flex-center">
                 <button 
                 @click="emit('waveDeleted')"
-                class="icon-btn">
+                class="icon-btn btn">
                     <delete-icon  :size="30" class="icon"/>
                 </button>
             </div>
@@ -17,33 +16,39 @@
 
                 <WaveCanvas
                 :wave="wave"></WaveCanvas>
-                <div class="sliders">
-                    <input type="range" 
+
+                <div class="slider-container">
+                    <input 
+                    type="range"
+                    class="slider" 
                     min="1"
-                    max="500"
+                    max="700"
                     v-model="wave.frequency" placeholder="frecuency" 
                     @input="onWaveChangeCB">
-                    <label>Frec: {{ wave.frequency }}</label>
+                    <label>{{ wave.frequency }}</label>
+
 
                     <input 
+                    class="slider"
                     v-if="dense"
+                    min="1"
+                    max="100"
                     type="range" 
                     v-model="wave.amplitude" placeholder="amplitude" 
                     @input="onWaveChangeCB">
-                    <label v-if="dense">Amp: {{ wave.amplitude }}</label>
+                    <label>{{ wave.amplitude }}</label>
                 </div>
             </div>
 
-            <div class="rightCol">
+            <div class="rightCol flex-center">
                 <button
-                class="icon-btn"
+                class="icon-btn btn"
                 @click="playWaveBtn">
                     <pause-icon :size="30" class="icon" v-if="isPlaying"/>
                     <play-icon :size="30" class="icon" v-else/>
                 </button>
             </div>
         </div>
-    </div>
 </template>
 
 <script setup>
@@ -71,6 +76,7 @@ function playWaveBtn(){
 
 function updateOscillator(){
     oscillator.frequency.value = props.wave.getFrequency();
+    gainNode.gain.setValueAtTime(props.wave.getAmplitude()/50,audioContext.currentTime)
     oscillator.type= props.wave.getForm();
 }
 
@@ -84,70 +90,60 @@ onMounted(()=>{
     audioContext = new AudioContext();
     audioContext.suspend();
 
+    // gainNode = new GainNode(audioContext);
+    // gainNode.connect(audioContext.destination)
+    // gainNode.gain.cancelScheduledValues(audioContext.currentTime);
+    // // gainNode.gain = 1;
+    // gainNode.gain.value = 0;
+
+    gainNode = audioContext.createGain();
+    gainNode.connect(audioContext.destination);
+    // gainNode.gain.setValueAtTime(1,audioContext.currentTime)
+
     oscillator = audioContext.createOscillator();
     oscillator.frequency.value = props.wave.getFrequency();
     oscillator.start();
-    oscillator.connect(audioContext.destination);
+    oscillator.connect(gainNode);
 })
 </script>
 
 <style scoped>
 
-
-    input[type=checkbox]{
-        border-radius: 10px;
-    }
-
     .waveCard{
         border-radius:20px;
         display: grid;
-        background-color:var(--card-color);
         grid-template-columns:1fr 7fr 1fr;
-        width:fit-content;
-        height:fit-content;
-
-        /* max-height: 300px; */
-        /* max-width:400px; */
-        max-width: 100%;
+        /* width:fit-content;
+        height:fit-content; */
 
         gap:10px;
-        padding:15px 30px;
-        /* padding:15px 20px; */
-        /* margin:10px; */
+        padding:15px 10px;
     }
 
     .centerCol{
         display: flex;
         flex-direction: column;
-        gap:10px;
+        gap:15px;
     }
 
     canvas{
         border-radius:10px;
         background-color: var(--canvas-bg);
         width: 100%;
+        height: 100%;
         /* height:100%; */
     }
 
-    .sliders{
-        /* padding:10px; */
+    .slider-container{
         width: 100%;
         display: flex;
         flex-direction: row;
-        justify-content: space-around;
-    }
-
-    .firstRow{
-        display: flex;
-        justify-content:center;
-        align-items: center;
-    }
-
-    .rightCol{
-        display: flex;
+        gap:10px;
+        padding: 0 10px;
         justify-content: center;
         align-items: center;
     }
+
 
     input{
 
