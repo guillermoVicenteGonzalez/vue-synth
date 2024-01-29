@@ -10,7 +10,11 @@
             </div>
 
             <div class="centerCol">
-                <select placeholder="waveform"></select>
+                <GSelector
+                @change="updateOscillator"
+                v-model="wave.form"
+                :items="waveForms"></GSelector>
+
                 <WaveCanvas
                 :wave="wave"></WaveCanvas>
                 <div class="sliders">
@@ -21,10 +25,12 @@
                     @input="onFrequencyChangeCB">
                     <label>Frec: {{ wave.frequency }}</label>
 
-                    <input type="range" 
+                    <input 
+                    v-if="dense"
+                    type="range" 
                     v-model="wave.amplitude" placeholder="amplitude" 
                     @input="emit('updateWave')">
-                    <label>Amp: {{ wave.amplitude }}</label>
+                    <label v-if="dense">Amp: {{ wave.amplitude }}</label>
                 </div>
             </div>
 
@@ -47,10 +53,12 @@ import WaveCanvas from "@/components/WaveCanvas.vue";
 import DeleteIcon from 'vue-material-design-icons/Delete.vue';
 import PauseIcon from 'vue-material-design-icons/Pause.vue';
 import PlayIcon from 'vue-material-design-icons/Play.vue';
+import GSelector from "./GSelector.vue";
 
-const props = defineProps(["wave"]);
+const props = defineProps(["wave","dense"]);
 const emit = defineEmits(["updateWave","waveDeleted"]);
 
+let waveForms = ["sine","square","triangle"];
 let audioContext;
 let oscillator;
 let isPlaying = ref(false);
@@ -63,6 +71,8 @@ function playWaveBtn(){
 function updateOscillator(){
     console.log("i'm updating")
     oscillator.frequency.value = props.wave.getFrequency();
+    oscillator.type= props.wave.getForm();
+    console.log(oscillator.type);
 }
 
 function onFrequencyChangeCB(){

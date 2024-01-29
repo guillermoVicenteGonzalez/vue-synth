@@ -60,7 +60,6 @@ function createNewWave(){
 
     let tempOsc = audioContext.createOscillator();
     tempOsc.frequency.value = wave.getFrequency();
-    console.log(oscillators.length);
     tempOsc.connect(merger, 0,oscillators.length);
     tempOsc.start();
     oscillators.push(tempOsc);
@@ -71,7 +70,6 @@ function createNewWave(){
 function updateOscillators(osc,waves){
     waves.forEach((wave, index) => {
         osc[index].frequency.value = wave.getFrequency();
-        console.log(osc[index].frequency.value)
     });
 }
 

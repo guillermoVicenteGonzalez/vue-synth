@@ -3,6 +3,7 @@
     v-for="(wave, index) in waves"
     :key="index"
     :wave="wave"
+    dense="true"
     @waveDeleted="onWaveDeletedCB(index)"
     @update-wave="onWaveUpdatedCB"></WaveDisplay>
 </template>
