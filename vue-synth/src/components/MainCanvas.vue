@@ -29,14 +29,6 @@ function paintMainWave(waves, ctx, step=0){
     ctx.clearRect(0, 0, length, height);
     ctx.beginPath();
     
-    // for(let x=0;x<length; x++){
-    //     let y = 0;
-    //     waves.forEach(wave => {
-    //         y += wave.amplitude * Math.sin(x * wave.getAngFrec()/length + step);
-    //     });
-    //     ctx.lineTo(x,(middle + y));
-    // }
-
     let wavePoints = Wave.addWaves(waves,length,step);
     wavePoints.forEach((y,x) =>{
         ctx.lineTo(x,(middle + y));

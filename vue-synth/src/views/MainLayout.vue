@@ -56,7 +56,7 @@ function createNewWave(){
 
     let tempOsc = audioContext.createOscillator();
     tempOsc.frequency.value = wave.getFrequency();
-    tempOsc.connect(merger, 0,oscillators.length);
+    tempOsc.connect(merger,0,2);
     tempOsc.start();
     oscillators.push(tempOsc);
     updateOscillators(oscillators,waves.value);
@@ -67,7 +67,6 @@ function updateOscillators(osc,waves){
     waves.forEach((wave, index) => {
         osc[index].frequency.value = wave.getFrequency();
         osc[index].type = wave.getForm();
-        console.log(osc[index].type);
     });
 }
 
@@ -75,7 +74,6 @@ function updateOscillators(osc,waves){
 function playSound(){
     isPlaying.value ? audioContext.suspend():audioContext.resume();
     isPlaying.value = !isPlaying.value
-    console.log(oscillators)
 }
 
 /**
@@ -91,7 +89,7 @@ function onWaveUpdated(){
 onMounted(()=>{
     audioContext = new AudioContext();
     audioContext.suspend();
-    merger = audioContext.createChannelMerger(10);
+    merger = audioContext.createChannelMerger();
     merger.connect(audioContext.destination)
 
 })

@@ -60,6 +60,7 @@ const emit = defineEmits(["updateWave","waveDeleted"]);
 
 let waveForms = ["sine","square","triangle","sawtooth"];
 let audioContext;
+let gainNode;
 let oscillator;
 let isPlaying = ref(false);
 
@@ -82,11 +83,11 @@ function onWaveChangeCB(){
 onMounted(()=>{
     audioContext = new AudioContext();
     audioContext.suspend();
+
     oscillator = audioContext.createOscillator();
-    oscillator.type = "sine";
     oscillator.frequency.value = props.wave.getFrequency();
-    oscillator.connect(audioContext.destination);
     oscillator.start();
+    oscillator.connect(audioContext.destination);
 })
 </script>
 
