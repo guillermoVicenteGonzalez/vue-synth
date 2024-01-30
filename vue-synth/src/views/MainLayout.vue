@@ -102,6 +102,7 @@ function onWaveUpdated(){
 }
 
 function onWaveDeletedCB(index){
+    waves.value.splice(index,1)
     oscillators[index].osc.stop();
     oscillators.splice(index,1);
 }
