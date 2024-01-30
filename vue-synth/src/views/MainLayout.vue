@@ -4,6 +4,7 @@
             <div class="waveCardList">
                 <waveList
                 :waves=waves
+                @waveDeleted="index => onWaveDeletedCB(index)"
                 @refresh-waves="onWaveUpdated"></waveList>
             </div>
 
@@ -100,7 +101,10 @@ function onWaveUpdated(){
     updateOscillators(oscillators, waves.value);
 }
 
-
+function onWaveDeletedCB(index){
+    oscillators[index].osc.stop();
+    oscillators.splice(index,1);
+}
 
 onMounted(()=>{
     audioContext = new AudioContext();

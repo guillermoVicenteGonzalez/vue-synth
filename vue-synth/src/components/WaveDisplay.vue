@@ -90,12 +90,6 @@ onMounted(()=>{
     audioContext = new AudioContext();
     audioContext.suspend();
 
-    // gainNode = new GainNode(audioContext);
-    // gainNode.connect(audioContext.destination)
-    // gainNode.gain.cancelScheduledValues(audioContext.currentTime);
-    // // gainNode.gain = 1;
-    // gainNode.gain.value = 0;
-
     gainNode = audioContext.createGain();
     gainNode.connect(audioContext.destination);
     // gainNode.gain.setValueAtTime(1,audioContext.currentTime)
