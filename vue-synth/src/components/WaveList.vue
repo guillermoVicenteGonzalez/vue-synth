@@ -3,6 +3,7 @@
     v-for="(wave, index) in waves"
     :key="index"
     :wave="wave"
+    dense="true"
     @waveDeleted="onWaveDeletedCB(index)"
     @update-wave="onWaveUpdatedCB"></WaveDisplay>
 </template>
@@ -22,7 +23,7 @@ const props = defineProps({
 const emit = defineEmits(["refreshWaves","waveDeleted"])
 
 function onWaveDeletedCB(index){
-    props.waves.splice(index,1);
+    // props.waves.splice(index,1);
     emit("waveDeleted",index)
 }
 

@@ -35,11 +35,24 @@
 
   --section-gap: 160px;
 
-  --bg-default:#fff;
+  --bg:#fff;
+  --bg-dark:#000;
   --card-color:#cdcdcd;
   --card-surface:#fff;
   --card-detail:#696969;
+
+
+  /* --canvas-bg:#fff;
+  --primary:#6C22A6;
+  --primary-lighten:#6962AD;
+  --secondary:#96E9C6;
+  --secondary-lighten:#96E9C6; */
+  --bg:#fff;
   --canvas-bg:#fff;
+  --primary:#1A374D;
+  --primary-accent:#406882;
+  --secondary:#6998AB;
+  --secondary--accent:#B1D0E0;
 }
 
 

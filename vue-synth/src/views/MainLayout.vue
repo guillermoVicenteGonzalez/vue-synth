@@ -1,14 +1,20 @@
 <template>
     <div class="layout">
-        <div class="leftControls">
+        <div class="leftMenu">
             <div class="waveCardList">
                 <waveList
                 :waves=waves
-                @waveDeleted="deleteWaveCB"
+                @waveDeleted="index => onWaveDeletedCB(index)"
                 @refresh-waves="onWaveUpdated"></waveList>
             </div>
 
-            <button @click="createNewWave">new wave</button>
+            <div class="leftMenuActions">
+                <button 
+                class="btn newWaveBtn default-btn"
+                @click="createNewWave">
+                    <plus-icon :size="30" class="icon"/>
+                </button>
+            </div>
         </div>
 
         <section class="mainSection">
@@ -19,7 +25,7 @@
                 </template>
                 
                 <template v-slot:actions>
-                    <button class="btn"
+                    <button class="btn default-btn"
                     @click="playSound()"
                     >
                     <PauseIcon v-if="isPlaying"></PauseIcon>
@@ -43,6 +49,8 @@ import MainCanvas from '@/components/MainCanvas.vue';
 import GCard from '@/components/GCard.vue';
 import PauseIcon from 'vue-material-design-icons/Pause.vue';
 import PlayIcon from 'vue-material-design-icons/Play.vue';
+import PlusIcon from 'vue-material-design-icons/Plus.vue';
+
 
 let waves = ref([]);
 let isPlaying = ref(false);
@@ -50,12 +58,6 @@ let audioContext
 let merger 
 let oscillators = []
 
-function deleteWaveCB(index){
-    oscillators[index].stop();
-    oscillators.splice(index,1);
-    console.log(oscillators);
-    updateOscillators(oscillators,waves.value);
-}
 
 function createNewWave(){
     let wave = new Wave(50,1,0);
@@ -63,10 +65,16 @@ function createNewWave(){
 
     let tempOsc = audioContext.createOscillator();
     tempOsc.frequency.value = wave.getFrequency();
-    console.log(oscillators.length);
-    tempOsc.connect(merger, 0,oscillators.length);
+    let gainNode = audioContext.createGain();
+    gainNode.connect(merger,0,2);
+    tempOsc.connect(gainNode);
+
+    // tempOsc.connect(merger,0,2);
     tempOsc.start();
-    oscillators.push(tempOsc);
+    oscillators.push({
+        osc:tempOsc,
+        gain:gainNode
+    });
     updateOscillators(oscillators,waves.value);
 }
 
@@ -74,8 +82,9 @@ function createNewWave(){
 
 function updateOscillators(osc,waves){
     waves.forEach((wave, index) => {
-        osc[index].frequency.value = wave.getFrequency();
-        console.log(osc[index].frequency.value)
+        osc[index].osc.frequency.value = wave.getFrequency();
+        osc[index].osc.type = wave.getForm();
+        osc[index].gain.gain.setValueAtTime(wave.getAmplitude()/50, audioContext.currentTime)
     });
 }
 
@@ -83,7 +92,6 @@ function updateOscillators(osc,waves){
 function playSound(){
     isPlaying.value ? audioContext.suspend():audioContext.resume();
     isPlaying.value = !isPlaying.value
-    console.log(oscillators)
 }
 
 /**
@@ -94,18 +102,16 @@ function onWaveUpdated(){
     updateOscillators(oscillators, waves.value);
 }
 
-
-// onBeforeMount(() => {
-//     audioContext = new AudioContext();
-//     merger = audioContext.createChannelMerger(10);
-//     merger.connect(audioContext.destination)
-// }),
-
+function onWaveDeletedCB(index){
+    waves.value.splice(index,1)
+    oscillators[index].osc.stop();
+    oscillators.splice(index,1);
+}
 
 onMounted(()=>{
     audioContext = new AudioContext();
     audioContext.suspend();
-    merger = audioContext.createChannelMerger(10);
+    merger = audioContext.createChannelMerger();
     merger.connect(audioContext.destination)
 
 })
@@ -113,23 +119,29 @@ onMounted(()=>{
 
 <style scoped>
     .layout{
+        height: 100vh;
         width:100vw;
-        height:100vh;
         display: grid;
-        grid-auto-flow: row;
-        grid-template-columns:3.5fr 6.5fr;
+        grid-template-columns: 2fr 8fr;
     }
 
 
-
-    .mainSection{
+    .leftMenuActions{
         display: flex;
         justify-content: center;
         align-items: center;
-        flex-direction: column;
-
-        margin: 5%;
     }
+
+    .mainSection{
+        box-sizing: border-box;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 5%;
+    }
+
 
     .waveCardList{
         display: flex;
@@ -140,7 +152,7 @@ onMounted(()=>{
         /* overflow:scroll; */
     }
 
-    .leftControls{
+    .leftMenu{
         max-height: 100vh;
         display: grid;
         grid-template-rows: 9fr 1fr;

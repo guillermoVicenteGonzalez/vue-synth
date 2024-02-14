@@ -2,11 +2,12 @@
 
 #app {
   /* max-width: 1280px; */
-  width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
+  min-width: 100vw;
   margin: 0;
   padding: 0;
   font-weight: normal;
+  background-color: var(--bg)
 }
 
 .flex-center{
@@ -23,19 +24,43 @@ a,
   padding: 3px;
 }
 
+
 .btn{
   border:none;
+  cursor: pointer;
+  background-color: var(--primary);
+  color:var(--secondary);
+}
+
+.default-btn{
   padding: 10px;
   border-radius: 10px;
-  cursor: pointer;
 }
 
 .btn:hover{
+  opacity: 0.8;
+}
 
+.btn:active{
+  opacity:0.9;
 }
 
 .divider{
-  
+  resize: both;
+}
+
+.slider{
+  width: 100%;
+}
+
+
+.card{
+  background-color:var(--card-color) ;
+  border-radius:20px;
+}
+
+body{
+  background-color: var(--secondary-accent);
 }
 
 .icon-btn{
@@ -54,15 +79,14 @@ a,
   }
 }
 
-@media (min-width: 1024px) {
+/* @media (min-width: 1024px) {
   body {
     display: flex;
     place-items: center;
   }
 
   #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+
     padding: 0;
   }
-}
+} */
