@@ -14,10 +14,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, type Ref } from 'vue';
+import { onMounted, ref, type Ref } from 'vue';
 import WaveCanvas from '../components/Waves/WaveCanvas.vue';
 import Wave from '@/models/wave';
 
+const emit = defineEmits(['updateWave', 'waveDeleted']);
 const props = defineProps({
   wave: {
     type: Wave,
@@ -41,6 +42,24 @@ function updateOscillator() {
   gainNode.gain.setValueAtTime(props.wave.getAmplitude() / 50, audioContext.currentTime);
   oscillator.type = props.wave.getForm();
 }
+
+function onWaveChangeCB() {
+  updateOscillator();
+  emit('updateWave');
+}
+
+onMounted(() => {
+  audioContext = new AudioContext();
+  audioContext.suspend();
+
+  gainNode = audioContext.createGain();
+  gainNode.connect(audioContext.destination);
+
+  oscillator = audioContext.createOscillator();
+  oscillator.frequency.value = props.wave.getFrequency();
+  oscillator.start();
+  oscillator.connect(gainNode);
+});
 </script>
 
 <style scoped lang="scss">

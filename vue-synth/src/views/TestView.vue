@@ -1,5 +1,5 @@
 <template>
-  <div class="testLayout">
+  <!-- <div class="testLayout">
     <h1 class="testLayout__heading">Test view</h1>
 
     <div class="testLayout__body">
@@ -11,13 +11,28 @@
         <MainWaveCanvas :waves="waves"></MainWaveCanvas>
       </div>
     </div>
-  </div>
+  </div> -->
+  <MainLayout>
+    <template #header> Vue-synth</template>
+    <template #side>
+      <WaveCard v-for="(wave, index) in waves" :key="index" :wave="wave"></WaveCard>
+    </template>
+
+    <template #body>
+      <MainWaveCanvas :waves="waves"></MainWaveCanvas>
+    </template>
+
+    <template #footer>
+      <h2>Footer</h2>
+    </template>
+  </MainLayout>
 </template>
 
 <script setup lang="ts">
 import Wave from '@/models/wave';
 import MainWaveCanvas from '@/components/Waves/MainWaveCanvas.vue';
 import WaveCard from '../widgets/WaveCard.vue';
+import MainLayout from '@/Layouts/MainLayout.vue';
 import { ref, type Ref } from 'vue';
 
 let waves: Ref<Wave[]> = ref([]);
