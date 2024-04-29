@@ -1,19 +1,10 @@
 @import './base.css';
 
 #app {
-  /* max-width: 1280px; */
-  min-height: 100vh;
-  min-width: 100vw;
-  margin: 0;
-  padding: 0;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
   font-weight: normal;
-  background-color: var(--bg)
-}
-
-.flex-center{
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 a,
@@ -24,69 +15,21 @@ a,
   padding: 3px;
 }
 
-
-.btn{
-  border:none;
-  cursor: pointer;
-  background-color: var(--primary);
-  color:var(--secondary);
-}
-
-.default-btn{
-  padding: 10px;
-  border-radius: 10px;
-}
-
-.btn:hover{
-  opacity: 0.8;
-}
-
-.btn:active{
-  opacity:0.9;
-}
-
-.divider{
-  resize: both;
-}
-
-.slider{
-  width: 100%;
-}
-
-
-.card{
-  background-color:var(--card-color) ;
-  border-radius:20px;
-}
-
-body{
-  background-color: var(--secondary-accent);
-}
-
-.icon-btn{
-  aspect-ratio: 1/1;
-  border-radius: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border:none;
-  cursor: pointer;
-}
-
 @media (hover: hover) {
   a:hover {
     background-color: hsla(160, 100%, 37%, 0.2);
   }
 }
 
-/* @media (min-width: 1024px) {
+@media (min-width: 1024px) {
   body {
     display: flex;
     place-items: center;
   }
 
   #app {
-
-    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 0 2rem;
   }
-} */
+}
