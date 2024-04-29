@@ -1,148 +1,148 @@
-enum waveForms {
-  sine,
-  square,
-  triangle,
-  sawtooth
+export enum waveForms {
+  sine = 'sine',
+  square = 'square',
+  triangle = 'triangle',
+  sawtooth = 'sawtooth',
 }
 
 export default class Wave {
-  amplitude: number
-  frequency: number
-  phase: number
-  form: waveForms
+  amplitude: number;
+  frequency: number;
+  phase: number;
+  form: waveForms;
 
   constructor(amp: number, frec: number, phase: number = 0) {
-    this.amplitude = amp
-    this.frequency = frec
-    this.phase = phase
-    this.form = waveForms.sine
+    this.amplitude = amp;
+    this.frequency = frec;
+    this.phase = phase;
+    this.form = waveForms.sine;
   }
 
   calculatePoints(length: number, step: number): number[] {
     switch (waveForms[this.form]) {
       case 'sine':
-        return this.generateSinWave(length, step)
+        return this.generateSinWave(length, step);
       case 'square':
-        return this.generateSquareWave(length, step)
+        return this.generateSquareWave(length, step);
       case 'triangle':
-        return this.generateTriangleWave(length, step)
+        return this.generateTriangleWave(length, step);
       case 'sawtooth':
-        return this.generateSawToothWave(length, step)
+        return this.generateSawToothWave(length, step);
       default:
-        return []
+        return [];
     }
   }
 
   generateSinWave(length = 100, step = 0): number[] {
-    const points: number[] = []
-    let y: number
-    const angFrec: number = (this.frequency * 2 * Math.PI) / length
+    const points: number[] = [];
+    let y: number;
+    const angFrec: number = (this.frequency * 2 * Math.PI) / length;
 
     for (let x = 0; x < length; x++) {
-      y = this.amplitude * Math.sin(x * angFrec + step) // + height/2
-      points.push(y)
+      y = this.amplitude * Math.sin(x * angFrec + step); // + height/2
+      points.push(y);
     }
 
-    return points
+    return points;
   }
 
-  generateSquareWave(length: number, step: number) {
-    const points: number[] = []
-    let y: number
-    const angFrec: number = (this.frequency * 2 * Math.PI) / length
+  generateSquareWave(length: number, step: number): number[] {
+    const points: number[] = [];
+    let y: number;
+    const angFrec: number = (this.frequency * 2 * Math.PI) / length;
 
     for (let x = 0; x < length; x++) {
-      y = ((2 * this.amplitude) / Math.PI) * Math.asin(Math.sin(angFrec * x + step))
-      points.push(y)
+      y = ((2 * this.amplitude) / Math.PI) * Math.asin(Math.sin(angFrec * x + step));
+      points.push(y);
     }
 
-    return points
+    return points;
   }
 
-  generateTriangleWave(length: number, step: number) {
-    const points: number[] = []
-    let y: number
-    const angFrec: number = (this.frequency * 2 * Math.PI) / length
+  generateTriangleWave(length: number, step: number): number[] {
+    const points: number[] = [];
+    let y: number;
+    const angFrec: number = (this.frequency * 2 * Math.PI) / length;
 
     for (let x = 0; x < length; x++) {
-      y = ((2 * this.amplitude) / Math.PI) * Math.asin(Math.sin(angFrec * x + step))
-      points.push(y)
+      y = ((2 * this.amplitude) / Math.PI) * Math.asin(Math.sin(angFrec * x + step));
+      points.push(y);
     }
 
-    return points
+    return points;
   }
 
-  generateSawToothWave(length: number, step: number) {
-    const points: number[] = []
-    let y: number
-    const angFrec: number = (this.frequency * 2 * Math.PI) / length
+  generateSawToothWave(length: number, step: number): number[] {
+    const points: number[] = [];
+    let y: number;
+    const angFrec: number = (this.frequency * 2 * Math.PI) / length;
 
     for (let x = 0; x < length; x++) {
       y =
         this.amplitude *
         (0.5 - 1 / Math.PI) *
-        (Math.pow(-1, x) * (Math.sin(angFrec * x + step) / x))
-      points.push(y)
+        (Math.pow(-1, x) * (Math.sin(angFrec * x + step) / x));
+      points.push(y);
     }
 
-    return points
+    return points;
   }
 
   //adds the waves passed attending to its waveform
   //returns the points of the resulting wave
-  static addWaves(waves: Wave[], length: number, step: number): number[] | boolean {
+  static addWaves(waves: Wave[], length: number, step: number): number[] {
     if (!Array.isArray(waves) || waves.length == 0) {
-      return false
+      return [];
     }
 
     if (waves.length == 1) {
-      return waves[0].calculatePoints(length, step)
+      return waves[0].calculatePoints(length, step);
     }
 
-    let points: number[] = waves[0].calculatePoints(length, step)
+    let points: number[] = waves[0].calculatePoints(length, step);
     for (let i = 1; i < waves.length; i++) {
-      const temp = waves[i].calculatePoints(length, step)
+      const temp = waves[i].calculatePoints(length, step);
       points = points.map((item, index) => {
-        return item + temp[index]
-      })
+        return item + temp[index];
+      });
     }
-    return points
+    return points;
   }
 
   getPeriod(): number {
-    return 1 / this.frequency
+    return 1 / this.frequency;
   }
 
   getAmplitude(): number {
-    return this.amplitude
+    return this.amplitude;
   }
 
   getFrequency(): number {
-    return this.frequency
+    return this.frequency;
   }
 
   getAngFrec(): number {
-    return this.frequency * 2 * Math.PI
+    return this.frequency * 2 * Math.PI;
   }
 
   getPhase(): number {
-    return this.phase
+    return this.phase;
   }
 
   setAmplitude(nAmp: number): void {
-    this.amplitude = nAmp
+    this.amplitude = nAmp;
   }
 
   setFrequency(nFrec: number): void {
-    this.frequency = nFrec
+    this.frequency = nFrec;
   }
 
   setPhase(nPhase: number): void {
-    this.phase = nPhase
+    this.phase = nPhase;
   }
 
   getForm(): string {
-    return waveForms[this.form]
+    return waveForms[this.form];
   }
 
   setForm(nForm: string) {
@@ -152,6 +152,6 @@ export default class Wave {
     // }else{
     //     this.form = nForm;
     // }
-    this.form = waveForms[nForm as keyof typeof waveForms]
+    this.form = waveForms[nForm as keyof typeof waveForms];
   }
 }
