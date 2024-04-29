@@ -1,67 +1,66 @@
 <template>
-    <canvas
-    ref="myCanvas"></canvas>
+  <canvas ref="myCanvas"></canvas>
 </template>
 
 <script setup>
-import {ref, onMounted} from "vue";
-import {Wave} from "@/models/wave"
+import { ref, onMounted } from 'vue'
+import { Wave } from '@/models/wave'
 
-let myCanvas = ref();
-let context;
-let frames = 0;
+let myCanvas = ref()
+let context
+let frames = 0
 
 const props = defineProps({
-    wave:{
-        type:Wave,
-        required:true
-    },
-});
+  wave: {
+    type: Wave,
+    required: true
+  }
+})
 
-const emit = defineEmits("updateWave");
+const emit = defineEmits('updateWave')
 
-function paintWave(w, ctx=context, step=0){
-    if(w == undefined){
-        return false;
-    }
+function paintWave(w, ctx = context, step = 0) {
+  if (w == undefined) {
+    return false
+  }
 
-    let cWidth = ctx.canvas.width;
-    let cHeight = ctx.canvas.height;
-    let middle = cHeight/2;
+  let cWidth = ctx.canvas.width
+  let cHeight = ctx.canvas.height
+  let middle = cHeight / 2
 
-    ctx.clearRect(0, 0, cWidth, cHeight);
-    ctx.beginPath();
-    
-    let points = w.calculatePoints(cWidth,step * w.frequency);
-    for(let x=0; x<cWidth; x++){
-        ctx.lineTo(x, (middle + points[x]));
-    }
-    ctx.stroke();
+  ctx.clearRect(0, 0, cWidth, cHeight)
+  ctx.beginPath()
+
+  let points = w.calculatePoints(cWidth, step * w.frequency)
+  for (let x = 0; x < cWidth; x++) {
+    ctx.lineTo(x, middle + points[x])
+  }
+  ctx.stroke()
 }
 
-function animateWave(){
-    if(myCanvas.value == undefined){
-        return false;
-    }
+function animateWave() {
+  if (myCanvas.value == undefined) {
+    return false
+  }
 
-    frames += 0.1;
-    let ctx = myCanvas.value.getContext("2d");
-    paintWave(props.wave, ctx, frames);
+  frames += 0.1
+  let ctx = myCanvas.value.getContext('2d')
+  paintWave(props.wave, ctx, frames)
 
-    window.requestAnimationFrame(animateWave)
+  window.requestAnimationFrame(animateWave)
 }
 
 onMounted(() => {
-    context = myCanvas.value.getContext("2d");
-    window.requestAnimationFrame(animateWave);
-    // emit("updateWave");
-});
+  context = myCanvas.value.getContext('2d')
+  window.requestAnimationFrame(animateWave)
+  // emit("updateWave");
+})
 </script>
 
 <style scoped>
-    canvas{
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-    }
+canvas {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
 </style>

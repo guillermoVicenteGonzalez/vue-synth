@@ -7,10 +7,10 @@
   margin: 0;
   padding: 0;
   font-weight: normal;
-  background-color: var(--bg)
+  background-color: var(--bg);
 }
 
-.flex-center{
+.flex-center {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,52 +24,50 @@ a,
   padding: 3px;
 }
 
-
-.btn{
-  border:none;
+.btn {
+  border: none;
   cursor: pointer;
   background-color: var(--primary);
-  color:var(--secondary);
+  color: var(--secondary);
 }
 
-.default-btn{
+.default-btn {
   padding: 10px;
   border-radius: 10px;
 }
 
-.btn:hover{
+.btn:hover {
   opacity: 0.8;
 }
 
-.btn:active{
-  opacity:0.9;
+.btn:active {
+  opacity: 0.9;
 }
 
-.divider{
+.divider {
   resize: both;
 }
 
-.slider{
+.slider {
   width: 100%;
 }
 
-
-.card{
-  background-color:var(--card-color) ;
-  border-radius:20px;
+.card {
+  background-color: var(--card-color);
+  border-radius: 20px;
 }
 
-body{
+body {
   background-color: var(--secondary-accent);
 }
 
-.icon-btn{
+.icon-btn {
   aspect-ratio: 1/1;
   border-radius: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  border:none;
+  border: none;
   cursor: pointer;
 }
 
