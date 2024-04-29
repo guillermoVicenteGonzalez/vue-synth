@@ -141,7 +141,7 @@ export default class Wave {
     this.phase = nPhase;
   }
 
-  getForm(): string {
+  getForm(): waveForms {
     return waveForms[this.form];
   }
 

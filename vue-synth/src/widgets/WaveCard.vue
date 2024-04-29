@@ -4,7 +4,7 @@
 
     <div class="waveCard__center-slot">
       <div class="waveCard__wave-slot">
-        <WaveCanvas :wave="myWave"></WaveCanvas>
+        <WaveCanvas :wave="wave"></WaveCanvas>
       </div>
       <div class="waveCard__controls-slot"></div>
     </div>
@@ -18,8 +18,6 @@ import { ref, type Ref } from 'vue';
 import WaveCanvas from '../components/Waves/WaveCanvas.vue';
 import Wave from '@/models/wave';
 
-// let myWave: Ref<Wave> = ref(new Wave(20, 2, 2));
-
 const props = defineProps({
   wave: {
     type: Wave,
@@ -27,6 +25,22 @@ const props = defineProps({
     default: new Wave(2, 2, 2),
   },
 });
+
+let audioContext: AudioContext;
+let gainNode: GainNode;
+let oscillator: OscillatorNode;
+let isPlaying: Ref<Boolean> = ref(false);
+
+function playWaveBtn() {
+  isPlaying.value ? audioContext.suspend() : audioContext.resume();
+  gainNode.gain.setValueAtTime(props.wave.getAmplitude() / 50, audioContext.currentTime);
+}
+
+function updateOscillator() {
+  oscillator.frequency.value = props.wave.getFrequency();
+  gainNode.gain.setValueAtTime(props.wave.getAmplitude() / 50, audioContext.currentTime);
+  oscillator.type = props.wave.getForm();
+}
 </script>
 
 <style scoped lang="scss">
