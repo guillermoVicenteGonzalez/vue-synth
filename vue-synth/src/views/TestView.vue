@@ -36,6 +36,10 @@ import MainLayout from '@/Layouts/MainLayout.vue';
 import { ref, type Ref } from 'vue';
 
 let waves: Ref<Wave[]> = ref([]);
+
+waves.value.push(new Wave(2, 2, 2));
+waves.value.push(new Wave(10, 10, 0));
+waves.value[1].setForm('square');
 </script>
 
 <style scoped lang="scss">

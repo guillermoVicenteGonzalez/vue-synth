@@ -15,7 +15,7 @@ export default class Wave {
     this.amplitude = amp;
     this.frequency = frec;
     this.phase = phase;
-    this.form = waveForms.sine;
+    this.form = waveForms.square;
   }
 
   calculatePoints(length: number, step: number): number[] {
@@ -47,12 +47,13 @@ export default class Wave {
   }
 
   generateSquareWave(length: number, step: number): number[] {
-    const points: number[] = [];
+    let points: number[] = [];
     let y: number;
-    const angFrec: number = (this.frequency * 2 * Math.PI) / length;
+    let angFrec: number = (this.frequency * 2 * Math.PI) / length;
 
     for (let x = 0; x < length; x++) {
-      y = ((2 * this.amplitude) / Math.PI) * Math.asin(Math.sin(angFrec * x + step));
+      y = this.amplitude * Math.sign(Math.sin(x * angFrec + step)); // + height/2
+      // y = Math.sign(y);
       points.push(y);
     }
 
