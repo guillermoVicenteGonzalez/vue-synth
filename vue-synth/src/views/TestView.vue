@@ -15,7 +15,9 @@
   <MainLayout>
     <template #header> Vue-synth</template>
     <template #side>
-      <WaveCard v-for="(wave, index) in waves" :key="index" :wave="wave"></WaveCard>
+      <div class="waveCardList">
+        <WaveCard v-for="(wave, index) in waves" :key="index" :wave="wave"></WaveCard>
+      </div>
     </template>
 
     <template #body>
@@ -43,23 +45,9 @@ waves.value[1].setForm('square');
 </script>
 
 <style scoped lang="scss">
-.testLayout {
-  box-sizing: border-box;
-  width: 100vw;
-  height: 100vh;
-
-  &__heading {
-    text-align: center;
-  }
-
-  &__body {
-    display: grid;
-    grid-template-columns: 2fr 8fr;
-    height: auto;
-
-    &__left {
-      border-right: solid 1px black;
-    }
+.waveCardList {
+  > * {
+    margin: 1rem 0.5rem;
   }
 }
 </style>

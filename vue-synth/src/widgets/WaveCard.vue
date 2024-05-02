@@ -1,6 +1,24 @@
 <template>
   <div class="waveCard">
-    <div class="waveCard__left-slot"></div>
+    <div class="waveCard__actions-slot"></div>
+
+    <div class="waveCard__left-slot">
+      <div class="waveCard__controls">
+        <!-- <span>Frequency</span> -->
+        <div class="waveCard__controls__slider">
+          <VerticalSlider v-model="wave.frequency"></VerticalSlider>
+        </div>
+        <span class="waveCard__controls__valueBox">{{ wave.frequency }}</span>
+      </div>
+
+      <div class="waveCard__controls">
+        <!-- <span>Amplitude</span> -->
+        <div class="waveCard__controls__slider">
+          <VerticalSlider v-model="wave.amplitude"></VerticalSlider>
+        </div>
+        <span class="waveCard__controls__valueBox">{{ wave.amplitude }}</span>
+      </div>
+    </div>
 
     <div class="waveCard__center-slot">
       <div class="waveCard__wave-slot">
@@ -8,8 +26,6 @@
       </div>
       <div class="waveCard__controls-slot"></div>
     </div>
-
-    <div class="waveCard__right-slot"></div>
   </div>
 </template>
 
@@ -17,6 +33,7 @@
 import { onMounted, ref, type Ref } from 'vue';
 import WaveCanvas from '../components/Waves/WaveCanvas.vue';
 import Wave from '@/models/wave';
+import VerticalSlider from '@/components/Common/VerticalSlider.vue';
 
 const emit = defineEmits(['updateWave', 'waveDeleted']);
 const props = defineProps({
@@ -63,20 +80,53 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-.waveCard {
-  max-width: 30rem;
-  min-height: 10rem;
-  max-height: 15rem;
+$card-width: 40rem;
+$card-height: 20rem;
+$card-padding: 2rem;
 
-  padding: 1rem;
+.waveCard {
+  max-width: $card-width;
+  width: $card-width;
+  max-height: $card-height;
+  height: $card-height;
 
   display: grid;
-  grid-template-columns: 1fr 8fr 1fr;
+  grid-template-columns: 1fr 2fr 8fr;
 
   box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.5);
   border-radius: 20px;
+  overflow: hidden;
 
-  &__center-slot {
+  &__left-slot {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    max-height: $card-height;
+  }
+
+  &__controls {
+    padding: $card-padding 0;
+
+    &__slider {
+      // height: calc(#{$card-height} * 0.7 - #{$card-padding});
+      height: calc(100% - #{$card-padding});
+      width: 100%;
+    }
+
+    &__valueBox {
+      display: block;
+      text-align: center;
+    }
+  }
+
+  &__wave-slot {
+    padding: $card-padding;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__actions-slot {
+    background-color: black;
   }
 }
 

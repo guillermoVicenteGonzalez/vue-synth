@@ -5,6 +5,7 @@
 - [ ] Refactor legacy code using typescript and scss
 - [ ] new design
 - [ ] Emits and props with typing
+- [ ] Main wave with audio api visual analyzer (maybe other waves too)
 - [ ] 4 Waves
   - [ ] Amplitude and freq controls
   - [ ] Individual sound

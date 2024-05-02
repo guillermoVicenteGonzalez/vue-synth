@@ -4,7 +4,7 @@
       <slot name="header"> </slot>
     </header>
 
-    <div class="mainLayout__sideMenu">
+    <div class="mainLayout__side">
       <slot name="side"> </slot>
     </div>
 
@@ -22,7 +22,7 @@
 .mainLayout {
   width: 100vw;
   height: 100vh;
-  background-color: red;
+  //   background-color: red;
   position: relative;
 
   &__header {
@@ -42,14 +42,20 @@
   }
 
   &__side {
+    display: inline-block;
     background-color: yellow;
     min-width: 10rem;
-    width: 10rem;
+    width: 40%;
     // height: 100%;
   }
 
   &__body {
-    background-color: green;
+    display: inline-block;
+
+    width: 60%;
+    // background-color: green;
+    padding: 2rem;
+    border: solid 1px black;
   }
 }
 </style>
