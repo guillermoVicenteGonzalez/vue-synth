@@ -5,13 +5,13 @@
 <script setup>
 let test = 5;
 const model = defineModel();
-const props = defineProps({
-  sliderValue: {
-    type: Number,
-    required: true,
-    default: 0,
-  },
-});
+// const props = defineProps({
+//   sliderValue: {
+//     type: Number,
+//     required: true,
+//     default: 0,
+//   },
+// });
 </script>
 
 <style scoped lang="scss">

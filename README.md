@@ -18,3 +18,6 @@
 - [ ] Midi capabilities
 - [ ] Effects
 - [ ] Preset saver.
+
+- [ ] Start an oscillator stopped (if that makes any sense)
+- [ ] pass options to an audio context
