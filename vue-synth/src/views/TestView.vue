@@ -16,7 +16,12 @@
     <template #header> Vue-synth</template>
     <template #side>
       <div class="waveCardList">
-        <WaveCard v-for="(wave, index) in waves" :key="index" :wave="wave"></WaveCard>
+        <WaveCard
+          v-for="(wave, index) in waves"
+          :key="index"
+          :wave="wave"
+          @update-wave="onWaveUpdated(index)"
+        ></WaveCard>
       </div>
       <button @click="createNewWave">new wave</button>
       <button @click="test">test</button>
@@ -47,11 +52,7 @@ type oscillatorItem = {
 let waves: Ref<Wave[]> = ref([]);
 let oscillators: Array<oscillatorItem> = [];
 let mainContext: Ref = ref(new AudioContext());
-let merger: Ref<ChannelMergerNode> = mainContext.value.createChannelMerger();
-
-waves.value.push(new Wave(2, 2, 2));
-waves.value.push(new Wave(440, 100, 0));
-waves.value[1].setForm('square');
+let merger: ChannelMergerNode = mainContext.value.createChannelMerger();
 
 function createNewWave() {
   let wave = new Wave(10, 40, 0);
@@ -71,15 +72,26 @@ function createNewWave() {
   });
 }
 
+function onWaveUpdated(index: number): void {
+  updateWaveOscillator(index);
+}
+
+function updateWaveOscillator(index: number): void {
+  oscillators[index].osc.frequency.value = waves.value[index].getFrequency();
+  oscillators[index].osc.type = waves.value[index].getForm();
+  oscillators[index].gain.gain.setValueAtTime(
+    waves.value[index].getAmplitude() / 50,
+    mainContext.value.currentTime,
+  );
+}
+
 function test() {
   mainContext.value.resume();
   console.log(merger);
 }
 
 onMounted(() => {
-  // mainContext.value = new AudioContext();
   mainContext.value.suspend();
-  // merger = mainContext.value.createChannelMerger();
   merger.connect(mainContext.value.destination);
 });
 </script>

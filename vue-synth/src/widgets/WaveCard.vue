@@ -3,7 +3,12 @@
     <div class="waveCard__actions-slot"></div>
 
     <div class="waveCard__left-slot">
-      <Selector v-model="wave.form" :items="waveForms" class="selector"></Selector>
+      <Selector
+        v-model="wave.form"
+        :items="waveForms"
+        class="selector"
+        @change="onWaveChangeCB"
+      ></Selector>
 
       <div class="waveCard__controls">
         <div class="waveCard__control">
@@ -63,6 +68,7 @@ let isPlaying: Ref<Boolean> = ref(false);
 function playWaveBtn() {
   isPlaying.value ? audioContext.suspend() : audioContext.resume();
   gainNode.gain.setValueAtTime(props.wave.getAmplitude() / 50, audioContext.currentTime);
+  isPlaying.value = !isPlaying.value;
 }
 
 function updateOscillator() {

@@ -1,5 +1,5 @@
 <template>
-  <select v-model="model" class="selector">
+  <select v-model="model" class="selector" @change="emit('change')">
     <option v-for="item in items" :value="item">{{ item }}</option>
   </select>
 </template>
@@ -11,7 +11,6 @@ const props = defineProps({
     required: true,
   },
 });
-let selection: Ref = ref();
 const model = defineModel();
 const emit = defineEmits(['change']);
 </script>
