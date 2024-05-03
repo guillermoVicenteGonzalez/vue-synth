@@ -8,14 +8,22 @@
       <div class="waveCard__controls">
         <div class="waveCard__control">
           <div class="waveCard__control__slider">
-            <VerticalSlider v-model="wave.frequency" range="1000"></VerticalSlider>
+            <VerticalSlider
+              v-model="wave.frequency"
+              range="1000"
+              @valueChange="onWaveChangeCB"
+            ></VerticalSlider>
           </div>
           <span class="waveCard__control__valueBox">{{ wave.frequency }}</span>
         </div>
 
         <div class="waveCard__control">
           <div class="waveCard__control__slider">
-            <VerticalSlider v-model="wave.amplitude" range="100"></VerticalSlider>
+            <VerticalSlider
+              v-model="wave.amplitude"
+              range="50"
+              @valueChange="onWaveChangeCB"
+            ></VerticalSlider>
           </div>
           <span class="waveCard__control__valueBox">{{ wave.amplitude }}</span>
         </div>
@@ -26,7 +34,7 @@
       <div class="waveCard__wave-slot">
         <WaveCanvas :wave="wave"></WaveCanvas>
       </div>
-      <div class="waveCard__controls-slot"></div>
+      <button @click="playWaveBtn">play wave</button>
     </div>
   </div>
 </template>

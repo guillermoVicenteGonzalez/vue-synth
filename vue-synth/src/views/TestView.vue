@@ -47,14 +47,15 @@ type oscillatorItem = {
 let waves: Ref<Wave[]> = ref([]);
 let oscillators: Array<oscillatorItem> = [];
 let mainContext: Ref = ref(new AudioContext());
-let merger: ChannelMergerNode = mainContext.value.createChannelMerger();
+let merger: Ref<ChannelMergerNode> = mainContext.value.createChannelMerger();
 
 waves.value.push(new Wave(2, 2, 2));
 waves.value.push(new Wave(440, 100, 0));
 waves.value[1].setForm('square');
 
 function createNewWave() {
-  let wave = new Wave(100, 500, 0);
+  let wave = new Wave(10, 40, 0);
+  wave.setForm('square');
   waves.value.push(wave);
 
   let tempOsc = mainContext.value.createOscillator();

@@ -1,9 +1,8 @@
 <template>
-  <input type="range" orient="vertical" v-model="model" :max="range" />
+  <input type="range" orient="vertical" v-model="model" :max="range" @input="emit('valueChange')" />
 </template>
 
 <script setup>
-let test = 5;
 const model = defineModel();
 const props = defineProps({
   range: {
@@ -11,13 +10,7 @@ const props = defineProps({
     default: 100,
   },
 });
-// const props = defineProps({
-//   sliderValue: {
-//     type: Number,
-//     required: true,
-//     default: 0,
-//   },
-// });
+const emit = defineEmits(['valueChange']);
 </script>
 
 <style scoped lang="scss">
