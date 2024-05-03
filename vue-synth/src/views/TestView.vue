@@ -28,7 +28,8 @@
     </template>
 
     <template #body>
-      <MainWaveCanvas :source-ctx="mainContext" :source="merger"></MainWaveCanvas>
+      <!-- <MainWaveCanvas :source-ctx="mainContext" :source="merger"></MainWaveCanvas> -->
+      <WaveAnalyzer :source-ctx="mainContext" :source="merger"></WaveAnalyzer>
     </template>
 
     <template #footer>
@@ -39,10 +40,10 @@
 
 <script setup lang="ts">
 import Wave from '@/models/wave';
-import MainWaveCanvas from '@/components/Waves/MainWaveCanvas.vue';
 import WaveCard from '../widgets/WaveCard.vue';
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { onMounted, ref, type Ref } from 'vue';
+import WaveAnalyzer from '@/components/Waves/WaveAnalyzer.vue';
 
 type oscillatorItem = {
   osc: OscillatorNode;

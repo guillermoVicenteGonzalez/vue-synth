@@ -97,8 +97,8 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-$card-width: 40rem;
-$card-height: 20rem;
+$card-width: 30rem;
+$card-height: 15rem;
 $card-padding: 2rem;
 
 .waveCard {
@@ -125,6 +125,7 @@ $card-padding: 2rem;
   }
 
   &__controls {
+    max-height: 100%;
     display: flex;
     margin: 0 2rem;
   }
