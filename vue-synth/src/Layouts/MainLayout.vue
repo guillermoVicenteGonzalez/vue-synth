@@ -43,7 +43,7 @@
 
   &__side {
     display: inline-block;
-    background-color: yellow;
+    // background-color: yellow;
     min-width: 10rem;
     width: 40%;
     // height: 100%;

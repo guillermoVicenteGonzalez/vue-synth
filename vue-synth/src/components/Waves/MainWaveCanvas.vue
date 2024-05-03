@@ -85,6 +85,7 @@ analyser.fftSize = 2048;
 
 let bufferLength: number = analyser.frequencyBinCount;
 let dataArray: Uint8Array = new Uint8Array(bufferLength);
+analyser.getByteTimeDomainData(dataArray);
 
 let myCanvas: Ref = ref();
 let context: CanvasRenderingContext2D;
@@ -133,13 +134,9 @@ onMounted(() => {
 
   // bufferLength = analyser.frequencyBinCount;
   // dataArray = new Uint8Array(bufferLength);
-  analyser.getByteTimeDomainData(dataArray);
+  // analyser.getByteTimeDomainData(dataArray);
   props.source.connect(analyser);
-
   context = myCanvas.value.getContext('2d');
-  // console.log(myCanvas.value);
-  console.log(context);
-  console.log(myCanvas.value.width);
 
   draw();
 });

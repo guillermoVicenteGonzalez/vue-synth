@@ -3,20 +3,22 @@
     <div class="waveCard__actions-slot"></div>
 
     <div class="waveCard__left-slot">
-      <div class="waveCard__controls">
-        <!-- <span>Frequency</span> -->
-        <div class="waveCard__controls__slider">
-          <VerticalSlider v-model="wave.frequency"></VerticalSlider>
-        </div>
-        <span class="waveCard__controls__valueBox">{{ wave.frequency }}</span>
-      </div>
+      <Selector v-model="wave.form" :items="waveForms" class="selector"></Selector>
 
       <div class="waveCard__controls">
-        <!-- <span>Amplitude</span> -->
-        <div class="waveCard__controls__slider">
-          <VerticalSlider v-model="wave.amplitude"></VerticalSlider>
+        <div class="waveCard__control">
+          <div class="waveCard__control__slider">
+            <VerticalSlider v-model="wave.frequency" range="1000"></VerticalSlider>
+          </div>
+          <span class="waveCard__control__valueBox">{{ wave.frequency }}</span>
         </div>
-        <span class="waveCard__controls__valueBox">{{ wave.amplitude }}</span>
+
+        <div class="waveCard__control">
+          <div class="waveCard__control__slider">
+            <VerticalSlider v-model="wave.amplitude" range="100"></VerticalSlider>
+          </div>
+          <span class="waveCard__control__valueBox">{{ wave.amplitude }}</span>
+        </div>
       </div>
     </div>
 
@@ -32,8 +34,9 @@
 <script setup lang="ts">
 import { onMounted, ref, type Ref } from 'vue';
 import WaveCanvas from '../components/Waves/WaveCanvas.vue';
-import Wave from '@/models/wave';
+import Wave, { waveForms } from '@/models/wave';
 import VerticalSlider from '@/components/Common/VerticalSlider.vue';
+import Selector from '@/components/Common/Selector.vue';
 
 const emit = defineEmits(['updateWave', 'waveDeleted']);
 const props = defineProps({
@@ -86,9 +89,9 @@ $card-padding: 2rem;
 
 .waveCard {
   max-width: $card-width;
-  width: $card-width;
+  width: 100%;
   max-height: $card-height;
-  height: $card-height;
+  height: 100%;
 
   display: grid;
   grid-template-columns: 1fr 2fr 8fr;
@@ -99,17 +102,22 @@ $card-padding: 2rem;
 
   &__left-slot {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     max-height: $card-height;
+    padding: $card-padding 1rem;
   }
 
   &__controls {
-    padding: $card-padding 0;
+    display: flex;
+    margin: 0 2rem;
+  }
 
+  &__control {
     &__slider {
-      // height: calc(#{$card-height} * 0.7 - #{$card-padding});
-      height: calc(100% - #{$card-padding});
+      height: 90%;
       width: 100%;
     }
 
@@ -119,8 +127,15 @@ $card-padding: 2rem;
     }
   }
 
-  &__wave-slot {
+  &__center-slot {
+    display: flex;
+    justify-content: ceter;
+    align-items: center;
+    flex-direction: column;
     padding: $card-padding;
+  }
+
+  &__wave-slot {
     width: 100%;
     height: 100%;
   }
