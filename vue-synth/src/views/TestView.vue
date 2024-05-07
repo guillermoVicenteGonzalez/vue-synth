@@ -29,7 +29,8 @@
 
     <template #body>
       <!-- <MainWaveCanvas :source-ctx="mainContext" :source="merger"></MainWaveCanvas> -->
-      <WaveAnalyzer :source-ctx="mainContext" :source="merger"></WaveAnalyzer>
+      <!-- <WaveAnalyzer :source-ctx="mainContext" :source="merger"></WaveAnalyzer> -->
+      <SumWavesDisplay :waves="waves"></SumWavesDisplay>
     </template>
 
     <template #footer>
