@@ -43,9 +43,9 @@
 
 <style scoped lang="scss">
 $header-h: 5vh;
-$body-h: 60vh;
+$body-h: 70vh;
 $footer-h: 5vh;
-$piano-h: 30vh;
+$piano-h: 20vh;
 
 .mainLayout {
   box-sizing: border-box;
@@ -72,8 +72,9 @@ $piano-h: 30vh;
   &__components {
     background-color: white;
     overflow: hidden;
-    display: grid;
-    grid-template-columns: 1.5fr 1fr;
+    // display: grid;
+
+    // grid-template-columns: 1.5fr 1fr;
   }
 
   &__mainDisplay {
