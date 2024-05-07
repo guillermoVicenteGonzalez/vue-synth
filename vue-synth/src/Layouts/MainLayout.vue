@@ -42,10 +42,17 @@
 </template>
 
 <style scoped lang="scss">
+<<<<<<< HEAD
   $header-h: 5vh;
   $body-h: 70vh;
   $footer-h: 5vh;
   $piano-h: 20vh;
+=======
+$header-h: 5vh;
+$body-h: 70vh;
+$footer-h: 5vh;
+$piano-h: 20vh;
+>>>>>>> 9159e72 (added scroll controls and main wave sound)
 
   .mainLayout {
     box-sizing: border-box;
@@ -104,6 +111,7 @@
     }
   }
 
+<<<<<<< HEAD
   // .mainLayout {
   //   box-sizing: border-box;
   //   background-color: #222222;
@@ -112,6 +120,15 @@
   //   max-width: 100vw;
   //   max-height: 100vh;
   //   overflow: hidden;
+=======
+  &__components {
+    background-color: white;
+    overflow: hidden;
+    // display: grid;
+
+    // grid-template-columns: 1.5fr 1fr;
+  }
+>>>>>>> b5386c1 (correctly populated layout)
 
   //   &__header {
   //     background-color: black;

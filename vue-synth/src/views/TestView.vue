@@ -2,6 +2,8 @@
   <MainLayout>
     <template #header> Vue-synth</template>
     <template #components>
+<<<<<<< HEAD
+<<<<<<< HEAD
       <div class="components">
         <WaveList :waves="waves" @wave-updated="onWaveUpdated" @wave-deleted="onWaveDeleted"
           @waveToggled="(disabled, index) => onWaveToggled(disabled, index)"></WaveList>
@@ -18,15 +20,59 @@
       </div>
     </template>
 
+<<<<<<< HEAD
     <template #display>
       <div class="displays">
         <div class="displays__pure">
           <SumWavesDisplay :waves="enabledWaves"></SumWavesDisplay>
+=======
+      <div class="waveCardList">
+        <WaveCard
+          v-for="(wave, index) in waves"
+          :key="index"
+          :wave="wave"
+          @update-wave="onWaveUpdated(index)"
+        ></WaveCard>
+=======
+      <div class="components">
+        <div class="components__waveCardList">
+          <WaveCard
+            v-for="(wave, index) in waves"
+            :key="index"
+            :wave="wave"
+            @update-wave="onWaveUpdated(index)"
+          ></WaveCard>
+        </div>
+        <div class="components__filters"></div>
+      </div>
+      <div class="controls">
+>>>>>>> 9159e72 (added scroll controls and main wave sound)
+        <button @click="createNewWave">new wave</button>
+        <button @click="playMainWave">play</button>
+      </div>
+    </template>
+
+    <template #display>
+      <div class="displays">
+        <div class="displays__pure">
+          <SumWavesDisplay :waves="waves"></SumWavesDisplay>
+>>>>>>> b5386c1 (correctly populated layout)
         </div>
         <div class="displays__analyser">
           <WaveAnalyzer :source-ctx="mainContext" :source="merger"></WaveAnalyzer>
         </div>
+<<<<<<< HEAD
       </div>
+=======
+    <template #body>
+      <!-- <MainWaveCanvas :source-ctx="mainContext" :source="merger"></MainWaveCanvas> -->
+      <!-- <WaveAnalyzer :source-ctx="mainContext" :source="merger"></WaveAnalyzer> -->
+      <SumWavesDisplay :waves="waves"></SumWavesDisplay>
+>>>>>>> 16e5dcc (main wave canvas added)
+=======
+        <!-- <WaveAnalyzer :source-ctx="mainContext" :source="merger"></WaveAnalyzer> -->
+      </div>
+>>>>>>> b5386c1 (correctly populated layout)
     </template>
 
     <template #footer>
@@ -50,19 +96,36 @@
     gain: GainNode;
   };
 
+<<<<<<< HEAD
   // let waves: Ref<Wave[]> = ref([]);
+=======
+let waves: Ref<Wave[]> = ref([]);
+let oscillators: Array<oscillatorItem> = [];
+let mainContext: Ref<AudioContext> = ref(new AudioContext());
+// let merger: ChannelMergerNode = mainContext.value.createChannelMerger();
+let merger: Ref<ChannelMergerNode> = ref(mainContext.value.createChannelMerger());
+// let merger: Ref = ref();
+>>>>>>> b5386c1 (correctly populated layout)
 
   let mainContext: Ref<AudioContext> = ref(new AudioContext());
   let merger: Ref<ChannelMergerNode> = ref(mainContext.value.createChannelMerger());
   let filters: Ref<BiquadFilterNode[]> = ref([]);
   let waveModules: Ref<AudioModule[]> = ref([])
 
+<<<<<<< HEAD
   let enabledWaves = computed(() => {
     return waveModules.value.filter(module => !module.disabled)
       .map((module) => {
         return module.wave
       })
   })
+=======
+  let tempOsc = mainContext.value.createOscillator();
+  tempOsc.frequency.value = wave.getFrequency();
+  let gainNode = mainContext.value.createGain();
+  gainNode.connect(merger.value, 0, 2);
+  tempOsc.connect(gainNode);
+>>>>>>> b5386c1 (correctly populated layout)
 
   let waves = computed(() => {
     return waveModules.value.map((module) => {
@@ -139,6 +202,34 @@
   onMounted(() => {
     merger.value.connect(mainContext.value.destination);
   });
+<<<<<<< HEAD
+=======
+}
+
+function onWaveUpdated(index: number): void {
+  updateWaveOscillator(index);
+}
+
+function updateWaveOscillator(index: number): void {
+  oscillators[index].osc.frequency.value = waves.value[index].getFrequency();
+  oscillators[index].osc.type = waves.value[index].getForm();
+  oscillators[index].gain.gain.setValueAtTime(
+    waves.value[index].getAmplitude() / 50,
+    mainContext.value.currentTime,
+  );
+}
+
+function playMainWave() {
+  // mainContext.value.resume();
+  mainContext.value.state == 'running' ? mainContext.value.suspend() : mainContext.value.resume();
+  console.log(merger);
+}
+
+onMounted(() => {
+  // merger.value = mainContext.value.createChannelMerger();
+  merger.value.connect(mainContext.value.destination);
+});
+>>>>>>> b5386c1 (correctly populated layout)
 </script>
 
 <style scoped lang="scss">
@@ -198,4 +289,51 @@
     justify-content: center;
     align-items: center;
   }
+<<<<<<< HEAD
+=======
+}
+
+.displays {
+  height: 100%;
+  // display: grid;
+  // grid-template-rows: 3fr 1fr;
+
+  &__pure {
+    height: 70%;
+    // background-color: red;
+  }
+
+  &__analyser {
+    height: 30%;
+    // background-color: blue;
+    > * {
+      object-fit: fill;
+    }
+  }
+}
+<<<<<<< HEAD
+>>>>>>> b5386c1 (correctly populated layout)
+=======
+
+.components {
+  height: 90%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  &__waveCardList {
+    border-right: solid 1px black;
+    overflow: auto;
+  }
+}
+
+.controls {
+  background-color: purple;
+  height: 10%;
+  display: flex;
+  padding: 1rem;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+}
+>>>>>>> 9159e72 (added scroll controls and main wave sound)
 </style>
