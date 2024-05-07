@@ -15,15 +15,20 @@
   <MainLayout>
     <template #header> Vue-synth</template>
     <template #components>
-      <div class="waveCardList">
-        <WaveCard
-          v-for="(wave, index) in waves"
-          :key="index"
-          :wave="wave"
-          @update-wave="onWaveUpdated(index)"
-        ></WaveCard>
+      <div class="components">
+        <div class="components__waveCardList">
+          <WaveCard
+            v-for="(wave, index) in waves"
+            :key="index"
+            :wave="wave"
+            @update-wave="onWaveUpdated(index)"
+          ></WaveCard>
+        </div>
+        <div class="components__filters"></div>
+      </div>
+      <div class="controls">
         <button @click="createNewWave">new wave</button>
-        <button @click="test">test</button>
+        <button @click="playMainWave">play</button>
       </div>
     </template>
 
@@ -60,7 +65,7 @@ type oscillatorItem = {
 
 let waves: Ref<Wave[]> = ref([]);
 let oscillators: Array<oscillatorItem> = [];
-let mainContext: Ref = ref(new AudioContext());
+let mainContext: Ref<AudioContext> = ref(new AudioContext());
 // let merger: ChannelMergerNode = mainContext.value.createChannelMerger();
 let merger: Ref<ChannelMergerNode> = ref(mainContext.value.createChannelMerger());
 // let merger: Ref = ref();
@@ -96,14 +101,14 @@ function updateWaveOscillator(index: number): void {
   );
 }
 
-function test() {
-  mainContext.value.resume();
+function playMainWave() {
+  // mainContext.value.resume();
+  mainContext.value.state == 'running' ? mainContext.value.suspend() : mainContext.value.resume();
   console.log(merger);
 }
 
 onMounted(() => {
   // merger.value = mainContext.value.createChannelMerger();
-  mainContext.value.resume();
   merger.value.connect(mainContext.value.destination);
 });
 </script>
@@ -122,15 +127,36 @@ onMounted(() => {
 
   &__pure {
     height: 70%;
-    background-color: red;
+    // background-color: red;
   }
 
   &__analyser {
     height: 30%;
-    background-color: blue;
+    // background-color: blue;
     > * {
       object-fit: fill;
     }
   }
+}
+
+.components {
+  height: 90%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  &__waveCardList {
+    border-right: solid 1px black;
+    overflow: auto;
+  }
+}
+
+.controls {
+  background-color: purple;
+  height: 10%;
+  display: flex;
+  padding: 1rem;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
 }
 </style>

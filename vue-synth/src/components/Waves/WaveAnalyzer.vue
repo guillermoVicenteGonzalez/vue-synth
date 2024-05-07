@@ -1,6 +1,5 @@
 <template>
   <canvas ref="myCanvas"></canvas>
-  <button @click="playSound">resume</button>
 </template>
 
 <script setup lang="ts">
@@ -58,10 +57,6 @@ function draw() {
 
   context.lineTo(myCanvas.value.width, myCanvas.value.height / 2);
   context.stroke();
-}
-
-function playSound() {
-  props.sourceCtx.state == 'running' ? props.sourceCtx.suspend() : props.sourceCtx.resume();
 }
 
 onMounted(() => {
