@@ -5,18 +5,15 @@
 
 <script setup lang="ts">
 import { ref, onMounted, type Ref } from 'vue';
-import Wave from '@/models/wave';
 
 const props = defineProps({
   sourceCtx: {
     type: AudioContext,
     required: true,
-    // default: new window.AudioContext(),
   },
   source: {
     type: ChannelMergerNode,
     required: true,
-    // default: new window.AudioContext().createChannelMerger(),
   },
 });
 
@@ -67,18 +64,7 @@ function playSound() {
   props.sourceCtx.state == 'running' ? props.sourceCtx.suspend() : props.sourceCtx.resume();
 }
 
-function test() {
-  props.sourceCtx.resume();
-  console.log(props.sourceCtx);
-}
-
 onMounted(() => {
-  // analyser = props.sourceCtx.createAnalyser();
-  // analyser.fftSize = 2048;
-
-  // bufferLength = analyser.frequencyBinCount;
-  // dataArray = new Uint8Array(bufferLength);
-  // analyser.getByteTimeDomainData(dataArray);
   props.source.connect(analyser);
   context = myCanvas.value.getContext('2d');
 

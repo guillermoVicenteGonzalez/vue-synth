@@ -5,10 +5,12 @@
 - [ ] Refactor legacy code using typescript and scss
 - [ ] new design
 - [ ] Emits and props with typing
-- [ ] Main wave with audio api visual analyzer (maybe other waves too)
+- [x] Main wave with audio api visual analyzer (maybe other waves too)
 - [ ] 4 Waves
-  - [ ] Amplitude and freq controls
-  - [ ] Individual sound
+  - [x] Amplitude and freq controls
+  - [x] Individual sound
+  - [ ] responsive and component based css
+  - [ ] disabled state (involves parent)
   - [ ] Color change
 - [ ] Main wave (sum of all colors)
 - [ ] Actual wave (what is being played in the piano)
