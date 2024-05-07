@@ -72,6 +72,8 @@ $piano-h: 30vh;
   &__components {
     background-color: white;
     overflow: hidden;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
   }
 
   &__mainDisplay {

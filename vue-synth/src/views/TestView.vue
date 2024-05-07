@@ -14,7 +14,7 @@
   </div> -->
   <MainLayout>
     <template #header> Vue-synth</template>
-    <template #side>
+    <template #components>
       <div class="waveCardList">
         <WaveCard
           v-for="(wave, index) in waves"
@@ -22,15 +22,21 @@
           :wave="wave"
           @update-wave="onWaveUpdated(index)"
         ></WaveCard>
+        <button @click="createNewWave">new wave</button>
+        <button @click="test">test</button>
       </div>
-      <button @click="createNewWave">new wave</button>
-      <button @click="test">test</button>
     </template>
 
-    <template #body>
-      <!-- <MainWaveCanvas :source-ctx="mainContext" :source="merger"></MainWaveCanvas> -->
-      <!-- <WaveAnalyzer :source-ctx="mainContext" :source="merger"></WaveAnalyzer> -->
-      <SumWavesDisplay :waves="waves"></SumWavesDisplay>
+    <template #display>
+      <div class="displays">
+        <div class="displays__pure">
+          <SumWavesDisplay :waves="waves"></SumWavesDisplay>
+        </div>
+        <div class="displays__analyser">
+          <WaveAnalyzer :source-ctx="mainContext" :source="merger"></WaveAnalyzer>
+        </div>
+        <!-- <WaveAnalyzer :source-ctx="mainContext" :source="merger"></WaveAnalyzer> -->
+      </div>
     </template>
 
     <template #footer>
@@ -55,7 +61,9 @@ type oscillatorItem = {
 let waves: Ref<Wave[]> = ref([]);
 let oscillators: Array<oscillatorItem> = [];
 let mainContext: Ref = ref(new AudioContext());
-let merger: ChannelMergerNode = mainContext.value.createChannelMerger();
+// let merger: ChannelMergerNode = mainContext.value.createChannelMerger();
+let merger: Ref<ChannelMergerNode> = ref(mainContext.value.createChannelMerger());
+// let merger: Ref = ref();
 
 function createNewWave() {
   let wave = new Wave(10, 40, 0);
@@ -65,7 +73,7 @@ function createNewWave() {
   let tempOsc = mainContext.value.createOscillator();
   tempOsc.frequency.value = wave.getFrequency();
   let gainNode = mainContext.value.createGain();
-  gainNode.connect(merger, 0, 2);
+  gainNode.connect(merger.value, 0, 2);
   tempOsc.connect(gainNode);
 
   tempOsc.start();
@@ -94,8 +102,9 @@ function test() {
 }
 
 onMounted(() => {
-  mainContext.value.suspend();
-  merger.connect(mainContext.value.destination);
+  // merger.value = mainContext.value.createChannelMerger();
+  mainContext.value.resume();
+  merger.value.connect(mainContext.value.destination);
 });
 </script>
 
@@ -103,6 +112,25 @@ onMounted(() => {
 .waveCardList {
   > * {
     margin: 1rem 0.5rem;
+  }
+}
+
+.displays {
+  height: 100%;
+  // display: grid;
+  // grid-template-rows: 3fr 1fr;
+
+  &__pure {
+    height: 70%;
+    background-color: red;
+  }
+
+  &__analyser {
+    height: 30%;
+    background-color: blue;
+    > * {
+      object-fit: fill;
+    }
   }
 }
 </style>
