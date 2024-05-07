@@ -44,6 +44,7 @@ import WaveCard from '../widgets/WaveCard.vue';
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { onMounted, ref, type Ref } from 'vue';
 import WaveAnalyzer from '@/components/Waves/WaveAnalyzer.vue';
+import SumWavesDisplay from '@/components/Waves/SumWavesDisplay.vue';
 
 type oscillatorItem = {
   osc: OscillatorNode;
