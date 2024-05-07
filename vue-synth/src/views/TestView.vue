@@ -29,7 +29,8 @@
 
     <template #body>
       <!-- <MainWaveCanvas :source-ctx="mainContext" :source="merger"></MainWaveCanvas> -->
-      <WaveAnalyzer :source-ctx="mainContext" :source="merger"></WaveAnalyzer>
+      <!-- <WaveAnalyzer :source-ctx="mainContext" :source="merger"></WaveAnalyzer> -->
+      <SumWavesDisplay :waves="waves"></SumWavesDisplay>
     </template>
 
     <template #footer>
@@ -44,6 +45,7 @@ import WaveCard from '../widgets/WaveCard.vue';
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { onMounted, ref, type Ref } from 'vue';
 import WaveAnalyzer from '@/components/Waves/WaveAnalyzer.vue';
+import SumWavesDisplay from '@/components/Waves/SumWavesDisplay.vue';
 
 type oscillatorItem = {
   osc: OscillatorNode;
