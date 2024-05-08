@@ -29,6 +29,7 @@
       <div class="controls">
         <button @click="createNewWave">new wave</button>
         <button @click="playMainWave">play</button>
+        <button>new effect</button>
       </div>
     </template>
 
@@ -140,19 +141,23 @@ onMounted(() => {
 }
 
 .components {
-  height: 90%;
+  height: 92%;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.5fr 1fr;
 
   &__waveCardList {
     border-right: solid 1px black;
     overflow: auto;
+    padding: 1rem 0.5rem;
+    > * {
+      margin-bottom: 1rem;
+    }
   }
 }
 
 .controls {
   background-color: purple;
-  height: 10%;
+  height: 8%;
   display: flex;
   padding: 1rem;
   gap: 1rem;

@@ -2,7 +2,7 @@
 
 # To-do
 
-- [ ] Refactor legacy code using typescript and scss
+- [x] Refactor legacy code using typescript and scss
 - [ ] new design
 - [ ] Emits and props with typing
 - [x] Main wave with audio api visual analyzer (maybe other waves too)
@@ -20,6 +20,10 @@
 - [ ] Midi capabilities
 - [ ] Effects
 - [ ] Preset saver.
+- [ ] Reverb
+- [ ] Turn test elements into widgets
+
+  - the view should only be responsible for the data. It should contain the layout and pass into it some widgets. The card list should be a widget, the effects list should be a widget etc just as the wave displays are.
 
 - [ ] Start an oscillator stopped (if that makes any sense)
 - [ ] pass options to an audio context
