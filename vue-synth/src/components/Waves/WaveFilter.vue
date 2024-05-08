@@ -2,17 +2,31 @@
   <div class="card">
     <div class="card__top">
       <Selector :items="props.sources" v-model="currentSource" @change="onSourceChange"></Selector>
-      <Selector :items="filterTypes" v-model="filterType" @change="onFilterChange"></Selector>
+      <Selector
+        :items="Object.keys(filterTypes)"
+        v-model="filterType"
+        @change="onFilterChange"
+      ></Selector>
     </div>
 
     <div class="card__body">
-      <!-- <WaveAnalyzer :source-ctx="internalContext"></WaveAnalyzer> -->
-      <canvas></canvas>
+      <WaveAnalyzer :source="props.filter" v-if="currentSource"></WaveAnalyzer>
     </div>
 
     <div class="card__bottom">
-      <input type="range" class="card__bottom__slider" v-model="cutoffFrequency" range="1000" />
-      <input type="number" class="card__bottom__input" v-model="cutoffFrequency" />
+      <input
+        type="range"
+        class="card__bottom__slider"
+        v-model="cutoffFrequency"
+        :max="1000"
+        @input="onFilterChange"
+      />
+      <input
+        type="number"
+        class="card__bottom__input"
+        v-model="cutoffFrequency"
+        @input="onFilterChange"
+      />
     </div>
   </div>
 </template>
@@ -39,11 +53,13 @@ const props = defineProps({
     required: true,
   },
 
-  mainCtxt: {
-    type: AudioContext,
-    required: true,
+  mixedWave: {
+    type: AudioNode,
+    // required: true,
   },
 });
+
+const emit = defineEmits(['attach-node', 'detach-node']);
 
 enum filterTypes {
   lowpass = 'lowpass',
@@ -58,13 +74,11 @@ enum filterTypes {
 
 let cutoffFrequency: Ref<number> = ref(0);
 let filterType: Ref<BiquadFilterType> = ref('lowpass');
-let currentSource: Ref<AudioNode | undefined> = ref();
+let currentSource: Ref<AudioNode> = ref();
 let previousSource: AudioNode;
 let internalContext: Ref<AudioContext> = ref(new AudioContext());
 let internalFilter: Ref<BiquadFilterNode> = ref(internalContext.value.createBiquadFilter());
 let internalSource: AudioNode;
-
-console.log(filterType.value);
 
 function onFilterChange() {
   /**
@@ -79,7 +93,13 @@ function onFilterChange() {
     0,
   );
 
-  props.filter.frequency.setTargetAtTime(cutoffFrequency.value, props.mainCtxt.currentTime, 0);
+  //   props.filter.frequency.setTargetAtTime(cutoffFrequency.value, props.mainCtxt.currentTime, 0);
+  props.filter.frequency.setTargetAtTime(
+    cutoffFrequency.value,
+    currentSource.value.context.currentTime,
+    0,
+  );
+  console.log('changing filter');
 }
 
 function onSourceChange() {
@@ -90,6 +110,18 @@ function onSourceChange() {
    * - conectar la source al filtro prop (emitiendo un evento)
    * - crear una source interna
    */
+  //   internalSource = currentSource.value.gain;
+  //   console.log(internalSource);
+
+  //conecto el filtro a la fuente
+  //devuelvo el filtro en un evento para conectarlo al nodo pertinente
+  if (previousSource != null) {
+    previousSource.disconnect(props.filter);
+  } else {
+    // currentSource.value.connect(props.filter);
+    console.log(currentSource.value);
+    emit('attach-node', currentSource.value);
+  }
 }
 </script>
 

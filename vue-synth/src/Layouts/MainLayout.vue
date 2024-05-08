@@ -80,6 +80,7 @@ $piano-h: 20vh;
   &__mainDisplay {
     background-color: grey;
     overflow: hidden;
+    resize: both;
   }
 
   &__piano {

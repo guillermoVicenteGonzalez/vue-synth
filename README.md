@@ -27,3 +27,9 @@
 
 - [ ] Start an oscillator stopped (if that makes any sense)
 - [ ] pass options to an audio context
+- [ ] Nodes include their context => it is not necesary to pass the context as a prop.
+- [ ] If a node alredy has a filter it is non selectable
+- [ ] Oscillators must be ref in order for the filters to be able to select them
+- [ ] Pass gain node as main node to attach a filter
+
+- Maybe it is better to initialize everything with a filter with a cutoff of 0. if a filter is detached we don't disconnect it, we just set its cutoff to 0.

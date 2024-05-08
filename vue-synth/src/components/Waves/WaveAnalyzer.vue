@@ -6,17 +6,17 @@
 import { ref, onMounted, type Ref } from 'vue';
 
 const props = defineProps({
-  sourceCtx: {
-    type: AudioContext,
-    required: true,
-  },
+  // sourceCtx: {
+  //   type: AudioContext,
+  //   required: true,
+  // },
   source: {
     type: AudioNode,
     required: true,
   },
 });
 
-let analyser: AnalyserNode = props.sourceCtx.createAnalyser();
+let analyser: AnalyserNode = props.source.context.createAnalyser();
 analyser.fftSize = 2048;
 
 let bufferLength: number = analyser.frequencyBinCount;
