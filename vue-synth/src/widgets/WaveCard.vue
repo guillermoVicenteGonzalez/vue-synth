@@ -5,7 +5,7 @@
     <div class="waveCard__left-slot">
       <Selector
         v-model="wave.form"
-        :items="waveForms"
+        :items="Object.keys(waveForms)"
         class="selector"
         @change="onWaveChangeCB"
       ></Selector>
@@ -26,7 +26,7 @@
           <div class="waveCard__control__slider">
             <VerticalSlider
               v-model="wave.amplitude"
-              range="50"
+              :range="50"
               @valueChange="onWaveChangeCB"
             ></VerticalSlider>
           </div>

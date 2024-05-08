@@ -19,7 +19,7 @@ const props = defineProps({
     default: '',
   },
 });
-const model = defineModel('select an option');
+const model = defineModel();
 const emit = defineEmits(['change']);
 </script>
 

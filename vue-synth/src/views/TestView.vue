@@ -7,9 +7,15 @@
         <div class="components__filters">
           <WaveFilter
             v-for="filter in filters"
+            :sources="
+              oscillators.map((osc) => {
+                return osc.gain;
+              })
+            "
             :filter="filter"
             :items="oscillators"
             :main-ctxt="mainContext"
+            @attach-node="(source: AudioNode) => attachEffect(filter, source, merger)"
           ></WaveFilter>
         </div>
       </div>
@@ -58,8 +64,8 @@ let merger: Ref<ChannelMergerNode> = ref(mainContext.value.createChannelMerger()
 let filters: Ref<BiquadFilterNode[]> = ref([]);
 
 function createNewWave() {
-  let wave = new Wave(10, 40, 0);
-  wave.setForm('square');
+  let wave = new Wave(10, 1, 0);
+  wave.setForm('sine');
   waves.value.push(wave);
 
   let tempOsc = mainContext.value.createOscillator();
@@ -73,10 +79,26 @@ function createNewWave() {
     osc: tempOsc,
     gain: gainNode,
   });
+
+  console.log(
+    oscillators.map((osc) => {
+      return osc.gain;
+    }),
+  );
 }
 
 function onWaveUpdated(index: number): void {
   updateWaveOscillator(index);
+}
+
+function attachEffect(effect: AudioNode, source: AudioNode, end: AudioNode) {
+  console.log('attaching');
+  console.log(source);
+  console.log(effect);
+  console.log(end);
+  source.disconnect(end);
+  source.connect(effect);
+  effect.connect(end);
 }
 
 function updateWaveOscillator(index: number): void {
@@ -113,6 +135,7 @@ onMounted(() => {
 
 .displays {
   height: 100%;
+  resize: both;
   // display: grid;
   // grid-template-rows: 3fr 1fr;
 
@@ -123,12 +146,14 @@ onMounted(() => {
 
   &__analyser {
     height: 30%;
+    resize: both;
     // background-color: blue;
     // > * {
     //   object-fit: fill;
     // }
     &:deep(canvas) {
       object-fit: fill;
+      resize: both;
     }
   }
 }
