@@ -130,12 +130,20 @@ $piano-h: 20vh;
   }
 >>>>>>> b5386c1 (correctly populated layout)
 
+<<<<<<< HEAD
   //   &__header {
   //     background-color: black;
   //     color: white;
   //     height: $header-h;
   //     text-align: center;
   //   }
+=======
+  &__mainDisplay {
+    background-color: grey;
+    overflow: hidden;
+    resize: both;
+  }
+>>>>>>> b94b397 (working filters)
 
   //   &__body {
   //     display: grid;

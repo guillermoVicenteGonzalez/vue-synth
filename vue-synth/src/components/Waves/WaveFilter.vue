@@ -1,4 +1,6 @@
 <template>
+<<<<<<< HEAD
+<<<<<<< HEAD
   <AudioModuleCard>
     <div class="card">
       <div class="card__top">
@@ -16,13 +18,73 @@
       </div>
     </div>
   </AudioModuleCard>
+=======
+  <div class="card">
+    <div class="card__top">
+      <Selector :items="props.sources" v-model="currentSource" @change="onSourceChange"></Selector>
+      <Selector
+        :items="Object.keys(filterTypes)"
+        v-model="filterType"
+        @change="onFilterChange"
+      ></Selector>
+    </div>
+=======
+  <AudioModuleCard>
+    <div class="card">
+      <div class="card__top">
+        <Selector
+          :items="props.sources"
+          v-model="currentSource"
+          @change="onSourceChange"
+        ></Selector>
+        <Selector
+          :items="Object.keys(filterTypes)"
+          v-model="filterType"
+          @change="onFilterChange"
+        ></Selector>
+      </div>
+>>>>>>> 4260106 (card component created)
+
+      <div class="card__body">
+        <WaveAnalyzer :source="props.filter" v-if="currentSource"></WaveAnalyzer>
+      </div>
+
+      <div class="card__bottom">
+        <input
+          type="range"
+          class="card__bottom__slider"
+          v-model="cutoffFrequency"
+          :max="1000"
+          @input="onFilterChange"
+        />
+        <input
+          type="number"
+          class="card__bottom__input"
+          v-model="cutoffFrequency"
+          @input="onFilterChange"
+        />
+      </div>
+    </div>
+<<<<<<< HEAD
+  </div>
+>>>>>>> 2c0de8d (wave filter structure)
+=======
+  </AudioModuleCard>
+>>>>>>> 4260106 (card component created)
 </template>
 
 <script setup lang="ts">
 import { ref, type Ref } from 'vue';
 import Selector from '../Common/Selector.vue';
 import WaveAnalyzer from './WaveAnalyzer.vue';
+<<<<<<< HEAD
+<<<<<<< HEAD
 import AudioModuleCard from './AudioModuleCard.vue';
+=======
+>>>>>>> 2c0de8d (wave filter structure)
+=======
+import AudioModuleCard from './AudioModuleCard.vue';
+>>>>>>> 4260106 (card component created)
 
 //recibe una coleccion de ondas (oscillators) a los que puede ser aplicado
 //le paso un origen que no puede ser el destino y le añade un
@@ -41,6 +103,8 @@ const props = defineProps({
     required: true,
   },
 
+<<<<<<< HEAD
+<<<<<<< HEAD
   mixedWave: {
     type: AudioNode,
     // required: true,
@@ -49,6 +113,24 @@ const props = defineProps({
 
 const emit = defineEmits(['attach-node', 'detach-node']);
 
+=======
+  mainCtxt: {
+    type: AudioContext,
+    required: true,
+  },
+});
+
+>>>>>>> 2c0de8d (wave filter structure)
+=======
+  mixedWave: {
+    type: AudioNode,
+    // required: true,
+  },
+});
+
+const emit = defineEmits(['attach-node', 'detach-node']);
+
+>>>>>>> b94b397 (working filters)
 enum filterTypes {
   lowpass = 'lowpass',
   highpass = 'highpass',
@@ -62,13 +144,29 @@ enum filterTypes {
 
 let cutoffFrequency: Ref<number> = ref(0);
 let filterType: Ref<BiquadFilterType> = ref('lowpass');
+<<<<<<< HEAD
+<<<<<<< HEAD
 let currentSource: Ref<AudioNode> = ref();
 let previousSource: AudioNode; // * used just to know if it is the first time a node is attached
+=======
+let currentSource: Ref<AudioNode | undefined> = ref();
+=======
+let currentSource: Ref<AudioNode> = ref();
+>>>>>>> b94b397 (working filters)
+let previousSource: AudioNode;
+>>>>>>> 2c0de8d (wave filter structure)
 let internalContext: Ref<AudioContext> = ref(new AudioContext());
 let internalFilter: Ref<BiquadFilterNode> = ref(internalContext.value.createBiquadFilter());
 let internalSource: AudioNode;
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+console.log(filterType.value);
+>>>>>>> 2c0de8d (wave filter structure)
 
+=======
+>>>>>>> b94b397 (working filters)
 function onFilterChange() {
   /**
    * Cambio el filtro interno y el externo a la vez
@@ -82,6 +180,10 @@ function onFilterChange() {
     0,
   );
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b94b397 (working filters)
   //   props.filter.frequency.setTargetAtTime(cutoffFrequency.value, props.mainCtxt.currentTime, 0);
   props.filter.frequency.setTargetAtTime(
     cutoffFrequency.value,
@@ -89,6 +191,7 @@ function onFilterChange() {
     0,
   );
   console.log('changing filter');
+<<<<<<< HEAD
 }
 
 function onSourceChange() {
@@ -103,6 +206,46 @@ function onSourceChange() {
 
 function onFilterDestroy() {
   emit('detach-node', currentSource.value);
+=======
+  props.filter.frequency.setTargetAtTime(cutoffFrequency.value, props.mainCtxt.currentTime, 0);
+=======
+>>>>>>> b94b397 (working filters)
+}
+
+function onSourceChange() {
+<<<<<<< HEAD
+  /**
+   * Si cambia la source hay que
+   * - desconectar la previa?
+   * - asignar la source actual a la variable previa
+   * - conectar la source al filtro prop (emitiendo un evento)
+   * - crear una source interna
+   */
+<<<<<<< HEAD
+>>>>>>> 2c0de8d (wave filter structure)
+=======
+  //   internalSource = currentSource.value.gain;
+  //   console.log(internalSource);
+
+  //conecto el filtro a la fuente
+  //devuelvo el filtro en un evento para conectarlo al nodo pertinente
+=======
+>>>>>>> 1a249fc (wave collection (unused) + filter management)
+  if (previousSource != null) {
+    // previousSource.disconnect(props.filter);
+    emit('detach-node', previousSource);
+  }
+<<<<<<< HEAD
+>>>>>>> b94b397 (working filters)
+=======
+  console.log(currentSource.value);
+  emit('attach-node', currentSource.value);
+  previousSource = currentSource.value;
+}
+
+function onFilterDestroy() {
+  emit('detach-node', currentSource.value);
+>>>>>>> 1a249fc (wave collection (unused) + filter management)
 }
 </script>
 
@@ -111,7 +254,15 @@ function onFilterDestroy() {
   display: block;
   width: 100%;
   height: 100%;
+<<<<<<< HEAD
+<<<<<<< HEAD
   //   max-height: 13rem;
+=======
+  max-height: 13rem;
+>>>>>>> 2c0de8d (wave filter structure)
+=======
+  //   max-height: 13rem;
+>>>>>>> 4260106 (card component created)
 
   border-radius: 20px;
   box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.5);
@@ -127,7 +278,10 @@ function onFilterDestroy() {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2c0de8d (wave filter structure)
     &:deep(select) {
       width: 100%;
     }

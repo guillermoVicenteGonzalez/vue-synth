@@ -7,6 +7,7 @@ export default class AudioModule {
   context: AudioContext;
   gain: GainNode;
   effects: AudioNode[];
+<<<<<<< HEAD
   end: AudioNode; //last node before the gain ganancia el penultimo
   exit: AudioNode;
   disabled: Boolean;
@@ -24,11 +25,21 @@ export default class AudioModule {
     this.wave = w;
     this.context = ctx;
     this.disabled = false;
+=======
+  end: AudioNode;
+  exit: AudioNode;
+
+  constructor(n: string = 'default', w: Wave, ctx: AudioContext, ex: AudioNode) {
+    this.name = n;
+    this.wave = w;
+    this.context = ctx;
+>>>>>>> 1a249fc (wave collection (unused) + filter management)
 
     this.effects = [];
 
     this.oscillator = this.context.createOscillator();
     this.oscillator.frequency.value = this.wave.getFrequency();
+<<<<<<< HEAD
     this.oscillator.start();
     this.gain = this.context.createGain();
     this.oscillator.connect(this.gain);
@@ -36,6 +47,14 @@ export default class AudioModule {
 
     ex ? this.exit = ex : this.exit = this.context.destination
     this.gain.connect(this.exit, 0, 2);
+=======
+    this.gain = this.context.createGain();
+    this.oscillator.connect(this.gain);
+
+    this.end = this.gain;
+    this.exit = ex;
+    this.end.connect(ex);
+>>>>>>> 1a249fc (wave collection (unused) + filter management)
   }
 
   updateOscillator() {
@@ -45,14 +64,22 @@ export default class AudioModule {
   }
 
   attachEffect(nEffect: AudioNode) {
+<<<<<<< HEAD
     this.end.disconnect(this.gain);
     this.end.connect(nEffect);
     this.end = nEffect;
     this.end.connect(this.gain);
+=======
+    this.end.disconnect(this.exit);
+    this.end.connect(nEffect);
+    this.end = nEffect;
+    this.end.connect(this.exit);
+>>>>>>> 1a249fc (wave collection (unused) + filter management)
 
     this.effects.push(nEffect);
   }
 
+<<<<<<< HEAD
   detachEffect(effect?: AudioNode): void {
     if (this.effects.length == 0) {
       console.log("effects are empty")
@@ -79,10 +106,24 @@ export default class AudioModule {
   }
 
   connectExit(nExit: AudioNode) {
+=======
+  detachEffect(effect: AudioNode) {
+    if (effect == null) {
+      let tempEff = this.effects.pop();
+      tempEff?.disconnect(this.exit);
+
+      let lastEff = this.effects[this.effects.length];
+      lastEff.disconnect(tempEff);
+    }
+  }
+
+  changeExit(nExit: AudioNode) {
+>>>>>>> 1a249fc (wave collection (unused) + filter management)
     this.end.disconnect(this.exit);
     this.end.connect(nExit);
     this.exit = nExit;
   }
+<<<<<<< HEAD
 
   unplugExit() {
     this.end.disconnect(this.exit)
@@ -116,4 +157,6 @@ export default class AudioModule {
       ? this.unplugOscillator()
       : this.plugOscillator()
   }
+=======
+>>>>>>> 1a249fc (wave collection (unused) + filter management)
 }

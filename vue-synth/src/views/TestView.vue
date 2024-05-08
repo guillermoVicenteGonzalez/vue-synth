@@ -35,22 +35,21 @@
         ></WaveCard>
 =======
       <div class="components">
-        <!-- <div class="components__waveCardList">
-          <WaveCard
-            v-for="(wave, index) in waves"
-            :key="index"
-            :wave="wave"
-            @update-wave="onWaveUpdated(index)"
-          ></WaveCard>
-        </div> -->
-        <WaveList :waves="waves" @wave-updated="onWaveUpdated"></WaveList>
-        <div class="components__filters"></div>
+        <WaveList :waves="waves" @wave-updated="onWaveUpdated" @wave-deleted="onWaveDeleted"></WaveList>
+        <div class="components__filters">
+          <WaveFilter v-for="filter in filters" :sources="oscillators.map((osc) => {
+            return osc.gain;
+          })
+            " :filter="filter" :items="oscillators" :main-ctxt="mainContext"
+            @detach-node="(source: AudioNode) => detachEffect(filter, source, merger)"
+            @attach-node="(source: AudioNode) => attachEffect(filter, source, merger)"></WaveFilter>
+        </div>
       </div>
       <div class="controls">
 >>>>>>> 9159e72 (added scroll controls and main wave sound)
         <button @click="createNewWave">new wave</button>
         <button @click="playMainWave">play</button>
-        <button>new effect</button>
+        <button @click="createNewFilter">new effect</button>
       </div>
     </template>
 
@@ -64,6 +63,7 @@
           <WaveAnalyzer :source-ctx="mainContext" :source="merger"></WaveAnalyzer>
         </div>
 <<<<<<< HEAD
+<<<<<<< HEAD
       </div>
 =======
     <template #body>
@@ -73,6 +73,8 @@
 >>>>>>> 16e5dcc (main wave canvas added)
 =======
         <!-- <WaveAnalyzer :source-ctx="mainContext" :source="merger"></WaveAnalyzer> -->
+=======
+>>>>>>> 2c0de8d (wave filter structure)
       </div>
 >>>>>>> b5386c1 (correctly populated layout)
     </template>
@@ -95,13 +97,16 @@
   import AudioModule from '@/models/AudioModule';
 =======
 import Wave from '@/models/wave';
-import WaveCard from '../widgets/WaveCard.vue';
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { onMounted, ref, type Ref } from 'vue';
 import WaveAnalyzer from '@/components/Waves/WaveAnalyzer.vue';
 import SumWavesDisplay from '@/components/Waves/SumWavesDisplay.vue';
 import WaveList from '@/widgets/WaveList.vue';
+<<<<<<< HEAD
 >>>>>>> 226b0cf (wave list widget)
+=======
+import WaveFilter from '@/components/Waves/WaveFilter.vue';
+>>>>>>> 2c0de8d (wave filter structure)
 
   type oscillatorItem = {
     osc: OscillatorNode;
@@ -112,17 +117,27 @@ import WaveList from '@/widgets/WaveList.vue';
   // let waves: Ref<Wave[]> = ref([]);
 =======
 let waves: Ref<Wave[]> = ref([]);
-let oscillators: Array<oscillatorItem> = [];
+let oscillators: Ref<oscillatorItem[]> = ref([]);
 let mainContext: Ref<AudioContext> = ref(new AudioContext());
-// let merger: ChannelMergerNode = mainContext.value.createChannelMerger();
 let merger: Ref<ChannelMergerNode> = ref(mainContext.value.createChannelMerger());
+<<<<<<< HEAD
 // let merger: Ref = ref();
 >>>>>>> b5386c1 (correctly populated layout)
+=======
+let filters: Ref<BiquadFilterNode[]> = ref([]);
+>>>>>>> 2c0de8d (wave filter structure)
 
+<<<<<<< HEAD
   let mainContext: Ref<AudioContext> = ref(new AudioContext());
   let merger: Ref<ChannelMergerNode> = ref(mainContext.value.createChannelMerger());
   let filters: Ref<BiquadFilterNode[]> = ref([]);
   let waveModules: Ref<AudioModule[]> = ref([])
+=======
+function createNewWave() {
+  let wave = new Wave(10, 1, 0);
+  wave.setForm('sine');
+  waves.value.push(wave);
+>>>>>>> b94b397 (working filters)
 
 <<<<<<< HEAD
   let enabledWaves = computed(() => {
@@ -139,6 +154,7 @@ let merger: Ref<ChannelMergerNode> = ref(mainContext.value.createChannelMerger()
   tempOsc.connect(gainNode);
 >>>>>>> b5386c1 (correctly populated layout)
 
+<<<<<<< HEAD
   let waves = computed(() => {
     return waveModules.value.map((module) => {
       return module.wave
@@ -213,39 +229,89 @@ let merger: Ref<ChannelMergerNode> = ref(mainContext.value.createChannelMerger()
 
   onMounted(() => {
     merger.value.connect(mainContext.value.destination);
+=======
+  tempOsc.start();
+  oscillators.value.push({
+    osc: tempOsc,
+    gain: gainNode,
+>>>>>>> 1a249fc (wave collection (unused) + filter management)
   });
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+
+  console.log(
+    oscillators.value.map((osc) => {
+      return osc.gain;
+    }),
+  );
+>>>>>>> b94b397 (working filters)
 }
 
 function onWaveUpdated(index: number): void {
-  // alert(index);
   updateWaveOscillator(index);
 }
 
+function onWaveDeleted(index: number): void {
+  oscillators.value[index].osc.stop();
+  oscillators.value[index].gain.disconnect(merger.value);
+  oscillators.value.splice(index, 1);
+  waves.value.splice(index, 1)
+}
+
+function attachEffect(effect: AudioNode, source: AudioNode, end: AudioNode) {
+  console.log('attaching');
+
+  console.log(source);
+  console.log(effect);
+  console.log(end);
+
+  source.disconnect(end);
+  source.connect(effect);
+  effect.connect(end);
+}
+
+function detachEffect(effect: AudioNode, source: AudioNode, end: AudioNode) {
+  console.log('detaching');
+
+  console.log(source);
+  console.log(effect);
+  console.log(end);
+
+  source.disconnect(effect);
+  effect.disconnect(end);
+  source.connect(end);
+}
+
 function updateWaveOscillator(index: number): void {
-  oscillators[index].osc.frequency.value = waves.value[index].getFrequency();
-  oscillators[index].osc.type = waves.value[index].getForm();
-  oscillators[index].gain.gain.setValueAtTime(
+  oscillators.value[index].osc.frequency.value = waves.value[index].getFrequency();
+  oscillators.value[index].osc.type = waves.value[index].getForm();
+  oscillators.value[index].gain.gain.setValueAtTime(
     waves.value[index].getAmplitude() / 50,
     mainContext.value.currentTime,
   );
 }
 
+function createNewFilter() {
+  let f: BiquadFilterNode = mainContext.value.createBiquadFilter();
+  filters.value.push(f);
+  console.log(filters.value.length);
+}
+
 function playMainWave() {
-  // mainContext.value.resume();
   mainContext.value.state == 'running' ? mainContext.value.suspend() : mainContext.value.resume();
   console.log(merger);
 }
 
 onMounted(() => {
-  // merger.value = mainContext.value.createChannelMerger();
   merger.value.connect(mainContext.value.destination);
 });
 >>>>>>> b5386c1 (correctly populated layout)
 </script>
 
 <style scoped lang="scss">
+<<<<<<< HEAD
   .displays {
     height: 100%;
     resize: both;
@@ -306,8 +372,11 @@ onMounted(() => {
 =======
 }
 
+=======
+>>>>>>> 4260106 (card component created)
 .displays {
   height: 100%;
+  resize: both;
   // display: grid;
   // grid-template-rows: 3fr 1fr;
 
@@ -318,12 +387,15 @@ onMounted(() => {
 
   &__analyser {
     height: 30%;
+    resize: both;
+
     // background-color: blue;
     // > * {
     //   object-fit: fill;
     // }
     &:deep(canvas) {
       object-fit: fill;
+      resize: both;
     }
   }
 }
@@ -336,13 +408,19 @@ onMounted(() => {
   display: grid;
   grid-template-columns: 1.5fr 1fr;
 
-  &__waveCardList {
-    border-right: solid 1px black;
+  // &__waveCardList {
+  //   border-right: solid 1px black;
+  //   overflow: auto;
+  //   // padding: 1rem 0.5rem;
+  //   > * {
+  //     margin-bottom: 1rem;
+  //   }
+  // }
+
+  &__filters {
     overflow: auto;
-    padding: 1rem 0.5rem;
-    > * {
-      margin-bottom: 1rem;
-    }
+
+    padding: 1rem;
   }
 }
 
