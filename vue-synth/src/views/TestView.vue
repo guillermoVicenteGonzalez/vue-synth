@@ -35,20 +35,22 @@
         ></WaveCard>
 =======
       <div class="components">
-        <div class="components__waveCardList">
+        <!-- <div class="components__waveCardList">
           <WaveCard
             v-for="(wave, index) in waves"
             :key="index"
             :wave="wave"
             @update-wave="onWaveUpdated(index)"
           ></WaveCard>
-        </div>
+        </div> -->
+        <WaveList :waves="waves" @wave-updated="onWaveUpdated"></WaveList>
         <div class="components__filters"></div>
       </div>
       <div class="controls">
 >>>>>>> 9159e72 (added scroll controls and main wave sound)
         <button @click="createNewWave">new wave</button>
         <button @click="playMainWave">play</button>
+        <button>new effect</button>
       </div>
     </template>
 
@@ -82,6 +84,7 @@
 </template>
 
 <script setup lang="ts">
+<<<<<<< HEAD
   import Wave from '@/models/wave';
   import MainLayout from '@/Layouts/MainLayout.vue';
   import { onMounted, ref, computed, type Ref } from 'vue';
@@ -90,6 +93,15 @@
   import WaveList from '@/widgets/WaveList.vue';
   import WaveFilter from '@/components/Waves/WaveFilter.vue';
   import AudioModule from '@/models/AudioModule';
+=======
+import Wave from '@/models/wave';
+import WaveCard from '../widgets/WaveCard.vue';
+import MainLayout from '@/Layouts/MainLayout.vue';
+import { onMounted, ref, type Ref } from 'vue';
+import WaveAnalyzer from '@/components/Waves/WaveAnalyzer.vue';
+import SumWavesDisplay from '@/components/Waves/SumWavesDisplay.vue';
+import WaveList from '@/widgets/WaveList.vue';
+>>>>>>> 226b0cf (wave list widget)
 
   type oscillatorItem = {
     osc: OscillatorNode;
@@ -207,6 +219,7 @@ let merger: Ref<ChannelMergerNode> = ref(mainContext.value.createChannelMerger()
 }
 
 function onWaveUpdated(index: number): void {
+  // alert(index);
   updateWaveOscillator(index);
 }
 
@@ -306,7 +319,10 @@ onMounted(() => {
   &__analyser {
     height: 30%;
     // background-color: blue;
-    > * {
+    // > * {
+    //   object-fit: fill;
+    // }
+    &:deep(canvas) {
       object-fit: fill;
     }
   }
@@ -316,19 +332,23 @@ onMounted(() => {
 =======
 
 .components {
-  height: 90%;
+  height: 92%;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.5fr 1fr;
 
   &__waveCardList {
     border-right: solid 1px black;
     overflow: auto;
+    padding: 1rem 0.5rem;
+    > * {
+      margin-bottom: 1rem;
+    }
   }
 }
 
 .controls {
   background-color: purple;
-  height: 10%;
+  height: 8%;
   display: flex;
   padding: 1rem;
   gap: 1rem;
