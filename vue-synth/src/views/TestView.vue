@@ -1,36 +1,22 @@
 <template>
-  <!-- <div class="testLayout">
-    <h1 class="testLayout__heading">Test view</h1>
-
-    <div class="testLayout__body">
-      <div class="testLayout__body__left">
-        <WaveCard v-for="(wave, index) in waves" :key="index" :wave="wave"></WaveCard>
-      </div>
-
-      <div class="testLayout__body__center">
-        <MainWaveCanvas :waves="waves"></MainWaveCanvas>
-      </div>
-    </div>
-  </div> -->
   <MainLayout>
     <template #header> Vue-synth</template>
     <template #components>
       <div class="components">
-        <!-- <div class="components__waveCardList">
-          <WaveCard
-            v-for="(wave, index) in waves"
-            :key="index"
-            :wave="wave"
-            @update-wave="onWaveUpdated(index)"
-          ></WaveCard>
-        </div> -->
         <WaveList :waves="waves" @wave-updated="onWaveUpdated"></WaveList>
-        <div class="components__filters"></div>
+        <div class="components__filters">
+          <WaveFilter
+            v-for="filter in filters"
+            :filter="filter"
+            :items="oscillators"
+            :main-ctxt="mainContext"
+          ></WaveFilter>
+        </div>
       </div>
       <div class="controls">
         <button @click="createNewWave">new wave</button>
         <button @click="playMainWave">play</button>
-        <button>new effect</button>
+        <button @click="createNewFilter">new effect</button>
       </div>
     </template>
 
@@ -42,7 +28,6 @@
         <div class="displays__analyser">
           <WaveAnalyzer :source-ctx="mainContext" :source="merger"></WaveAnalyzer>
         </div>
-        <!-- <WaveAnalyzer :source-ctx="mainContext" :source="merger"></WaveAnalyzer> -->
       </div>
     </template>
 
@@ -54,12 +39,12 @@
 
 <script setup lang="ts">
 import Wave from '@/models/wave';
-import WaveCard from '../widgets/WaveCard.vue';
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { onMounted, ref, type Ref } from 'vue';
 import WaveAnalyzer from '@/components/Waves/WaveAnalyzer.vue';
 import SumWavesDisplay from '@/components/Waves/SumWavesDisplay.vue';
 import WaveList from '@/widgets/WaveList.vue';
+import WaveFilter from '@/components/Waves/WaveFilter.vue';
 
 type oscillatorItem = {
   osc: OscillatorNode;
@@ -69,9 +54,8 @@ type oscillatorItem = {
 let waves: Ref<Wave[]> = ref([]);
 let oscillators: Array<oscillatorItem> = [];
 let mainContext: Ref<AudioContext> = ref(new AudioContext());
-// let merger: ChannelMergerNode = mainContext.value.createChannelMerger();
 let merger: Ref<ChannelMergerNode> = ref(mainContext.value.createChannelMerger());
-// let merger: Ref = ref();
+let filters: Ref<BiquadFilterNode[]> = ref([]);
 
 function createNewWave() {
   let wave = new Wave(10, 40, 0);
@@ -92,7 +76,6 @@ function createNewWave() {
 }
 
 function onWaveUpdated(index: number): void {
-  // alert(index);
   updateWaveOscillator(index);
 }
 
@@ -105,14 +88,18 @@ function updateWaveOscillator(index: number): void {
   );
 }
 
+function createNewFilter() {
+  let f: BiquadFilterNode = mainContext.value.createBiquadFilter();
+  filters.value.push(f);
+  console.log(filters.value.length);
+}
+
 function playMainWave() {
-  // mainContext.value.resume();
   mainContext.value.state == 'running' ? mainContext.value.suspend() : mainContext.value.resume();
   console.log(merger);
 }
 
 onMounted(() => {
-  // merger.value = mainContext.value.createChannelMerger();
   merger.value.connect(mainContext.value.destination);
 });
 </script>
@@ -158,6 +145,9 @@ onMounted(() => {
     > * {
       margin-bottom: 1rem;
     }
+  }
+
+  &__filters {
   }
 }
 

@@ -11,7 +11,7 @@ const props = defineProps({
     required: true,
   },
   source: {
-    type: ChannelMergerNode,
+    type: AudioNode,
     required: true,
   },
 });

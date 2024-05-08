@@ -1,5 +1,11 @@
 <template>
-  <input type="range" orient="vertical" v-model="model" :max="range" @input="emit('valueChange')" />
+  <input
+    type="range"
+    v-model="model"
+    :max="range"
+    @input="emit('valueChange')"
+    class="verticalSlider"
+  />
 </template>
 
 <script setup>
@@ -14,9 +20,10 @@ const emit = defineEmits(['valueChange']);
 </script>
 
 <style scoped lang="scss">
-input[type='range'][orient='vertical'] {
-  appearance: slider-vertical;
+.verticalSlider {
   height: 100%;
   width: 100%;
+  writing-mode: vertical-lr;
+  direction: rtl;
 }
 </style>

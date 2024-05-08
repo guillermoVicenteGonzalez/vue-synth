@@ -15,7 +15,7 @@
           <div class="waveCard__control__slider">
             <VerticalSlider
               v-model="wave.frequency"
-              range="1000"
+              :range="1000"
               @valueChange="onWaveChangeCB"
             ></VerticalSlider>
           </div>
