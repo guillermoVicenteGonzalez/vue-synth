@@ -16,14 +16,15 @@
     <template #header> Vue-synth</template>
     <template #components>
       <div class="components">
-        <div class="components__waveCardList">
+        <!-- <div class="components__waveCardList">
           <WaveCard
             v-for="(wave, index) in waves"
             :key="index"
             :wave="wave"
             @update-wave="onWaveUpdated(index)"
           ></WaveCard>
-        </div>
+        </div> -->
+        <WaveList :waves="waves" @wave-updated="onWaveUpdated"></WaveList>
         <div class="components__filters"></div>
       </div>
       <div class="controls">
@@ -58,6 +59,7 @@ import MainLayout from '@/Layouts/MainLayout.vue';
 import { onMounted, ref, type Ref } from 'vue';
 import WaveAnalyzer from '@/components/Waves/WaveAnalyzer.vue';
 import SumWavesDisplay from '@/components/Waves/SumWavesDisplay.vue';
+import WaveList from '@/widgets/WaveList.vue';
 
 type oscillatorItem = {
   osc: OscillatorNode;
@@ -90,6 +92,7 @@ function createNewWave() {
 }
 
 function onWaveUpdated(index: number): void {
+  // alert(index);
   updateWaveOscillator(index);
 }
 
@@ -134,7 +137,10 @@ onMounted(() => {
   &__analyser {
     height: 30%;
     // background-color: blue;
-    > * {
+    // > * {
+    //   object-fit: fill;
+    // }
+    &:deep(canvas) {
       object-fit: fill;
     }
   }
