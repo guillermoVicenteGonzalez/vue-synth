@@ -15,6 +15,7 @@
             :filter="filter"
             :items="oscillators"
             :main-ctxt="mainContext"
+            @detach-node="(source: AudioNode) => detachEffect(filter, source, merger)"
             @attach-node="(source: AudioNode) => attachEffect(filter, source, merger)"
           ></WaveFilter>
         </div>
@@ -58,7 +59,7 @@ type oscillatorItem = {
 };
 
 let waves: Ref<Wave[]> = ref([]);
-let oscillators: Array<oscillatorItem> = [];
+let oscillators: Ref<oscillatorItem[]> = ref([]);
 let mainContext: Ref<AudioContext> = ref(new AudioContext());
 let merger: Ref<ChannelMergerNode> = ref(mainContext.value.createChannelMerger());
 let filters: Ref<BiquadFilterNode[]> = ref([]);
@@ -75,13 +76,13 @@ function createNewWave() {
   tempOsc.connect(gainNode);
 
   tempOsc.start();
-  oscillators.push({
+  oscillators.value.push({
     osc: tempOsc,
     gain: gainNode,
   });
 
   console.log(
-    oscillators.map((osc) => {
+    oscillators.value.map((osc) => {
       return osc.gain;
     }),
   );
@@ -93,18 +94,32 @@ function onWaveUpdated(index: number): void {
 
 function attachEffect(effect: AudioNode, source: AudioNode, end: AudioNode) {
   console.log('attaching');
+
   console.log(source);
   console.log(effect);
   console.log(end);
+
   source.disconnect(end);
   source.connect(effect);
   effect.connect(end);
 }
 
+function detachEffect(effect: AudioNode, source: AudioNode, end: AudioNode) {
+  console.log('detaching');
+
+  console.log(source);
+  console.log(effect);
+  console.log(end);
+
+  source.disconnect(effect);
+  effect.disconnect(end);
+  source.connect(end);
+}
+
 function updateWaveOscillator(index: number): void {
-  oscillators[index].osc.frequency.value = waves.value[index].getFrequency();
-  oscillators[index].osc.type = waves.value[index].getForm();
-  oscillators[index].gain.gain.setValueAtTime(
+  oscillators.value[index].osc.frequency.value = waves.value[index].getFrequency();
+  oscillators.value[index].osc.type = waves.value[index].getForm();
+  oscillators.value[index].gain.gain.setValueAtTime(
     waves.value[index].getAmplitude() / 50,
     mainContext.value.currentTime,
   );
@@ -173,6 +188,7 @@ onMounted(() => {
   }
 
   &__filters {
+    overflow: auto;
   }
 }
 

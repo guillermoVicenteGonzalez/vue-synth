@@ -103,25 +103,17 @@ function onFilterChange() {
 }
 
 function onSourceChange() {
-  /**
-   * Si cambia la source hay que
-   * - desconectar la previa?
-   * - asignar la source actual a la variable previa
-   * - conectar la source al filtro prop (emitiendo un evento)
-   * - crear una source interna
-   */
-  //   internalSource = currentSource.value.gain;
-  //   console.log(internalSource);
-
-  //conecto el filtro a la fuente
-  //devuelvo el filtro en un evento para conectarlo al nodo pertinente
   if (previousSource != null) {
-    previousSource.disconnect(props.filter);
-  } else {
-    // currentSource.value.connect(props.filter);
-    console.log(currentSource.value);
-    emit('attach-node', currentSource.value);
+    // previousSource.disconnect(props.filter);
+    emit('detach-node', previousSource);
   }
+  console.log(currentSource.value);
+  emit('attach-node', currentSource.value);
+  previousSource = currentSource.value;
+}
+
+function onFilterDestroy() {
+  emit('detach-node', currentSource.value);
 }
 </script>
 
