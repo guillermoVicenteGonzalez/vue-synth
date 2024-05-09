@@ -29,9 +29,11 @@ function onWaveUpdated(index: number) {
 
 <style scoped lang="scss">
 .waveCardList {
+  //   margin: 1rem 0;
   border-right: solid 1px black;
-  overflow: auto;
-  padding: 1rem 0.5rem;
+  //   overflow: auto;
+  overflow-y: auto;
+  padding: 1rem;
   > * {
     margin-bottom: 1rem;
   }

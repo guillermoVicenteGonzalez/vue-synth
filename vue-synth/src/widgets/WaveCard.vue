@@ -1,47 +1,49 @@
 <template>
-  <div class="waveCard">
-    <div class="waveCard__actions-slot"></div>
+  <AudioModuleCard>
+    <div class="waveCard">
+      <div class="waveCard__actions-slot"></div>
 
-    <div class="waveCard__left-slot">
-      <Selector
-        v-model="wave.form"
-        :items="Object.keys(waveForms)"
-        class="selector"
-        @change="onWaveChangeCB"
-      ></Selector>
+      <div class="waveCard__left-slot">
+        <Selector
+          v-model="wave.form"
+          :items="Object.keys(waveForms)"
+          class="selector"
+          @change="onWaveChangeCB"
+        ></Selector>
 
-      <div class="waveCard__controls">
-        <div class="waveCard__control">
-          <div class="waveCard__control__slider">
-            <VerticalSlider
-              v-model="wave.frequency"
-              :range="1000"
-              @valueChange="onWaveChangeCB"
-            ></VerticalSlider>
+        <div class="waveCard__controls">
+          <div class="waveCard__control">
+            <div class="waveCard__control__slider">
+              <VerticalSlider
+                v-model="wave.frequency"
+                :range="1000"
+                @valueChange="onWaveChangeCB"
+              ></VerticalSlider>
+            </div>
+            <span class="waveCard__control__valueBox">{{ wave.frequency }}</span>
           </div>
-          <span class="waveCard__control__valueBox">{{ wave.frequency }}</span>
-        </div>
 
-        <div class="waveCard__control">
-          <div class="waveCard__control__slider">
-            <VerticalSlider
-              v-model="wave.amplitude"
-              :range="50"
-              @valueChange="onWaveChangeCB"
-            ></VerticalSlider>
+          <div class="waveCard__control">
+            <div class="waveCard__control__slider">
+              <VerticalSlider
+                v-model="wave.amplitude"
+                :range="50"
+                @valueChange="onWaveChangeCB"
+              ></VerticalSlider>
+            </div>
+            <span class="waveCard__control__valueBox">{{ wave.amplitude }}</span>
           </div>
-          <span class="waveCard__control__valueBox">{{ wave.amplitude }}</span>
         </div>
       </div>
-    </div>
 
-    <div class="waveCard__center-slot">
-      <div class="waveCard__wave-slot">
-        <WaveCanvas :wave="wave"></WaveCanvas>
+      <div class="waveCard__center-slot">
+        <div class="waveCard__wave-slot">
+          <WaveCanvas :wave="wave"></WaveCanvas>
+        </div>
+        <button @click="playWaveBtn">play wave</button>
       </div>
-      <button @click="playWaveBtn">play wave</button>
     </div>
-  </div>
+  </AudioModuleCard>
 </template>
 
 <script setup lang="ts">
@@ -50,6 +52,7 @@ import WaveCanvas from '../components/Waves/WaveCanvas.vue';
 import Wave, { waveForms } from '@/models/wave';
 import VerticalSlider from '@/components/Common/VerticalSlider.vue';
 import Selector from '@/components/Common/Selector.vue';
+import AudioModuleCard from '@/components/Waves/AudioModuleCard.vue';
 
 const emit = defineEmits(['updateWave', 'waveDeleted']);
 const props = defineProps({
@@ -102,17 +105,17 @@ $card-height: 15rem;
 $card-padding: 2rem;
 
 .waveCard {
-  max-width: $card-width;
-  width: 100%;
-  max-height: $card-height;
-  height: 100%;
+  // max-width: $card-width;
+  // width: 100%;
+  // max-height: $card-height;
+  // height: 100%;
 
   display: grid;
   grid-template-columns: 1fr 2fr 8fr;
 
-  box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.5);
-  border-radius: 20px;
-  overflow: hidden;
+  // box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.5);
+  // border-radius: 20px;
+  // overflow: hidden;
 
   &__left-slot {
     display: flex;
