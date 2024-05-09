@@ -142,12 +142,6 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-.waveCardList {
-  > * {
-    margin: 1rem 0.5rem;
-  }
-}
-
 .displays {
   height: 100%;
   resize: both;
@@ -178,17 +172,19 @@ onMounted(() => {
   display: grid;
   grid-template-columns: 1.5fr 1fr;
 
-  &__waveCardList {
-    border-right: solid 1px black;
-    overflow: auto;
-    padding: 1rem 0.5rem;
-    > * {
-      margin-bottom: 1rem;
-    }
-  }
+  // &__waveCardList {
+  //   border-right: solid 1px black;
+  //   overflow: auto;
+  //   // padding: 1rem 0.5rem;
+  //   > * {
+  //     margin-bottom: 1rem;
+  //   }
+  // }
 
   &__filters {
     overflow: auto;
+
+    padding: 1rem;
   }
 }
 

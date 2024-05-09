@@ -1,40 +1,47 @@
 <template>
-  <div class="card">
-    <div class="card__top">
-      <Selector :items="props.sources" v-model="currentSource" @change="onSourceChange"></Selector>
-      <Selector
-        :items="Object.keys(filterTypes)"
-        v-model="filterType"
-        @change="onFilterChange"
-      ></Selector>
-    </div>
+  <AudioModuleCard>
+    <div class="card">
+      <div class="card__top">
+        <Selector
+          :items="props.sources"
+          v-model="currentSource"
+          @change="onSourceChange"
+        ></Selector>
+        <Selector
+          :items="Object.keys(filterTypes)"
+          v-model="filterType"
+          @change="onFilterChange"
+        ></Selector>
+      </div>
 
-    <div class="card__body">
-      <WaveAnalyzer :source="props.filter" v-if="currentSource"></WaveAnalyzer>
-    </div>
+      <div class="card__body">
+        <WaveAnalyzer :source="props.filter" v-if="currentSource"></WaveAnalyzer>
+      </div>
 
-    <div class="card__bottom">
-      <input
-        type="range"
-        class="card__bottom__slider"
-        v-model="cutoffFrequency"
-        :max="1000"
-        @input="onFilterChange"
-      />
-      <input
-        type="number"
-        class="card__bottom__input"
-        v-model="cutoffFrequency"
-        @input="onFilterChange"
-      />
+      <div class="card__bottom">
+        <input
+          type="range"
+          class="card__bottom__slider"
+          v-model="cutoffFrequency"
+          :max="1000"
+          @input="onFilterChange"
+        />
+        <input
+          type="number"
+          class="card__bottom__input"
+          v-model="cutoffFrequency"
+          @input="onFilterChange"
+        />
+      </div>
     </div>
-  </div>
+  </AudioModuleCard>
 </template>
 
 <script setup lang="ts">
 import { ref, type Ref } from 'vue';
 import Selector from '../Common/Selector.vue';
 import WaveAnalyzer from './WaveAnalyzer.vue';
+import AudioModuleCard from './AudioModuleCard.vue';
 
 //recibe una coleccion de ondas (oscillators) a los que puede ser aplicado
 //le paso un origen que no puede ser el destino y le añade un
@@ -122,7 +129,7 @@ function onFilterDestroy() {
   display: block;
   width: 100%;
   height: 100%;
-  max-height: 13rem;
+  //   max-height: 13rem;
 
   border-radius: 20px;
   box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.5);
