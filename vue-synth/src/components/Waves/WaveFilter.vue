@@ -36,10 +36,11 @@ import { ref, type Ref } from 'vue';
 import Selector from '../Common/Selector.vue';
 import WaveAnalyzer from './WaveAnalyzer.vue';
 
-//recibe una coleccion de ondas (oscillators) a los que puede ser aplicado
-//le paso un origen que no puede ser el destino y le añade un
-//al cambiar
-//la idea es que el filtro tenga su propio play button. Si se le asigna a una onda, la tarjeta de onda reproduce la onda pura y el filtro la onda filtrada.
+//TODO Aqui hago una prueba
+// ! recibe una coleccion de ondas (oscillators) a los que puede ser aplicado
+// * le paso un origen que no puede ser el destino y le añade un
+// ? al cambiar
+// TODO: la idea es que el filtro tenga su propio play button. Si se le asigna a una onda, la tarjeta de onda reproduce la onda pura y el filtro la onda filtrada.
 //posible solucion. El evento change de este componente devuelve el filtro creado. El padre se encarga de asignarlo?
 const props = defineProps({
   sources: {
