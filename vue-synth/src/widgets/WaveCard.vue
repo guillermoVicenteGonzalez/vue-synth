@@ -94,7 +94,6 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  alert("hola")
 })
 </script>
 
