@@ -1,11 +1,7 @@
 <template>
   <div class="waveCardList">
-    <WaveCard
-      v-for="(wave, index) in waves"
-      :key="index"
-      :wave="wave"
-      @update-wave="onWaveUpdated(index)"
-    ></WaveCard>
+    <WaveCard v-for="(wave, index) in waves" :key="index" :wave="wave" @update-wave="onWaveUpdated(index)"
+      @delete-wave="onWaveDeleted(index)"></WaveCard>
   </div>
 </template>
 
@@ -20,10 +16,14 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['waveUpdated']);
+const emit = defineEmits(['waveUpdated', "waveDeleted"]);
 
 function onWaveUpdated(index: number) {
   emit('waveUpdated', index);
+}
+
+function onWaveDeleted(index: number) {
+  emit("waveDeleted", index)
 }
 </script>
 
@@ -34,7 +34,8 @@ function onWaveUpdated(index: number) {
   //   overflow: auto;
   overflow-y: auto;
   padding: 1rem;
-  > * {
+
+  >* {
     margin-bottom: 1rem;
   }
 }
