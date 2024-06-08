@@ -98,7 +98,7 @@
 =======
 import Wave from '@/models/wave';
 import MainLayout from '@/Layouts/MainLayout.vue';
-import { onMounted, ref, type Ref } from 'vue';
+import { onMounted, ref, computed, type Ref } from 'vue';
 import WaveAnalyzer from '@/components/Waves/WaveAnalyzer.vue';
 import SumWavesDisplay from '@/components/Waves/SumWavesDisplay.vue';
 import WaveList from '@/widgets/WaveList.vue';
@@ -106,7 +106,11 @@ import WaveList from '@/widgets/WaveList.vue';
 >>>>>>> 226b0cf (wave list widget)
 =======
 import WaveFilter from '@/components/Waves/WaveFilter.vue';
+<<<<<<< HEAD
 >>>>>>> 2c0de8d (wave filter structure)
+=======
+import AudioModule from '@/models/AudioModule';
+>>>>>>> 2a37070 (refactor with data structs: create delete and update wave)
 
   type oscillatorItem = {
     osc: OscillatorNode;
@@ -114,9 +118,18 @@ import WaveFilter from '@/components/Waves/WaveFilter.vue';
   };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   // let waves: Ref<Wave[]> = ref([]);
 =======
 let waves: Ref<Wave[]> = ref([]);
+=======
+// let waves: Ref<Wave[]> = ref([]);
+let waves = computed(() => {
+  return waveModules.value.map((module) => {
+    return module.wave
+  })
+})
+>>>>>>> 2a37070 (refactor with data structs: create delete and update wave)
 let oscillators: Ref<oscillatorItem[]> = ref([]);
 let mainContext: Ref<AudioContext> = ref(new AudioContext());
 let merger: Ref<ChannelMergerNode> = ref(mainContext.value.createChannelMerger());
@@ -125,7 +138,11 @@ let merger: Ref<ChannelMergerNode> = ref(mainContext.value.createChannelMerger()
 >>>>>>> b5386c1 (correctly populated layout)
 =======
 let filters: Ref<BiquadFilterNode[]> = ref([]);
+<<<<<<< HEAD
 >>>>>>> 2c0de8d (wave filter structure)
+=======
+let waveModules: Ref<AudioModule[]> = ref([])
+>>>>>>> 2a37070 (refactor with data structs: create delete and update wave)
 
 <<<<<<< HEAD
   let mainContext: Ref<AudioContext> = ref(new AudioContext());
@@ -137,6 +154,7 @@ function createNewWave() {
   let wave = new Wave(10, 1, 0);
   wave.setForm('sine');
   waves.value.push(wave);
+<<<<<<< HEAD
 >>>>>>> b94b397 (working filters)
 
 <<<<<<< HEAD
@@ -247,6 +265,26 @@ function createNewWave() {
     }),
   );
 >>>>>>> b94b397 (working filters)
+=======
+  let waveName = `wave ${waveModules.value.length + 1}`
+
+  let module = new AudioModule(waveName, wave, mainContext.value, merger.value)
+  waveModules.value.push(module)
+
+  // let tempOsc = mainContext.value.createOscillator();
+  // tempOsc.frequency.value = wave.getFrequency();
+  // let gainNode = mainContext.value.createGain();
+  // gainNode.connect(merger.value, 0, 2);
+  // tempOsc.connect(gainNode);
+
+  // tempOsc.start();
+  // oscillators.value.push({
+  //   osc: tempOsc,
+  //   gain: gainNode,
+  // });
+
+
+>>>>>>> 2a37070 (refactor with data structs: create delete and update wave)
 }
 
 function onWaveUpdated(index: number): void {
@@ -254,10 +292,12 @@ function onWaveUpdated(index: number): void {
 }
 
 function onWaveDeleted(index: number): void {
-  oscillators.value[index].osc.stop();
-  oscillators.value[index].gain.disconnect(merger.value);
-  oscillators.value.splice(index, 1);
-  waves.value.splice(index, 1)
+  // oscillators.value[index].osc.stop();
+  // oscillators.value[index].gain.disconnect(merger.value);
+  // oscillators.value.splice(index, 1);
+  // waves.value.splice(index, 1)
+  waveModules.value[index].destroyModule();
+  waveModules.value.splice(index, 1);
 }
 
 function attachEffect(effect: AudioNode, source: AudioNode, end: AudioNode) {
@@ -285,12 +325,13 @@ function detachEffect(effect: AudioNode, source: AudioNode, end: AudioNode) {
 }
 
 function updateWaveOscillator(index: number): void {
-  oscillators.value[index].osc.frequency.value = waves.value[index].getFrequency();
-  oscillators.value[index].osc.type = waves.value[index].getForm();
-  oscillators.value[index].gain.gain.setValueAtTime(
-    waves.value[index].getAmplitude() / 50,
-    mainContext.value.currentTime,
-  );
+  // oscillators.value[index].osc.frequency.value = waves.value[index].getFrequency();
+  // oscillators.value[index].osc.type = waves.value[index].getForm();
+  // oscillators.value[index].gain.gain.setValueAtTime(
+  //   waves.value[index].getAmplitude() / 50,
+  //   mainContext.value.currentTime,
+  // );
+  waveModules.value[index].updateOscillator();
 }
 
 function createNewFilter() {
@@ -406,7 +447,7 @@ onMounted(() => {
 .components {
   height: 92%;
   display: grid;
-  grid-template-columns: 1.5fr 1fr;
+  grid-template-columns: 1.2fr 1fr;
 
   // &__waveCardList {
   //   border-right: solid 1px black;

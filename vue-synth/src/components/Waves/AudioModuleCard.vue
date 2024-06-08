@@ -8,16 +8,21 @@
 
 <style scoped lang="scss">
 <<<<<<< HEAD
+<<<<<<< HEAD
 $card-width: 100rem;
 =======
 $card-width: 30rem;
 >>>>>>> 4260106 (card component created)
+=======
+$card-width: 100rem;
+>>>>>>> 3110368 (fixed card dimensions)
 $card-height: 15rem;
 $card-padding: 2rem;
 
 .moduleCard {
   max-width: $card-width;
   width: 100%;
+<<<<<<< HEAD
 <<<<<<< HEAD
   // height: fit-content;
   // aspect-ratio: 2/1;
@@ -27,6 +32,13 @@ $card-padding: 2rem;
   max-height: $card-height;
   height: 100%;
 >>>>>>> 4260106 (card component created)
+=======
+  // max-height: $card-height;
+  // height: 100%;
+  height: fit-content;
+  aspect-ratio: 2/1;
+
+>>>>>>> 3110368 (fixed card dimensions)
 
   box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.5);
   border-radius: 20px;

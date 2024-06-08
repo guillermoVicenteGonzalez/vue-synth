@@ -12,15 +12,21 @@
     "titleBar.inactiveBackground": "#42b88399",
     "titleBar.inactiveForeground": "#15202b99",
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 3110368 (fixed card dimensions)
     "activityBar.activeBackground": "#65c89b",
     "activityBar.background": "#65c89b",
     "activityBar.foreground": "#15202b",
     "activityBar.inactiveForeground": "#15202b99",
     "activityBarBadge.background": "#945bc4",
     "activityBarBadge.foreground": "#e7e7e7"
+<<<<<<< HEAD
 =======
 
 >>>>>>> d4659da (wave deleted)
+=======
+>>>>>>> 3110368 (fixed card dimensions)
   },
   "peacock.color": "#42b883",
   "editor.codeActionsOnSave": {

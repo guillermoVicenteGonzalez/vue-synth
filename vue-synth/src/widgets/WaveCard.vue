@@ -171,6 +171,7 @@ const props = defineProps({
 =======
 function deleteWave() {
   oscillator.stop();
+  audioContext.close();
   emit("deleteWave")
 }
 
@@ -246,7 +247,6 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  alert("hola")
 })
 >>>>>>> d4659da (wave deleted)
 </script>
@@ -263,9 +263,9 @@ onUnmounted(() => {
 =======
 .waveCard {
   // max-width: $card-width;
-  // width: 100%;
+  width: 100%;
   // max-height: $card-height;
-  // height: 100%;
+  height: 100%;
 
   display: grid;
   grid-template-columns: 1fr 2fr 8fr;

@@ -8,6 +8,7 @@ export default class AudioModule {
   gain: GainNode;
   effects: AudioNode[];
 <<<<<<< HEAD
+<<<<<<< HEAD
   end: AudioNode; //last node before the gain ganancia el penultimo
   exit: AudioNode;
   disabled: Boolean;
@@ -27,9 +28,20 @@ export default class AudioModule {
     this.disabled = false;
 =======
   end: AudioNode;
+=======
+  end: AudioNode; //last node before the gain ganancia el penultimo
+>>>>>>> 2a37070 (refactor with data structs: create delete and update wave)
   exit: AudioNode;
 
-  constructor(n: string = 'default', w: Wave, ctx: AudioContext, ex: AudioNode) {
+  /**
+   * 
+   * @param n - name of the module
+   * @param w - associated wave of the module ?
+   * @param ctx - asociated context of the module
+   * @param ex - default sound exit of the module (redundant, it is in the audio context)
+   * * The gain node should always be the penultimate. This way effects are also affected by the gain
+   */
+  constructor(n: string = 'default', w: Wave, ctx: AudioContext, ex?: AudioNode) {
     this.name = n;
     this.wave = w;
     this.context = ctx;
@@ -40,6 +52,7 @@ export default class AudioModule {
     this.oscillator = this.context.createOscillator();
     this.oscillator.frequency.value = this.wave.getFrequency();
 <<<<<<< HEAD
+<<<<<<< HEAD
     this.oscillator.start();
     this.gain = this.context.createGain();
     this.oscillator.connect(this.gain);
@@ -48,13 +61,22 @@ export default class AudioModule {
     ex ? this.exit = ex : this.exit = this.context.destination
     this.gain.connect(this.exit, 0, 2);
 =======
+=======
+    this.oscillator.start();
+>>>>>>> 2a37070 (refactor with data structs: create delete and update wave)
     this.gain = this.context.createGain();
     this.oscillator.connect(this.gain);
+    this.end = this.oscillator;
 
+<<<<<<< HEAD
     this.end = this.gain;
     this.exit = ex;
     this.end.connect(ex);
 >>>>>>> 1a249fc (wave collection (unused) + filter management)
+=======
+    ex ? this.exit = ex : this.exit = this.context.destination
+    this.gain.connect(this.exit, 0, 2);
+>>>>>>> 2a37070 (refactor with data structs: create delete and update wave)
   }
 
   updateOscillator() {
@@ -64,6 +86,7 @@ export default class AudioModule {
   }
 
   attachEffect(nEffect: AudioNode) {
+<<<<<<< HEAD
 <<<<<<< HEAD
     this.end.disconnect(this.gain);
     this.end.connect(nEffect);
@@ -75,10 +98,17 @@ export default class AudioModule {
     this.end = nEffect;
     this.end.connect(this.exit);
 >>>>>>> 1a249fc (wave collection (unused) + filter management)
+=======
+    this.end.disconnect(this.gain);
+    this.end.connect(nEffect);
+    this.end = nEffect;
+    this.end.connect(this.gain);
+>>>>>>> 2a37070 (refactor with data structs: create delete and update wave)
 
     this.effects.push(nEffect);
   }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
   detachEffect(effect?: AudioNode): void {
     if (this.effects.length == 0) {
@@ -86,10 +116,14 @@ export default class AudioModule {
       return
     }
 
+=======
+  detachEffect(effect?: AudioNode) {
+>>>>>>> 2a37070 (refactor with data structs: create delete and update wave)
     let index = this.effects.length - 1
     if (effect != null) {
       index = this.effects.indexOf(effect);
     }
+<<<<<<< HEAD
 
     //if no parameter or the effect passed is the last one.
     if (effect == null || index >= this.effects.length - 1) {
@@ -111,18 +145,34 @@ export default class AudioModule {
     if (effect == null) {
       let tempEff = this.effects.pop();
       tempEff?.disconnect(this.exit);
+=======
+>>>>>>> 2a37070 (refactor with data structs: create delete and update wave)
 
-      let lastEff = this.effects[this.effects.length];
-      lastEff.disconnect(tempEff);
+    //if no parameter or the effect passed is the last one.
+    if (effect == null || index >= this.effects.length - 1) {
+      let detached = this.effects.pop()
+      detached?.disconnect(this.gain)
+      let newLastEff = this.effects[this.effects.length]
+      this.end = newLastEff
+      this.end.connect(this.gain)
+    } else {
+      this.effects[index].disconnect(this.effects[index + 1])
+      this.effects[index - 1].connect(this.effects[index + 1])
+      this.effects.splice(index, 1)
     }
   }
 
+<<<<<<< HEAD
   changeExit(nExit: AudioNode) {
 >>>>>>> 1a249fc (wave collection (unused) + filter management)
+=======
+  connectExit(nExit: AudioNode) {
+>>>>>>> 2a37070 (refactor with data structs: create delete and update wave)
     this.end.disconnect(this.exit);
     this.end.connect(nExit);
     this.exit = nExit;
   }
+<<<<<<< HEAD
 <<<<<<< HEAD
 
   unplugExit() {
@@ -140,6 +190,8 @@ export default class AudioModule {
   plugOscillator() {
     this.oscillator.connect(this.gain)
   }
+=======
+>>>>>>> 2a37070 (refactor with data structs: create delete and update wave)
 
   toggleMute(flag?: boolean) {
     flag ? this.gain.gain.value = 0 : this.gain.gain.value = this.wave.getAmplitude() / 50
@@ -149,6 +201,7 @@ export default class AudioModule {
     this.oscillator.stop();
     this.gain.disconnect(this.exit)
   }
+<<<<<<< HEAD
 
 
   toggleModule(flag: Boolean) {
@@ -159,4 +212,6 @@ export default class AudioModule {
   }
 =======
 >>>>>>> 1a249fc (wave collection (unused) + filter management)
+=======
+>>>>>>> 2a37070 (refactor with data structs: create delete and update wave)
 }
