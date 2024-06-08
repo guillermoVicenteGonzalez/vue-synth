@@ -3,32 +3,19 @@
     <div class="waveCard__actions-slot"></div>
 
     <div class="waveCard__left-slot">
-      <Selector
-        v-model="wave.form"
-        :items="Object.keys(waveForms)"
-        class="selector"
-        @change="onWaveChangeCB"
-      ></Selector>
+      <Selector v-model="wave.form" :items="Object.keys(waveForms)" class="selector" @change="onWaveChangeCB"></Selector>
 
       <div class="waveCard__controls">
         <div class="waveCard__control">
           <div class="waveCard__control__slider">
-            <VerticalSlider
-              v-model="wave.frequency"
-              :range="1000"
-              @valueChange="onWaveChangeCB"
-            ></VerticalSlider>
+            <VerticalSlider v-model="wave.frequency" :range="1000" @valueChange="onWaveChangeCB"></VerticalSlider>
           </div>
           <span class="waveCard__control__valueBox">{{ wave.frequency }}</span>
         </div>
 
         <div class="waveCard__control">
           <div class="waveCard__control__slider">
-            <VerticalSlider
-              v-model="wave.amplitude"
-              :range="50"
-              @valueChange="onWaveChangeCB"
-            ></VerticalSlider>
+            <VerticalSlider v-model="wave.amplitude" :range="50" @valueChange="onWaveChangeCB"></VerticalSlider>
           </div>
           <span class="waveCard__control__valueBox">{{ wave.amplitude }}</span>
         </div>
@@ -40,6 +27,7 @@
         <WaveCanvas :wave="wave"></WaveCanvas>
       </div>
       <button @click="playWaveBtn">play wave</button>
+      <button @click="deleteWave">delete</button>
     </div>
   </div>
 </template>
@@ -51,7 +39,7 @@ import Wave, { waveForms } from '@/models/wave';
 import VerticalSlider from '@/components/Common/VerticalSlider.vue';
 import Selector from '@/components/Common/Selector.vue';
 
-const emit = defineEmits(['updateWave', 'waveDeleted']);
+const emit = defineEmits(['updateWave', 'deleteWave']);
 const props = defineProps({
   wave: {
     type: Wave,
@@ -80,6 +68,10 @@ function updateOscillator() {
 function onWaveChangeCB() {
   updateOscillator();
   emit('updateWave');
+}
+
+function deleteWave() {
+  emit("deleteWave")
 }
 
 onMounted(() => {

@@ -3,20 +3,13 @@
     <template #header> Vue-synth</template>
     <template #components>
       <div class="components">
-        <WaveList :waves="waves" @wave-updated="onWaveUpdated"></WaveList>
+        <WaveList :waves="waves" @wave-updated="onWaveUpdated" @wave-deleted="onWaveDeleted"></WaveList>
         <div class="components__filters">
-          <WaveFilter
-            v-for="filter in filters"
-            :sources="
-              oscillators.map((osc) => {
-                return osc.gain;
-              })
-            "
-            :filter="filter"
-            :items="oscillators"
-            :main-ctxt="mainContext"
-            @attach-node="(source: AudioNode) => attachEffect(filter, source, merger)"
-          ></WaveFilter>
+          <WaveFilter v-for="filter in filters" :sources="oscillators.map((osc) => {
+            return osc.gain;
+          })
+            " :filter="filter" :items="oscillators" :main-ctxt="mainContext"
+            @attach-node="(source: AudioNode) => attachEffect(filter, source, merger)"></WaveFilter>
         </div>
       </div>
       <div class="controls">
@@ -80,16 +73,19 @@ function createNewWave() {
     gain: gainNode,
   });
 
-  console.log(
-    oscillators.map((osc) => {
-      return osc.gain;
-    }),
-  );
 }
 
 function onWaveUpdated(index: number): void {
   updateWaveOscillator(index);
 }
+
+function onWaveDeleted(index: number) {
+  waves.value.splice(index, 1)
+  oscillators[index].osc.stop();
+  oscillators[index].gain.disconnect(merger.value);
+  oscillators.splice(index, 1);
+}
+
 
 function attachEffect(effect: AudioNode, source: AudioNode, end: AudioNode) {
   console.log('attaching');
@@ -128,7 +124,7 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .waveCardList {
-  > * {
+  >* {
     margin: 1rem 0.5rem;
   }
 }
@@ -147,6 +143,7 @@ onMounted(() => {
   &__analyser {
     height: 30%;
     resize: both;
+
     // background-color: blue;
     // > * {
     //   object-fit: fill;
@@ -167,13 +164,13 @@ onMounted(() => {
     border-right: solid 1px black;
     overflow: auto;
     padding: 1rem 0.5rem;
-    > * {
+
+    >* {
       margin-bottom: 1rem;
     }
   }
 
-  &__filters {
-  }
+  &__filters {}
 }
 
 .controls {
