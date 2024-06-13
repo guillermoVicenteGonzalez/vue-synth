@@ -104,9 +104,9 @@ $card-padding: 2rem;
 
 .waveCard {
   // max-width: $card-width;
-  // width: 100%;
+  width: 100%;
   // max-height: $card-height;
-  // height: 100%;
+  height: 100%;
 
   display: grid;
   grid-template-columns: 1fr 2fr 8fr;
