@@ -171,7 +171,7 @@ onMounted(() => {
 .components {
   height: 92%;
   display: grid;
-  grid-template-columns: 1.5fr 1fr;
+  grid-template-columns: 1.2fr 1fr;
 
   // &__waveCardList {
   //   border-right: solid 1px black;
