@@ -65,6 +65,7 @@ function playWaveBtn() {
 
 function deleteWave() {
   oscillator.stop();
+  audioContext.close();
   emit("deleteWave")
 }
 
