@@ -3,21 +3,14 @@
     <template #header> Vue-synth</template>
     <template #components>
       <div class="components">
-        <WaveList :waves="waves" @wave-updated="onWaveUpdated"></WaveList>
+        <WaveList :waves="waves" @wave-updated="onWaveUpdated" @wave-deleted="onWaveDeleted"></WaveList>
         <div class="components__filters">
-          <WaveFilter
-            v-for="filter in filters"
-            :sources="
-              oscillators.map((osc) => {
-                return osc.gain;
-              })
-            "
-            :filter="filter"
-            :items="oscillators"
-            :main-ctxt="mainContext"
+          <WaveFilter v-for="filter in filters" :sources="oscillators.map((osc) => {
+            return osc.gain;
+          })
+            " :filter="filter" :items="oscillators" :main-ctxt="mainContext"
             @detach-node="(source: AudioNode) => detachEffect(filter, source, merger)"
-            @attach-node="(source: AudioNode) => attachEffect(filter, source, merger)"
-          ></WaveFilter>
+            @attach-node="(source: AudioNode) => attachEffect(filter, source, merger)"></WaveFilter>
         </div>
       </div>
       <div class="controls">
@@ -92,6 +85,13 @@ function onWaveUpdated(index: number): void {
   updateWaveOscillator(index);
 }
 
+function onWaveDeleted(index: number): void {
+  oscillators.value[index].osc.stop();
+  oscillators.value[index].gain.disconnect(merger.value);
+  oscillators.value.splice(index, 1);
+  waves.value.splice(index, 1)
+}
+
 function attachEffect(effect: AudioNode, source: AudioNode, end: AudioNode) {
   console.log('attaching');
 
@@ -156,6 +156,7 @@ onMounted(() => {
   &__analyser {
     height: 30%;
     resize: both;
+
     // background-color: blue;
     // > * {
     //   object-fit: fill;

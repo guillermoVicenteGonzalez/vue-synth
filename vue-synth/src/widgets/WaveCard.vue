@@ -4,32 +4,20 @@
       <div class="waveCard__actions-slot"></div>
 
       <div class="waveCard__left-slot">
-        <Selector
-          v-model="wave.form"
-          :items="Object.keys(waveForms)"
-          class="selector"
-          @change="onWaveChangeCB"
-        ></Selector>
+        <Selector v-model="wave.form" :items="Object.keys(waveForms)" class="selector" @change="onWaveChangeCB">
+        </Selector>
 
         <div class="waveCard__controls">
           <div class="waveCard__control">
             <div class="waveCard__control__slider">
-              <VerticalSlider
-                v-model="wave.frequency"
-                :range="1000"
-                @valueChange="onWaveChangeCB"
-              ></VerticalSlider>
+              <VerticalSlider v-model="wave.frequency" :range="1000" @valueChange="onWaveChangeCB"></VerticalSlider>
             </div>
             <span class="waveCard__control__valueBox">{{ wave.frequency }}</span>
           </div>
 
           <div class="waveCard__control">
             <div class="waveCard__control__slider">
-              <VerticalSlider
-                v-model="wave.amplitude"
-                :range="50"
-                @valueChange="onWaveChangeCB"
-              ></VerticalSlider>
+              <VerticalSlider v-model="wave.amplitude" :range="50" @valueChange="onWaveChangeCB"></VerticalSlider>
             </div>
             <span class="waveCard__control__valueBox">{{ wave.amplitude }}</span>
           </div>
@@ -41,20 +29,21 @@
           <WaveCanvas :wave="wave"></WaveCanvas>
         </div>
         <button @click="playWaveBtn">play wave</button>
+        <button @click="deleteWave">delete</button>
       </div>
     </div>
   </AudioModuleCard>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, type Ref } from 'vue';
+import { onMounted, onUnmounted, ref, type Ref } from 'vue';
 import WaveCanvas from '../components/Waves/WaveCanvas.vue';
 import Wave, { waveForms } from '@/models/wave';
 import VerticalSlider from '@/components/Common/VerticalSlider.vue';
 import Selector from '@/components/Common/Selector.vue';
 import AudioModuleCard from '@/components/Waves/AudioModuleCard.vue';
 
-const emit = defineEmits(['updateWave', 'waveDeleted']);
+const emit = defineEmits(['updateWave', 'deleteWave']);
 const props = defineProps({
   wave: {
     type: Wave,
@@ -74,6 +63,11 @@ function playWaveBtn() {
   isPlaying.value = !isPlaying.value;
 }
 
+function deleteWave() {
+  oscillator.stop();
+  emit("deleteWave")
+}
+
 function updateOscillator() {
   oscillator.frequency.value = props.wave.getFrequency();
   gainNode.gain.setValueAtTime(props.wave.getAmplitude() / 50, audioContext.currentTime);
@@ -84,6 +78,7 @@ function onWaveChangeCB() {
   updateOscillator();
   emit('updateWave');
 }
+
 
 onMounted(() => {
   audioContext = new AudioContext();
@@ -97,6 +92,9 @@ onMounted(() => {
   oscillator.start();
   oscillator.connect(gainNode);
 });
+
+onUnmounted(() => {
+})
 </script>
 
 <style scoped lang="scss">
