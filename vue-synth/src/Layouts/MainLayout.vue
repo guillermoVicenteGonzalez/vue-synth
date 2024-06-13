@@ -43,16 +43,22 @@
 
 <style scoped lang="scss">
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> e85234f (area layout naming)
   $header-h: 5vh;
   $body-h: 70vh;
   $footer-h: 5vh;
   $piano-h: 20vh;
+<<<<<<< HEAD
 =======
 $header-h: 5vh;
 $body-h: 70vh;
 $footer-h: 5vh;
 $piano-h: 20vh;
 >>>>>>> 9159e72 (added scroll controls and main wave sound)
+=======
+>>>>>>> e85234f (area layout naming)
 
   .mainLayout {
     box-sizing: border-box;
@@ -112,6 +118,9 @@ $piano-h: 20vh;
   }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> e85234f (area layout naming)
   // .mainLayout {
   //   box-sizing: border-box;
   //   background-color: #222222;
@@ -120,6 +129,7 @@ $piano-h: 20vh;
   //   max-width: 100vw;
   //   max-height: 100vh;
   //   overflow: hidden;
+<<<<<<< HEAD
 =======
   &__components {
     background-color: white;
@@ -151,6 +161,22 @@ $piano-h: 20vh;
   //     height: $body-h;
   //   }
 
+=======
+
+  //   &__header {
+  //     background-color: black;
+  //     color: white;
+  //     height: $header-h;
+  //     text-align: center;
+  //   }
+
+  //   &__body {
+  //     display: grid;
+  //     grid-template-columns: [cards-start] minmax(30rem, 2fr) [cards-end visualization-start] minmax(40rem, 3fr);
+  //     height: $body-h;
+  //   }
+
+>>>>>>> e85234f (area layout naming)
   //   &__components {
   //     background-color: white;
   //     overflow: hidden;

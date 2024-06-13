@@ -24,6 +24,7 @@ $card-padding: 2rem;
   width: 100%;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   // height: fit-content;
   // aspect-ratio: 2/1;
   height: 20rem;
@@ -37,6 +38,11 @@ $card-padding: 2rem;
   // height: 100%;
   height: fit-content;
   aspect-ratio: 2/1;
+=======
+  // height: fit-content;
+  // aspect-ratio: 2/1;
+  height: 20rem;
+>>>>>>> 06a3705 (refactored some styles)
 
 >>>>>>> 3110368 (fixed card dimensions)
 

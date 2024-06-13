@@ -32,16 +32,8 @@
   <AudioModuleCard>
     <div class="card">
       <div class="card__top">
-        <Selector
-          :items="props.sources"
-          v-model="currentSource"
-          @change="onSourceChange"
-        ></Selector>
-        <Selector
-          :items="Object.keys(filterTypes)"
-          v-model="filterType"
-          @change="onFilterChange"
-        ></Selector>
+        <Selector :items="props.sources" v-model="currentSource" @change="onSourceChange"></Selector>
+        <Selector :items="Object.keys(filterTypes)" v-model="filterType" @change="onFilterChange"></Selector>
       </div>
 >>>>>>> 4260106 (card component created)
 
@@ -50,19 +42,8 @@
       </div>
 
       <div class="card__bottom">
-        <input
-          type="range"
-          class="card__bottom__slider"
-          v-model="cutoffFrequency"
-          :max="1000"
-          @input="onFilterChange"
-        />
-        <input
-          type="number"
-          class="card__bottom__input"
-          v-model="cutoffFrequency"
-          @input="onFilterChange"
-        />
+        <input type="range" class="card__bottom__slider" v-model="cutoffFrequency" :max="1000" @input="onFilterChange" />
+        <input type="number" class="card__bottom__input" v-model="cutoffFrequency" @input="onFilterChange" />
       </div>
     </div>
 <<<<<<< HEAD
@@ -148,6 +129,7 @@ let filterType: Ref<BiquadFilterType> = ref('lowpass');
 <<<<<<< HEAD
 let currentSource: Ref<AudioNode> = ref();
 let previousSource: AudioNode; // * used just to know if it is the first time a node is attached
+<<<<<<< HEAD
 =======
 let currentSource: Ref<AudioNode | undefined> = ref();
 =======
@@ -155,10 +137,13 @@ let currentSource: Ref<AudioNode> = ref();
 >>>>>>> b94b397 (working filters)
 let previousSource: AudioNode;
 >>>>>>> 2c0de8d (wave filter structure)
+=======
+>>>>>>> 9f97c7a (attach effects works)
 let internalContext: Ref<AudioContext> = ref(new AudioContext());
 let internalFilter: Ref<BiquadFilterNode> = ref(internalContext.value.createBiquadFilter());
 let internalSource: AudioNode;
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -167,6 +152,9 @@ console.log(filterType.value);
 
 =======
 >>>>>>> b94b397 (working filters)
+=======
+
+>>>>>>> 9f97c7a (attach effects works)
 function onFilterChange() {
   /**
    * Cambio el filtro interno y el externo a la vez
@@ -198,6 +186,7 @@ function onSourceChange() {
   if (previousSource != null) {
     // previousSource.disconnect(props.filter);
     emit('detach-node', props.sources.indexOf(previousSource));
+<<<<<<< HEAD
   }
   console.log(currentSource.value);
   emit('attach-node', props.sources.indexOf(currentSource.value));
@@ -234,12 +223,14 @@ function onSourceChange() {
   if (previousSource != null) {
     // previousSource.disconnect(props.filter);
     emit('detach-node', previousSource);
+=======
+>>>>>>> 9f97c7a (attach effects works)
   }
 <<<<<<< HEAD
 >>>>>>> b94b397 (working filters)
 =======
   console.log(currentSource.value);
-  emit('attach-node', currentSource.value);
+  emit('attach-node', props.sources.indexOf(currentSource.value));
   previousSource = currentSource.value;
 }
 
@@ -279,9 +270,13 @@ function onFilterDestroy() {
     justify-content: space-evenly;
     align-items: center;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> 2c0de8d (wave filter structure)
+=======
+
+>>>>>>> 9f97c7a (attach effects works)
     &:deep(select) {
       width: 100%;
     }
