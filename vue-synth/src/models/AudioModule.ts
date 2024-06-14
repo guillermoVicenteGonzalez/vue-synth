@@ -51,7 +51,12 @@ export default class AudioModule {
     this.effects.push(nEffect);
   }
 
-  detachEffect(effect?: AudioNode) {
+  detachEffect(effect?: AudioNode): void {
+    if (this.effects.length == 0) {
+      console.log("effects are empty")
+      return
+    }
+
     let index = this.effects.length - 1
     if (effect != null) {
       index = this.effects.indexOf(effect);
@@ -61,9 +66,9 @@ export default class AudioModule {
     if (effect == null || index >= this.effects.length - 1) {
       let detached = this.effects.pop()
       detached?.disconnect(this.gain)
-      let newLastEff = this.effects[this.effects.length]
-      this.end = newLastEff
-      this.end.connect(this.gain)
+      this.effects.length > 0
+        ? this.end = this.effects[this.effects.length - 1]
+        : this.end = this.oscillator;
     } else {
       this.effects[index].disconnect(this.effects[index + 1])
       this.effects[index - 1].connect(this.effects[index + 1])

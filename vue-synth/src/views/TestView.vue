@@ -112,28 +112,36 @@ function onWaveDeleted(index: number): void {
   waveModules.value.splice(index, 1);
 }
 
-function attachEffect(effect: AudioNode, source: AudioNode, end: AudioNode) {
-  console.log('attaching');
+// function attachEffect(effect: AudioNode, source: AudioNode, end: AudioNode) {
+//   console.log('attaching');
 
-  console.log(source);
-  console.log(effect);
-  console.log(end);
+//   console.log(source);
+//   console.log(effect);
+//   console.log(end);
 
-  source.disconnect(end);
-  source.connect(effect);
-  effect.connect(end);
+//   source.disconnect(end);
+//   source.connect(effect);
+//   effect.connect(end);
+// }
+
+function attachEffect(effect: AudioNode, index: number) {
+  waveModules.value[index].attachEffect(effect)
 }
 
-function detachEffect(effect: AudioNode, source: AudioNode, end: AudioNode) {
-  console.log('detaching');
+// function detachEffect(effect: AudioNode, source: AudioNode, end: AudioNode) {
+//   console.log('detaching');
 
-  console.log(source);
-  console.log(effect);
-  console.log(end);
+//   console.log(source);
+//   console.log(effect);
+//   console.log(end);
 
-  source.disconnect(effect);
-  effect.disconnect(end);
-  source.connect(end);
+//   source.disconnect(effect);
+//   effect.disconnect(end);
+//   source.connect(end);
+// }
+
+function detachEffect(effect: AudioNode, index: number) {
+  waveModules.value[index].detachEffect(effect)
 }
 
 function updateWaveOscillator(index: number): void {
