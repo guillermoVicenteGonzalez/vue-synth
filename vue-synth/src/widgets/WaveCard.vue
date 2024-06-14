@@ -50,6 +50,11 @@ const props = defineProps({
     required: true,
     default: new Wave(2, 2, 2),
   },
+
+  name: {
+    type: String,
+    default: "wave "
+  }
 });
 
 let audioContext: AudioContext;
