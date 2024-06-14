@@ -14,10 +14,9 @@ $card-padding: 2rem;
 .moduleCard {
   max-width: $card-width;
   width: 100%;
-  // max-height: $card-height;
-  // height: 100%;
-  height: fit-content;
-  aspect-ratio: 2/1;
+  // height: fit-content;
+  // aspect-ratio: 2/1;
+  height: 20rem;
 
 
   box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.5);

@@ -28,8 +28,10 @@
         <div class="waveCard__wave-slot">
           <WaveCanvas :wave="wave"></WaveCanvas>
         </div>
-        <button @click="playWaveBtn">play wave</button>
-        <button @click="deleteWave">delete</button>
+        <div class="waveCard__buttons">
+          <button @click="playWaveBtn">play wave</button>
+          <button @click="deleteWave">delete</button>
+        </div>
       </div>
     </div>
   </AudioModuleCard>
@@ -127,8 +129,10 @@ $card-padding: 2rem;
     justify-content: center;
     align-items: center;
     width: 100%;
-    max-height: $card-height;
+    // max-height: $card-height;
+    height: 100%;
     padding: $card-padding 1rem;
+    gap: .5rem;
   }
 
   &__controls {
@@ -154,7 +158,8 @@ $card-padding: 2rem;
     justify-content: ceter;
     align-items: center;
     flex-direction: column;
-    padding: $card-padding;
+    padding: $card-padding 2rem $card-padding 1rem;
+    gap: 1rem;
   }
 
   &__wave-slot {
@@ -164,6 +169,11 @@ $card-padding: 2rem;
 
   &__actions-slot {
     background-color: black;
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 1rem;
   }
 }
 
