@@ -2,16 +2,8 @@
   <AudioModuleCard>
     <div class="card">
       <div class="card__top">
-        <Selector
-          :items="props.sources"
-          v-model="currentSource"
-          @change="onSourceChange"
-        ></Selector>
-        <Selector
-          :items="Object.keys(filterTypes)"
-          v-model="filterType"
-          @change="onFilterChange"
-        ></Selector>
+        <Selector :items="props.sources" v-model="currentSource" @change="onSourceChange"></Selector>
+        <Selector :items="Object.keys(filterTypes)" v-model="filterType" @change="onFilterChange"></Selector>
       </div>
 
       <div class="card__body">
@@ -19,19 +11,8 @@
       </div>
 
       <div class="card__bottom">
-        <input
-          type="range"
-          class="card__bottom__slider"
-          v-model="cutoffFrequency"
-          :max="1000"
-          @input="onFilterChange"
-        />
-        <input
-          type="number"
-          class="card__bottom__input"
-          v-model="cutoffFrequency"
-          @input="onFilterChange"
-        />
+        <input type="range" class="card__bottom__slider" v-model="cutoffFrequency" :max="1000" @input="onFilterChange" />
+        <input type="number" class="card__bottom__input" v-model="cutoffFrequency" @input="onFilterChange" />
       </div>
     </div>
   </AudioModuleCard>
@@ -82,10 +63,11 @@ enum filterTypes {
 let cutoffFrequency: Ref<number> = ref(0);
 let filterType: Ref<BiquadFilterType> = ref('lowpass');
 let currentSource: Ref<AudioNode> = ref();
-let previousSource: AudioNode;
+let previousSource: AudioNode; // * used just to know if it is the first time a node is attached
 let internalContext: Ref<AudioContext> = ref(new AudioContext());
 let internalFilter: Ref<BiquadFilterNode> = ref(internalContext.value.createBiquadFilter());
 let internalSource: AudioNode;
+
 
 function onFilterChange() {
   /**
@@ -112,10 +94,10 @@ function onFilterChange() {
 function onSourceChange() {
   if (previousSource != null) {
     // previousSource.disconnect(props.filter);
-    emit('detach-node', previousSource);
+    emit('detach-node', props.sources.indexOf(previousSource));
   }
   console.log(currentSource.value);
-  emit('attach-node', currentSource.value);
+  emit('attach-node', props.sources.indexOf(currentSource.value));
   previousSource = currentSource.value;
 }
 
@@ -145,6 +127,7 @@ function onFilterDestroy() {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+
     &:deep(select) {
       width: 100%;
     }
