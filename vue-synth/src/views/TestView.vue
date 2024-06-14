@@ -5,11 +5,8 @@
       <div class="components">
         <WaveList :waves="waves" @wave-updated="onWaveUpdated" @wave-deleted="onWaveDeleted"></WaveList>
         <div class="components__filters">
-          <WaveFilter v-for="filter in filters" :sources="oscillators.map((osc) => {
-            return osc.gain;
-          })
-            " :filter="filter" :items="oscillators" :main-ctxt="mainContext"
-            @detach-node="(source: AudioNode) => detachEffect(filter, source, merger)"
+          <WaveFilter v-for="filter in filters" :sources="connectors" :filter="filter" :items="oscillators"
+            :main-ctxt="mainContext" @detach-node="(source: AudioNode) => detachEffect(filter, source, merger)"
             @attach-node="(source: AudioNode) => attachEffect(filter, source, merger)"></WaveFilter>
         </div>
       </div>
@@ -58,7 +55,21 @@ let waves = computed(() => {
     return module.wave
   })
 })
-let oscillators: Ref<oscillatorItem[]> = ref([]);
+
+let oscillators = computed(() => {
+  return waveModules.value.map((module) => {
+    return module.oscillator
+  })
+})
+
+let connectors = computed(() => {
+  return waveModules.value.map((module) => {
+    return module.gain
+  })
+})
+
+
+// let oscillators: Ref<oscillatorItem[]> = ref([]);
 let mainContext: Ref<AudioContext> = ref(new AudioContext());
 let merger: Ref<ChannelMergerNode> = ref(mainContext.value.createChannelMerger());
 let filters: Ref<BiquadFilterNode[]> = ref([]);
