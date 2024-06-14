@@ -1,7 +1,9 @@
 <template>
   <AudioModuleCard>
-    <div class="waveCard">
-      <div class="waveCard__actions-slot"></div>
+    <div :class="applyDisabled">
+      <div class="waveCard__actions-slot">
+        <ToggleButton v-model="disabled"></ToggleButton>
+      </div>
 
       <div class="waveCard__left-slot">
         <Selector v-model="wave.form" :items="Object.keys(waveForms)" class="selector" @change="onWaveChangeCB">
@@ -38,14 +40,15 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, type Ref } from 'vue';
+import { onMounted, onUnmounted, ref, type Ref, computed } from 'vue';
 import WaveCanvas from '../components/Waves/WaveCanvas.vue';
 import Wave, { waveForms } from '@/models/wave';
 import VerticalSlider from '@/components/Common/VerticalSlider.vue';
 import Selector from '@/components/Common/Selector.vue';
 import AudioModuleCard from '@/components/Waves/AudioModuleCard.vue';
+import ToggleButton from '@/components/Common/ToggleButton.vue';
 
-const emit = defineEmits(['updateWave', 'deleteWave']);
+const emit = defineEmits(['updateWave', 'deleteWave', "toggleWave"]);
 const props = defineProps({
   wave: {
     type: Wave,
@@ -63,6 +66,13 @@ let audioContext: AudioContext;
 let gainNode: GainNode;
 let oscillator: OscillatorNode;
 let isPlaying: Ref<Boolean> = ref(false);
+let disabled = ref();
+
+let applyDisabled = computed(() => {
+  return disabled.value
+    ? "waveCard waveCard--disabled"
+    : "waveCard"
+})
 
 function playWaveBtn() {
   isPlaying.value ? audioContext.suspend() : audioContext.resume();
@@ -85,6 +95,10 @@ function updateOscillator() {
 function onWaveChangeCB() {
   updateOscillator();
   emit('updateWave');
+}
+
+function disableWave() {
+  console.log(radioBtn.value)
 }
 
 
@@ -122,6 +136,10 @@ $card-padding: 2rem;
   // box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.5);
   // border-radius: 20px;
   // overflow: hidden;
+
+  &--disabled {
+    background-color: red;
+  }
 
   &__left-slot {
     display: flex;
@@ -168,7 +186,11 @@ $card-padding: 2rem;
   }
 
   &__actions-slot {
+    padding: 1rem 0;
     background-color: black;
+    // display: flex;
+    // justify-content: center;
+    // align-items: start;
   }
 
   &__buttons {
@@ -182,5 +204,31 @@ canvas {
   background-color: var(--canvas-bg);
   width: 100%;
   height: 100%;
+}
+
+#disableWaveInput {
+  display: none;
+}
+
+label {
+  width: 1.5rem;
+  height: 1.5rem;
+  background-color: red;
+  border-radius: 100px;
+  position: relative;
+
+  &::before {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 100px;
+    content: "";
+    width: 1rem;
+    height: 1rem;
+    background-color: blue;
+    z-index: 99;
+  }
 }
 </style>
