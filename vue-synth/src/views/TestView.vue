@@ -83,20 +83,6 @@ function createNewWave() {
 
   let module = new AudioModule(waveName, wave, mainContext.value, merger.value)
   waveModules.value.push(module)
-
-  // let tempOsc = mainContext.value.createOscillator();
-  // tempOsc.frequency.value = wave.getFrequency();
-  // let gainNode = mainContext.value.createGain();
-  // gainNode.connect(merger.value, 0, 2);
-  // tempOsc.connect(gainNode);
-
-  // tempOsc.start();
-  // oscillators.value.push({
-  //   osc: tempOsc,
-  //   gain: gainNode,
-  // });
-
-
 }
 
 function onWaveUpdated(index: number): void {
@@ -104,53 +90,22 @@ function onWaveUpdated(index: number): void {
 }
 
 function onWaveDeleted(index: number): void {
-  // oscillators.value[index].osc.stop();
-  // oscillators.value[index].gain.disconnect(merger.value);
-  // oscillators.value.splice(index, 1);
-  // waves.value.splice(index, 1)
   waveModules.value[index].destroyModule();
   waveModules.value.splice(index, 1);
 }
 
-// function attachEffect(effect: AudioNode, source: AudioNode, end: AudioNode) {
-//   console.log('attaching');
 
-//   console.log(source);
-//   console.log(effect);
-//   console.log(end);
-
-//   source.disconnect(end);
-//   source.connect(effect);
-//   effect.connect(end);
-// }
 
 function attachEffect(effect: AudioNode, index: number) {
   waveModules.value[index].attachEffect(effect)
 }
 
-// function detachEffect(effect: AudioNode, source: AudioNode, end: AudioNode) {
-//   console.log('detaching');
-
-//   console.log(source);
-//   console.log(effect);
-//   console.log(end);
-
-//   source.disconnect(effect);
-//   effect.disconnect(end);
-//   source.connect(end);
-// }
 
 function detachEffect(effect: AudioNode, index: number) {
   waveModules.value[index].detachEffect(effect)
 }
 
 function updateWaveOscillator(index: number): void {
-  // oscillators.value[index].osc.frequency.value = waves.value[index].getFrequency();
-  // oscillators.value[index].osc.type = waves.value[index].getForm();
-  // oscillators.value[index].gain.gain.setValueAtTime(
-  //   waves.value[index].getAmplitude() / 50,
-  //   mainContext.value.currentTime,
-  // );
   waveModules.value[index].updateOscillator();
 }
 
