@@ -1,12 +1,7 @@
 # Vue-synth
 
 # To-do
-- [ ] Refactor using custom data structures
-  - [x] Create wave
-  - [x] delete wave
-  - [x] update oscillator
-  - [ ] add and detach effects
-    - [ ] refactor effects component to take an audio node as input
+
 - [x] Refactor legacy code using typescript and scss
 - [ ] new design
 - [ ] Emits and props with typing
