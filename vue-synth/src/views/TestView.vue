@@ -7,8 +7,8 @@
           @waveToggled="(disabled, index) => onWaveToggled(disabled, index)"></WaveList>
         <div class="components__filters">
           <WaveFilter v-for="filter in filters" :sources="connectors" :filter="filter" :items="oscillators"
-            :main-ctxt="mainContext" @detach-node="(source: AudioNode) => detachEffect(filter, source, merger)"
-            @attach-node="(source: AudioNode) => attachEffect(filter, source, merger)"></WaveFilter>
+            :main-ctxt="mainContext" @detach-node="(sourceIndex: number) => detachEffect(filter, sourceIndex)"
+            @attach-node="(sourceIndex: number) => attachEffect(filter, sourceIndex)"></WaveFilter>
         </div>
       </div>
       <div class="controls">
