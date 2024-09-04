@@ -6,20 +6,23 @@
       </div>
 
       <div class="waveCard__left-slot">
-        <Selector v-model="wave.form" :items="Object.keys(waveForms)" class="selector" @change="onWaveChangeCB">
+        <Selector :disabled="disabled" v-model="wave.form" :items="Object.keys(waveForms)" class="selector"
+          @change="onWaveChangeCB">
         </Selector>
 
         <div class="waveCard__controls">
           <div class="waveCard__control">
             <div class="waveCard__control__slider">
-              <VerticalSlider v-model="wave.frequency" :range="1000" @valueChange="onWaveChangeCB"></VerticalSlider>
+              <VerticalSlider :disabled="disabled" v-model="wave.frequency" :range="1000" @valueChange="onWaveChangeCB">
+              </VerticalSlider>
             </div>
             <span class="waveCard__control__valueBox">{{ wave.frequency }}</span>
           </div>
 
           <div class="waveCard__control">
             <div class="waveCard__control__slider">
-              <VerticalSlider v-model="wave.amplitude" :range="50" @valueChange="onWaveChangeCB"></VerticalSlider>
+              <VerticalSlider :disabled="disabled" v-model="wave.amplitude" :range="50" @valueChange="onWaveChangeCB">
+              </VerticalSlider>
             </div>
             <span class="waveCard__control__valueBox">{{ wave.amplitude }}</span>
           </div>
@@ -31,8 +34,8 @@
           <WaveCanvas :wave="wave" :paused="disabled"></WaveCanvas>
         </div>
         <div class="waveCard__buttons">
-          <button @click="playWaveBtn">play wave</button>
-          <button @click="deleteWave">delete</button>
+          <button @click="playWaveBtn" :disabled="disabled">play wave</button>
+          <button @click="deleteWave" :disabled="disabled">delete</button>
         </div>
       </div>
     </div>
@@ -126,6 +129,7 @@
 </script>
 
 <style scoped lang="scss">
+  @import "../assets/base.scss";
   $card-width: 30rem;
   $card-height: 15rem;
   $card-padding: 2rem;
@@ -144,7 +148,18 @@
     // overflow: hidden;
 
     &--disabled {
-      background-color: red;
+      // background-color: red;
+      position: relative;
+
+
+      &::after {
+        content: "";
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        background-color: rgba($color-primary, .1);
+        backdrop-filter: blur(1px);
+      }
     }
 
     &__left-slot {
@@ -194,6 +209,7 @@
     &__actions-slot {
       padding: 1rem 0;
       background-color: black;
+      z-index: 99;
       // display: flex;
       // justify-content: center;
       // align-items: start;
