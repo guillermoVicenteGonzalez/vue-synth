@@ -1,40 +1,28 @@
 <template>
-  <div class="card">
-    <div class="card__top">
-      <Selector :items="props.sources" v-model="currentSource" @change="onSourceChange"></Selector>
-      <Selector
-        :items="Object.keys(filterTypes)"
-        v-model="filterType"
-        @change="onFilterChange"
-      ></Selector>
-    </div>
+  <AudioModuleCard>
+    <div class="card">
+      <div class="card__top">
+        <Selector :items="props.sources" v-model="currentSource" @change="onSourceChange"></Selector>
+        <Selector :items="Object.keys(filterTypes)" v-model="filterType" @change="onFilterChange"></Selector>
+      </div>
 
-    <div class="card__body">
-      <WaveAnalyzer :source="props.filter" v-if="currentSource"></WaveAnalyzer>
-    </div>
+      <div class="card__body">
+        <WaveAnalyzer :source="props.filter" v-if="currentSource"></WaveAnalyzer>
+      </div>
 
-    <div class="card__bottom">
-      <input
-        type="range"
-        class="card__bottom__slider"
-        v-model="cutoffFrequency"
-        :max="1000"
-        @input="onFilterChange"
-      />
-      <input
-        type="number"
-        class="card__bottom__input"
-        v-model="cutoffFrequency"
-        @input="onFilterChange"
-      />
+      <div class="card__bottom">
+        <input type="range" class="card__bottom__slider" v-model="cutoffFrequency" :max="1000" @input="onFilterChange" />
+        <input type="number" class="card__bottom__input" v-model="cutoffFrequency" @input="onFilterChange" />
+      </div>
     </div>
-  </div>
+  </AudioModuleCard>
 </template>
 
 <script setup lang="ts">
 import { ref, type Ref } from 'vue';
 import Selector from '../Common/Selector.vue';
 import WaveAnalyzer from './WaveAnalyzer.vue';
+import AudioModuleCard from './AudioModuleCard.vue';
 
 //recibe una coleccion de ondas (oscillators) a los que puede ser aplicado
 //le paso un origen que no puede ser el destino y le añade un
@@ -75,10 +63,11 @@ enum filterTypes {
 let cutoffFrequency: Ref<number> = ref(0);
 let filterType: Ref<BiquadFilterType> = ref('lowpass');
 let currentSource: Ref<AudioNode> = ref();
-let previousSource: AudioNode;
+let previousSource: AudioNode; // * used just to know if it is the first time a node is attached
 let internalContext: Ref<AudioContext> = ref(new AudioContext());
 let internalFilter: Ref<BiquadFilterNode> = ref(internalContext.value.createBiquadFilter());
 let internalSource: AudioNode;
+
 
 function onFilterChange() {
   /**
@@ -103,25 +92,17 @@ function onFilterChange() {
 }
 
 function onSourceChange() {
-  /**
-   * Si cambia la source hay que
-   * - desconectar la previa?
-   * - asignar la source actual a la variable previa
-   * - conectar la source al filtro prop (emitiendo un evento)
-   * - crear una source interna
-   */
-  //   internalSource = currentSource.value.gain;
-  //   console.log(internalSource);
-
-  //conecto el filtro a la fuente
-  //devuelvo el filtro en un evento para conectarlo al nodo pertinente
   if (previousSource != null) {
-    previousSource.disconnect(props.filter);
-  } else {
-    // currentSource.value.connect(props.filter);
-    console.log(currentSource.value);
-    emit('attach-node', currentSource.value);
+    // previousSource.disconnect(props.filter);
+    emit('detach-node', props.sources.indexOf(previousSource));
   }
+  console.log(currentSource.value);
+  emit('attach-node', props.sources.indexOf(currentSource.value));
+  previousSource = currentSource.value;
+}
+
+function onFilterDestroy() {
+  emit('detach-node', currentSource.value);
 }
 </script>
 
@@ -130,7 +111,7 @@ function onSourceChange() {
   display: block;
   width: 100%;
   height: 100%;
-  max-height: 13rem;
+  //   max-height: 13rem;
 
   border-radius: 20px;
   box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.5);
@@ -146,6 +127,7 @@ function onSourceChange() {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+
     &:deep(select) {
       width: 100%;
     }
