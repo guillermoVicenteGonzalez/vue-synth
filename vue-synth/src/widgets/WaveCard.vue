@@ -102,8 +102,9 @@
     if (disabled.value) {
       audioContext.suspend()
     } else {
-
+      audioContext.resume();
     }
+    emit("toggleWave", disabled.value)
   }
 
 
