@@ -1,7 +1,16 @@
 {
-  "recommendations": [
-    "Vue.volar",
-    "dbaeumer.vscode-eslint",
-    "esbenp.prettier-vscode"
-  ]
+	"recommendations": [
+		"Vue.volar",
+		"vitest.explorer",
+		"dbaeumer.vscode-eslint",
+		"EditorConfig.EditorConfig",
+		"esbenp.prettier-vscode",
+		"christian-kohler.npm-intellisense",
+		"aaron-bond.better-comments",
+		"formulahendry.auto-rename-tag",
+		"formulahendry.auto-close-tag",
+		"christian-kohler.path-intellisense",
+		"mrmlnc.vscode-scss",
+		"teamchilla.blueprint"
+	]
 }
