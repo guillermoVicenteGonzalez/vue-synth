@@ -1,7 +1,13 @@
 <template>
-	<VsButton></VsButton>
+	<SynthLayout>
+		<template #header>Header</template>
+		<template #components>Components</template>
+		<template #display>Main display</template>
+		<template #piano>Piano</template>
+		<template #footer> Footer</template>
+	</SynthLayout>
 </template>
 
 <script setup lang="ts">
-import VsButton from "@/components/common/VsButton/VsButton.vue";
+import SynthLayout from "@/layouts/synth/SynthLayout.vue";
 </script>
