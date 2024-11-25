@@ -9,6 +9,7 @@ export default class AudioModule {
   effects: AudioNode[];
   end: AudioNode; //last node before the gain ganancia el penultimo
   exit: AudioNode;
+  disabled: Boolean;
 
   /**
    * 
@@ -22,6 +23,7 @@ export default class AudioModule {
     this.name = n;
     this.wave = w;
     this.context = ctx;
+    this.disabled = false;
 
     this.effects = [];
 
@@ -82,6 +84,22 @@ export default class AudioModule {
     this.exit = nExit;
   }
 
+  unplugExit() {
+    this.end.disconnect(this.exit)
+  }
+
+  plugExit() {
+    this.end.connect(this.exit)
+  }
+
+  unplugOscillator() {
+    this.oscillator.disconnect(this.gain)
+  }
+
+  plugOscillator() {
+    this.oscillator.connect(this.gain)
+  }
+
   toggleMute(flag?: boolean) {
     flag ? this.gain.gain.value = 0 : this.gain.gain.value = this.wave.getAmplitude() / 50
   }
@@ -89,5 +107,13 @@ export default class AudioModule {
   destroyModule() {
     this.oscillator.stop();
     this.gain.disconnect(this.exit)
+  }
+
+
+  toggleModule(flag: Boolean) {
+    this.disabled = !flag
+    this.disabled
+      ? this.unplugOscillator()
+      : this.plugOscillator()
   }
 }
