@@ -1,18 +1,18 @@
 <template>
 <<<<<<< HEAD
 <<<<<<< HEAD
-  <input type="range" v-model="model" :max="range" @input="emit('valueChange')" class="verticalSlider" />
+  <input v-model="model" type="range" :max="range" class="verticalSlider" @input="emit('valueChange')" />
 =======
   <input
-    type="range"
     v-model="model"
+    type="range"
     :max="range"
-    @input="emit('valueChange')"
     class="verticalSlider"
+    @input="emit('valueChange')"
   />
 >>>>>>> 2c0de8d (wave filter structure)
 =======
-  <input type="range" v-model="model" :max="range" @input="emit('valueChange')" class="verticalSlider" />
+  <input v-model="model" type="range" :max="range" class="verticalSlider" @input="emit('valueChange')" />
 >>>>>>> 06a3705 (refactored some styles)
 </template>
 

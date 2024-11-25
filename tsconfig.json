@@ -1,0 +1,25 @@
+{
+	"files": [],
+	"exclude": [
+		"src/**/__tests__/*",
+		".blueprints/**/*",
+		".blueprints/**",
+		".blueprints",
+		".blueprints/component/*"
+	],
+
+	"references": [
+		{
+			"path": "./tsconfig.node.json"
+		},
+		{
+			"path": "./tsconfig.app.json"
+		},
+		{
+			"path": "./tsconfig.vitest.json"
+		}
+	],
+	"compilerOptions": {
+		"module": "NodeNext"
+	}
+}

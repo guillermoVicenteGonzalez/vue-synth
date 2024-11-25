@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "workbench.colorCustomizations": {
     "commandCenter.border": "#15202b99",
     "sash.hoverBorder": "#65c89b",
@@ -51,4 +52,42 @@
   "editor.defaultFormatter": "vscode.emmet",
   "eslint.alwaysShowStatus": true,
   "eslint.format.enable": true
+=======
+	"explorer.fileNesting.enabled": true,
+	"explorer.fileNesting.patterns": {
+		"tsconfig.json": "tsconfig.*.json, env.d.ts",
+		"vite.config.*": "jsconfig*, vitest.config.*, cypress.config.*, playwright.config.*",
+		"package.json": "package-lock.json, pnpm*, .yarnrc*, yarn*, .eslint*, eslint*, .prettier*, prettier*, .editorconfig"
+	},
+	"blueprint.templatesPath": ["./.blueprints"],
+
+	"editor.formatOnSave": true,
+	"editor.formatOnPaste": true,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.codeActionsOnSave": {
+		"source.fixAll": "explicit",
+		"source.addMissingImports.ts": "always",
+		"source.removeUnused.ts": "never",
+		"source.organizeImports": "always",
+		"source.removeUnusedImports": "always",
+		"source.sortImports": "always",
+		"source.formatDocument": "always",
+		"source.fixAll.ts": "always",
+		"source.fixAll.eslint": "always"
+	},
+	"eslint.validate": [
+		"typescript",
+		"typescriptvue",
+		"javascript",
+		"javascriptvue"
+	],
+	"css.validate": true,
+	"scss.validate": true,
+	"files.associations": {
+		"*.css": "css",
+		"css": "css",
+		"*.scss": "scss",
+		"scss": "scss"
+	}
+>>>>>>> 6c8390e (refactor(models): refactored wave and audioModule)
 }

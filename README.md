@@ -1,35 +1,71 @@
-# Vue-synth
+## Todo
 
-# To-do
+- [x] vsconfig
+- [x] Scss
+- [x] eslint
+- [x] prettier config
+- [ ] vite config
+- [ ] axios
+- [x] storybook
+- [x] docker
+- [x] blueprints ?
+- [x] Typescript variant
+- [ ] Husky
 
-- [x] Refactor legacy code using typescript and scss
-- [ ] new design
-- [ ] Emits and props with typing
-- [x] Main wave with audio api visual analyzer (maybe other waves too)
-- [ ] 4 Waves
-  - [x] Amplitude and freq controls
-  - [x] Individual sound
-  - [ ] responsive and component based css
-  - [ ] disabled state (involves parent)
-  - [ ] Color change
-- [ ] Main wave (sum of all colors)
-- [ ] Actual wave (what is being played in the piano)
-- [ ] 2 Filters
-- [ ] sampler
-- [ ] Piano
-- [ ] Midi capabilities
-- [ ] Effects
-- [ ] Preset saver.
-- [ ] Reverb
-- [ ] Turn test elements into widgets
+# vue-template
 
-  - the view should only be responsible for the data. It should contain the layout and pass into it some widgets. The card list should be a widget, the effects list should be a widget etc just as the wave displays are.
+This template should help get you started developing with Vue 3 in Vite.
 
-- [ ] Start an oscillator stopped (if that makes any sense)
-- [ ] pass options to an audio context
-- [ ] Nodes include their context => it is not necesary to pass the context as a prop.
-- [ ] If a node alredy has a filter it is non selectable
-- [ ] Oscillators must be ref in order for the filters to be able to select them
-- [ ] Pass gain node as main node to attach a filter
+## Recommended IDE Setup
 
-- Maybe it is better to initialize everything with a filter with a cutoff of 0. if a filter is detached we don't disconnect it, we just set its cutoff to 0.
+[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+
+## Customize configuration
+
+See [Vite Configuration Reference](https://vite.dev/config/).
+
+## Project Setup
+
+```sh
+npm install
+```
+
+### Compile and Hot-Reload for Development
+
+```sh
+npm run dev
+```
+
+### Compile and Minify for Production
+
+```sh
+npm run build
+```
+
+### Run Unit Tests with [Vitest](https://vitest.dev/)
+
+```sh
+npm run test:unit
+```
+
+### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
+
+```sh
+npm run test:e2e:dev
+```
+
+This runs the end-to-end tests against the Vite development server.
+It is much faster than the production build.
+
+But it's still recommended to test the production build with `test:e2e` before deploying (e.g. in CI environments):
+
+```sh
+npm run build
+npm run test:e2e
+```
+
+### Lint with [ESLint](https://eslint.org/)
+
+```sh
+npm run lint
+```

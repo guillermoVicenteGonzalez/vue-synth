@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+echo -e "\033[31;1;4m>>> Checking commit message\033[0m"
+npx commitlint --edit $1
+echo -e "\033[31;1;4m>>> Correct commit format\033[0m"
