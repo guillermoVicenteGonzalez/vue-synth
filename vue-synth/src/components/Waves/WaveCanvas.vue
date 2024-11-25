@@ -3,68 +3,85 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, type Ref } from 'vue';
-import Wave from '@/models/wave';
+  import { ref, onMounted, type Ref, watch } from 'vue';
+  import Wave from '@/models/wave';
 
-let myCanvas: Ref = ref();
-// let myCanvas:Ref<HTMLCanvasElement | undefined> = ref();
-let context: CanvasRenderingContext2D;
-let frames = 0;
+  let myCanvas: Ref = ref();
+  // let myCanvas:Ref<HTMLCanvasElement | undefined> = ref();
+  let context: CanvasRenderingContext2D;
+  let frames = 0;
 
-const props = defineProps({
-  wave: {
-    type: Wave,
-    required: true,
-    default: new Wave(2, 2, 2),
-  },
-});
+  const props = defineProps({
+    paused: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    wave: {
+      type: Wave,
+      required: true,
+      default: new Wave(2, 2, 2),
+    },
+  });
 
-const emit = defineEmits(['updateWave']);
 
-function paintWave(w: Wave, ctx: CanvasRenderingContext2D = context, step = 0): Boolean {
-  if (w == undefined) {
-    return false;
+
+  const emit = defineEmits(['updateWave']);
+
+  function paintWave(w: Wave, ctx: CanvasRenderingContext2D = context, step = 0): Boolean {
+    if (w == undefined) {
+      return false;
+    }
+
+    let cWidth: number = ctx.canvas.width;
+    let cHeight: number = ctx.canvas.height;
+    let middle: number = cHeight / 2;
+
+    ctx.clearRect(0, 0, cWidth, cHeight);
+    ctx.beginPath();
+
+    let points = w.calculatePoints(cWidth, step * w.frequency);
+    for (let x = 0; x < cWidth; x++) {
+      ctx.lineTo(x, middle + points[x]);
+    }
+    ctx.stroke();
+    return true;
   }
 
-  let cWidth: number = ctx.canvas.width;
-  let cHeight: number = ctx.canvas.height;
-  let middle: number = cHeight / 2;
+  function animateWave(): Boolean {
+    if (props.paused) {
+      window.requestAnimationFrame(animateWave);
+      return false;
+    }
 
-  ctx.clearRect(0, 0, cWidth, cHeight);
-  ctx.beginPath();
+    if (myCanvas.value == undefined) {
+      return false;
+    }
 
-  let points = w.calculatePoints(cWidth, step * w.frequency);
-  for (let x = 0; x < cWidth; x++) {
-    ctx.lineTo(x, middle + points[x]);
-  }
-  ctx.stroke();
-  return true;
-}
+    frames += 0.1;
+    let ctx: CanvasRenderingContext2D = myCanvas.value.getContext('2d');
+    paintWave(props.wave, ctx, frames);
 
-function animateWave(): Boolean {
-  if (myCanvas.value == undefined) {
-    return false;
+    window.requestAnimationFrame(animateWave);
+    return true;
   }
 
-  frames += 0.1;
-  let ctx: CanvasRenderingContext2D = myCanvas.value.getContext('2d');
-  paintWave(props.wave, ctx, frames);
+  function animationLoop() {
+    if (props.paused) return
+  }
 
-  window.requestAnimationFrame(animateWave);
-  return true;
-}
 
-onMounted(() => {
-  myCanvas.value.getContext('2d');
-  window.requestAnimationFrame(animateWave);
-});
+  onMounted(() => {
+    myCanvas.value.getContext('2d');
+    window.requestAnimationFrame(animateWave);
+  });
 </script>
 
 <style scoped>
-canvas {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  border: solid 1px black;
-}
+  canvas {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border: solid 1px black;
+  }
 </style>
