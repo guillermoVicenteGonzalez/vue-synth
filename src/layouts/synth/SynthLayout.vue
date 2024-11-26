@@ -29,6 +29,24 @@ $components-bg-color: white;
 $display-bg-color: white;
 $footer-bg-color: blueviolet;
 
+$min-components-w: 30rem;
+$max-components-w: 2fr;
+
+$min-display-w: 40rem;
+$max-display-w: 3fr;
+
+$min-header-h: 2rem;
+$max-header-h: 0.5fr;
+
+$min-body-h: 7rem;
+$max-body-h: 7fr;
+
+$min-piano-h: 2rem;
+$max-piano-h: 2fr;
+
+$min-footer-h: 0.5rem;
+$max-footer-h: 0.5fr;
+
 .synth-layout {
 	width: 100vw;
 	height: 100vh;
@@ -39,14 +57,15 @@ $footer-bg-color: blueviolet;
 	overflow: hidden;
 
 	display: grid;
-	grid-template-columns: [cards-start] minmax(30rem, 2fr) [cards-end visualization-start] minmax(
-			40rem,
-			3fr
-		);
+	grid-template-columns:
+		[cards-start] minmax($min-components-w, $max-components-w)
+		[cards-end visualization-start] minmax($min-display-w, $max-display-w);
 
 	grid-template-rows:
-		[header-start] minmax(2rem, 0.5fr) [header-end body-start] minmax(7rem, 7fr)
-		[body-end piano-start] minmax(2rem, 2fr) [piano-end footer-start] minmax(0.5rem, 0.5fr);
+		[header-start] minmax($min-header-h, $max-header-h)
+		[header-end body-start] minmax($min-body-h, $max-body-h)
+		[body-end piano-start] minmax($min-piano-h, $max-piano-h)
+		[piano-end footer-start] minmax($min-footer-h, $max-footer-h);
 
 	&__header {
 		background-color: $header-color;
