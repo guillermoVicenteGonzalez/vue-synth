@@ -4,11 +4,11 @@
 
 <script setup lang="ts">
 
-interface {{pascalCase name}}Props{
+interface {{pascalCase name}}WidgetProps{
 
 }
 
-const {...} = defineProps<{{pascalCase name}}Props>();
+const {...} = defineProps<{{pascalCase name}}WidgetProps>();
 </script>
 
 <style lang="scss" scoped></style>

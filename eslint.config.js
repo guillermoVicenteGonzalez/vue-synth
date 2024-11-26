@@ -41,6 +41,12 @@ export default [
 		rules: {
 			"vue/no-arrow-functions-in-watch": "error",
 			"vue/no-unused-vars": "error",
+			"vue/no-mutating-props": [
+				"error",
+				{
+					shallowOnly: true,
+				},
+			],
 
 			// "vue/no-template-key": "error",
 			"vue/define-emits-declaration": ["error", "type-based"],
