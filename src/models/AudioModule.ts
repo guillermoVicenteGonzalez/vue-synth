@@ -3,6 +3,8 @@ import type Wave from "./wave";
 //for future scalability
 type AudioEffect = AudioNode;
 
+//Remember it goes osc(maybe end) -> effects(end) -> gain -> exit
+
 export default class AudioModule {
 	name: string;
 	wave: Wave;
@@ -12,29 +14,31 @@ export default class AudioModule {
 	oscillator: OscillatorNode;
 	exit: AudioNode; //redundant?
 	disabled: boolean;
-	end: AudioNode; //* The last node in the "improvised" linked list
+	end: AudioNode; //* The last node in the "improvised" linked list. Always before gain
 
 	/**
 	 *
 	 * @param {string} n: - name of the module
 	 * @param {Wave} w - associated wave of the module ?
 	 * @param {AudioContext} ctx - asociated context of the module
-	 * @param {boolean} disabled - Wether the wave is enabled or not
+	 * @param {AudioNode} exit - Not the exit of the module but where the exit of the module goes
 	 * * The gain node should always be the penultimate. This way effects are also affected by the gain
 	 */
 	constructor(
 		name: string = "default",
 		w: Wave,
 		ctx: AudioContext,
-		disabled: boolean = false
+		exit?: AudioNode
 	) {
 		this.name = name;
 		this.wave = w;
 		this.context = ctx;
-		this.exit = this.context.destination;
 
 		this.effects = [];
-		this.disabled = disabled;
+		this.disabled = false;
+
+		if (exit != null) this.exit = exit;
+		else this.exit = this.context.destination;
 
 		this.oscillator = this.context.createOscillator();
 		this.gainNode = this.context.createGain();
@@ -143,7 +147,8 @@ export default class AudioModule {
 	 * Meant to work just like plugging or unplugging the source from the amp/speaker
 	 */
 	unplugOscillator() {
-		this.oscillator.disconnect(this.end);
+		// this.oscillator.disconnect(this.end);
+		this.end.disconnect(this.gainNode);
 	}
 
 	/**
@@ -151,7 +156,8 @@ export default class AudioModule {
 	 * Meant to work just like plugging or unplugging the source from the amp/speaker
 	 */
 	plugOscillator() {
-		this.oscillator.connect(this.end);
+		// this.oscillator.connect(this.end);
+		this.end.connect(this.gainNode);
 	}
 
 	/**

@@ -11,32 +11,49 @@
 			</div>
 			<!-- <ModuleCardWidget></ModuleCardWidget> -->
 		</template>
-		<template #display>Main display</template>
+		<template #display>
+			<VsCard height="50px">
+				<div style="background-color: red; height: 100%">
+					<VerticalSlider></VerticalSlider>
+				</div>
+			</VsCard>
+		</template>
 		<template #piano>Piano</template>
 		<template #footer> Footer</template>
 	</SynthLayout>
 </template>
 
 <script setup lang="ts">
+import VerticalSlider from "@/components/common/VerticalSlider/VerticalSlider.vue";
+import VsCard from "@/components/common/VsCard/VsCard.vue";
 import SynthLayout from "@/layouts/synth/SynthLayout.vue";
 import AudioModule from "@/models/AudioModule";
 import Wave from "@/models/wave";
 import ModuleCardListWidget from "@/widgets/ModuleCardList/ModuleCardListWidget.vue";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 
 const audioModules = ref<AudioModule[]>([]);
 const mainContext = ref<AudioContext>(new AudioContext());
 const merger = ref<ChannelMergerNode>(mainContext.value.createChannelMerger());
-const filters = ref<BiquadFilterNode[]>([]);
+// const filters = ref<BiquadFilterNode[]>([]);
 
 function createNewModule() {
 	const wave = new Wave(10, 1, 0);
 	wave.setForm("sine");
 	const waveName = `wave ${audioModules.value.length + 1}`;
 
-	const module = new AudioModule(waveName, wave, mainContext.value, false);
+	const module = new AudioModule(
+		waveName,
+		wave,
+		mainContext.value,
+		merger.value
+	);
 	audioModules.value.push(module);
 }
+
+onMounted(() => {
+	merger.value.connect(mainContext.value.destination);
+});
 </script>
 
 <style scoped lang="scss">
@@ -52,5 +69,11 @@ function createNewModule() {
 		grid-column: 1/-1;
 		background-color: green;
 	}
+}
+
+.testContainer {
+	background-color: red;
+	height: 20px;
+	width: 100px;
 }
 </style>

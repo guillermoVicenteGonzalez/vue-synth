@@ -1,13 +1,10 @@
-
 import type { Meta, StoryObj } from "@storybook/vue3";
-import  ModuleCardListWidget  from "./ModuleCardListWidget.vue"
-
-
+import ModuleCardListWidget from "./ModuleCardListWidget.vue";
 
 const meta: Meta<typeof ModuleCardListWidget> = {
-	title: 'ModuleCardListWidget',
-  component: ModuleCardListWidget,
-  argTypes: {},
+	title: "ModuleCardListWidget",
+	component: ModuleCardListWidget,
+	argTypes: {},
 };
 
 export default meta;
