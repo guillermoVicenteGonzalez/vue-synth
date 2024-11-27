@@ -1,10 +1,12 @@
 <template>
-	<VsCard max-height="15rem" max-width="50rem">
-		<div class="ModuleCard">
-			<div class="ModuleCard__handle"></div>
+	<VsCard max-height="15rem" max-width="50rem" min-height="12rem">
+		<div v-if="audioModule" class="ModuleCard">
+			<div class="ModuleCard__handle">
+				<ToggleButton></ToggleButton>
+			</div>
 			<div class="ModuleCard__left-slot">
 				<VsSelector
-					v-model="wave.form"
+					v-model="audioModule.wave.form"
 					:items="Object.keys(waveForms)"
 					@change="onWaveChangeCB"
 				></VsSelector>
@@ -16,38 +18,44 @@
 </template>
 
 <script setup lang="ts">
+import ToggleButton from "@/components/common/ToggleButton/ToggleButton.vue";
 import VsCard from "@/components/common/VsCard/VsCard.vue";
 import VsSelector from "@/components/common/VsSelector/VsSelector.vue";
-import Wave, { waveForms } from "@/models/wave";
+import AudioModule from "@/models/AudioModule";
+import { waveForms } from "@/models/wave";
 
-interface ModuleCardWidgetProps {
-	disabled?: boolean;
-	wave?: Wave;
-}
+const audioModule = defineModel<AudioModule>();
 
 function onWaveChangeCB() {
+	//wave module update oscillator?
 	return;
 }
-
-const { wave = new Wave(2, 2, 2) } = defineProps<ModuleCardWidgetProps>();
 </script>
 
 <style lang="scss" scoped>
 $left-slot-bg-color: black;
 
 .ModuleCard {
+	background-color: $primary-color;
+
 	display: grid;
 	grid-template-columns:
-		[handle-start] minmax(20px, 0.5fr)
+		[handle-start] minmax(30px, 0.5fr)
 		[handle-end left-start] minmax(20px, 2fr)
 		[left-end body-start] minmax(100px, 7fr)
 		[body-end right-start] minmax(20px, 1fr);
 	width: 100%;
 	min-height: 100%;
+	height: 100%;
 
 	&__handle {
 		background-color: $left-slot-bg-color;
 		height: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: start;
+		padding: 0.5rem 0 0.5rem 0;
 	}
 }
 </style>

@@ -24,7 +24,7 @@ const {
 	bgColor = "white",
 	childClass,
 	width = "100%",
-	height = "100%",
+	height = "100px",
 	minWidth = "10px",
 	minHeight = "50px",
 } = defineProps<VSCardProps>();
