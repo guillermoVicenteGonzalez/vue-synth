@@ -30,10 +30,10 @@ $display-bg-color: white;
 $footer-bg-color: blueviolet;
 
 $min-components-w: 30rem;
-$max-components-w: 3fr;
+$max-components-w: 4fr;
 
 $min-display-w: 40rem;
-$max-display-w: 4fr;
+$max-display-w: 5fr;
 
 $min-header-h: 2rem;
 $max-header-h: 0.5fr;

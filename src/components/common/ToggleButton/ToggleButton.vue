@@ -12,9 +12,14 @@ type ToggleButtonVariants = "default" | "elevated";
 interface ToggleButtonProps {
 	variant?: ToggleButtonVariants;
 	color?: string;
+	size?: CSSNumericValue;
 }
 
-const { color = "red", variant = "default" } = defineProps<ToggleButtonProps>();
+const {
+	color = "red",
+	variant = "default",
+	size = "1.5rem",
+} = defineProps<ToggleButtonProps>();
 
 const model = defineModel<boolean>({ default: false });
 const emit = defineEmits<{
@@ -37,22 +42,25 @@ const variantClass = computed(() => {
 
 <style lang="scss" scoped>
 .toggleButton {
-	display: block;
 	background-color: transparent;
-	width: 1.5rem;
-	height: 1.5rem;
+	width: v-bind(size);
+	height: v-bind(size);
 	border-radius: 100px;
-	border: 0.1rem solid v-bind(color);
+	border: none;
+	outline: 0.1rem solid v-bind(color);
 	// margin: auto;
-	padding: 2px;
+	// padding: 2px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .toggleButton--selected::before {
 	display: block;
 	content: "";
 	background: v-bind(color);
-	height: 100%;
-	width: 100%;
+	height: 70%;
+	width: 70%;
 	border-radius: 100px;
 	margin: auto;
 }
