@@ -1,13 +1,10 @@
-
 import type { Meta, StoryObj } from "@storybook/vue3";
-import  EffectListWidget  from "./EffectListWidget.vue"
-
-
+import EffectListWidget from "./EffectListWidget.vue";
 
 const meta: Meta<typeof EffectListWidget> = {
-	title: 'EffectListWidget',
-  component: EffectListWidget,
-  argTypes: {},
+	title: "EffectListWidget",
+	component: EffectListWidget,
+	argTypes: {},
 };
 
 export default meta;

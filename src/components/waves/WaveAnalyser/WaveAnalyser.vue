@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 
 interface WaveAnalyserProps {
 	canvasWidth?: number;
@@ -31,6 +31,7 @@ let context: CanvasRenderingContext2D;
 const bufferLength: number = analyser.frequencyBinCount;
 const dataArray: Uint8Array = new Uint8Array(bufferLength);
 analyser.getByteTimeDomainData(dataArray);
+const previousSource = ref<AudioNode>();
 
 function draw() {
 	requestAnimationFrame(draw);
@@ -76,12 +77,39 @@ function draw() {
 	context.stroke();
 }
 
+watch(
+	() => source,
+	() => {
+		if (previousSource.value) {
+			previousSource.value.disconnect(analyser);
+		}
+		source.connect(analyser);
+		previousSource.value = source;
+	}
+);
+
+//otra opcion es lanzar un emit con la source antigua pidiendo que lo desconecte
+//o directamente desconectarlo desde el padre?
+//niguna funciona porque no tengo a que desconectarlo (el analizador)
+
 onMounted(() => {
 	source.connect(analyser);
 	context = analyserCanvas.value.getContext("2d");
-
+	previousSource.value = source;
 	draw();
 });
+
+// onBeforeUpdate(() => {
+// 	console.log("ahora");
+// 	console.log(source);
+// 	// source.disconnect(analyser);
+// });
+
+// onUpdated(() => {
+// 	console.log("now im updated");
+// 	console.log(source);
+// 	// source.connect(analyser);
+// });
 </script>
 
 <style lang="scss" scoped>

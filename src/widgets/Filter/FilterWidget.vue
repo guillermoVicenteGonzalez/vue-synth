@@ -32,7 +32,7 @@
 			</div>
 			<WaveAnalyser
 				v-if="source"
-				:source="source.exit"
+				:source="source.gainNode"
 				:canvas-width="zoom"
 			></WaveAnalyser>
 
@@ -95,11 +95,11 @@ function handleSelectModule(moduleName: string | undefined) {
 
 	if (!newModule) return;
 
-	if (source.value != undefined && filter.value != undefined) {
-		source.value.detachEffect(filter.value as AudioNode);
-	}
-	if (filter.value != undefined)
-		newModule.attachEffect(filter.value as AudioNode);
+	// if (source.value != undefined && filter.value != undefined) {
+	// 	source.value.detachEffect(filter.value as AudioNode);
+	// }
+	// if (filter.value != undefined)
+	// 	newModule.attachEffect(filter.value as AudioNode);
 	source.value = newModule;
 }
 
