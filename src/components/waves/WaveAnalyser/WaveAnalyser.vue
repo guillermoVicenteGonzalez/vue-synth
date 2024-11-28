@@ -1,8 +1,8 @@
 <template>
 	<canvas
 		ref="analyserCanvas"
-		:width="canvasWidth"
 		:height="canvasHeight"
+		:width="canvasWidth"
 	></canvas>
 </template>
 
@@ -34,6 +34,12 @@ analyser.getByteTimeDomainData(dataArray);
 
 function draw() {
 	requestAnimationFrame(draw);
+	if (
+		!analyserCanvas.value ||
+		!analyserCanvas.value.width ||
+		!analyserCanvas.value.height
+	)
+		return;
 
 	analyser.getByteTimeDomainData(dataArray);
 

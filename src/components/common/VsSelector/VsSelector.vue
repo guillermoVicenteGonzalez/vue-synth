@@ -4,7 +4,7 @@
 		v-model="model"
 		name=""
 		class="selector"
-		@change="emit('change')"
+		@change="emit('change', model)"
 	>
 		<option v-if="items.length == 0" value="">
 			{{ placeholder || "select a value" }}
@@ -23,7 +23,7 @@ interface VsSelectorProps {
 
 const model = defineModel<string>();
 const emit = defineEmits<{
-	(e: "change"): void;
+	(e: "change", value: string | undefined): void;
 }>();
 
 const { items = [], placeholder } = defineProps<VsSelectorProps>();
