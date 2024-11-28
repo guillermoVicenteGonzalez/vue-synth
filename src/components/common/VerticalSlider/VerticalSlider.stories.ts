@@ -1,13 +1,10 @@
-
 import type { Meta, StoryObj } from "@storybook/vue3";
-import  VerticalSlider  from "./VerticalSlider.vue"
-
-
+import VerticalSlider from "./VerticalSlider.vue";
 
 const meta: Meta<typeof VerticalSlider> = {
-	title: 'VerticalSlider',
-  component: VerticalSlider,
-  argTypes: {},
+	title: "VerticalSlider",
+	component: VerticalSlider,
+	argTypes: {},
 };
 
 export default meta;

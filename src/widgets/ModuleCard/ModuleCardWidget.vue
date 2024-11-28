@@ -3,8 +3,7 @@
 		v-if="audioModule"
 		max-height="20rem"
 		max-width="50rem"
-		min-height="12rem"
-		height="15rem"
+		min-height="15rem"
 		:child-class="ModuleCardStyles"
 	>
 		<div class="ModuleCard__handle">
@@ -12,9 +11,15 @@
 		</div>
 
 		<div class="ModuleCard__left-slot">
+			<VsSelector
+				v-model="audioModule.wave.form"
+				:items="Object.keys(waveForms)"
+				@change="onWaveChangeCB"
+			></VsSelector>
 			<div class="ModuleCard__sliders">
 				<VerticalSlider
 					v-model="audioModule.wave.amplitude"
+					label="amplitude"
 					:range="50"
 					@change="onWaveChangeCB"
 				></VerticalSlider>
@@ -36,7 +41,9 @@
 import ToggleButton from "@/components/common/ToggleButton/ToggleButton.vue";
 import VerticalSlider from "@/components/common/VerticalSlider/VerticalSlider.vue";
 import VsCard from "@/components/common/VsCard/VsCard.vue";
+import VsSelector from "@/components/common/VsSelector/VsSelector.vue";
 import AudioModule from "@/models/AudioModule";
+import { waveForms } from "@/models/wave";
 import { computed, ref, watch } from "vue";
 
 const audioModule = defineModel<AudioModule>();
@@ -74,11 +81,7 @@ $handle-padding: 1rem;
 		[handle-end left-start] minmax(20px, 2fr)
 		[left-end body-start] minmax(100px, 7fr)
 		[body-end right-start] minmax(20px, 1fr);
-	// width: 100%;
-	// min-height: 100%;
-	// height: 100px;
 	grid-template-rows: minmax(10px, 1fr);
-
 	&__handle {
 		background-color: $handle-bg-color;
 		height: 100%;
@@ -91,8 +94,8 @@ $handle-padding: 1rem;
 	}
 
 	&__left-slot {
-		// display: flex;
-		flex-direction: column;
+		display: grid;
+		grid-template-rows: minmax(10%, 1fr) minmax(50%, 8fr);
 		height: 100%;
 	}
 
@@ -100,7 +103,7 @@ $handle-padding: 1rem;
 		width: 80%;
 		flex: 1;
 		background-color: yellow;
-		height: 100%;
+
 		max-height: 100%;
 		display: flex;
 		justify-content: center;

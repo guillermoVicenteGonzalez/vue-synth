@@ -13,6 +13,7 @@
 interface VerticalSliderProps {
 	range?: number;
 	initialValue?: number;
+	label?: string;
 }
 const { range = 100 } = defineProps<VerticalSliderProps>();
 
@@ -35,5 +36,9 @@ const emit = defineEmits<{
 	width: 2rem;
 	writing-mode: vertical-lr;
 	direction: rtl;
+}
+
+span {
+	display: block;
 }
 </style>
