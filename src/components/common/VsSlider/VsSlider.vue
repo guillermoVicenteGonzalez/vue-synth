@@ -2,9 +2,10 @@
 	<div :class="sliderClass">
 		<input
 			v-model="model"
+			:disabled="disabled"
 			type="range"
-			min="0"
-			:max="range"
+			:min="min"
+			:max="max"
 			class="slider__input"
 			@input="emit('change', model)"
 		/>
@@ -18,11 +19,13 @@ type VSSliderVariants = "default";
 type VSSliderOrientation = "horizontal" | "vertical";
 
 interface VsSliderProps {
+	disabled?: boolean;
 	variant?: VSSliderVariants;
 	orientation?: VSSliderOrientation;
-	label?: string;
+	label?: string | number;
 	labelColor?: string;
-	range?: number;
+	max?: number;
+	min?: number;
 }
 
 const {
@@ -30,7 +33,9 @@ const {
 	orientation = "horizontal",
 	label,
 	labelColor = "#000",
-	range,
+	max,
+	min,
+	disabled = false,
 } = defineProps<VsSliderProps>();
 
 const model = defineModel<number>({
@@ -56,6 +61,8 @@ const sliderClass = computed(() => {
 	width: 100%;
 	display: flex;
 	flex-direction: row;
+	justify-content: center;
+	gap: 0.5rem;
 
 	&__input {
 		box-sizing: inherit;
@@ -70,7 +77,6 @@ const sliderClass = computed(() => {
 	&--vertical {
 		flex-direction: column;
 		height: 100%;
-		background-color: red;
 		.slider__input {
 			max-height: 100%;
 			height: 100%;

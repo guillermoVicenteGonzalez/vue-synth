@@ -3,7 +3,7 @@
 		v-if="audioModule"
 		max-height="20rem"
 		max-width="50rem"
-		min-height="15rem"
+		min-height="17rem"
 		:child-class="ModuleCardStyles"
 	>
 		<div class="ModuleCard__handle">
@@ -13,32 +13,25 @@
 		<div class="ModuleCard__left-slot">
 			<VsSelector
 				v-model="audioModule.wave.form"
+				:disabled="disabled"
 				:items="Object.keys(waveForms)"
 				@change="onWaveChangeCB"
 			></VsSelector>
 			<div class="ModuleCard__sliders">
-				<!-- <VerticalSlider
-					v-model="audioModule.wave.amplitude"
-					label="amplitude"
-					:range="50"
-					@change="onWaveChangeCB"
-				></VerticalSlider> -->
-				<!-- <VerticalSlider
-					v-model="audioModule.wave.frequency"
-					:range="1000"
-					@change="onWaveChangeCB"
-				></VerticalSlider> -->
 				<VsSlider
-					v-model="audioModule.wave.frequency"
-					label="amp"
-					:range="1000"
+					v-model="audioModule.wave.amplitude"
+					:disabled="disabled"
+					:label="audioModule.wave.amplitude"
+					:max="50"
+					:min="0"
 					orientation="vertical"
 					@change="onWaveChangeCB"
 				></VsSlider>
 				<VsSlider
-					v-model="audioModule.wave.amplitude"
+					v-model="audioModule.wave.frequency"
+					:disabled="disabled"
 					label="freq"
-					:range="50"
+					:max="1000"
 					orientation="vertical"
 					@change="onWaveChangeCB"
 				></VsSlider>
@@ -46,14 +39,19 @@
 		</div>
 
 		<div class="ModuleCard__center-slot">
-			<input v-model="audioModule.name" type="text" />
+			<input v-model="audioModule.name" type="text" :disabled="disabled" />
 			<WaveCanvas
 				:wave="audioModule.wave"
 				:paused="disabled"
 				:canvas-width="zoom"
 			></WaveCanvas>
-			<input v-model="zoom" type="range" min="300" max="10020" />
-			<span>{{ zoom }}</span>
+			<VsSlider
+				v-model="zoom"
+				:min="400"
+				:max="10000"
+				:label="zoom"
+				:disabled="disabled"
+			></VsSlider>
 		</div>
 
 		<div class="ModuleCard__right-slot"></div>
@@ -87,7 +85,6 @@ watch(disabled, () => {
 });
 
 function onWaveChangeCB() {
-	//wave module update oscillator?
 	audioModule.value?.updateOscillator();
 	return;
 }
@@ -96,10 +93,9 @@ function onWaveChangeCB() {
 <style lang="scss" scoped>
 $handle-bg-color: black;
 $handle-padding: 1rem;
+$disabled-color: gray;
 
 .ModuleCard {
-	background-color: $primary-color;
-
 	display: grid;
 	grid-template-columns:
 		[handle-start] minmax(30px, 0.5fr)
@@ -127,7 +123,6 @@ $handle-padding: 1rem;
 	&__sliders {
 		width: 100%;
 		flex: 1;
-		background-color: yellow;
 
 		max-height: 100%;
 		display: flex;
@@ -137,7 +132,6 @@ $handle-padding: 1rem;
 
 	&__center-slot {
 		height: 100%;
-		background-color: white;
 		justify-content: center;
 		align-items: center;
 		display: flex;
@@ -152,7 +146,7 @@ $handle-padding: 1rem;
 			position: absolute;
 			height: 100%;
 			width: 100%;
-			background-color: rgba(red, 0.1);
+			background-color: rgba($disabled-color, 0.1);
 			backdrop-filter: blur(1px);
 		}
 	}
