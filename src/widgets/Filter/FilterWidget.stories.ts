@@ -1,13 +1,10 @@
-
 import type { Meta, StoryObj } from "@storybook/vue3";
-import  FilterWidget  from "./FilterWidget.vue"
-
-
+import FilterWidget from "./FilterWidget.vue";
 
 const meta: Meta<typeof FilterWidget> = {
-	title: 'FilterWidget',
-  component: FilterWidget,
-  argTypes: {},
+	title: "FilterWidget",
+	component: FilterWidget,
+	argTypes: {},
 };
 
 export default meta;
