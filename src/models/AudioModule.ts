@@ -1,7 +1,7 @@
 import type Wave from "./wave";
 
 //for future scalability
-type AudioEffect = AudioNode;
+export type AudioEffect = AudioNode;
 
 //Remember it goes osc(maybe end) -> effects(end) -> gain -> exit
 

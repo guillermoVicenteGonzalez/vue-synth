@@ -1,21 +1,24 @@
-import type { Meta, StoryObj } from "@storybook/vue3";
-import WaveAnalyser from "./WaveAnalyser.vue";
 
-const meta: Meta<typeof WaveAnalyser> = {
-	title: "WaveAnalyser",
-	component: WaveAnalyser,
-	argTypes: {},
+import type { Meta, StoryObj } from "@storybook/vue3";
+import  FilterWidget  from "./FilterWidget.vue"
+
+
+
+const meta: Meta<typeof FilterWidget> = {
+	title: 'FilterWidget',
+  component: FilterWidget,
+  argTypes: {},
 };
 
 export default meta;
 
-type Story = StoryObj<typeof WaveAnalyser>;
+type Story = StoryObj<typeof FilterWidget>;
 
 export const Default: Story = {
 	args: {},
 	// async play({ canvasElement }) {
 	//     const canvas = within(canvasElement)
-	//     const container = canvas.getByTestId('wave-analyser')
+	//     const container = canvas.getByTestId('filter')
 
 	//     void expect(container).toBeTruthy()
 	// },
