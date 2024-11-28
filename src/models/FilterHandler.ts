@@ -40,17 +40,6 @@ class FilterHandler {
 	get type() {
 		return this.interalType;
 	}
-
-	createFilter(sourceCtx: AudioContext, filterHandler: FilterHandler) {
-		const newFilter = sourceCtx.createBiquadFilter();
-		newFilter.type = filterHandler.type;
-		newFilter.frequency.setTargetAtTime(
-			filterHandler.cutoffFrequency,
-			sourceCtx.currentTime,
-			0
-		);
-		return newFilter;
-	}
 }
 
 export default FilterHandler;

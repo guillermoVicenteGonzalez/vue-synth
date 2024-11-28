@@ -5,23 +5,16 @@
 			<div class="components">
 				<ModuleCardListWidget v-model="audioModules"></ModuleCardListWidget>
 				<!-- Esto tiene que ser un widget -->
-				<div>
-					<FilterWidget
-						v-for="(effect, index) in effects"
-						:key="index + effect.channelCount"
-						v-model:filter="effects[index] as BiquadFilterNode"
-						:context="mainContext"
-						:sources="audioModules"
-					></FilterWidget>
-				</div>
-				<div></div>
+				<EffectListWidget
+					v-model="effects"
+					:context="mainContext"
+					:sources="audioModules"
+				></EffectListWidget>
 				<div class="components__controls">
 					<button @click="createNewModule">new wave</button>
-					<button @click="handleCreateFilter">new filter</button>
-					<button @click="test">test</button>
+					<button @click="createEffect('filter')">new filter</button>
 				</div>
 			</div>
-			<!-- <ModuleCardWidget></ModuleCardWidget> -->
 		</template>
 		<template #display> </template>
 		<template #piano>Piano</template>
@@ -31,20 +24,20 @@
 
 <script setup lang="ts">
 import SynthLayout from "@/layouts/synth/SynthLayout.vue";
-import AudioModule from "@/models/AudioModule";
-import FilterHandler from "@/models/FilterHandler";
+import AudioModule, { type AudioEffect } from "@/models/AudioModule";
 import Wave from "@/models/wave";
-import FilterWidget from "@/widgets/Filter/FilterWidget.vue";
+import EffectListWidget from "@/widgets/EffectList/EffectListWidget.vue";
 import ModuleCardListWidget from "@/widgets/ModuleCardList/ModuleCardListWidget.vue";
 import { onMounted, ref } from "vue";
 
 const MAX_MODULES = 5;
+const MAX_EFFECTS = 5;
 
 const audioModules = ref<AudioModule[]>([]);
 const mainContext = ref<AudioContext>(new AudioContext());
 const merger = ref<ChannelMergerNode>(mainContext.value.createChannelMerger());
 // const filters = ref<FilterHandler[]>([]);
-const effects = ref<AudioNode[]>([]);
+const effects = ref<AudioEffect[]>([]);
 
 function createNewModule() {
 	if (audioModules.value.length >= MAX_MODULES) return;
@@ -61,14 +54,19 @@ function createNewModule() {
 	audioModules.value.push(module);
 }
 
-function handleCreateFilter() {
-	const handler = new FilterHandler("lowpass", 0);
-	handler.node = handler.createFilter(mainContext.value, handler);
-	effects.value.push(handler.node);
+function createEffect(effectType: string) {
+	if (effects.value.length >= MAX_EFFECTS) return;
+	if (effectType == "filter") {
+		const nEffect = createFilter(mainContext.value);
+		effects.value.push(nEffect);
+	}
 }
 
-function test() {
-	console.log(audioModules.value[0].effects);
+function createFilter(sourceCtx: AudioContext) {
+	const newFilter = sourceCtx.createBiquadFilter();
+	newFilter.type = "lowpass";
+	newFilter.frequency.setTargetAtTime(200, sourceCtx.currentTime, 0);
+	return newFilter;
 }
 
 onMounted(() => {

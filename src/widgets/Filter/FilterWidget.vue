@@ -13,8 +13,8 @@
 				v-model="filterHandler.cutoffFrequency"
 				orientation="vertical"
 				:min="0"
-				:max="1000"
-				label="cuttof freq"
+				:max="10000"
+				label="cuttof"
 			></VsSlider>
 		</div>
 
@@ -35,6 +35,14 @@
 				:source="source.exit"
 				:canvas-width="zoom"
 			></WaveAnalyser>
+
+			<VsSlider
+				v-if="source"
+				v-model="zoom"
+				:min="400"
+				:max="1000"
+				:label="zoom"
+			></VsSlider>
 		</div>
 	</VsCard>
 </template>
@@ -69,28 +77,24 @@ enum filterTypes {
 }
 
 interface FilterWidgetProps {
-	zoom?: number;
 	sources: AudioModule[];
 	context: AudioContext;
 }
-const { zoom, sources, context } = defineProps<FilterWidgetProps>();
+const { sources, context } = defineProps<FilterWidgetProps>();
 
-// const source = defineModel<AudioModule>("source", {});
-// const filter = defineModel<FilterHandler>("filter", {});
 const filter = defineModel<BiquadFilterNode>("filter");
-const filterHandler = ref<FilterHandler>(new FilterHandler("lowpass", 100));
+const filterHandler = ref<FilterHandler>(new FilterHandler("lowpass", 400));
 const source = ref<AudioModule>();
+const zoom = ref<number>();
 
 function handleSelectModule(moduleName: string | undefined) {
 	if (!moduleName) return;
-	// emit("select", moduleName);
 	const newModule = sources.find(module => {
 		return module.name == moduleName;
 	});
 
 	if (!newModule) return;
 
-	//si tenía source antes y el filtro no es null => "desenchufo el efecto"
 	if (source.value != undefined && filter.value != undefined) {
 		source.value.detachEffect(filter.value as AudioNode);
 	}
@@ -104,7 +108,6 @@ const filterCardStyles = computed(() => {
 });
 
 onMounted(() => {
-	console.log(filter.value);
 	if (context != null && filter.value != undefined) {
 		filterHandler.value.setNode(filter.value);
 	}
