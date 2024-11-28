@@ -45,7 +45,7 @@ const {
 	border-radius: 10px;
 
 	&--default {
-		box-shadow: 0 0 0.5rem 0.02rem rgba(black, 0.2);
+		box-shadow: 0 0 0.5rem 0.2rem rgba(black, 0.2);
 	}
 
 	&--outlined {

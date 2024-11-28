@@ -13,9 +13,10 @@
 		</template>
 		<template #display>
 			<VsCard height="50px">
-				<div style="background-color: red; height: 100%">
-					<VerticalSlider></VerticalSlider>
-				</div>
+				<WaveAnalyser
+					v-if="audioModules[0] != null"
+					:source="audioModules[0].end"
+				></WaveAnalyser>
 			</VsCard>
 		</template>
 		<template #piano>Piano</template>
@@ -24,8 +25,8 @@
 </template>
 
 <script setup lang="ts">
-import VerticalSlider from "@/components/common/VerticalSlider/VerticalSlider.vue";
 import VsCard from "@/components/common/VsCard/VsCard.vue";
+import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
 import SynthLayout from "@/layouts/synth/SynthLayout.vue";
 import AudioModule from "@/models/AudioModule";
 import Wave from "@/models/wave";
@@ -58,7 +59,6 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .components {
-	background-color: purple;
 	height: 100%;
 	width: 100%;
 	display: grid;
