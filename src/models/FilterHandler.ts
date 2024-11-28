@@ -18,7 +18,6 @@ class FilterHandler {
 	}
 
 	set cutoffFrequency(freq: number) {
-		console.log("setting cuttof");
 		this.internalFrequency = freq;
 		if (this.node == null) return;
 		this.node.frequency.setTargetAtTime(
@@ -36,7 +35,6 @@ class FilterHandler {
 		this.interalType = n_type;
 		if (this.node == null) return;
 		this.node.type = this.interalType;
-		alert(this.node.type);
 	}
 
 	get type() {

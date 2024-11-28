@@ -4,6 +4,16 @@
 		<template #components>
 			<div class="components">
 				<ModuleCardListWidget v-model="audioModules"></ModuleCardListWidget>
+				<!-- Esto tiene que ser un widget -->
+				<div>
+					<FilterWidget
+						v-for="(effect, index) in effects"
+						:key="index + effect.channelCount"
+						v-model:filter="effects[index] as BiquadFilterNode"
+						:context="mainContext"
+						:sources="audioModules"
+					></FilterWidget>
+				</div>
 				<div></div>
 				<div class="components__controls">
 					<button @click="createNewModule">new wave</button>
@@ -13,15 +23,7 @@
 			</div>
 			<!-- <ModuleCardWidget></ModuleCardWidget> -->
 		</template>
-		<template #display>
-			<FilterWidget
-				v-for="(effect, index) in effects"
-				:key="index + effect.channelCount"
-				v-model:filter="effects[index] as BiquadFilterNode"
-				:context="mainContext"
-				:sources="audioModules"
-			></FilterWidget>
-		</template>
+		<template #display> </template>
 		<template #piano>Piano</template>
 		<template #footer> Footer</template>
 	</SynthLayout>
@@ -60,7 +62,6 @@ function createNewModule() {
 }
 
 function handleCreateFilter() {
-	alert("creating filter");
 	const handler = new FilterHandler("lowpass", 0);
 	handler.node = handler.createFilter(mainContext.value, handler);
 	effects.value.push(handler.node);

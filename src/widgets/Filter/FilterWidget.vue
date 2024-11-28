@@ -1,28 +1,41 @@
 <template>
-	<VsCard max-height="15rem" height="100%">
-		<h1>Hola</h1>
-		<VsSlider></VsSlider>
-		<VsSlider
-			v-if="filter"
-			v-model="filterHandler.cutoffFrequency"
-			:min="0"
-			:max="1000"
-			label="cuttof freq"
-		></VsSlider>
-		<VsSelector
-			v-if="filter"
-			v-model="filterHandler.type"
-			:items="Object.keys(filterTypes)"
-		></VsSelector>
-		<VsSelector
-			:items="sources.map(m => m.name)"
-			@change="handleSelectModule"
-		></VsSelector>
-		<WaveAnalyser
-			v-if="source"
-			:source="source.exit"
-			:canvas-width="zoom"
-		></WaveAnalyser>
+	<VsCard
+		max-height="20rem"
+		max-width="50rem"
+		min-height="17rem"
+		:child-class="filterCardStyles"
+	>
+		<div class="filterCard__handle"></div>
+
+		<div class="filterCard__controls">
+			<VsSlider
+				v-if="filter"
+				v-model="filterHandler.cutoffFrequency"
+				orientation="vertical"
+				:min="0"
+				:max="1000"
+				label="cuttof freq"
+			></VsSlider>
+		</div>
+
+		<div class="filterCard__main">
+			<div class="filterCard__selectors">
+				<VsSelector
+					v-if="filter"
+					v-model="filterHandler.type"
+					:items="Object.keys(filterTypes)"
+				></VsSelector>
+				<VsSelector
+					:items="sources.map(m => m.name)"
+					@change="handleSelectModule"
+				></VsSelector>
+			</div>
+			<WaveAnalyser
+				v-if="source"
+				:source="source.exit"
+				:canvas-width="zoom"
+			></WaveAnalyser>
+		</div>
 	</VsCard>
 </template>
 
@@ -33,7 +46,7 @@ import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
 import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
 import type AudioModule from "@/models/AudioModule";
 import FilterHandler from "@/models/FilterHandler";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 /**
  * el efecto deberia ser un estado del componente
  * Si ha de estar asociado a a un contexto entonces almacenamos solo sus datos
@@ -86,13 +99,60 @@ function handleSelectModule(moduleName: string | undefined) {
 	source.value = newModule;
 }
 
+const filterCardStyles = computed(() => {
+	return `filterCard`;
+});
+
 onMounted(() => {
 	console.log(filter.value);
 	if (context != null && filter.value != undefined) {
 		filterHandler.value.setNode(filter.value);
-		alert("mounting correctly");
 	}
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.filterCard {
+	display: grid;
+	grid-template-columns:
+		[handle-start] minmax(30px, 1fr)
+		[handle-end controls-start] minmax(50px, 2fr)
+		[controls-end main-start] minmax(200px, 8fr);
+
+	grid-template-rows: minmax(10px, 1fr);
+
+	&__handle {
+		width: 100%;
+		height: 100%;
+		background-color: black;
+	}
+
+	&__controls {
+		width: 100%;
+		height: 100%;
+		flex: 1;
+
+		max-height: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	&__selectors {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		> * {
+			flex: 1;
+		}
+	}
+
+	&__main {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+}
+</style>
