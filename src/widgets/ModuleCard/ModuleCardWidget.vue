@@ -31,7 +31,16 @@
 			</div>
 		</div>
 
-		<div class="ModuleCard__center-slot">{{ audioModule.wave.amplitude }}</div>
+		<div class="ModuleCard__center-slot">
+			<input v-model="audioModule.name" type="text" />
+			<WaveCanvas
+				:wave="audioModule.wave"
+				:paused="disabled"
+				:canvas-width="zoom"
+			></WaveCanvas>
+			<input v-model="zoom" type="range" min="300" max="10020" />
+			<span>{{ zoom }}</span>
+		</div>
 
 		<div class="ModuleCard__right-slot"></div>
 	</VsCard>
@@ -42,12 +51,14 @@ import ToggleButton from "@/components/common/ToggleButton/ToggleButton.vue";
 import VerticalSlider from "@/components/common/VerticalSlider/VerticalSlider.vue";
 import VsCard from "@/components/common/VsCard/VsCard.vue";
 import VsSelector from "@/components/common/VsSelector/VsSelector.vue";
+import WaveCanvas from "@/components/waves/WaveCanvas/WaveCanvas.vue";
 import AudioModule from "@/models/AudioModule";
 import { waveForms } from "@/models/wave";
 import { computed, ref, watch } from "vue";
 
 const audioModule = defineModel<AudioModule>();
 const disabled = ref<boolean>(false);
+const zoom = ref<number>(300);
 
 const ModuleCardStyles = computed(() => {
 	return `ModuleCard ${disabled.value ? "ModuleCard--disabled" : null}`;
@@ -79,7 +90,7 @@ $handle-padding: 1rem;
 	grid-template-columns:
 		[handle-start] minmax(30px, 0.5fr)
 		[handle-end left-start] minmax(20px, 2fr)
-		[left-end body-start] minmax(100px, 7fr)
+		[left-end body-start] minmax(100px, 6fr)
 		[body-end right-start] minmax(20px, 1fr);
 	grid-template-rows: minmax(10px, 1fr);
 	&__handle {
@@ -100,7 +111,7 @@ $handle-padding: 1rem;
 	}
 
 	&__sliders {
-		width: 80%;
+		width: 100%;
 		flex: 1;
 		background-color: yellow;
 
@@ -112,9 +123,11 @@ $handle-padding: 1rem;
 
 	&__center-slot {
 		height: 100%;
-		background-color: purple;
+		background-color: white;
 		justify-content: center;
 		align-items: center;
+		display: flex;
+		flex-direction: column;
 	}
 
 	&--disabled {
