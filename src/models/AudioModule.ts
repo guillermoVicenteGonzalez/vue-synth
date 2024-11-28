@@ -1,7 +1,7 @@
 import type Wave from "./wave";
 
 //for future scalability
-export type AudioEffect = AudioNode;
+export type AudioEffect = AudioNode | BiquadFilterNode;
 
 //Remember it goes osc(maybe end) -> effects(end) -> gain -> exit
 
