@@ -17,17 +17,31 @@
 				@change="onWaveChangeCB"
 			></VsSelector>
 			<div class="ModuleCard__sliders">
-				<VerticalSlider
+				<!-- <VerticalSlider
 					v-model="audioModule.wave.amplitude"
 					label="amplitude"
 					:range="50"
 					@change="onWaveChangeCB"
-				></VerticalSlider>
-				<VerticalSlider
+				></VerticalSlider> -->
+				<!-- <VerticalSlider
 					v-model="audioModule.wave.frequency"
 					:range="1000"
 					@change="onWaveChangeCB"
-				></VerticalSlider>
+				></VerticalSlider> -->
+				<VsSlider
+					v-model="audioModule.wave.frequency"
+					label="amp"
+					:range="1000"
+					orientation="vertical"
+					@change="onWaveChangeCB"
+				></VsSlider>
+				<VsSlider
+					v-model="audioModule.wave.amplitude"
+					label="freq"
+					:range="50"
+					orientation="vertical"
+					@change="onWaveChangeCB"
+				></VsSlider>
 			</div>
 		</div>
 
@@ -48,9 +62,9 @@
 
 <script setup lang="ts">
 import ToggleButton from "@/components/common/ToggleButton/ToggleButton.vue";
-import VerticalSlider from "@/components/common/VerticalSlider/VerticalSlider.vue";
 import VsCard from "@/components/common/VsCard/VsCard.vue";
 import VsSelector from "@/components/common/VsSelector/VsSelector.vue";
+import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
 import WaveCanvas from "@/components/waves/WaveCanvas/WaveCanvas.vue";
 import AudioModule from "@/models/AudioModule";
 import { waveForms } from "@/models/wave";

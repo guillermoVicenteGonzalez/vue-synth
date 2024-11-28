@@ -1,21 +1,23 @@
 import type { Meta, StoryObj } from "@storybook/vue3";
-import WaveCanvas from "./WaveCanvas.vue";
+import VsSlider from "./VsSlider.vue";
 
-const meta: Meta<typeof WaveCanvas> = {
-	title: "WaveCanvas",
-	component: WaveCanvas,
+const meta: Meta<typeof VsSlider> = {
+	title: "VsSlider",
+	component: VsSlider,
 	argTypes: {},
 };
 
 export default meta;
 
-type Story = StoryObj<typeof WaveCanvas>;
+type Story = StoryObj<typeof VsSlider>;
 
 export const Default: Story = {
-	args: {},
+	args: {
+		orientation: {},
+	},
 	// async play({ canvasElement }) {
 	//     const canvas = within(canvasElement)
-	//     const container = canvas.getByTestId('wave-canvas')
+	//     const container = canvas.getByTestId('vs-slider')
 
 	//     void expect(container).toBeTruthy()
 	// },
