@@ -5,7 +5,9 @@
 		min-height="17rem"
 		:child-class="filterCardStyles"
 	>
-		<div class="filterCard__handle"></div>
+		<div class="filterCard__handle">
+			<button @click="cancelSource">d</button>
+		</div>
 
 		<div class="filterCard__controls">
 			<VsSlider
@@ -95,12 +97,21 @@ function handleSelectModule(moduleName: string | undefined) {
 
 	if (!newModule) return;
 
-	// if (source.value != undefined && filter.value != undefined) {
-	// 	source.value.detachEffect(filter.value as AudioNode);
-	// }
-	// if (filter.value != undefined)
-	// 	newModule.attachEffect(filter.value as AudioNode);
+	console.log(newModule.name);
+	console.log(source.value?.name);
+
+	if (source.value != undefined && filter.value != undefined) {
+		source.value.detachEffect(filter.value as AudioNode);
+	}
+	if (filter.value != undefined)
+		newModule.attachEffect(filter.value as AudioNode);
 	source.value = newModule;
+}
+
+function cancelSource() {
+	if (!source.value) return;
+	console.log(filter.value);
+	source.value.detachEffect(filter.value as AudioNode);
 }
 
 const filterCardStyles = computed(() => {
