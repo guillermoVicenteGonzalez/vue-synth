@@ -1,58 +1,4 @@
 {
-<<<<<<< HEAD
-  "workbench.colorCustomizations": {
-    "commandCenter.border": "#15202b99",
-    "sash.hoverBorder": "#65c89b",
-    "statusBar.background": "#42b883",
-    "statusBar.foreground": "#15202b",
-    "statusBarItem.hoverBackground": "#359268",
-    "statusBarItem.remoteBackground": "#42b883",
-    "statusBarItem.remoteForeground": "#15202b",
-    "titleBar.activeBackground": "#42b883",
-    "titleBar.activeForeground": "#15202b",
-    "titleBar.inactiveBackground": "#42b88399",
-    "titleBar.inactiveForeground": "#15202b99",
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 3110368 (fixed card dimensions)
-    "activityBar.activeBackground": "#65c89b",
-    "activityBar.background": "#65c89b",
-    "activityBar.foreground": "#15202b",
-    "activityBar.inactiveForeground": "#15202b99",
-    "activityBarBadge.background": "#945bc4",
-    "activityBarBadge.foreground": "#e7e7e7"
-<<<<<<< HEAD
-=======
-
->>>>>>> d4659da (wave deleted)
-=======
->>>>>>> 3110368 (fixed card dimensions)
-  },
-  "peacock.color": "#42b883",
-  "editor.codeActionsOnSave": {
-    "source.fixAll": "explicit"
-  },
-  "eslint.options": {
-    "configFile": ".eslintrc.json"
-  },
-  "[javascript]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-    "editor.formatOnSave": true
-  },
-  "[vue]": {
-    "editor.defaultFormatter": "Vue.volar",
-    "editor.formatOnSave": true
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features",
-    "editor.formatOnSave": true
-  },
-  "editor.formatOnSave": true,
-  "editor.defaultFormatter": "vscode.emmet",
-  "eslint.alwaysShowStatus": true,
-  "eslint.format.enable": true
-=======
 	"explorer.fileNesting.enabled": true,
 	"explorer.fileNesting.patterns": {
 		"tsconfig.json": "tsconfig.*.json, env.d.ts",
@@ -89,5 +35,4 @@
 		"*.scss": "scss",
 		"scss": "scss"
 	}
->>>>>>> 6c8390e (refactor(models): refactored wave and audioModule)
 }
