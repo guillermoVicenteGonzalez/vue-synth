@@ -57,6 +57,38 @@ export class LinkedList<T> {
 		return currentNode;
 	}
 
+	getIndexByNode(node: LinkedNode<T>) {
+		let cont = 0;
+		let currentNode = this.first;
+
+		if (currentNode == null) return -1;
+
+		while (cont < this.length && currentNode != null) {
+			if (currentNode == node) return cont;
+
+			currentNode = currentNode.next;
+			cont++;
+		}
+
+		return -1;
+	}
+
+	getIndexByValue(value: T) {
+		let cont = 0;
+		let currentNode = this.first;
+
+		if (currentNode == null) return -1;
+
+		while (cont < this.length && currentNode != null) {
+			if (currentNode.value == value) return cont;
+
+			currentNode = currentNode.next;
+			cont++;
+		}
+
+		return -1;
+	}
+
 	getValueByIndex(index: number) {
 		const node = this.getNodeByIndex(index);
 		if (!node) return null;
@@ -80,6 +112,71 @@ export class LinkedList<T> {
 		this.last = this.last.prev;
 		this.length--;
 		return popped;
+	}
+
+	appendAt(value: T, index: number) {
+		if (index > this.length || this.first == null) return null;
+
+		//if the index is the last position: That is the same as appending
+		if (index == this.length - 1) return this.append(value);
+
+		//if the index is the first position
+		if (index == 0) {
+			const newNode = new LinkedNode<T>(value, null, this.first);
+			this.first.prev = newNode;
+			this.first = newNode;
+			this.length++;
+			return newNode;
+		}
+
+		let prevNode = this.first ? this.first : null;
+		let cont = 0;
+
+		while (cont < index - 1 && prevNode != null) {
+			prevNode = prevNode.next;
+			cont++;
+		}
+
+		if (prevNode == null) return;
+
+		const nextNode = prevNode.next;
+		const newNode = new LinkedNode<T>(value, prevNode, nextNode);
+		prevNode.next = newNode;
+
+		if (index == 0) this.first = newNode;
+
+		this.length++;
+
+		return newNode;
+	}
+
+	appendAfterNode(value: T, node: LinkedNode<T>) {
+		const prevIndex = this.getIndexByNode(node);
+		//cuidado si previndex es el ultimo
+		if (prevIndex != -1) this.appendAt(value, prevIndex + 1);
+	}
+
+	appendAfterValue(value: T, prevValue: T) {
+		const prevIndex = this.getIndexByValue(prevValue);
+		if (prevIndex != -1) this.appendAt(value, prevIndex + 1);
+	}
+
+	slice(index: number) {
+		if (index > this.length) return null;
+
+		if (index == this.length - 1) return this.pop();
+
+		let prevNode = this.first;
+		let cont = 0;
+
+		while (cont < index && prevNode != null) {
+			prevNode = prevNode.next;
+			cont++;
+		}
+
+		if (prevNode != null) this.length--;
+
+		return prevNode;
 	}
 
 	#recursiveRun(node: LinkedNode<T> | null) {
@@ -110,6 +207,10 @@ export class LinkedList<T> {
 	// }
 }
 
+/**
+ * ! THIS SHOULDN'T BE gain:GainNode and source:Oscillator node.
+ * If we later want another general effect chain whose input node is the exit of the general wave, we need source and exit to just be audioNodes
+ */
 export class EffectChain extends LinkedList<AudioEffect> {
 	gain: GainNode;
 	source: OscillatorNode;

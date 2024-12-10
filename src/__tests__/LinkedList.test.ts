@@ -28,7 +28,6 @@ describe("Linked list", () => {
 		expect(popped?.value).toBe(2);
 		expect(list.length).toBe(0);
 		expect(list.first).toBe(null);
-		console.log(list.last);
 		expect(list.last).toBe(null);
 	});
 
@@ -79,5 +78,87 @@ describe("Linked list", () => {
 		detached = list.pop();
 		expect(detached?.value).toBe(values[1]);
 		expect(list.last?.value).toBe(values[0]);
+	});
+
+	test("should have random access", () => {
+		const list = new LinkedList<number>();
+		const values = [2, 4, 6];
+
+		for (let i = 0; i < values.length; i++) {
+			list.append(values[i]);
+		}
+
+		list.appendAt(10, 1);
+		expect(list.getValueByIndex(1)).toBe(10);
+		expect(list.length).toBe(4);
+
+		console.log("\n");
+		list.appendAt(5, 0);
+
+		expect(list.first?.value).toBe(5);
+		expect(list.length).toBe(5);
+	});
+
+	test("should be able to slice with random access", () => {
+		const list = new LinkedList<number>();
+		const values = [2, 4, 6];
+
+		for (let i = 0; i < values.length; i++) {
+			list.append(values[i]);
+		}
+
+		const sliceIndex = 2;
+
+		const detached = list.slice(sliceIndex);
+		expect(detached).toBeDefined();
+		expect(detached?.value).toBe(values[sliceIndex]);
+		expect(list.length).toBe(values.length - 1);
+		expect(list.last?.value).toBe(4);
+	});
+
+	test("should return index of node", () => {
+		const list = new LinkedList<number>();
+		const values = [2, 4, 6];
+
+		for (let i = 0; i < values.length; i++) {
+			list.append(values[i]);
+		}
+
+		const testNode = list.getNodeByIndex(1);
+		const indexOfNode = list.getIndexByNode(testNode);
+		expect(indexOfNode).toBe(1);
+	});
+
+	test("should return index of value", () => {
+		const list = new LinkedList<number>();
+		const values = [2, 4, 6];
+
+		for (let i = 0; i < values.length; i++) {
+			list.append(values[i]);
+		}
+
+		const value = 4;
+		expect(list.getIndexByValue(value)).toBe(1);
+		expect(list.getIndexByValue(2)).toBe(0);
+		expect(list.getIndexByValue(6)).toBe(2);
+		expect(list.getIndexByValue(10)).toBe(-1);
+	});
+
+	test("Should append new value after a specific existing node", () => {
+		const list = new LinkedList<number>();
+		const values = [2, 4, 6];
+
+		for (let i = 0; i < values.length; i++) {
+			list.append(values[i]);
+		}
+
+		const nodeIndex = 0;
+
+		const testNode = list.getNodeByIndex(nodeIndex);
+		list.appendAfterNode(10, testNode);
+		list.printList();
+
+		expect(list.length).toBe(4);
+		expect(list.getValueByIndex(nodeIndex + 1)).toBe(10);
 	});
 });
