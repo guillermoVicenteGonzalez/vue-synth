@@ -153,12 +153,14 @@ export class LinkedList<T> {
 	appendAfterNode(value: T, node: LinkedNode<T>) {
 		const prevIndex = this.getIndexByNode(node);
 		//cuidado si previndex es el ultimo
-		if (prevIndex != -1) this.appendAt(value, prevIndex + 1);
+		if (prevIndex != -1) return this.appendAt(value, prevIndex + 1);
+		return null;
 	}
 
 	appendAfterValue(value: T, prevValue: T) {
 		const prevIndex = this.getIndexByValue(prevValue);
-		if (prevIndex != -1) this.appendAt(value, prevIndex + 1);
+		if (prevIndex != -1) return this.appendAt(value, prevIndex + 1);
+		return null;
 	}
 
 	slice(index: number) {

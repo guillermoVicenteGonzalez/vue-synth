@@ -161,4 +161,25 @@ describe("Linked list", () => {
 		expect(list.length).toBe(4);
 		expect(list.getValueByIndex(nodeIndex + 1)).toBe(10);
 	});
+
+	test("Should append new node after an existing value", () => {
+		const list = new LinkedList<number>();
+		const values = [2, 4, 6];
+
+		for (let i = 0; i < values.length; i++) {
+			list.append(values[i]);
+		}
+
+		const valueIndex = 0;
+
+		list.getNodeByIndex(valueIndex);
+		list.appendAfterValue(10, 2);
+		list.printList();
+
+		expect(list.length).toBe(4);
+		expect(list.getValueByIndex(valueIndex + 1)).toBe(10);
+		expect(list.length).toBe(4);
+		const res = list.appendAfterValue(8, 8);
+		expect(res).toBe(null);
+	});
 });
