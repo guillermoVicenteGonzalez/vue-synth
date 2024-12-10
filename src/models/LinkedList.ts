@@ -57,6 +57,19 @@ export class LinkedList<T> {
 		return currentNode;
 	}
 
+	getNodeByValue(value: T) {
+		let cont = 0;
+		let currentNode = this.first;
+
+		while (cont < this.length && currentNode != null) {
+			if (currentNode.value == value) return currentNode;
+			currentNode = currentNode.next;
+			cont++;
+		}
+
+		return null;
+	}
+
 	getIndexByNode(node: LinkedNode<T>) {
 		let cont = 0;
 		let currentNode = this.first;
@@ -118,8 +131,9 @@ export class LinkedList<T> {
 		if (index > this.length || this.first == null) return null;
 
 		//if the index is the last position: That is the same as appending
-		if (index == this.length - 1) return this.append(value);
-
+		if (index == this.length) {
+			return this.append(value);
+		}
 		//if the index is the first position
 		if (index == 0) {
 			const newNode = new LinkedNode<T>(value, null, this.first);
@@ -164,21 +178,53 @@ export class LinkedList<T> {
 	}
 
 	slice(index: number) {
-		if (index > this.length) return null;
+		//invalid index / access check
+		if (index > this.length || this.length == 0 || this.first == null)
+			return null;
 
+		//if the index is the last element
 		if (index == this.length - 1) return this.pop();
 
-		let prevNode = this.first;
+		//else
+		let currentNode: LinkedNode<T> | null = this.first;
 		let cont = 0;
 
-		while (cont < index && prevNode != null) {
-			prevNode = prevNode.next;
+		while (cont < index && currentNode != null) {
+			currentNode = currentNode.next;
 			cont++;
 		}
 
-		if (prevNode != null) this.length--;
+		if (currentNode == null) return null;
 
-		return prevNode;
+		const prevNode = currentNode.prev;
+		const nextNode = currentNode.next;
+
+		//if its the first
+		if (prevNode != null) prevNode.next = nextNode;
+		if (nextNode != null) nextNode.prev = prevNode;
+
+		/**
+		 * If its the only element:
+		 * 	- Next node is null => this.first = null; checks out
+		 * If its not the only element
+		 *  - Next node == former index nº 1 => current index number 0
+		 */
+		if (index == 0) {
+			this.first = nextNode;
+		}
+
+		this.length--;
+		return currentNode;
+	}
+
+	detachNodeByValue(value: T) {
+		const nodeIndex = this.getIndexByValue(value);
+		return this.slice(nodeIndex);
+	}
+
+	detachNode(node: LinkedNode<T>) {
+		const nodeIndex = this.getIndexByNode(node);
+		return this.slice(nodeIndex);
 	}
 
 	#recursiveRun(node: LinkedNode<T> | null) {
@@ -192,6 +238,7 @@ export class LinkedList<T> {
 
 	printList() {
 		if (this.first != null) this.#recursiveRun(this.first);
+		console.log("\n");
 	}
 
 	// #recursiveSearch(value: T, node: LinkedNode<T>) {
