@@ -1,4 +1,3 @@
-
 import SynthView from "@/views/SynthView.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
