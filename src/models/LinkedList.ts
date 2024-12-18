@@ -16,8 +16,21 @@ export class LinkedNode<T> {
 	}
 }
 
+/**
+ * A linked list consists of a series of linked nodes that are connected
+ * Navigation of a linked list is achieved as:
+ * - the LinkedList.first parameter stores the reference of the first linkedNode
+ * - the LinkedList.last parameter stores the reference of the last linkedNode
+ * - each linkedNode has references to its predecessors and successors
+ * Members
+ * - first: the first linkedNode in the list
+ * - last: The last linkedNode in the list
+ * - length: The number of nodes in the list
+ */
 export class LinkedList<T> {
+	/**The first node in the list. If its value its null => the list is empty */
 	first: LinkedNode<T> | null;
+	/**The last node in the list. If it's null the list is empty */
 	last: LinkedNode<T> | null;
 	length: number;
 
@@ -27,6 +40,11 @@ export class LinkedList<T> {
 		this.length = 0;
 	}
 
+	/**
+	 * Adds a new linked node with the specified value at the end of the list
+	 * @param value - The value to append to the list. Is internally converted into linkedNode
+	 * @returns The last node in the list, eg the appended value, or null if it failed
+	 */
 	append(value: T) {
 		if (this.first == null || this.last == null) {
 			this.first = new LinkedNode(value, null, null);
@@ -43,6 +61,11 @@ export class LinkedList<T> {
 		return this.last;
 	}
 
+	/**
+	 * Returns the linkedNode found at the "index" position
+	 * @param index
+	 * @returns
+	 */
 	getNodeByIndex(index: number) {
 		if (index >= this.length) return null;
 
@@ -57,6 +80,11 @@ export class LinkedList<T> {
 		return currentNode;
 	}
 
+	/**
+	 * Finds the first node in the list that has the specified value and returns it
+	 * @param value
+	 * @returns
+	 */
 	getNodeByValue(value: T) {
 		let cont = 0;
 		let currentNode = this.first;
@@ -70,6 +98,11 @@ export class LinkedList<T> {
 		return null;
 	}
 
+	/**
+	 * Provided a linkedNode returns its position in the list (starting at 0)
+	 * @param node
+	 * @returns
+	 */
 	getIndexByNode(node: LinkedNode<T>) {
 		let cont = 0;
 		let currentNode = this.first;
@@ -86,6 +119,11 @@ export class LinkedList<T> {
 		return -1;
 	}
 
+	/**
+	 * Returns the position (starting at 0) of the first element whose value matched the one specified
+	 * @param value
+	 * @returns
+	 */
 	getIndexByValue(value: T) {
 		let cont = 0;
 		let currentNode = this.first;
@@ -261,15 +299,15 @@ export class LinkedList<T> {
  * If we later want another general effect chain whose input node is the exit of the general wave, we need source and exit to just be audioNodes
  */
 export class EffectChain extends LinkedList<AudioEffect> {
-	gain: GainNode;
-	source: OscillatorNode;
+	exit: AudioNode;
+	source: AudioNode;
 
-	constructor(gain: GainNode, source: OscillatorNode) {
+	constructor(exit: AudioNode, source: AudioNode) {
 		super();
-		this.gain = gain;
+		this.exit = exit;
 		this.source = source;
 
-		this.source.connect(gain);
+		this.source.connect(exit);
 	}
 
 	//revisar
@@ -280,10 +318,10 @@ export class EffectChain extends LinkedList<AudioEffect> {
 		/**
 		 * the source node will be the oscillator (this.source) if the prev node is null
 		 * if not, the source node will be the one attached before the new node (prev)
-		 * When doing an append, the exit node is always the same, eg: The gain node
+		 * When doing an append, the exit node is always the same, eg: The exit node
 		 */
 		const sourceNode = node.prev == undefined ? this.source : node.prev.value;
-		const exitNode = this.gain;
+		const exitNode = this.exit;
 
 		sourceNode.connect(node.value);
 		node.value.connect(exitNode);
@@ -297,12 +335,12 @@ export class EffectChain extends LinkedList<AudioEffect> {
 
 		/**
 		 * The detached node will retain its former previous and next nodes
-		 * If detached.next is undefined it means the detached node used to be the last one => it was connected to gain
+		 * If detached.next is undefined it means the detached node used to be the last one => it was connected to exit
 		 * If the previous node is undefined => it was the oscillator
 		 *
 		 */
 		const exitNode =
-			detached.next == undefined ? this.gain : detached.next.value;
+			detached.next == undefined ? this.exit : detached.next.value;
 		const sourceNode =
 			detached.prev == undefined ? this.source : detached.prev.value;
 

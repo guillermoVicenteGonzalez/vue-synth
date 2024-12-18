@@ -16,19 +16,34 @@
 				</div>
 			</div>
 		</template>
-		<template #display> </template>
+		<template #display>
+			<div class="displays">
+				<div class="displays__pure">
+					<SumWavesDisplay :waves="waves"></SumWavesDisplay>
+				</div>
+				<div class="displays__analyser">
+					<WaveAnalyser
+						:source="merger"
+						:canvas-width="1080"
+						:canvas-height="200"
+					></WaveAnalyser>
+				</div>
+			</div>
+		</template>
 		<template #piano>Piano</template>
 		<template #footer> Footer</template>
 	</SynthLayout>
 </template>
 
 <script setup lang="ts">
+import SumWavesDisplay from "@/components/waves/SumWavesDisplay/SumWavesDisplay.vue";
+import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
 import SynthLayout from "@/layouts/synth/SynthLayout.vue";
 import AudioModule, { type AudioEffect } from "@/models/AudioModule";
 import Wave from "@/models/wave";
 import EffectListWidget from "@/widgets/EffectList/EffectListWidget.vue";
 import ModuleCardListWidget from "@/widgets/ModuleCardList/ModuleCardListWidget.vue";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 
 const MAX_MODULES = 5;
 const MAX_EFFECTS = 5;
@@ -38,6 +53,10 @@ const mainContext = ref<AudioContext>(new AudioContext());
 const merger = ref<ChannelMergerNode>(mainContext.value.createChannelMerger());
 // const filters = ref<FilterHandler[]>([]);
 const effects = ref<AudioEffect[]>([]);
+
+const waves = computed(() => {
+	return audioModules.value.map(module => module.wave);
+});
 
 function createNewModule() {
 	if (audioModules.value.length >= MAX_MODULES) return;
@@ -80,11 +99,34 @@ onMounted(() => {
 	width: 100%;
 	display: grid;
 	grid-template-columns: 4fr 3fr;
+	grid-template-rows: minmax(80%, 10fr) minmax(10%, 1fr);
 	gap: 0.5rem;
 
 	&__controls {
 		grid-column: 1/-1;
 		background-color: green;
+		position: relative;
+		bottom: 0;
+		height: 10rem;
+	}
+}
+
+.displays {
+	height: 100%;
+	resize: both;
+
+	display: grid;
+	grid-template-rows: [first-row start] minmax(200px, 3fr) [second-row end] minmax(
+			200px,
+			1fr
+		);
+
+	&__pure {
+		grid-row: first-row / second-row;
+	}
+
+	&__analyser {
+		grid-row: second-row / -1;
 	}
 }
 
