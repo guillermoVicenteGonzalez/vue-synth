@@ -330,11 +330,18 @@ export class EffectChain extends LinkedList<AudioEffect> {
 		 * if not, the source node will be the one attached before the new node (prev)
 		 * When doing an append, the exit node is always the same, eg: The exit node
 		 */
-		const sourceNode = node.prev == undefined ? this.source : node.prev.value;
-		const exitNode = this.exit;
+		// const sourceNode = node.prev == undefined ? this.source : node.prev.value;
+		// const exitNode = this.exit;
 
-		sourceNode.connect(node.value);
-		node.value.connect(exitNode);
+		// sourceNode.connect(node.value);
+		// node.value.connect(exitNode);
+
+		const prevNode = node.prev == undefined ? this.source : node.prev.value;
+		const nextNode = this.exit;
+
+		prevNode.disconnect(nextNode);
+		prevNode.connect(node.value);
+		node.value.connect(nextNode);
 		return node;
 	}
 
