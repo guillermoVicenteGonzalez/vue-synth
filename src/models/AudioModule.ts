@@ -1,3 +1,4 @@
+import { EffectChain } from "./LinkedList";
 import type Wave from "./wave";
 
 //for future scalability
@@ -10,11 +11,10 @@ export default class AudioModule {
 	wave: Wave;
 	context: AudioContext;
 	gainNode: GainNode; //should always be the last one before exit
-	effects: AudioNode[];
+	effects: EffectChain;
 	oscillator: OscillatorNode;
 	exit: AudioNode; //redundant?
 	disabled: boolean;
-	end: AudioNode; //* The last node in the "improvised" linked list. Always before gain
 
 	/**
 	 *
@@ -34,7 +34,6 @@ export default class AudioModule {
 		this.wave = w;
 		this.context = ctx;
 
-		this.effects = [];
 		this.disabled = false;
 
 		if (exit != null) this.exit = exit;
@@ -47,10 +46,10 @@ export default class AudioModule {
 		this.updateOscillator();
 		this.oscillator.start();
 
+		this.effects = new EffectChain(this.oscillator, this.gainNode);
 		/**
 			The oscillator is
 		*/
-		this.end = this.oscillator;
 	}
 
 	/**
@@ -71,24 +70,7 @@ export default class AudioModule {
 	 * Attaches an Audio effect node to the last effect of the chain
 	 */
 	attachEffect(nEffect: AudioEffect) {
-		console.log("\nattach");
-		console.log("new effect");
-		console.log(nEffect);
-		console.log("current end");
-		console.log(this.end);
-
-		this.end.disconnect(this.gainNode);
-		const previous = this.end;
-		this.end.connect(nEffect);
-		this.end = nEffect;
-
-		console.log("previous end");
-		console.log(previous);
-		console.log("new end");
-		console.log(this.end);
-
-		this.end.connect(this.gainNode);
-		this.effects.push(nEffect);
+		return this.effects.append(nEffect);
 	}
 
 	/**
@@ -100,92 +82,8 @@ export default class AudioModule {
 	 */
 	//Ideally this would be a linked list.
 	detachEffect(effect?: AudioEffect) {
-		console.log("\ndetach");
-		console.log("current end");
-		console.log(this.end);
-
-		//if no effects => error
-		if (this.effects.length == 0) {
-			console.log("effects are empty");
-			return;
-		}
-
-		//we get the index of the effect
-		let index = this.effects.length - 1;
-		if (effect != null) {
-			index = this.effects.indexOf(effect);
-			if (index == -1) {
-				console.log("unable to find effect");
-				console.log(this.effects);
-				return;
-			}
-		}
-
-		//if the effect is the last one or no parameter was passed
-		if (index == this.effects.length - 1 || effect == null) {
-			const detached = this.effects.pop();
-			if (!detached) {
-				console.log("unable to detach effect");
-				return;
-			}
-			detached.disconnect(this.gainNode);
-
-			//if there are effects remaining i connect the chain
-			if (this.effects.length > 0) {
-				this.end = this.effects[this.effects.length - 1];
-				this.end.disconnect(detached);
-				this.end.connect(this.gainNode);
-				return;
-			}
-
-			//if it was the last effect => we connect the oscillator
-			if (this.effects.length == 0) {
-				this.end = this.oscillator;
-				this.end.disconnect(detached);
-				this.end.connect(this.gainNode);
-				return;
-			}
-		}
-
-		//if there is only one effect
-		if (this.effects.length == 1) {
-			const detached: AudioNode = this.effects.splice(index, 1)[0];
-			this.end = this.oscillator;
-			this.end.disconnect(detached);
-			detached.disconnect(this.gainNode);
-			this.end.connect(this.gainNode);
-		}
-
-		//if the effect was not the last one and there are more
-		if (index != this.effects.length - 1 && effect != null) {
-			this.effects[index].disconnect(this.effects[index + 1]);
-			this.effects[index - 1].connect(this.effects[index + 1]);
-			this.effects.splice(index, 1);
-		}
-
-		// //if no parameter or the effect passed is the last one.
-		// if (effect == null || index >= this.effects.length - 1) {
-		// 	const detached = this.effects.pop();
-		// 	console.log("detached effect");
-		// 	console.log(detached);
-		// 	detached?.disconnect(this.gainNode);
-		// 	//if no effects => the end node is the oscillator
-		// 	if (this.effects.length > 0)
-		// 		this.end = this.effects[this.effects.length - 1];
-		// 	else {
-		// 		console.log("no effects. The end is the osc");
-		// 		this.end = this.oscillator;
-		// 		this.end.connect(this.gainNode);
-		// 	}
-		// } else {
-		// 	console.log("aqui no entro");
-		// 	this.effects[index].disconnect(this.effects[index + 1]);
-		// 	this.effects[index - 1].connect(this.effects[index + 1]);
-		// 	this.effects.splice(index, 1);
-		// }
-
-		console.log("current end");
-		console.log(this.end);
+		if (effect) return this.effects.detachNodeByValue(effect);
+		else return this.effects.pop();
 	}
 
 	/**
@@ -194,8 +92,8 @@ export default class AudioModule {
 	 * Sets a new exit node
 	 */
 	connectExit(nExit: AudioNode) {
-		this.end.disconnect(this.exit);
-		this.end.connect(nExit);
+		this.gainNode.disconnect(this.exit);
+		this.gainNode.connect(nExit);
 		this.exit = nExit;
 	}
 
@@ -204,7 +102,7 @@ export default class AudioModule {
 	 * Meant to work just like plugging or unplugging a cable from a speaker
 	 */
 	unplugExit() {
-		this.end.disconnect(this.exit);
+		this.gainNode.disconnect(this.exit);
 	}
 
 	/**
@@ -213,7 +111,7 @@ export default class AudioModule {
 	 */
 	//error handling?: If it is alredy connected????
 	plugExit() {
-		this.end.connect(this.exit);
+		this.gainNode.connect(this.exit);
 	}
 
 	/**
@@ -222,7 +120,7 @@ export default class AudioModule {
 	 */
 	unplugOscillator() {
 		// this.oscillator.disconnect(this.end);
-		this.end.disconnect(this.gainNode);
+		this.gainNode.disconnect(this.gainNode);
 	}
 
 	/**
@@ -231,7 +129,7 @@ export default class AudioModule {
 	 */
 	plugOscillator() {
 		// this.oscillator.connect(this.end);
-		this.end.connect(this.gainNode);
+		this.gainNode.connect(this.gainNode);
 	}
 
 	/**

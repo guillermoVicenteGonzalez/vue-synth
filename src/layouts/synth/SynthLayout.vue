@@ -87,11 +87,14 @@ $max-footer-h: 0.5fr;
 		background-color: $display-bg-color;
 		overflow: hidden;
 		resize: both;
+
+		background-color: #fabada;
 	}
 
 	&__piano {
 		grid-row: piano-start / piano-end;
 		grid-column: 1 / -1;
+		background-color: rgb(48, 48, 48);
 	}
 
 	&__footer {
@@ -99,6 +102,7 @@ $max-footer-h: 0.5fr;
 		grid-column: 1/ -1;
 		// height: $footer-h;
 		background-color: $footer-bg-color;
+		background-color: purple;
 	}
 }
 </style>
