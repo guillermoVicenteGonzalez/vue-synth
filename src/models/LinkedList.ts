@@ -330,16 +330,19 @@ export class EffectChain extends LinkedList<AudioEffect> {
 		 * if not, the source node will be the one attached before the new node (prev)
 		 * When doing an append, the exit node is always the same, eg: The exit node
 		 */
-		const sourceNode = node.prev == undefined ? this.source : node.prev.value;
-		const exitNode = this.exit;
 
-		sourceNode.connect(node.value);
-		node.value.connect(exitNode);
+		const prevNode = node.prev == undefined ? this.source : node.prev.value;
+		const nextNode = this.exit;
+
+		prevNode.disconnect(nextNode);
+		prevNode.connect(node.value);
+		node.value.connect(nextNode);
 		return node;
 	}
 
 	//revisar
 	pop() {
+		console.log("pop");
 		const detached = super.pop();
 		if (detached == null) return null;
 
@@ -349,16 +352,20 @@ export class EffectChain extends LinkedList<AudioEffect> {
 		 * If the previous node is undefined => it was the oscillator
 		 *
 		 */
-		const exitNode =
-			detached.next == undefined ? this.exit : detached.next.value;
-		const sourceNode =
+
+		const prevNode =
 			detached.prev == undefined ? this.source : detached.prev.value;
+		const nextNode =
+			detached.next == undefined ? this.exit : detached.next.value;
 
 		/**
 		 * We diconnect the source from the detached node and the detached node from the previous exit.
 		 */
-		sourceNode.disconnect(detached.value);
-		detached.value.disconnect(exitNode);
+
+		prevNode.disconnect(detached.value);
+		detached.value.disconnect(nextNode);
+		prevNode.connect(nextNode);
+
 		return detached;
 	}
 
@@ -397,6 +404,12 @@ export class EffectChain extends LinkedList<AudioEffect> {
 		const detached = super.slice(index);
 
 		if (!detached) return null;
+
+		//if it WAS the last element => pop has been executed and has reconnected audio
+		if (index == this.length) {
+			console.log("This was the last element");
+			return detached;
+		}
 
 		const prevNode = detached.prev == null ? this.source : detached.prev.value;
 		const nextNode = detached.next == null ? this.exit : detached.next.value;
