@@ -1,13 +1,10 @@
-
 import type { Meta, StoryObj } from "@storybook/vue3";
-import  SumWavesDisplay  from "./SumWavesDisplay.vue"
-
-
+import SumWavesDisplay from "./SumWavesDisplay.vue";
 
 const meta: Meta<typeof SumWavesDisplay> = {
-	title: 'SumWavesDisplay',
-  component: SumWavesDisplay,
-  argTypes: {},
+	title: "SumWavesDisplay",
+	component: SumWavesDisplay,
+	argTypes: {},
 };
 
 export default meta;

@@ -146,6 +146,10 @@ export class LinkedList<T> {
 		return node.value;
 	}
 
+	/**
+	 * detaches the last node in the linked list updating the pointers and returns it.
+	 * @returns popped - The (former) last node in the chain
+	 */
 	pop() {
 		if (this.last == null) return null;
 		const popped = this.last;
@@ -165,6 +169,12 @@ export class LinkedList<T> {
 		return popped;
 	}
 
+	/**
+	 *
+	 * @param value - The value we want the new node to have
+	 * @param index - The position at which we want to append the new node
+	 * @returns newNode - The created node or null if there was an error
+	 */
 	appendAt(value: T, index: number) {
 		if (index > this.length || this.first == null) return null;
 
@@ -189,7 +199,7 @@ export class LinkedList<T> {
 			cont++;
 		}
 
-		if (prevNode == null) return;
+		if (prevNode == null) return null;
 
 		const nextNode = prevNode.next;
 		const newNode = new LinkedNode<T>(value, prevNode, nextNode);
@@ -302,7 +312,7 @@ export class EffectChain extends LinkedList<AudioEffect> {
 	exit: AudioNode;
 	source: AudioNode;
 
-	constructor(exit: AudioNode, source: AudioNode) {
+	constructor(source: AudioNode, exit: AudioNode) {
 		super();
 		this.exit = exit;
 		this.source = source;
@@ -349,6 +359,52 @@ export class EffectChain extends LinkedList<AudioEffect> {
 		 */
 		sourceNode.disconnect(detached.value);
 		detached.value.disconnect(exitNode);
+		return detached;
+	}
+
+	appendAt(value: AudioEffect, index: number) {
+		const newNode = super.appendAt(value, index);
+
+		if (!newNode) return null;
+
+		//if no prevnode => the prev is the source
+		const prevNode = newNode.prev == null ? this.source : newNode.prev.value;
+		//if no next node => the next is the exit
+		const nextNode = newNode.next == null ? this.exit : newNode.next.value;
+
+		/**
+		 * This should always work.
+		 * If it is the first node to be attached, source will disconnect from gain
+		 */
+
+		prevNode.disconnect(nextNode);
+		prevNode.connect(newNode.value);
+		newNode.value.connect(nextNode);
+		return newNode;
+	}
+
+	//It alredy calls append at => does the connections
+	appendAfterNode(value: AudioEffect, node: LinkedNode<AudioEffect>) {
+		const newNode = super.appendAfterNode(value, node);
+
+		// const prevNode = newNode.prev == null ? this.source : newNode.prev.value;
+		// const nextNode = newNode.next == null ? this.exit : newNode.next.value;
+
+		return newNode;
+	}
+
+	slice(index: number) {
+		const detached = super.slice(index);
+
+		if (!detached) return null;
+
+		const prevNode = detached.prev == null ? this.source : detached.prev.value;
+		const nextNode = detached.next == null ? this.exit : detached.next.value;
+
+		prevNode.disconnect(detached.value);
+		prevNode.connect(nextNode);
+		detached.value.disconnect(nextNode);
+
 		return detached;
 	}
 
