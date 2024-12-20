@@ -4,7 +4,7 @@
 		max-height="20rem"
 		max-width="50rem"
 		min-height="17rem"
-		:child-class="ModuleCardStyles"
+		:class="ModuleCardStyles"
 	>
 		<div class="ModuleCard__handle">
 			<ToggleButton v-model="disabled"></ToggleButton>

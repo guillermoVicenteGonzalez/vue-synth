@@ -98,18 +98,6 @@ onMounted(() => {
 	previousSource.value = source;
 	draw();
 });
-
-// onBeforeUpdate(() => {
-// 	console.log("ahora");
-// 	console.log(source);
-// 	// source.disconnect(analyser);
-// });
-
-// onUpdated(() => {
-// 	console.log("now im updated");
-// 	console.log(source);
-// 	// source.connect(analyser);
-// });
 </script>
 
 <style lang="scss" scoped>

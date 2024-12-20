@@ -120,7 +120,7 @@ export default class AudioModule {
 	 */
 	unplugOscillator() {
 		// this.oscillator.disconnect(this.end);
-		this.gainNode.disconnect(this.gainNode);
+		this.gainNode.disconnect(this.exit);
 	}
 
 	/**
@@ -129,7 +129,7 @@ export default class AudioModule {
 	 */
 	plugOscillator() {
 		// this.oscillator.connect(this.end);
-		this.gainNode.connect(this.gainNode);
+		this.gainNode.connect(this.exit);
 	}
 
 	/**

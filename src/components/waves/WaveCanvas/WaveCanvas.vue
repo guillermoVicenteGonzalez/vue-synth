@@ -1,10 +1,5 @@
 <template>
-	<canvas
-		ref="myCanvas"
-		:width="canvasWidth"
-		:height="canvasHeight"
-		:class="childClass"
-	></canvas>
+	<canvas ref="myCanvas" :width="canvasWidth" :height="canvasHeight"></canvas>
 </template>
 
 <script setup lang="ts">
@@ -19,11 +14,9 @@ interface WaveCanvasProps {
 	canvasHeight?: number;
 	lineColor?: string;
 	filled?: boolean;
-	childClass?: string;
 }
 
 const myCanvas = ref<HTMLCanvasElement>();
-let context: CanvasRenderingContext2D;
 let frames: number = 0;
 
 const {
@@ -35,11 +28,7 @@ const {
 	lineColor,
 } = defineProps<WaveCanvasProps>();
 
-function paintWave(
-	w: Wave,
-	ctx: CanvasRenderingContext2D = context,
-	step = 0
-): boolean {
+function paintWave(w: Wave, ctx: CanvasRenderingContext2D, step = 0): boolean {
 	if (w == undefined) {
 		return false;
 	}

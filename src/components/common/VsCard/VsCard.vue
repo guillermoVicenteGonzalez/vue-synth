@@ -1,5 +1,5 @@
 <template>
-	<div :class="`VSCard ${childClass} VSCard--${variant}`">
+	<div :class="`VSCard  VSCard--${variant}`">
 		<slot></slot>
 	</div>
 </template>
@@ -8,7 +8,6 @@
 type VSCardVariant = "default" | "outlined" | "flat" | "elevated";
 
 interface VSCardProps {
-	childClass?: string;
 	width?: string;
 	height?: string;
 	minWidth?: string;
@@ -22,7 +21,6 @@ interface VSCardProps {
 const {
 	variant = "default",
 	bgColor = "white",
-	childClass,
 	width = "100%",
 	height = "100px",
 	minWidth = "10px",

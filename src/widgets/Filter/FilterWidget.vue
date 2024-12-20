@@ -3,9 +3,11 @@
 		max-height="20rem"
 		max-width="50rem"
 		min-height="17rem"
-		:child-class="filterCardStyles"
+		:class="filterCardStyles"
 	>
-		<div class="filterCard__handle"></div>
+		<div class="filterCard__handle">
+			<ToggleButton v-model="disabled"></ToggleButton>
+		</div>
 
 		<div class="filterCard__controls">
 			<VsSlider
@@ -48,13 +50,14 @@
 </template>
 
 <script setup lang="ts">
+import ToggleButton from "@/components/common/ToggleButton/ToggleButton.vue";
 import VsCard from "@/components/common/VsCard/VsCard.vue";
 import VsSelector from "@/components/common/VsSelector/VsSelector.vue";
 import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
 import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
 import type AudioModule from "@/models/AudioModule";
 import FilterHandler from "@/models/FilterHandler";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 /**
  * el efecto deberia ser un estado del componente
  * Si ha de estar asociado a a un contexto entonces almacenamos solo sus datos
@@ -77,15 +80,32 @@ enum filterTypes {
 }
 
 interface FilterWidgetProps {
+	/**All the waves we can apply filters to*/
 	sources: AudioModule[];
 	context: AudioContext;
 }
 const { sources, context } = defineProps<FilterWidgetProps>();
 
+/**The filter node attached as model to the card.
+ * It is created by the parent component (main view tipically)
+ */
 const filter = defineModel<BiquadFilterNode>("filter");
+/**A helper for filter parameter reactive handling */
 const filterHandler = ref<FilterHandler>(new FilterHandler("lowpass", 400));
+/**Current audioModule connected to the filter */
 const source = ref<AudioModule>();
 const zoom = ref<number>();
+const disabled = ref<boolean>(false);
+
+const filterCardStyles = computed(() => {
+	return `filterCard ${disabled.value ? "filterCard--disabled" : null}`;
+});
+
+watch(disabled, () => {
+	if (!source.value || !filter.value) return;
+	if (disabled.value) source.value.detachEffect(filter.value);
+	else source.value.attachEffect(filter.value);
+});
 
 function handleSelectModule(moduleName: string | undefined) {
 	if (!moduleName) return;
@@ -107,10 +127,6 @@ function handleSelectModule(moduleName: string | undefined) {
 	source.value = newModule;
 }
 
-const filterCardStyles = computed(() => {
-	return `filterCard`;
-});
-
 onMounted(() => {
 	if (context != null && filter.value != undefined) {
 		filterHandler.value.setNode(filter.value);
@@ -119,6 +135,9 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+$handle-padding: 1rem;
+$disabled-color: gray;
+
 .filterCard {
 	display: grid;
 	grid-template-columns:
@@ -132,6 +151,12 @@ onMounted(() => {
 		width: 100%;
 		height: 100%;
 		background-color: black;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: start;
+		padding: $handle-padding 0 $handle-padding 0;
+		z-index: 2;
 	}
 
 	&__controls {
@@ -160,6 +185,19 @@ onMounted(() => {
 		height: 100%;
 		display: flex;
 		flex-direction: column;
+	}
+
+	&--disabled {
+		position: relative;
+
+		&::after {
+			content: "";
+			position: absolute;
+			height: 100%;
+			width: 100%;
+			background-color: rgba($disabled-color, 0.1);
+			backdrop-filter: blur(1px);
+		}
 	}
 }
 </style>

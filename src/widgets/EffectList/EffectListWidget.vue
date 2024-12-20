@@ -1,7 +1,7 @@
 <template>
 	<div class="effectList">
 		<FilterWidget
-			v-for="(effect, index) in effects"
+			v-for="(_effect, index) in effects"
 			:key="index"
 			v-model:filter="effects[index] as BiquadFilterNode"
 			:context="context"
