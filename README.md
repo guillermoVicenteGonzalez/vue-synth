@@ -8,3 +8,4 @@
 - [ ] Main wave effect chain
 - [ ] Piano widget
 - [ ] Sound Attack, delay... controls
+- [ ] change :class bidings to :class= {active:isActive}

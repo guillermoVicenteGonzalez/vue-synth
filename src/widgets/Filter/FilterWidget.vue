@@ -115,9 +115,6 @@ function handleSelectModule(moduleName: string | undefined) {
 
 	if (!newModule) return;
 
-	console.log(newModule.name);
-	console.log(source.value?.name);
-
 	if (source.value != undefined && filter.value != undefined) {
 		source.value.detachEffect(filter.value as AudioNode);
 	}

@@ -103,6 +103,7 @@ $disabled-color: gray;
 		[left-end body-start] minmax(100px, 6fr)
 		[body-end right-start] minmax(20px, 1fr);
 	grid-template-rows: minmax(10px, 1fr);
+	// background-color: global.$primary-color;
 
 	&__handle {
 		background-color: $handle-bg-color;

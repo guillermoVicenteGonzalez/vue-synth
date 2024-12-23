@@ -279,29 +279,13 @@ export class LinkedList<T> {
 		if (node == null) {
 			return;
 		} else {
-			console.log(node.value);
 			this.#recursiveRun(node.next);
 		}
 	}
 
 	printList() {
 		if (this.first != null) this.#recursiveRun(this.first);
-		console.log("\n");
 	}
-
-	// #recursiveSearch(value: T, node: LinkedNode<T>) {
-	// 	if (node.next == null) {
-	// 		return null;
-	// 	}
-
-	// 	if (node.value == value) {
-	// 		return node;
-	// 	}
-	// }
-
-	// getElement(value: T) {
-	// 	// if ()
-	// }
 }
 
 /**
@@ -342,7 +326,6 @@ export class EffectChain extends LinkedList<AudioEffect> {
 
 	//revisar
 	pop() {
-		console.log("pop");
 		const detached = super.pop();
 		if (detached == null) return null;
 
@@ -390,16 +373,6 @@ export class EffectChain extends LinkedList<AudioEffect> {
 		return newNode;
 	}
 
-	//It alredy calls append at => does the connections
-	appendAfterNode(value: AudioEffect, node: LinkedNode<AudioEffect>) {
-		const newNode = super.appendAfterNode(value, node);
-
-		// const prevNode = newNode.prev == null ? this.source : newNode.prev.value;
-		// const nextNode = newNode.next == null ? this.exit : newNode.next.value;
-
-		return newNode;
-	}
-
 	slice(index: number) {
 		const detached = super.slice(index);
 
@@ -407,7 +380,6 @@ export class EffectChain extends LinkedList<AudioEffect> {
 
 		//if it WAS the last element => pop has been executed and has reconnected audio
 		if (index == this.length) {
-			console.log("This was the last element");
 			return detached;
 		}
 

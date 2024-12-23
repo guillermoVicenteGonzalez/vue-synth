@@ -13,7 +13,7 @@ export default class AudioModule {
 	gainNode: GainNode; //should always be the last one before exit
 	effects: EffectChain;
 	oscillator: OscillatorNode;
-	exit: AudioNode; //redundant?
+	exit: AudioNode; // Should be the merger or the ctx destination
 	disabled: boolean;
 
 	/**
