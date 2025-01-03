@@ -1,4 +1,4 @@
-<template>
+<template v-if="source">
 	<canvas
 		ref="analyserCanvas"
 		:height="canvasHeight"
@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
+import { onBeforeUnmount, onMounted, onUnmounted, ref, watch } from "vue";
 
 interface WaveAnalyserProps {
 	canvasWidth?: number;
@@ -35,6 +35,8 @@ const previousSource = ref<AudioNode>();
 
 function draw() {
 	requestAnimationFrame(draw);
+	if (!analyser) return;
+
 	if (
 		!analyserCanvas.value ||
 		!analyserCanvas.value.width ||
@@ -80,6 +82,7 @@ function draw() {
 watch(
 	() => source,
 	() => {
+		console.log("cambia");
 		if (previousSource.value) {
 			previousSource.value.disconnect(analyser);
 		}
@@ -94,9 +97,20 @@ watch(
 
 onMounted(() => {
 	source.connect(analyser);
-	context = analyserCanvas.value.getContext("2d");
+	if (!context) context = analyserCanvas.value.getContext("2d");
 	previousSource.value = source;
 	draw();
+});
+
+onBeforeUnmount(() => {
+	previousSource.value = undefined;
+	source.disconnect(analyser);
+	analyser.disconnect();
+});
+
+onUnmounted(() => {
+	// source.disconnect(analyser);
+	// if (previousSource.value) previousSource.value.disconnect(analyser);
 });
 </script>
 

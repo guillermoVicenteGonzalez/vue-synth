@@ -104,6 +104,7 @@ function handleSelectModule(moduleName: string | undefined) {
 		if (!source.value) return;
 		console.log("detaching");
 		source.value.detachEffect(filter.value);
+		source.value = undefined;
 	}
 
 	const newModule = sources.find(module => {

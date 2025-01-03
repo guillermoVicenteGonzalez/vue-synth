@@ -9,3 +9,7 @@
 - [ ] Piano widget
 - [ ] Sound Attack, delay... controls
 - [ ] change :class bidings to :class= {active:isActive}
+
+## Bugs
+
+- FilterWidget: Each time it is mounted a different analyzer is created. This can be easily checked using the debugger. This shouldn't be happening
