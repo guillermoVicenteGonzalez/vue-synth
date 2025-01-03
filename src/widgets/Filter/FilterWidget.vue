@@ -58,16 +58,7 @@ import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
 import type AudioModule from "@/models/AudioModule";
 import FilterHandler from "@/models/FilterHandler";
 import { computed, onMounted, ref, watch } from "vue";
-/**
- * el efecto deberia ser un estado del componente
- * Si ha de estar asociado a a un contexto entonces almacenamos solo sus datos
- * On attach un audioModule, creamos el filtro y lo añadimos como el ultimo effecto
- * onChange de cualquier cosa hacemos updateOscillator (o lo que toque)
- */
 
-/**
- * Nuevo enfoque. Mas de un VModel.
- */
 enum filterTypes {
 	lowpass = "lowpass",
 	highpass = "highpass",
@@ -108,7 +99,13 @@ watch(disabled, () => {
 });
 
 function handleSelectModule(moduleName: string | undefined) {
-	if (!moduleName) return;
+	//we detach the current module
+	if (!moduleName || moduleName == "") {
+		if (!source.value) return;
+		console.log("detaching");
+		source.value.detachEffect(filter.value);
+	}
+
 	const newModule = sources.find(module => {
 		return module.name == moduleName;
 	});
@@ -116,11 +113,10 @@ function handleSelectModule(moduleName: string | undefined) {
 	if (!newModule) return;
 
 	if (source.value != undefined && filter.value != undefined) {
-		source.value.detachEffect(filter.value as AudioNode);
+		source.value.detachEffect(filter.value);
 	}
 
-	if (filter.value != undefined)
-		newModule.attachEffect(filter.value as AudioNode);
+	if (filter.value != undefined) newModule.attachEffect(filter.value);
 	source.value = newModule;
 }
 
