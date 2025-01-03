@@ -7,6 +7,8 @@
 	>
 		<div class="filterCard__handle">
 			<ToggleButton v-model="disabled"></ToggleButton>
+
+			<button class="delete-btn" @click="deleteFilter">X</button>
 		</div>
 
 		<div class="filterCard__controls">
@@ -98,6 +100,10 @@ watch(disabled, () => {
 	else source.value.attachEffect(filter.value);
 });
 
+const emit = defineEmits<{
+	(e: "delete", value: BiquadFilterNode | undefined): void;
+}>();
+
 function handleSelectModule(moduleName: string | undefined) {
 	//we detach the current module
 	if (!moduleName || moduleName == "") {
@@ -119,6 +125,11 @@ function handleSelectModule(moduleName: string | undefined) {
 
 	if (filter.value != undefined) newModule.attachEffect(filter.value);
 	source.value = newModule;
+}
+
+function deleteFilter() {
+	handleSelectModule(undefined);
+	emit("delete", filter.value);
 }
 
 onMounted(() => {
@@ -192,6 +203,9 @@ $disabled-color: gray;
 			background-color: rgba($disabled-color, 0.1);
 			backdrop-filter: blur(1px);
 		}
+	}
+
+	.delete-btn {
 	}
 }
 </style>

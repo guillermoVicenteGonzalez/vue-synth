@@ -6,6 +6,7 @@
 			v-model:filter="effects[index] as BiquadFilterNode"
 			:context="context"
 			:sources="sources"
+			@delete="deleteEffect(index)"
 		></FilterWidget>
 	</div>
 </template>
@@ -22,6 +23,10 @@ interface EffectListWidgetProps {
 
 const { sources, context } = defineProps<EffectListWidgetProps>();
 const effects = defineModel<AudioEffect[]>({ default: [] });
+
+function deleteEffect(index: number) {
+	effects.value.splice(index, 1);
+}
 </script>
 
 <style lang="scss" scoped>
