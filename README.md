@@ -9,6 +9,7 @@
 - [ ] Piano widget
 - [ ] Sound Attack, delay... controls
 - [ ] change :class bidings to :class= {active:isActive}
+- [ ] Memory leaks in Wave analyser and filter widget (and possibly wave canvas)
 
 ## Bugs
 

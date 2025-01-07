@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, onUnmounted, ref, watch } from "vue";
+import { onBeforeUnmount, onMounted, ref, watch } from "vue";
 
 interface WaveAnalyserProps {
 	canvasWidth?: number;
@@ -27,23 +27,23 @@ const analyserCanvas = ref();
 const analyser = source.context.createAnalyser();
 analyser.fftSize = 2048;
 let context: CanvasRenderingContext2D;
-
 const bufferLength: number = analyser.frequencyBinCount;
 const dataArray: Uint8Array = new Uint8Array(bufferLength);
 analyser.getByteTimeDomainData(dataArray);
 const previousSource = ref<AudioNode>();
+const animationFrameId = ref<number>(0);
 
 function draw() {
-	requestAnimationFrame(draw);
-	if (!analyser) return;
-
 	if (
+		!analyser ||
 		!analyserCanvas.value ||
 		!analyserCanvas.value.width ||
 		!analyserCanvas.value.height
-	)
+	) {
 		return;
+	}
 
+	animationFrameId.value = requestAnimationFrame(draw);
 	analyser.getByteTimeDomainData(dataArray);
 
 	context.fillStyle = "rgb(200 200 200)";
@@ -82,7 +82,6 @@ function draw() {
 watch(
 	() => source,
 	() => {
-		console.log("cambia");
 		if (previousSource.value) {
 			previousSource.value.disconnect(analyser);
 		}
@@ -106,11 +105,6 @@ onBeforeUnmount(() => {
 	previousSource.value = undefined;
 	source.disconnect(analyser);
 	analyser.disconnect();
-});
-
-onUnmounted(() => {
-	// source.disconnect(analyser);
-	// if (previousSource.value) previousSource.value.disconnect(analyser);
 });
 </script>
 

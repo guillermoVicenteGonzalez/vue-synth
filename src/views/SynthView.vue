@@ -30,7 +30,9 @@
 				</div>
 			</div>
 		</template>
-		<template #piano>Piano</template>
+		<template #piano>
+			<RouterLink to="/home">aqui</RouterLink>
+		</template>
 		<template #footer> Footer</template>
 	</SynthLayout>
 </template>

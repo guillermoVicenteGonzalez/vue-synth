@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import Wave from "@/models/wave";
-import { onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 
 interface WaveCanvasProps {
 	paused?: boolean;
@@ -18,6 +18,7 @@ interface WaveCanvasProps {
 
 const myCanvas = ref<HTMLCanvasElement>();
 let frames: number = 0;
+let animationFrameId = 0;
 
 const {
 	paused = false,
@@ -67,7 +68,7 @@ function animateWave(): boolean {
 	) as CanvasRenderingContext2D;
 	paintWave(wave, ctx, frames);
 
-	window.requestAnimationFrame(animateWave);
+	animationFrameId = window.requestAnimationFrame(animateWave);
 	return true;
 }
 
@@ -78,6 +79,10 @@ onMounted(() => {
 		// myCanvas.value.width = 1920;
 		// myCanvas.value.height = 1080;
 	}
+});
+
+onUnmounted(() => {
+	cancelAnimationFrame(animationFrameId);
 });
 </script>
 
