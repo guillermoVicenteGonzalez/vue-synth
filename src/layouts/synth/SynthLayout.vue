@@ -29,7 +29,7 @@ $components-bg-color: white;
 $display-bg-color: white;
 $footer-bg-color: blueviolet;
 
-$min-components-w: 30rem;
+$min-components-w: 70rem;
 $max-components-w: 4fr;
 
 $min-display-w: 40rem;
@@ -103,6 +103,15 @@ $max-footer-h: 0.5fr;
 		// height: $footer-h;
 		background-color: $footer-bg-color;
 		background-color: purple;
+	}
+
+	@media screen and (max-width: 1900px) {
+		$min-components-w: 40rem;
+	}
+
+	@include global.respond(tab-land) {
+		background-color: red !important	;
+		$min-components-w: 30rem;
 	}
 }
 </style>

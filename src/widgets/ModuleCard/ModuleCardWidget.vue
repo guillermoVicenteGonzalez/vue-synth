@@ -39,14 +39,21 @@
 		</div>
 
 		<div class="ModuleCard__center-slot">
-			<input v-model="audioModule.name" type="text" :disabled="disabled" />
+			<input
+				v-model="audioModule.name"
+				class="ModuleCard__center-slot__name-input"
+				type="text"
+				:disabled="disabled"
+			/>
 			<WaveCanvas
+				class="ModuleCard__center-slot__wave-canvas"
 				:wave="audioModule.wave"
 				:paused="disabled"
 				:canvas-width="zoom"
 			></WaveCanvas>
 			<VsSlider
 				v-model="zoom"
+				class="ModuleCard__center-slot__zoom-slider"
 				:min="400"
 				:max="10000"
 				:label="zoom"
@@ -138,6 +145,24 @@ $disabled-color: gray;
 		align-items: center;
 		display: flex;
 		flex-direction: column;
+
+		&__wave-canvas {
+			// max-height: 60%;
+			flex-grow: 0;
+			flex-shrink: 1;
+			max-height: 100%;
+			aspect-ratio: 3;
+		}
+
+		&__zoom-slider {
+			flex-shrink: 0;
+			flex-basis: 10%;
+		}
+
+		&__name-input {
+			flex-shrink: 0;
+			flex-basis: 10%;
+		}
 	}
 
 	&--disabled {

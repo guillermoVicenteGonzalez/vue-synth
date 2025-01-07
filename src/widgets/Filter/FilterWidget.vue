@@ -8,7 +8,9 @@
 		<div class="filterCard__handle">
 			<ToggleButton v-model="disabled"></ToggleButton>
 
-			<button class="delete-btn" @click="deleteFilter">X</button>
+			<VsButton variant="round" class="delete-btn" @click="deleteFilter"
+				>X</VsButton
+			>
 		</div>
 
 		<div class="filterCard__controls">
@@ -30,6 +32,7 @@
 					:items="Object.keys(filterTypes)"
 				></VsSelector>
 				<VsSelector
+					clearable
 					:items="sources.map(m => m.name)"
 					@change="handleSelectModule"
 				></VsSelector>
@@ -53,6 +56,7 @@
 
 <script setup lang="ts">
 import ToggleButton from "@/components/common/ToggleButton/ToggleButton.vue";
+import VsButton from "@/components/common/VsButton/VsButton.vue";
 import VsCard from "@/components/common/VsCard/VsCard.vue";
 import VsSelector from "@/components/common/VsSelector/VsSelector.vue";
 import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
@@ -157,6 +161,7 @@ $disabled-color: gray;
 		height: 100%;
 		background-color: black;
 		display: flex;
+		gap: 1rem;
 		flex-direction: column;
 		align-items: center;
 		justify-content: start;

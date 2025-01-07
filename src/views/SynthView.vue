@@ -11,8 +11,8 @@
 					:sources="audioModules"
 				></EffectListWidget>
 				<div class="components__controls">
-					<button @click="createNewModule">new wave</button>
-					<button @click="createEffect('filter')">new filter</button>
+					<VsButton @click="createNewModule">New Wave</VsButton>
+					<VsButton @click="createEffect('filter')">New filter</VsButton>
 				</div>
 			</div>
 		</template>
@@ -36,6 +36,7 @@
 </template>
 
 <script setup lang="ts">
+import VsButton from "@/components/common/VsButton/VsButton.vue";
 import SumWavesDisplay from "@/components/waves/SumWavesDisplay/SumWavesDisplay.vue";
 import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
 import SynthLayout from "@/layouts/synth/SynthLayout.vue";

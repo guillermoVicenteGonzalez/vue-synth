@@ -85,7 +85,7 @@ onMounted(() => {
 canvas {
 	width: 100%;
 	height: 100%;
-	object-fit: cover;
+	object-fit: contain;
 	border: solid 1px v-bind(borderColor);
 }
 </style>

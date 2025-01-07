@@ -35,7 +35,7 @@ interface VsSelectorProps {
 const {
 	items = [],
 	placeholder,
-	clearable = true,
+	clearable = false,
 } = defineProps<VsSelectorProps>();
 
 const model = defineModel<string>();
