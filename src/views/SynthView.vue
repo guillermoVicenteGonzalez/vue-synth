@@ -33,9 +33,12 @@
 			</div>
 		</template>
 		<template #piano>
+			<KeyboardWidget :context="mainContext"></KeyboardWidget>
+		</template>
+		<template #footer>
+			Footer
 			<RouterLink to="/home">asdas</RouterLink>
 		</template>
-		<template #footer> Footer</template>
 	</SynthLayout>
 </template>
 
@@ -47,6 +50,7 @@ import SynthLayout from "@/layouts/synth/SynthLayout.vue";
 import AudioModule, { type AudioEffect } from "@/models/AudioModule";
 import Wave from "@/models/wave";
 import EffectListWidget from "@/widgets/EffectList/EffectListWidget.vue";
+import KeyboardWidget from "@/widgets/Keyboard/KeyboardWidget.vue";
 import ModuleCardListWidget from "@/widgets/ModuleCardList/ModuleCardListWidget.vue";
 import { computed, onMounted, ref } from "vue";
 
