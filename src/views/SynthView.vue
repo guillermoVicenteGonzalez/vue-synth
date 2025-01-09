@@ -3,16 +3,18 @@
 		<template #header>Header</template>
 		<template #components>
 			<div class="components">
-				<ModuleCardListWidget v-model="audioModules"></ModuleCardListWidget>
+				<ModuleCardListWidget
+					v-model="audioModules as AudioModule[]"
+				></ModuleCardListWidget>
 				<!-- Esto tiene que ser un widget -->
 				<EffectListWidget
 					v-model="effects"
 					:context="mainContext"
-					:sources="audioModules"
+					:sources="audioModules as AudioModule[]"
 				></EffectListWidget>
 				<div class="components__controls">
-					<button @click="createNewModule">new wave</button>
-					<button @click="createEffect('filter')">new filter</button>
+					<VsButton @click="createNewModule">New Wave</VsButton>
+					<VsButton @click="createEffect('filter')">New filter</VsButton>
 				</div>
 			</div>
 		</template>
@@ -30,12 +32,15 @@
 				</div>
 			</div>
 		</template>
-		<template #piano>Piano</template>
+		<template #piano>
+			<RouterLink to="/home">asdas</RouterLink>
+		</template>
 		<template #footer> Footer</template>
 	</SynthLayout>
 </template>
 
 <script setup lang="ts">
+import VsButton from "@/components/common/VsButton/VsButton.vue";
 import SumWavesDisplay from "@/components/waves/SumWavesDisplay/SumWavesDisplay.vue";
 import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
 import SynthLayout from "@/layouts/synth/SynthLayout.vue";

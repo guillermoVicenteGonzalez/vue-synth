@@ -3,9 +3,15 @@
 		max-height="20rem"
 		max-width="50rem"
 		min-height="17rem"
-		:child-class="filterCardStyles"
+		:class="filterCardStyles"
 	>
-		<div class="filterCard__handle"></div>
+		<div class="filterCard__handle">
+			<ToggleButton v-model="disabled"></ToggleButton>
+
+			<VsButton variant="round" class="delete-btn" @click="deleteFilter"
+				>X</VsButton
+			>
+		</div>
 
 		<div class="filterCard__controls">
 			<VsSlider
@@ -26,6 +32,7 @@
 					:items="Object.keys(filterTypes)"
 				></VsSelector>
 				<VsSelector
+					clearable
 					:items="sources.map(m => m.name)"
 					@change="handleSelectModule"
 				></VsSelector>
@@ -48,23 +55,16 @@
 </template>
 
 <script setup lang="ts">
+import ToggleButton from "@/components/common/ToggleButton/ToggleButton.vue";
+import VsButton from "@/components/common/VsButton/VsButton.vue";
 import VsCard from "@/components/common/VsCard/VsCard.vue";
 import VsSelector from "@/components/common/VsSelector/VsSelector.vue";
 import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
 import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
 import type AudioModule from "@/models/AudioModule";
 import FilterHandler from "@/models/FilterHandler";
-import { computed, onMounted, ref } from "vue";
-/**
- * el efecto deberia ser un estado del componente
- * Si ha de estar asociado a a un contexto entonces almacenamos solo sus datos
- * On attach un audioModule, creamos el filtro y lo añadimos como el ultimo effecto
- * onChange de cualquier cosa hacemos updateOscillator (o lo que toque)
- */
+import { computed, onMounted, ref, watch } from "vue";
 
-/**
- * Nuevo enfoque. Mas de un VModel.
- */
 enum filterTypes {
 	lowpass = "lowpass",
 	highpass = "highpass",
@@ -77,39 +77,64 @@ enum filterTypes {
 }
 
 interface FilterWidgetProps {
+	/**All the waves we can apply filters to*/
 	sources: AudioModule[];
 	context: AudioContext;
 }
 const { sources, context } = defineProps<FilterWidgetProps>();
 
+/**The filter node attached as model to the card.
+ * It is created by the parent component (main view tipically)
+ */
 const filter = defineModel<BiquadFilterNode>("filter");
+/**A helper for filter parameter reactive handling */
 const filterHandler = ref<FilterHandler>(new FilterHandler("lowpass", 400));
+/**Current audioModule connected to the filter */
 const source = ref<AudioModule>();
 const zoom = ref<number>();
+const disabled = ref<boolean>(false);
+
+const filterCardStyles = computed(() => {
+	return `filterCard ${disabled.value ? "filterCard--disabled" : null}`;
+});
+
+watch(disabled, () => {
+	if (!source.value || !filter.value) return;
+	if (disabled.value) source.value.detachEffect(filter.value);
+	else source.value.attachEffect(filter.value);
+});
+
+const emit = defineEmits<{
+	(e: "delete", value: BiquadFilterNode | undefined): void;
+}>();
 
 function handleSelectModule(moduleName: string | undefined) {
-	if (!moduleName) return;
+	//we detach the current module from the in	ternal component filter
+	if (!moduleName || moduleName == "") {
+		if (!source.value) return;
+		console.log("detaching");
+		source.value.detachEffect(filter.value);
+		source.value = undefined;
+	}
+
 	const newModule = sources.find(module => {
 		return module.name == moduleName;
 	});
 
 	if (!newModule) return;
 
-	console.log(newModule.name);
-	console.log(source.value?.name);
-
 	if (source.value != undefined && filter.value != undefined) {
-		source.value.detachEffect(filter.value as AudioNode);
+		source.value.detachEffect(filter.value);
 	}
 
-	if (filter.value != undefined)
-		newModule.attachEffect(filter.value as AudioNode);
+	if (filter.value != undefined) newModule.attachEffect(filter.value);
 	source.value = newModule;
 }
 
-const filterCardStyles = computed(() => {
-	return `filterCard`;
-});
+function deleteFilter() {
+	handleSelectModule(undefined);
+	emit("delete", filter.value);
+}
 
 onMounted(() => {
 	if (context != null && filter.value != undefined) {
@@ -119,6 +144,9 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+$handle-padding: 1rem;
+$disabled-color: gray;
+
 .filterCard {
 	display: grid;
 	grid-template-columns:
@@ -132,6 +160,13 @@ onMounted(() => {
 		width: 100%;
 		height: 100%;
 		background-color: black;
+		display: flex;
+		gap: 1rem;
+		flex-direction: column;
+		align-items: center;
+		justify-content: start;
+		padding: $handle-padding 0 $handle-padding 0;
+		z-index: 2;
 	}
 
 	&__controls {
@@ -160,6 +195,22 @@ onMounted(() => {
 		height: 100%;
 		display: flex;
 		flex-direction: column;
+	}
+
+	&--disabled {
+		position: relative;
+
+		&::after {
+			content: "";
+			position: absolute;
+			height: 100%;
+			width: 100%;
+			background-color: rgba($disabled-color, 0.1);
+			backdrop-filter: blur(1px);
+		}
+	}
+
+	.delete-btn {
 	}
 }
 </style>

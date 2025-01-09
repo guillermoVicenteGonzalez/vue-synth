@@ -1,4 +1,4 @@
-<template>
+<template v-if="source">
 	<canvas
 		ref="analyserCanvas"
 		:height="canvasHeight"
@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
+import { onBeforeUnmount, onMounted, ref, watch } from "vue";
 
 interface WaveAnalyserProps {
 	canvasWidth?: number;
@@ -24,24 +24,26 @@ const {
 } = defineProps<WaveAnalyserProps>();
 
 const analyserCanvas = ref();
-const analyser = source.context.createAnalyser();
+let analyser: AnalyserNode | null = source.context.createAnalyser();
 analyser.fftSize = 2048;
 let context: CanvasRenderingContext2D;
-
 const bufferLength: number = analyser.frequencyBinCount;
 const dataArray: Uint8Array = new Uint8Array(bufferLength);
 analyser.getByteTimeDomainData(dataArray);
 const previousSource = ref<AudioNode>();
+const animationFrameId = ref<number>(0);
 
 function draw() {
-	requestAnimationFrame(draw);
 	if (
+		!analyser ||
 		!analyserCanvas.value ||
 		!analyserCanvas.value.width ||
 		!analyserCanvas.value.height
-	)
+	) {
 		return;
+	}
 
+	animationFrameId.value = requestAnimationFrame(draw);
 	analyser.getByteTimeDomainData(dataArray);
 
 	context.fillStyle = "rgb(200 200 200)";
@@ -80,6 +82,7 @@ function draw() {
 watch(
 	() => source,
 	() => {
+		if (!analyser) return;
 		if (previousSource.value) {
 			previousSource.value.disconnect(analyser);
 		}
@@ -93,23 +96,20 @@ watch(
 //niguna funciona porque no tengo a que desconectarlo (el analizador)
 
 onMounted(() => {
+	if (!analyser) return;
 	source.connect(analyser);
-	context = analyserCanvas.value.getContext("2d");
+	if (!context) context = analyserCanvas.value.getContext("2d");
 	previousSource.value = source;
 	draw();
 });
 
-// onBeforeUpdate(() => {
-// 	console.log("ahora");
-// 	console.log(source);
-// 	// source.disconnect(analyser);
-// });
-
-// onUpdated(() => {
-// 	console.log("now im updated");
-// 	console.log(source);
-// 	// source.connect(analyser);
-// });
+onBeforeUnmount(() => {
+	previousSource.value = undefined;
+	if (!analyser) return;
+	source.disconnect(analyser);
+	analyser.disconnect();
+	analyser = null;
+});
 </script>
 
 <style lang="scss" scoped>

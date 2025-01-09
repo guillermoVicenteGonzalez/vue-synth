@@ -1,11 +1,12 @@
 <template>
 	<div class="effectList">
 		<FilterWidget
-			v-for="(effect, index) in effects"
+			v-for="(_effect, index) in effects"
 			:key="index"
 			v-model:filter="effects[index] as BiquadFilterNode"
 			:context="context"
 			:sources="sources"
+			@delete="deleteEffect(index)"
 		></FilterWidget>
 	</div>
 </template>
@@ -20,8 +21,13 @@ interface EffectListWidgetProps {
 	context: AudioContext;
 }
 
-const { sources, context } = defineProps<EffectListWidgetProps>();
-const effects = defineModel<AudioEffect[]>({ default: [] });
+const { sources = [], context } = defineProps<EffectListWidgetProps>();
+const effects = defineModel<(AudioEffect | undefined)[]>({ default: [] });
+
+function deleteEffect(index: number) {
+	const deletedEffects = effects.value.splice(index, 1);
+	deletedEffects[0] = undefined; //for garbage collection
+}
 </script>
 
 <style lang="scss" scoped>

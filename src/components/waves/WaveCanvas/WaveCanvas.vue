@@ -1,15 +1,10 @@
 <template>
-	<canvas
-		ref="myCanvas"
-		:width="canvasWidth"
-		:height="canvasHeight"
-		:class="childClass"
-	></canvas>
+	<canvas ref="myCanvas" :width="canvasWidth" :height="canvasHeight"></canvas>
 </template>
 
 <script setup lang="ts">
 import Wave from "@/models/wave";
-import { onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 
 interface WaveCanvasProps {
 	paused?: boolean;
@@ -19,12 +14,11 @@ interface WaveCanvasProps {
 	canvasHeight?: number;
 	lineColor?: string;
 	filled?: boolean;
-	childClass?: string;
 }
 
 const myCanvas = ref<HTMLCanvasElement>();
-let context: CanvasRenderingContext2D;
 let frames: number = 0;
+let animationFrameId = 0;
 
 const {
 	paused = false,
@@ -35,11 +29,7 @@ const {
 	lineColor,
 } = defineProps<WaveCanvasProps>();
 
-function paintWave(
-	w: Wave,
-	ctx: CanvasRenderingContext2D = context,
-	step = 0
-): boolean {
+function paintWave(w: Wave, ctx: CanvasRenderingContext2D, step = 0): boolean {
 	if (w == undefined) {
 		return false;
 	}
@@ -78,7 +68,7 @@ function animateWave(): boolean {
 	) as CanvasRenderingContext2D;
 	paintWave(wave, ctx, frames);
 
-	window.requestAnimationFrame(animateWave);
+	animationFrameId = window.requestAnimationFrame(animateWave);
 	return true;
 }
 
@@ -90,13 +80,17 @@ onMounted(() => {
 		// myCanvas.value.height = 1080;
 	}
 });
+
+onUnmounted(() => {
+	cancelAnimationFrame(animationFrameId);
+});
 </script>
 
 <style lang="scss" scoped>
 canvas {
 	width: 100%;
 	height: 100%;
-	object-fit: cover;
+	object-fit: contain;
 	border: solid 1px v-bind(borderColor);
 }
 </style>

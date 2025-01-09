@@ -36,11 +36,11 @@ function paintMainWave(waves: Wave[], ctx: CanvasRenderingContext2D, step = 0) {
 }
 
 function animateWave() {
-	frames += 0.1;
+	if (!myCanvas.value) return;
 	const ctx = myCanvas.value.getContext("2d");
-	if (ctx != undefined) {
-		paintMainWave(waves, ctx, frames);
-	}
+	if (!ctx) return;
+	frames += 0.1;
+	paintMainWave(waves, ctx, frames);
 	if (frames > 10000000) {
 		frames = 0;
 	}

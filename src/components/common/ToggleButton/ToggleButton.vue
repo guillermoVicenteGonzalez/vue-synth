@@ -1,6 +1,7 @@
 <template>
 	<button
-		:class="`${selectedClass} ${variantClass}`"
+		class="toggleButton"
+		:class="classObject"
 		@click="handleClick"
 	></button>
 </template>
@@ -31,17 +32,15 @@ function handleClick() {
 	emit("click", model.value);
 }
 
-const selectedClass = computed(() => {
-	return model.value ? "toggleButton toggleButton--selected" : "toggleButton";
-});
-
-const variantClass = computed(() => {
-	return `toggleButton--${variant}`;
-});
+const classObject = computed(() => ({
+	"toggleButton--selected": model.value,
+	[`toggleButton--${variant}`]: variant != null,
+}));
 </script>
 
 <style lang="scss" scoped>
 .toggleButton {
+	cursor: pointer;
 	background-color: transparent;
 	width: v-bind(size);
 	height: v-bind(size);

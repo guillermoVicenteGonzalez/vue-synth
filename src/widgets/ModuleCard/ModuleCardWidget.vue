@@ -4,7 +4,7 @@
 		max-height="20rem"
 		max-width="50rem"
 		min-height="17rem"
-		:child-class="ModuleCardStyles"
+		:class="ModuleCardStyles"
 	>
 		<div class="ModuleCard__handle">
 			<ToggleButton v-model="disabled"></ToggleButton>
@@ -39,14 +39,21 @@
 		</div>
 
 		<div class="ModuleCard__center-slot">
-			<input v-model="audioModule.name" type="text" :disabled="disabled" />
+			<input
+				v-model="audioModule.name"
+				class="ModuleCard__center-slot__name-input"
+				type="text"
+				:disabled="disabled"
+			/>
 			<WaveCanvas
+				class="ModuleCard__center-slot__wave-canvas"
 				:wave="audioModule.wave"
 				:paused="disabled"
 				:canvas-width="zoom"
 			></WaveCanvas>
 			<VsSlider
 				v-model="zoom"
+				class="ModuleCard__center-slot__zoom-slider"
 				:min="400"
 				:max="10000"
 				:label="zoom"
@@ -103,6 +110,7 @@ $disabled-color: gray;
 		[left-end body-start] minmax(100px, 6fr)
 		[body-end right-start] minmax(20px, 1fr);
 	grid-template-rows: minmax(10px, 1fr);
+	// background-color: global.$primary-color;
 
 	&__handle {
 		background-color: $handle-bg-color;
@@ -137,6 +145,24 @@ $disabled-color: gray;
 		align-items: center;
 		display: flex;
 		flex-direction: column;
+
+		&__wave-canvas {
+			// max-height: 60%;
+			flex-grow: 0;
+			flex-shrink: 1;
+			max-height: 100%;
+			aspect-ratio: 3;
+		}
+
+		&__zoom-slider {
+			flex-shrink: 0;
+			flex-basis: 10%;
+		}
+
+		&__name-input {
+			flex-shrink: 0;
+			flex-basis: 10%;
+		}
 	}
 
 	&--disabled {
