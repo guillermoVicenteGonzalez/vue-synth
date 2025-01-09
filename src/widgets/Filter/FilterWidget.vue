@@ -109,7 +109,7 @@ const emit = defineEmits<{
 }>();
 
 function handleSelectModule(moduleName: string | undefined) {
-	//we detach the current module
+	//we detach the current module from the in	ternal component filter
 	if (!moduleName || moduleName == "") {
 		if (!source.value) return;
 		console.log("detaching");

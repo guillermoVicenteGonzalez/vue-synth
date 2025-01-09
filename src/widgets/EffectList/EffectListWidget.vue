@@ -21,11 +21,12 @@ interface EffectListWidgetProps {
 	context: AudioContext;
 }
 
-const { sources, context } = defineProps<EffectListWidgetProps>();
-const effects = defineModel<AudioEffect[]>({ default: [] });
+const { sources = [], context } = defineProps<EffectListWidgetProps>();
+const effects = defineModel<(AudioEffect | undefined)[]>({ default: [] });
 
 function deleteEffect(index: number) {
-	effects.value.splice(index, 1);
+	const deletedEffects = effects.value.splice(index, 1);
+	deletedEffects[0] = undefined; //for garbage collection
 }
 </script>
 

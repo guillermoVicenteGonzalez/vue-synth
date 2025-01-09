@@ -3,12 +3,14 @@
 		<template #header>Header</template>
 		<template #components>
 			<div class="components">
-				<ModuleCardListWidget v-model="audioModules"></ModuleCardListWidget>
+				<ModuleCardListWidget
+					v-model="audioModules as AudioModule[]"
+				></ModuleCardListWidget>
 				<!-- Esto tiene que ser un widget -->
 				<EffectListWidget
 					v-model="effects"
 					:context="mainContext"
-					:sources="audioModules"
+					:sources="audioModules as AudioModule[]"
 				></EffectListWidget>
 				<div class="components__controls">
 					<VsButton @click="createNewModule">New Wave</VsButton>
@@ -31,7 +33,7 @@
 			</div>
 		</template>
 		<template #piano>
-			<RouterLink to="/home">aqui</RouterLink>
+			<RouterLink to="/home">asdas</RouterLink>
 		</template>
 		<template #footer> Footer</template>
 	</SynthLayout>

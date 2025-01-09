@@ -24,7 +24,7 @@ const {
 } = defineProps<WaveAnalyserProps>();
 
 const analyserCanvas = ref();
-const analyser = source.context.createAnalyser();
+let analyser: AnalyserNode | null = source.context.createAnalyser();
 analyser.fftSize = 2048;
 let context: CanvasRenderingContext2D;
 const bufferLength: number = analyser.frequencyBinCount;
@@ -82,6 +82,7 @@ function draw() {
 watch(
 	() => source,
 	() => {
+		if (!analyser) return;
 		if (previousSource.value) {
 			previousSource.value.disconnect(analyser);
 		}
@@ -95,6 +96,7 @@ watch(
 //niguna funciona porque no tengo a que desconectarlo (el analizador)
 
 onMounted(() => {
+	if (!analyser) return;
 	source.connect(analyser);
 	if (!context) context = analyserCanvas.value.getContext("2d");
 	previousSource.value = source;
@@ -103,8 +105,10 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
 	previousSource.value = undefined;
+	if (!analyser) return;
 	source.disconnect(analyser);
 	analyser.disconnect();
+	analyser = null;
 });
 </script>
 
