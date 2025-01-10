@@ -1,18 +1,18 @@
 <template>
-	<div class="ModuleCardList">
+	<div v-if="cluster" class="ModuleCardList">
 		<ModuleCardWidget
-			v-for="(module, index) in modulesList"
+			v-for="(module, index) in cluster.modules"
 			:key="index"
-			v-model="modulesList[index]"
+			v-model="cluster.modules[index]"
 		></ModuleCardWidget>
 	</div>
 </template>
 
 <script setup lang="ts">
-import type AudioModule from "@/models/AudioModule";
+import type AudioCluster from "@/models/AudioCluster";
 import ModuleCardWidget from "@/widgets/ModuleCard/ModuleCardWidget.vue";
 
-const modulesList = defineModel<AudioModule[]>({ default: [] });
+const cluster = defineModel<AudioCluster>();
 </script>
 
 <style lang="scss" scoped>

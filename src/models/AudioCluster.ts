@@ -3,6 +3,8 @@ import { EffectChain } from "./LinkedList";
 import type { waveForms } from "./wave";
 import Wave from "./wave";
 
+const MAX_MODULES = 5;
+
 export default class AudioCluster {
 	modules: AudioModule[];
 	exit: AudioNode;
@@ -31,6 +33,7 @@ export default class AudioCluster {
 	}
 
 	createModule(name: string, waveForm: keyof typeof waveForms) {
+		if (this.modules.length >= MAX_MODULES) return null;
 		const nWave = new Wave(10, 1, 0);
 		nWave.setForm(waveForm);
 		const nModule = new AudioModule(name, nWave, this.context, this.compressor);

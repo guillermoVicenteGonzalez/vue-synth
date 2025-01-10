@@ -1,29 +1,27 @@
 <template>
-	<div class="keyboard">
+	<div v-if="sourceCluster" class="keyboard">
 		<KeyboardKey
 			v-for="(note, index) in notes"
 			:key="note.name + index"
 			:note="note"
 			:context="context"
-			:source="sourceModules"
+			:source-cluster="sourceCluster"
 		></KeyboardKey>
 	</div>
 </template>
 
 <script setup lang="ts">
 import KeyboardKey from "@/components/sound/KeyboardKey/KeyboardKey.vue";
-import type AudioModule from "@/models/AudioModule";
+import type AudioCluster from "@/models/AudioCluster";
 import Note, { noteDetunes, type noteName } from "@/models/note";
 import { onMounted, ref } from "vue";
 
 interface KeyboardWidgetProps {
 	context: AudioContext;
-	sourceModules: AudioModule[];
+	sourceCluster: AudioCluster;
 }
 
-const { context, sourceModules } = defineProps<KeyboardWidgetProps>();
-
-// const myNote = new Note("la", 1);
+const { context, sourceCluster = null } = defineProps<KeyboardWidgetProps>();
 
 const notes = ref<Note[]>([]);
 

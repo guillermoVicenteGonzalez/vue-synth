@@ -33,7 +33,7 @@
 				></VsSelector>
 				<VsSelector
 					clearable
-					:items="sources.map(m => m.name)"
+					:items="sources.modules.map(m => m.name)"
 					@change="handleSelectModule"
 				></VsSelector>
 			</div>
@@ -61,6 +61,7 @@ import VsCard from "@/components/common/VsCard/VsCard.vue";
 import VsSelector from "@/components/common/VsSelector/VsSelector.vue";
 import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
 import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
+import type AudioCluster from "@/models/AudioCluster";
 import type AudioModule from "@/models/AudioModule";
 import FilterHandler from "@/models/FilterHandler";
 import { computed, onMounted, ref, watch } from "vue";
@@ -78,7 +79,7 @@ enum filterTypes {
 
 interface FilterWidgetProps {
 	/**All the waves we can apply filters to*/
-	sources: AudioModule[];
+	sources: AudioCluster;
 	context: AudioContext;
 }
 const { sources, context } = defineProps<FilterWidgetProps>();
@@ -117,7 +118,7 @@ function handleSelectModule(moduleName: string | undefined) {
 		source.value = undefined;
 	}
 
-	const newModule = sources.find(module => {
+	const newModule = sources.modules.find(module => {
 		return module.name == moduleName;
 	});
 

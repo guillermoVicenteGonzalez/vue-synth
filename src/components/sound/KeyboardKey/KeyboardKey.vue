@@ -8,27 +8,27 @@
 </template>
 
 <script setup lang="ts">
-import type AudioModule from "@/models/AudioModule";
+import type AudioCluster from "@/models/AudioCluster";
 import type Note from "@/models/note";
 
 interface KeyboardKeyProps {
 	context: AudioContext;
-	source: AudioModule[];
+	sourceCluster: AudioCluster;
 	note: Note;
 	blackKey?: boolean;
 }
 
-const { context, note, source } = defineProps<KeyboardKeyProps>();
+const { context, note, sourceCluster } = defineProps<KeyboardKeyProps>();
 
 let oscillators: OscillatorNode[] = [];
 
 // function createSound() {}
 
 function playNote() {
-	if (source.length > 0) {
+	if (sourceCluster.modules.length > 0) {
 		const createdOscillators: OscillatorNode[] = [];
 
-		for (const module of source) {
+		for (const module of sourceCluster.modules) {
 			const osc = module.cloneOscillator();
 			osc.detune.value = note.detune;
 			createdOscillators.push(osc);
