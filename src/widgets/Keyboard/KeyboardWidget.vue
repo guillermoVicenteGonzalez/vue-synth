@@ -5,20 +5,23 @@
 			:key="note.name + index"
 			:note="note"
 			:context="context"
+			:source="sourceModules"
 		></KeyboardKey>
 	</div>
 </template>
 
 <script setup lang="ts">
 import KeyboardKey from "@/components/sound/KeyboardKey/KeyboardKey.vue";
+import type AudioModule from "@/models/AudioModule";
 import Note, { noteDetunes, type noteName } from "@/models/note";
 import { onMounted, ref } from "vue";
 
 interface KeyboardWidgetProps {
 	context: AudioContext;
+	sourceModules: AudioModule[];
 }
 
-const { context } = defineProps<KeyboardWidgetProps>();
+const { context, sourceModules } = defineProps<KeyboardWidgetProps>();
 
 // const myNote = new Note("la", 1);
 
@@ -29,9 +32,6 @@ function setupNotes() {
 		for (const note in noteDetunes) {
 			const nNote = new Note(note as noteName, i);
 			notes.value.push(nNote);
-			console.log(nNote.name);
-			console.log(nNote.detune);
-			console.log(nNote.octave);
 		}
 	}
 }

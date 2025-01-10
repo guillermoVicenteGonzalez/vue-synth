@@ -1,13 +1,10 @@
-
 import type { Meta, StoryObj } from "@storybook/vue3";
-import  KeyboardKey  from "./KeyboardKey.vue"
-
-
+import KeyboardKey from "./KeyboardKey.vue";
 
 const meta: Meta<typeof KeyboardKey> = {
-	title: 'KeyboardKey',
-  component: KeyboardKey,
-  argTypes: {},
+	title: "KeyboardKey",
+	component: KeyboardKey,
+	argTypes: {},
 };
 
 export default meta;

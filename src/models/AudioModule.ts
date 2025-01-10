@@ -161,4 +161,20 @@ export default class AudioModule {
 		if (this.disabled) this.unplugOscillator();
 		else this.plugOscillator();
 	}
+
+	/**
+	 * This is used to quickly clone dispensable oscillators taking the module's as a blueprint.
+	 * It could be interesting to also return (or ask) for a constant source node so both are linked
+	 * @param context - if not specified, the context of this module will be used
+	 * @returns - OscillatorNode with the same properties as the one this module has
+	 */
+	cloneOscillator(context: AudioContext = this.context) {
+		const nOsc = context.createOscillator();
+		nOsc.frequency.setValueAtTime(this.wave.frequency, context.currentTime);
+		nOsc.type = this.wave.form;
+
+		nOsc.connect(this.effects.exit);
+		nOsc.start();
+		return nOsc;
+	}
 }

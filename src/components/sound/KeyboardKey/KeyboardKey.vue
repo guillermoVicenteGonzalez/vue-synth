@@ -13,28 +13,39 @@ import type Note from "@/models/note";
 
 interface KeyboardKeyProps {
 	context: AudioContext;
-	source?: AudioModule;
+	source: AudioModule[];
 	note: Note;
 	blackKey?: boolean;
 }
 
-const { context, note } = defineProps<KeyboardKeyProps>();
+const { context, note, source } = defineProps<KeyboardKeyProps>();
 
-const oscillators: OscillatorNode[] = [];
+let oscillators: OscillatorNode[] = [];
+
+// function createSound() {}
 
 function playNote() {
+	if (source.length > 0) {
+		const createdOscillators: OscillatorNode[] = [];
+
+		for (const module of source) {
+			const osc = module.cloneOscillator();
+			osc.detune.value = note.detune;
+			createdOscillators.push(osc);
+		}
+
+		return createdOscillators;
+	}
 	const osc = context.createOscillator();
 	osc.detune.value = note.detune;
 	osc.connect(context.destination);
 	osc.start();
-
-	return osc;
+	return [osc];
 }
 
 function notePressed() {
-	const osc = playNote();
-	oscillators.push(osc);
-	console.log(oscillators);
+	const oscs = playNote();
+	oscillators.push(...oscs);
 }
 
 function noteReleased() {
@@ -42,13 +53,17 @@ function noteReleased() {
 	// 	// osc.disconnect(context.destination);
 	// 	osc.stop();
 	// });
+	console.log("note released");
+	oscillators.forEach(osc => {
+		osc.stop();
+		osc.disconnect();
+	});
 
 	for (const osc of oscillators) {
-		osc.disconnect(context.destination);
 		osc.stop();
-		const index = oscillators.indexOf(osc);
-		oscillators.splice(index, 1);
+		osc.disconnect();
 	}
+	oscillators = [];
 }
 </script>
 

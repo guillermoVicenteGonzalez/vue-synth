@@ -33,7 +33,10 @@
 			</div>
 		</template>
 		<template #piano>
-			<KeyboardWidget :context="mainContext"></KeyboardWidget>
+			<KeyboardWidget
+				:context="mainContext"
+				:source-modules="audioModules"
+			></KeyboardWidget>
 		</template>
 		<template #footer>
 			Footer
