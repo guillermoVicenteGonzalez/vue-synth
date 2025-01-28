@@ -35,7 +35,7 @@
 		<template #piano>
 			<KeyboardWidget
 				:context="mainContext"
-				:source-cluster="KeyboardAudioCluster"
+				:source-cluster="VisualizationAudioCluster"
 			></KeyboardWidget>
 		</template>
 		<template #footer>
@@ -56,7 +56,7 @@ import Wave from "@/models/wave";
 import EffectListWidget from "@/widgets/EffectList/EffectListWidget.vue";
 import KeyboardWidget from "@/widgets/Keyboard/KeyboardWidget.vue";
 import ModuleCardListWidget from "@/widgets/ModuleCardList/ModuleCardListWidget.vue";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 
 const MAX_EFFECTS = 5;
 
@@ -65,11 +65,6 @@ const mainContext = ref<AudioContext>(new AudioContext());
 const merger = ref<ChannelMergerNode>(mainContext.value.createChannelMerger());
 const VisualizationAudioCluster = ref<AudioCluster>(
 	new AudioCluster(mainContext.value, merger.value)
-);
-
-const KeyboardAudioCluster = new AudioCluster(
-	mainContext.value,
-	mainContext.value.destination
 );
 
 const effects = ref<AudioEffect[]>([]);
@@ -103,6 +98,10 @@ function createFilter(sourceCtx: AudioContext) {
 	newFilter.frequency.setTargetAtTime(200, sourceCtx.currentTime, 0);
 	return newFilter;
 }
+
+onMounted(() => {
+	merger.value.connect(mainContext.value.destination);
+});
 </script>
 
 <style scoped lang="scss">

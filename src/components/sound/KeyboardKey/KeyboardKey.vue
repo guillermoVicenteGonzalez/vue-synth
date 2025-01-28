@@ -25,6 +25,7 @@ let oscillators: OscillatorNode[] = [];
 // function createSound() {}
 
 function playNote() {
+	console.log(sourceCluster.modules.length);
 	if (sourceCluster.modules.length > 0) {
 		const createdOscillators: OscillatorNode[] = [];
 
