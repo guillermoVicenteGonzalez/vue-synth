@@ -1,5 +1,5 @@
 <template>
-	<div class="effectList">
+	<div v-if="sources" class="effectList">
 		<FilterWidget
 			v-for="(_effect, index) in effects"
 			:key="index"
@@ -12,16 +12,16 @@
 </template>
 
 <script setup lang="ts">
-import type AudioModule from "@/models/AudioModule";
+import type AudioCluster from "@/models/AudioCluster";
 import type { AudioEffect } from "@/models/AudioModule";
 import FilterWidget from "../Filter/FilterWidget.vue";
 
 interface EffectListWidgetProps {
-	sources: AudioModule[];
+	sources: AudioCluster;
 	context: AudioContext;
 }
 
-const { sources = [], context } = defineProps<EffectListWidgetProps>();
+const { sources, context } = defineProps<EffectListWidgetProps>();
 const effects = defineModel<(AudioEffect | undefined)[]>({ default: [] });
 
 function deleteEffect(index: number) {

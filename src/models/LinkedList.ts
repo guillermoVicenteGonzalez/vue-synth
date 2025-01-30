@@ -296,6 +296,11 @@ export class EffectChain extends LinkedList<AudioEffect> {
 	exit: AudioNode;
 	source: AudioNode;
 
+	/**
+	 * Creates a linked list of Audio nodes. The source and exit nodes are linked upon creation
+	 * @param source - The Audio node from whom the audio comes
+	 * @param exit - The audio node that serves as exit
+	 */
 	constructor(source: AudioNode, exit: AudioNode) {
 		super();
 		this.exit = exit;

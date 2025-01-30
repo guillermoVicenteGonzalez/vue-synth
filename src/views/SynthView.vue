@@ -4,13 +4,13 @@
 		<template #components>
 			<div class="components">
 				<ModuleCardListWidget
-					v-model="audioModules as AudioModule[]"
+					v-model="VisualizationAudioCluster"
 				></ModuleCardListWidget>
 				<!-- Esto tiene que ser un widget -->
 				<EffectListWidget
 					v-model="effects"
 					:context="mainContext"
-					:sources="audioModules as AudioModule[]"
+					:sources="VisualizationAudioCluster"
 				></EffectListWidget>
 				<div class="components__controls">
 					<VsButton @click="createNewModule">New Wave</VsButton>
@@ -33,9 +33,15 @@
 			</div>
 		</template>
 		<template #piano>
+			<KeyboardWidget
+				:context="mainContext"
+				:source-cluster="VisualizationAudioCluster"
+			></KeyboardWidget>
+		</template>
+		<template #footer>
+			Footer
 			<RouterLink to="/home">asdas</RouterLink>
 		</template>
-		<template #footer> Footer</template>
 	</SynthLayout>
 </template>
 
@@ -44,38 +50,38 @@ import VsButton from "@/components/common/VsButton/VsButton.vue";
 import SumWavesDisplay from "@/components/waves/SumWavesDisplay/SumWavesDisplay.vue";
 import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
 import SynthLayout from "@/layouts/synth/SynthLayout.vue";
-import AudioModule, { type AudioEffect } from "@/models/AudioModule";
+import AudioCluster from "@/models/AudioCluster";
+import { type AudioEffect } from "@/models/AudioModule";
 import Wave from "@/models/wave";
 import EffectListWidget from "@/widgets/EffectList/EffectListWidget.vue";
+import KeyboardWidget from "@/widgets/Keyboard/KeyboardWidget.vue";
 import ModuleCardListWidget from "@/widgets/ModuleCardList/ModuleCardListWidget.vue";
 import { computed, onMounted, ref } from "vue";
 
-const MAX_MODULES = 5;
 const MAX_EFFECTS = 5;
 
-const audioModules = ref<AudioModule[]>([]);
+// const audioModules = ref<AudioModule[]>([]);
 const mainContext = ref<AudioContext>(new AudioContext());
 const merger = ref<ChannelMergerNode>(mainContext.value.createChannelMerger());
-// const filters = ref<FilterHandler[]>([]);
+const VisualizationAudioCluster = ref<AudioCluster>(
+	new AudioCluster(mainContext.value, merger.value)
+);
+
 const effects = ref<AudioEffect[]>([]);
 
-const waves = computed(() => {
-	return audioModules.value.map(module => module.wave);
+const waves = computed((): Wave[] => {
+	// return audioModules.value.map(module => module.wave);
+	if (
+		!VisualizationAudioCluster.value ||
+		VisualizationAudioCluster.value.modules.length == 0
+	)
+		return [];
+	return VisualizationAudioCluster.value.modules.map(module => module.wave);
 });
 
 function createNewModule() {
-	if (audioModules.value.length >= MAX_MODULES) return;
-	const wave = new Wave(10, 1, 0);
-	wave.setForm("sine");
-	const waveName = `wave ${audioModules.value.length + 1}`;
-
-	const module = new AudioModule(
-		waveName,
-		wave,
-		mainContext.value,
-		merger.value
-	);
-	audioModules.value.push(module);
+	const waveName = `wave ${VisualizationAudioCluster.value.modules.length}`;
+	VisualizationAudioCluster.value.createModule(waveName, "sine");
 }
 
 function createEffect(effectType: string) {

@@ -12,7 +12,7 @@ export default class AudioModule {
 	context: AudioContext;
 	gainNode: GainNode; //should always be the last one before exit
 	effects: EffectChain;
-	oscillator: OscillatorNode;
+	input: AudioNode;
 	exit: AudioNode; // Should be the merger or the ctx destination
 	disabled: boolean;
 
@@ -39,25 +39,22 @@ export default class AudioModule {
 		if (exit != null) this.exit = exit;
 		else this.exit = this.context.destination;
 
-		this.oscillator = this.context.createOscillator();
+		this.input = this.context.createWaveShaper();
 		this.gainNode = this.context.createGain();
-		this.oscillator.connect(this.gainNode);
+		this.input.connect(this.gainNode);
 		this.gainNode.connect(this.exit);
-		this.updateOscillator();
-		this.oscillator.start();
+		this.updateModule();
 
-		this.effects = new EffectChain(this.oscillator, this.gainNode);
+		this.effects = new EffectChain(this.input, this.gainNode);
 		/**
-			The oscillator is
+			The input is
 		*/
 	}
 
 	/**
 	takes the changes present in the wave model and updates the audio nodes accordingly
 	*/
-	updateOscillator() {
-		this.oscillator.frequency.value = this.wave.getFrequency();
-		this.oscillator.type = this.wave.getForm();
+	updateModule() {
 		this.gainNode.gain.setTargetAtTime(
 			this.wave.getAmplitude() / 50,
 			this.context.currentTime,
@@ -115,20 +112,20 @@ export default class AudioModule {
 	}
 
 	/**
-	 * Connects again the oscillator(start) node of the module to the exit
+	 * Connects again the input(start) node of the module to the exit
 	 * Meant to work just like plugging or unplugging the source from the amp/speaker
 	 */
 	unplugOscillator() {
-		// this.oscillator.disconnect(this.end);
+		// this.input.disconnect(this.end);
 		this.gainNode.disconnect(this.exit);
 	}
 
 	/**
-	 * Connects again the oscillator(start) node of the module to the exit
+	 * Connects again the input(start) node of the module to the exit
 	 * Meant to work just like plugging or unplugging the source from the amp/speaker
 	 */
 	plugOscillator() {
-		// this.oscillator.connect(this.end);
+		// this.input.connect(this.end);
 		this.gainNode.connect(this.exit);
 	}
 
@@ -147,18 +144,34 @@ export default class AudioModule {
 	 * Handles the destruction of the module so no trash remains afterwards
 	 */
 	destroyModule() {
-		this.oscillator.stop();
+		// this.input.stop();
 		this.gainNode.disconnect(this.exit);
 	}
 
 	/**
 	 *
 	 * @param flag - decides if the module is activated or deactivated.
-	 * "Disables" the module by disconnecting its source (oscillator), so no audio related to this module is emitted
+	 * "Disables" the module by disconnecting its source (input), so no audio related to this module is emitted
 	 */
 	toggleModule(flag: boolean) {
 		this.disabled = !flag;
 		if (this.disabled) this.unplugOscillator();
 		else this.plugOscillator();
+	}
+
+	/**
+	 * This is used to quickly clone dispensable inputs taking the module's as a blueprint.
+	 * It could be interesting to also return (or ask) for a constant source node so both are linked
+	 * @param context - if not specified, the context of this module will be used
+	 * @returns - OscillatorNode with the same properties as the one this module has
+	 */
+	cloneOscillator(context: AudioContext = this.context) {
+		const nOsc = context.createOscillator();
+		nOsc.frequency.setValueAtTime(this.wave.frequency, context.currentTime);
+		nOsc.type = this.wave.form;
+
+		nOsc.connect(this.input);
+		nOsc.start();
+		return nOsc;
 	}
 }

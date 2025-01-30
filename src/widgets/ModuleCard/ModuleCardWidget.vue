@@ -92,7 +92,7 @@ watch(disabled, () => {
 });
 
 function onWaveChangeCB() {
-	audioModule.value?.updateOscillator();
+	audioModule.value?.updateModule();
 	return;
 }
 </script>

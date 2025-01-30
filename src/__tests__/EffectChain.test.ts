@@ -11,9 +11,8 @@ wave.setForm("sine");
 const module = new AudioModule("test moudule", wave, audioCtx, merger);
 
 describe("Effect chain", () => {
-	const effectChain = new EffectChain(module.oscillator, merger);
-
 	test("appends efffects succesfully", () => {
+		const effectChain = new EffectChain(module.oscillator, merger);
 		const lowPassFilter = audioCtx.createBiquadFilter();
 		const otherFilter = audioCtx.createBiquadFilter();
 		effectChain.append(lowPassFilter);
