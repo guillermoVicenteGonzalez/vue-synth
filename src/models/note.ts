@@ -1,12 +1,12 @@
 //a note is its detune from "la" multiplied by its octave
 export const noteDetunes = {
-	si: -1000,
 	do: -900,
 	re: -700,
 	mi: -500,
 	fa: -400,
 	sol: -200,
 	la: 0,
+	si: +200,
 };
 
 export type noteName = keyof typeof noteDetunes;
