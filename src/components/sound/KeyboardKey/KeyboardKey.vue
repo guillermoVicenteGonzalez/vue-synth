@@ -6,13 +6,14 @@
 		@mouseup="isPressed = false"
 		@mousedown="isPressed = true"
 	>
-		{{ note.name }}
+		{{ note.name }}<br />{{ note.black }}
 	</button>
 </template>
 
 <script setup lang="ts">
 import type AudioCluster from "@/models/AudioCluster";
 import type Note from "@/models/note";
+import { SynthModule } from "@/models/SynthSource";
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 
 interface KeyboardKeyProps {
@@ -23,15 +24,17 @@ interface KeyboardKeyProps {
 	blackKey?: boolean;
 }
 
-const { context, note, sourceCluster, keycode } =
-	defineProps<KeyboardKeyProps>();
+const { note, sourceCluster, keycode } = defineProps<KeyboardKeyProps>();
 
-let oscillators: OscillatorNode[] = [];
+// const oscillators: OscillatorNode[] = [];
 const isPressed = ref<boolean>(false);
 
 const classObject = computed(() => ({
 	"keyboard-key--pressed": isPressed.value,
+	"keyboard-key--black": note.black,
 }));
+
+const synthModule: SynthModule = new SynthModule(sourceCluster);
 
 /**
  * Events (keyboard and click) just turn isPressed on or off
@@ -62,47 +65,40 @@ function handleKeyRelease(e: KeyboardEvent) {
 	}
 }
 
+//refactor
 function playNote() {
-	console.log(sourceCluster.modules.length);
 	if (sourceCluster.modules.length > 0) {
-		const createdOscillators: OscillatorNode[] = [];
-
-		for (const module of sourceCluster.modules) {
-			const osc = module.cloneOscillator();
-			osc.detune.value = note.detune;
-			createdOscillators.push(osc);
-		}
-
-		return createdOscillators;
+		synthModule.play(note);
 	}
-	const osc = context.createOscillator();
-	osc.detune.value = note.detune;
-	osc.connect(context.destination);
-	osc.start();
 
-	isPressed.value = true;
+	// const osc = context.createOscillator();
+	// osc.detune.value = note.detune;
+	// osc.connect(context.destination);
+	// osc.start();
 
-	return [osc];
+	// isPressed.value = true;
+
+	// return [osc];
 }
 
 function stopNote() {
-	console.log("note stopped");
-	oscillators.forEach(osc => {
-		osc.stop();
-		osc.disconnect();
-	});
+	synthModule.stop();
+	// oscillators.forEach(osc => {
+	// 	osc.stop();
+	// 	osc.disconnect();
+	// });
 
-	for (const osc of oscillators) {
-		osc.stop();
-		osc.disconnect();
-	}
+	// for (const osc of oscillators) {
+	// 	osc.stop();
+	// 	osc.disconnect();
+	// }
 
-	oscillators = [];
+	// oscillators = [];
 }
 
 function notePressed() {
-	const oscs = playNote();
-	oscillators.push(...oscs);
+	playNote();
+	// oscillators.push(...oscs);
 }
 
 function keySetup() {
@@ -135,6 +131,12 @@ $key-color: #fff;
 	&--pressed {
 		background-color: $pressed-color;
 		transform: scale(0.9);
+	}
+
+	&--black {
+		background-color: black;
+		width: calc($key-width / 2);
+		height: 70%;
 	}
 }
 </style>

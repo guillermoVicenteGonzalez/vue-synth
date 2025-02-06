@@ -62,7 +62,7 @@ const MAX_EFFECTS = 5;
 
 // const audioModules = ref<AudioModule[]>([]);
 const mainContext = ref<AudioContext>(new AudioContext());
-const merger = ref<ChannelMergerNode>(mainContext.value.createChannelMerger());
+const merger = ref<ChannelMergerNode>(mainContext.value.createChannelMerger(1));
 const VisualizationAudioCluster = ref<AudioCluster>(
 	new AudioCluster(mainContext.value, merger.value)
 );

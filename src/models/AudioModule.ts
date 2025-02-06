@@ -174,4 +174,6 @@ export default class AudioModule {
 		nOsc.start();
 		return nOsc;
 	}
+
+	createSound() {}
 }
