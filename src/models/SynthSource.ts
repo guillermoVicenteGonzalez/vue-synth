@@ -38,25 +38,26 @@ export class SynthSource {
 		osc.type = w.form;
 
 		const gainNode = ctx.createGain();
+		gainNode.gain.value = 0;
 		osc.connect(gainNode);
 		return { oscillator: osc, gain: gainNode };
 	}
 
 	setDetune(detune: number) {
 		this.osc.detune.value = detune;
-		console.log(this.osc.detune.value);
 	}
 
 	setConstantSource(source: ConstantSourceNode) {
 		this.constantSource = source;
-		this.constantSource.connect(this.gain);
+		this.constantSource.connect(this.gain.gain);
+		// this.constantSource.start();
 	}
 
 	delete() {
 		this.osc.stop();
 		this.osc.disconnect(this.gain);
 		this.gain.disconnect(this.outputNode);
-		this.constantSource?.disconnect(this.gain);
+		this.constantSource?.disconnect();
 		this.constantSource = null;
 	}
 }
@@ -66,6 +67,7 @@ export class SynthModule {
 	context: AudioContext;
 	gainSource: ConstantSourceNode | null;
 	audioCluster: AudioCluster;
+	attack: number = 1;
 
 	constructor(cluster: AudioCluster) {
 		this.sources = [];
@@ -82,10 +84,16 @@ export class SynthModule {
 		this.gainSource = new ConstantSourceNode(this.context, {
 			offset: 0,
 		});
+		this.gainSource.start();
+
 		this.sources = this.#createSynthSources(this.audioCluster);
 		this.sources.forEach(source => {
 			source.setDetune(note.detune);
 		});
+		this.gainSource.offset.linearRampToValueAtTime(
+			1,
+			this.context.currentTime + this.attack
+		);
 	}
 
 	stop() {
