@@ -1,4 +1,5 @@
 import type AudioCluster from "./AudioCluster";
+import type { AudioEnveloppe } from "./AudioEnvelope";
 import type Note from "./note";
 import type Wave from "./wave";
 
@@ -11,6 +12,7 @@ export class SynthSource {
 	osc: OscillatorNode;
 	constantSource: ConstantSourceNode | null = null;
 	outputNode: AudioNode;
+	context: AudioContext;
 
 	/**
 	 * @param w - Wave object that will be used as reference
@@ -24,6 +26,7 @@ export class SynthSource {
 		this.osc.start();
 		this.outputNode = output;
 		this.gain.connect(this.outputNode);
+		this.context = ctx;
 	}
 
 	/**
@@ -54,11 +57,34 @@ export class SynthSource {
 	}
 
 	delete() {
+		console.log("delete");
 		this.osc.stop();
 		this.osc.disconnect(this.gain);
 		this.gain.disconnect(this.outputNode);
 		this.constantSource?.disconnect();
 		this.constantSource = null;
+	}
+
+	attack(attack: number) {
+		this.gain.gain.linearRampToValueAtTime(
+			1,
+			attack + this.context.currentTime
+		);
+		console.log("attacking");
+	}
+
+	release(release: number) {
+		this.gain.gain.cancelAndHoldAtTime(this.context.currentTime);
+		this.gain.gain.linearRampToValueAtTime(
+			0,
+			release + this.context.currentTime
+		);
+		setTimeout(
+			() => {
+				this.delete();
+			},
+			release * 1000 + 1000
+		);
 	}
 }
 
@@ -67,7 +93,12 @@ export class SynthModule {
 	context: AudioContext;
 	gainSource: ConstantSourceNode | null;
 	audioCluster: AudioCluster;
-	attack: number = 1;
+	enveloppe: AudioEnveloppe = {
+		attack: 1,
+		decay: 0.5,
+		sustain: 1,
+		release: 0.2,
+	};
 
 	constructor(cluster: AudioCluster) {
 		this.sources = [];
@@ -81,6 +112,52 @@ export class SynthModule {
 	 * @param note - The note to be played
 	 */
 	play(note: Note) {
+		//maybe eliminate what was playing?
+		this.#createSources(note);
+		//attack
+		// this.gainSource?.offset.linearRampToValueAtTime(
+		// 	1,
+		// 	this.context.currentTime + this.enveloppe.attack
+		// );
+		this.sources.forEach(source => source.attack(this.enveloppe.attack));
+		//sustain
+
+		//decay
+	}
+
+	stop() {
+		//linear ramp para release
+		// this.gainSource?.offset.linearRampToValueAtTime(
+		// 	0,
+		// 	this.context.currentTime + this.enveloppe.release
+		// );
+		// setTimeout(
+		// 	() => {
+		// 		this.#deleteSources();
+		// 	},
+		// 	this.enveloppe.release * 1000 + 2
+		// );
+		this.sources.forEach(source => {
+			source.release(this.enveloppe.release);
+		});
+		// this.#deleteSources();
+	}
+
+	/**
+	 * For every synth source currently playing, we invoke its delete method effectively disconnecting every osc, gain and constant source and eliminating any reference to them
+	 */
+	#deleteSources() {
+		console.log("deleting");
+		for (const source of this.sources) {
+			source.delete();
+		}
+
+		this.gainSource?.disconnect();
+
+		this.sources = [];
+	}
+
+	#createSources(note: Note) {
 		this.gainSource = new ConstantSourceNode(this.context, {
 			offset: 0,
 		});
@@ -90,25 +167,6 @@ export class SynthModule {
 		this.sources.forEach(source => {
 			source.setDetune(note.detune);
 		});
-		this.gainSource.offset.linearRampToValueAtTime(
-			1,
-			this.context.currentTime + this.attack
-		);
-	}
-
-	stop() {
-		this.#deleteSources();
-	}
-
-	/**
-	 * For every synth source currently playing, we invoke its delete method effectively disconnecting every osc, gain and constant source and eliminating any reference to them
-	 */
-	#deleteSources() {
-		for (const source of this.sources) {
-			source.delete();
-		}
-
-		this.sources = [];
 	}
 
 	#createSynthSources(cluster: AudioCluster) {

@@ -8,3 +8,9 @@
 
 // 	}
 // }
+export type AudioEnveloppe = {
+	attack: number;
+	decay: number;
+	sustain: number;
+	release: number;
+};
