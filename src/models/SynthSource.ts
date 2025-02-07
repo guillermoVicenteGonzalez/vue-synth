@@ -10,7 +10,6 @@ import type Wave from "./wave";
 export class SynthSource {
 	gain: GainNode;
 	osc: OscillatorNode;
-	constantSource: ConstantSourceNode | null = null;
 	outputNode: AudioNode;
 	context: AudioContext;
 
@@ -50,29 +49,37 @@ export class SynthSource {
 		this.osc.detune.value = detune;
 	}
 
-	setConstantSource(source: ConstantSourceNode) {
-		this.constantSource = source;
-		this.constantSource.connect(this.gain.gain);
-		// this.constantSource.start();
-	}
-
 	delete() {
-		console.log("delete");
 		this.osc.stop();
 		this.osc.disconnect(this.gain);
 		this.gain.disconnect(this.outputNode);
-		this.constantSource?.disconnect();
-		this.constantSource = null;
 	}
 
-	attack(attack: number) {
+	/**
+	 * Plays a note and handles its envelope (attack, decay, sustain)
+	 * @param attack - The time it take the note to ramp up to 1 gain
+	 * @param decay - The time it takes the note to ramp down to sustain
+	 * @param sustain - The value to sustain after the decay
+	 */
+	play(attack: number, decay: number, sustain: number) {
+		//attack
 		this.gain.gain.linearRampToValueAtTime(
 			1,
 			attack + this.context.currentTime
 		);
-		console.log("attacking");
+
+		//decay
+		this.gain.gain.linearRampToValueAtTime(
+			sustain,
+			attack + this.context.currentTime + decay
+		);
 	}
 
+	/**
+	 * Handles the release and posterior deletion of the synthSource.
+	 * A timeout is created so that first, the note linearly reaches 0 gain and then, after release + 1 sec the delete method of this source is invoked.
+	 * @param release - The time it takes the note to reach a gain (volume) of 0
+	 */
 	release(release: number) {
 		this.gain.gain.cancelAndHoldAtTime(this.context.currentTime);
 		this.gain.gain.linearRampToValueAtTime(
@@ -91,19 +98,17 @@ export class SynthSource {
 export class SynthModule {
 	sources: SynthSource[];
 	context: AudioContext;
-	gainSource: ConstantSourceNode | null;
 	audioCluster: AudioCluster;
 	enveloppe: AudioEnveloppe = {
-		attack: 1,
-		decay: 0.5,
-		sustain: 1,
-		release: 0.2,
+		attack: 0.5,
+		decay: 0.2,
+		sustain: 0.4,
+		release: 0,
 	};
 
 	constructor(cluster: AudioCluster) {
 		this.sources = [];
 		this.context = cluster.context;
-		this.gainSource = null;
 		this.audioCluster = cluster;
 	}
 
@@ -112,64 +117,35 @@ export class SynthModule {
 	 * @param note - The note to be played
 	 */
 	play(note: Note) {
-		//maybe eliminate what was playing?
-		this.#createSources(note);
-		//attack
-		// this.gainSource?.offset.linearRampToValueAtTime(
-		// 	1,
-		// 	this.context.currentTime + this.enveloppe.attack
-		// );
-		this.sources.forEach(source => source.attack(this.enveloppe.attack));
-		//sustain
+		this.sources = this.#createSynthSources(this.audioCluster, note);
 
-		//decay
-	}
-
-	stop() {
-		//linear ramp para release
-		// this.gainSource?.offset.linearRampToValueAtTime(
-		// 	0,
-		// 	this.context.currentTime + this.enveloppe.release
-		// );
-		// setTimeout(
-		// 	() => {
-		// 		this.#deleteSources();
-		// 	},
-		// 	this.enveloppe.release * 1000 + 2
-		// );
-		this.sources.forEach(source => {
-			source.release(this.enveloppe.release);
-		});
-		// this.#deleteSources();
+		this.sources.forEach(source =>
+			source.play(
+				this.enveloppe.attack,
+				this.enveloppe.decay,
+				this.enveloppe.sustain
+			)
+		);
 	}
 
 	/**
-	 * For every synth source currently playing, we invoke its delete method effectively disconnecting every osc, gain and constant source and eliminating any reference to them
+	 * To be invoked when we want to stop playing a note
+	 * invokes the release method of the synth source (handles release + disconnection) and resets the sources array so there are no references to the previous synth sources and they can be deleted by the garbage handler
 	 */
-	#deleteSources() {
-		console.log("deleting");
-		for (const source of this.sources) {
-			source.delete();
-		}
-
-		this.gainSource?.disconnect();
-
+	stop() {
+		this.sources.forEach(source => {
+			source.release(this.enveloppe.release);
+		});
 		this.sources = [];
 	}
 
-	#createSources(note: Note) {
-		this.gainSource = new ConstantSourceNode(this.context, {
-			offset: 0,
-		});
-		this.gainSource.start();
-
-		this.sources = this.#createSynthSources(this.audioCluster);
-		this.sources.forEach(source => {
-			source.setDetune(note.detune);
-		});
-	}
-
-	#createSynthSources(cluster: AudioCluster) {
+	/**
+	 * Creates a synth source for every module in the passed cluster and tells it the note it has to play (in relation to each modules freq)
+	 * @param cluster - The audio cluster containing the audio modules
+	 * @param note - The note to play
+	 * @returns sources - An array of SynthSource
+	 */
+	#createSynthSources(cluster: AudioCluster, note: Note) {
 		const sources: SynthSource[] = [];
 		for (const module of cluster.modules) {
 			const synthSource = new SynthSource(
@@ -177,7 +153,7 @@ export class SynthModule {
 				this.context,
 				module.input
 			);
-			if (this.gainSource) synthSource.setConstantSource(this.gainSource);
+			synthSource.setDetune(note.detune);
 			sources.push(synthSource);
 		}
 
