@@ -29,10 +29,14 @@ const notes = ref<Note[]>([]);
 function assignKeycode(note: Note) {
 	if (note.octave == -1) {
 		switch (note.name) {
-			case "si":
-				return "KeyS";
+			case "sol#":
+				return "KeyQ";
 			case "la":
 				return "KeyA";
+			case "la#":
+				return "KeyW";
+			case "si":
+				return "KeyS";
 		}
 	}
 
@@ -40,16 +44,26 @@ function assignKeycode(note: Note) {
 		switch (note.name) {
 			case "do":
 				return "KeyD";
+			case "do#":
+				return "KeyR";
 			case "re":
 				return "KeyF";
+			case "re#":
+				return "KeyT";
 			case "mi":
 				return "KeyG";
 			case "fa":
 				return "KeyH";
+			case "fa#":
+				return "KeyU";
 			case "sol":
 				return "KeyJ";
+			case "sol#":
+				return "KeyI";
 			case "la":
 				return "KeyK";
+			case "la#":
+				return "KeyO";
 			case "si":
 				return "KeyL";
 		}
@@ -59,6 +73,7 @@ function assignKeycode(note: Note) {
 		switch (note.name) {
 			case "do":
 				return "Semicolon";
+
 			case "re":
 				return "Quote";
 		}
@@ -83,8 +98,9 @@ onMounted(() => {
 .keyboard {
 	width: 100%;
 	height: 100%;
-	background-color: red;
+	background-color: brown;
 	display: flex;
 	gap: 0.5rem;
+	overflow-x: scroll;
 }
 </style>
