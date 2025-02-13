@@ -110,6 +110,7 @@ const model = defineModel<AudioEnvelope>({
 
 <style lang="scss" scoped>
 .envelope-widget {
+	// resize: both;
 	padding: 2rem;
 	min-height: 4rem;
 	height: 100%;
@@ -147,15 +148,23 @@ const model = defineModel<AudioEnvelope>({
 			font-size: 1.6rem;
 		}
 
+		/*probably redundant*/
 		input[type="range"] {
-			flex-basis: 6rem;
+			min-width: 5rem;
+			width: 100%;
+			max-width: 30rem;
+			flex-basis: 1rem;
 			flex-grow: 1;
-			flex-shrink: 0;
+			flex-shrink: 1;
 		}
 
 		input[type="number"] {
-			flex-basis: 2rem;
-			flex-shrink: 0;
+			min-width: 5rem;
+			// width: 2rem;
+			width: 100%;
+			max-width: 10rem;
+			flex-basis: 1rem;
+			flex-shrink: 1;
 			flex-grow: 0;
 		}
 	}
