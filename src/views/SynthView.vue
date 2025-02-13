@@ -69,10 +69,10 @@ const VisualizationAudioCluster = ref<AudioCluster>(
 	new AudioCluster(mainContext.value, merger.value)
 );
 const envelope = ref<AudioEnvelope>({
-	attack: 1,
+	attack: 0.2,
 	decay: 0.4,
-	sustain: 0.2,
-	release: 1,
+	sustain: 0.5,
+	release: 0.2,
 });
 
 const effects = ref<AudioEffect[]>([]);
@@ -142,6 +142,7 @@ onMounted(() => {
 
 	&__pure {
 		grid-row: first-row / second-row;
+		padding: 1rem;
 	}
 
 	&__analyser {

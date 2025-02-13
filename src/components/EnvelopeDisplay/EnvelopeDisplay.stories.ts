@@ -1,13 +1,10 @@
-
 import type { Meta, StoryObj } from "@storybook/vue3";
-import  EnvelopeDisplay  from "./EnvelopeDisplay.vue"
-
-
+import EnvelopeDisplay from "./EnvelopeDisplay.vue";
 
 const meta: Meta<typeof EnvelopeDisplay> = {
-	title: 'EnvelopeDisplay',
-  component: EnvelopeDisplay,
-  argTypes: {},
+	title: "EnvelopeDisplay",
+	component: EnvelopeDisplay,
+	argTypes: {},
 };
 
 export default meta;
