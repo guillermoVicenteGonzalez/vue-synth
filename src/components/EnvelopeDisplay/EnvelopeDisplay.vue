@@ -80,7 +80,11 @@ function paintEnvelope(
 	currentStep += (env.release * cWidth) / envelopeSize;
 	ctx.lineTo(currentStep, cHeight);
 
+	const fillStyleColor = ctx.strokeStyle + "09";
+	ctx.fillStyle = fillStyleColor;
+	ctx.fill();
 	ctx.stroke();
+	ctx.closePath();
 }
 
 onMounted(() => {
