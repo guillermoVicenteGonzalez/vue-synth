@@ -29,7 +29,7 @@ const {
 </script>
 
 <style lang="scss" scoped>
-.VSCard {
+:where(.VSCard) {
 	width: v-bind(width);
 	height: v-bind(height);
 	min-width: v-bind(minWidth);
@@ -37,7 +37,9 @@ const {
 	max-width: v-bind(maxWidth);
 	max-height: v-bind(maxHeight);
 	background-color: v-bind(bgColor);
+}
 
+.VSCard {
 	overflow: hidden;
 	// padding: 1.5rem;
 	border-radius: 10px;

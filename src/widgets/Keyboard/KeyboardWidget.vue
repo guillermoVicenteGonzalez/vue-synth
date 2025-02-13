@@ -3,6 +3,7 @@
 		<KeyboardKey
 			v-for="(note, index) in notes"
 			:key="note.name + index"
+			:envelope="envelope"
 			:note="note"
 			:keycode="assignKeycode(note)"
 			:context="context"
@@ -14,15 +15,21 @@
 <script setup lang="ts">
 import KeyboardKey from "@/components/sound/KeyboardKey/KeyboardKey.vue";
 import type AudioCluster from "@/models/AudioCluster";
+import type { AudioEnvelope } from "@/models/AudioEnvelope";
 import Note, { noteDetunes, type noteName } from "@/models/note";
 import { onMounted, ref } from "vue";
 
 interface KeyboardWidgetProps {
+	envelope?: AudioEnvelope;
 	context: AudioContext;
 	sourceCluster: AudioCluster;
 }
 
-const { context, sourceCluster = null } = defineProps<KeyboardWidgetProps>();
+const {
+	context,
+	sourceCluster = null,
+	envelope = undefined,
+} = defineProps<KeyboardWidgetProps>();
 
 const notes = ref<Note[]>([]);
 
