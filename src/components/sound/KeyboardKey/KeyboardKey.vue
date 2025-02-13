@@ -12,6 +12,7 @@
 
 <script setup lang="ts">
 import type AudioCluster from "@/models/AudioCluster";
+import type { AudioEnvelope } from "@/models/AudioEnvelope";
 import type Note from "@/models/note";
 import { SynthModule } from "@/models/SynthSource";
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
@@ -22,9 +23,15 @@ interface KeyboardKeyProps {
 	sourceCluster: AudioCluster;
 	note: Note;
 	blackKey?: boolean;
+	envelope?: AudioEnvelope;
 }
 
-const { note, sourceCluster, keycode } = defineProps<KeyboardKeyProps>();
+const {
+	note,
+	sourceCluster,
+	keycode,
+	envelope = undefined,
+} = defineProps<KeyboardKeyProps>();
 
 // const oscillators: OscillatorNode[] = [];
 const isPressed = ref<boolean>(false);
@@ -34,7 +41,7 @@ const classObject = computed(() => ({
 	"keyboard-key--black": note.black,
 }));
 
-const synthModule: SynthModule = new SynthModule(sourceCluster);
+const synthModule: SynthModule = new SynthModule(sourceCluster, envelope);
 
 /**
  * Events (keyboard and click) just turn isPressed on or off
@@ -70,15 +77,6 @@ function playNote() {
 	if (sourceCluster.modules.length > 0) {
 		synthModule.play(note);
 	}
-
-	// const osc = context.createOscillator();
-	// osc.detune.value = note.detune;
-	// osc.connect(context.destination);
-	// osc.start();
-
-	// isPressed.value = true;
-
-	// return [osc];
 }
 
 function stopNote() {

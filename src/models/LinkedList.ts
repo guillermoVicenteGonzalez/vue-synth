@@ -309,7 +309,7 @@ export class EffectChain extends LinkedList<AudioEffect> {
 		this.source.connect(exit);
 	}
 
-	//revisar
+	// !revisar
 	append(value: AudioEffect) {
 		//we call the method of the inherited LLclass
 		const node = super.append(value);

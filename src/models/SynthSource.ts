@@ -1,5 +1,5 @@
 import type AudioCluster from "./AudioCluster";
-import type { AudioEnveloppe } from "./AudioEnvelope";
+import type { AudioEnvelope } from "./AudioEnvelope";
 import type Note from "./note";
 import type Wave from "./wave";
 
@@ -99,17 +99,18 @@ export class SynthModule {
 	sources: SynthSource[];
 	context: AudioContext;
 	audioCluster: AudioCluster;
-	enveloppe: AudioEnveloppe = {
-		attack: 0.5,
-		decay: 0.2,
-		sustain: 0.4,
-		release: 0,
+	envelope: AudioEnvelope = {
+		attack: 0.2,
+		decay: 0.4,
+		sustain: 0.1,
+		release: 1,
 	};
 
-	constructor(cluster: AudioCluster) {
+	constructor(cluster: AudioCluster, envelope: AudioEnvelope | null = null) {
 		this.sources = [];
 		this.context = cluster.context;
 		this.audioCluster = cluster;
+		if (envelope) this.envelope = envelope;
 	}
 
 	/**
@@ -118,12 +119,12 @@ export class SynthModule {
 	 */
 	play(note: Note) {
 		this.sources = this.#createSynthSources(this.audioCluster, note);
-
+		console.table(this.envelope);
 		this.sources.forEach(source =>
 			source.play(
-				this.enveloppe.attack,
-				this.enveloppe.decay,
-				this.enveloppe.sustain
+				this.envelope.attack,
+				this.envelope.decay,
+				this.envelope.sustain
 			)
 		);
 	}
@@ -134,7 +135,7 @@ export class SynthModule {
 	 */
 	stop() {
 		this.sources.forEach(source => {
-			source.release(this.enveloppe.release);
+			source.release(this.envelope.release);
 		});
 		this.sources = [];
 	}

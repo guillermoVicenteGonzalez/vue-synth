@@ -7,7 +7,7 @@
 - [-] Piano widget
   - [ ] Visuals
   - [ ] Key functionality
-    - [ ] Natural keys
+    - [x] Natural keys
     - [ ] Altered keys
     - [ ] Change central note
 - [ ] Audio module effects
@@ -16,10 +16,11 @@
     - [ ] Voice detuning
 - [ ] Global effects
   - [ ] widget
-  - [ ] Envelope?
-    - [ ] Attack
-    - [ ] Sustain
-    - [ ] Release
+  - [x] Envelope?
+    - [x] Attack
+    - [x] Sustain
+    - [x] Release
+    - [x] Decay
   - [ ] Filters
   - [ ] Echo
   - [ ] Chorus
@@ -36,7 +37,9 @@
   - [ ] Global "detuning"
   - [ ] Wheel
 - [ ] Global volume controls
+- [ ] Dynamic layouts / effects bar
 - [ ] Responsive
+- [ ] MIDI interfacing
 
 ### What ifs
 
@@ -46,6 +49,7 @@
 - [ ] Metronome
 - [ ] Base
 - [ ] Audio imports
+- [ ] Audio envelope progress when key is pressed
 
 ### Bugs / fixes / refactors
 

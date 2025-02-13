@@ -21,7 +21,8 @@
 		<template #display>
 			<div class="displays">
 				<div class="displays__pure">
-					<SumWavesDisplay :waves="waves"></SumWavesDisplay>
+					<!-- <SumWavesDisplay :waves="waves"></SumWavesDisplay> -->
+					<EnvelopeControlWidget v-model="envelope" />
 				</div>
 				<div class="displays__analyser">
 					<WaveAnalyser
@@ -34,6 +35,7 @@
 		</template>
 		<template #piano>
 			<KeyboardWidget
+				:envelope="envelope"
 				:context="mainContext"
 				:source-cluster="VisualizationAudioCluster"
 			></KeyboardWidget>
@@ -47,16 +49,16 @@
 
 <script setup lang="ts">
 import VsButton from "@/components/common/VsButton/VsButton.vue";
-import SumWavesDisplay from "@/components/waves/SumWavesDisplay/SumWavesDisplay.vue";
 import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
 import SynthLayout from "@/layouts/synth/SynthLayout.vue";
 import AudioCluster from "@/models/AudioCluster";
+import type { AudioEnvelope } from "@/models/AudioEnvelope";
 import { type AudioEffect } from "@/models/AudioModule";
-import Wave from "@/models/wave";
 import EffectListWidget from "@/widgets/EffectList/EffectListWidget.vue";
+import EnvelopeControlWidget from "@/widgets/EnvelopeControl/EnvelopeControlWidget.vue";
 import KeyboardWidget from "@/widgets/Keyboard/KeyboardWidget.vue";
 import ModuleCardListWidget from "@/widgets/ModuleCardList/ModuleCardListWidget.vue";
-import { computed, onMounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 
 const MAX_EFFECTS = 5;
 
@@ -66,18 +68,24 @@ const merger = ref<ChannelMergerNode>(mainContext.value.createChannelMerger(1));
 const VisualizationAudioCluster = ref<AudioCluster>(
 	new AudioCluster(mainContext.value, merger.value)
 );
+const envelope = ref<AudioEnvelope>({
+	attack: 0.2,
+	decay: 0.4,
+	sustain: 0.5,
+	release: 0.2,
+});
 
 const effects = ref<AudioEffect[]>([]);
 
-const waves = computed((): Wave[] => {
-	// return audioModules.value.map(module => module.wave);
-	if (
-		!VisualizationAudioCluster.value ||
-		VisualizationAudioCluster.value.modules.length == 0
-	)
-		return [];
-	return VisualizationAudioCluster.value.modules.map(module => module.wave);
-});
+// const waves = computed((): Wave[] => {
+// 	// return audioModules.value.map(module => module.wave);
+// 	if (
+// 		!VisualizationAudioCluster.value ||
+// 		VisualizationAudioCluster.value.modules.length == 0
+// 	)
+// 		return [];
+// 	return VisualizationAudioCluster.value.modules.map(module => module.wave);
+// });
 
 function createNewModule() {
 	const waveName = `wave ${VisualizationAudioCluster.value.modules.length}`;
@@ -134,6 +142,7 @@ onMounted(() => {
 
 	&__pure {
 		grid-row: first-row / second-row;
+		padding: 1rem;
 	}
 
 	&__analyser {

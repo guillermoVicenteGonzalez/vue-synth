@@ -8,7 +8,7 @@
 
 // 	}
 // }
-export type AudioEnveloppe = {
+export type AudioEnvelope = {
 	attack: number;
 	decay: number;
 	sustain: number;
