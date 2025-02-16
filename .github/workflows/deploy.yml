@@ -1,6 +1,9 @@
 name: deploy pipeline
 run-name: ${{ github.actor }} is deploying vsynth
-on: [push]
+on:
+  push:
+    branches:
+      - "main"
 jobs:
   configure-update:
     runs-on: self-hosted
