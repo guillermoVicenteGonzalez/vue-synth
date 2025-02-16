@@ -6,11 +6,20 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: pull from repo
+        env:
+          PROJECT_PATH: ${{secrets.PROJECT_PATH}}
+          PROJECTS_PATH: ${{secrets.PROJECTS_PATH}}
         run: |
-          cd projects/vsynth
+          if [ ! -d "$PROJECT_PATH" ]; then
+            cd "$PROJECTS_PATH"
+            git clone https://github.com/guillermoVicenteGonzalez/vue-synth.git
+          fi
+          cd "$PROJECT_PATH"
           git pull
 
-      - name: rebuild docker container
+      - name: build docker container
+        env:
+          PROJECT_PATH: ${{secrets.PROJECT_PATH}}
         run: |
-          cd projects/vsynth
-          docker compose up front-prod
+          cd "$PROJECT_PATH"
+          docker compose up front-prod -d
