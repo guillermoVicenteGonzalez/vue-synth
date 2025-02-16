@@ -10,6 +10,7 @@ jobs:
           PROJECT_PATH: ${{secrets.PROJECT_PATH}}
           PROJECTS_PATH: ${{secrets.PROJECTS_PATH}}
         run: |
+          cd
           if [ ! -d "$PROJECT_PATH" ]; then
             echo "no existing project => Cloning repo"
             cd "$PROJECTS_PATH"
@@ -23,5 +24,6 @@ jobs:
         env:
           PROJECT_PATH: ${{secrets.PROJECT_PATH}}
         run: |
+          cd
           cd "$PROJECT_PATH"
           docker compose up front-prod -d
