@@ -10,17 +10,14 @@ jobs:
           PROJECT_PATH: ${{secrets.PROJECT_PATH}}
           PROJECTS_PATH: ${{secrets.PROJECTS_PATH}}
         run: |
-          cd
-          echo "$(pwd)"
           if [ ! -d $PROJECT_PATH ]; then
-            echo "no existing project => Cloning repo"
+            echo -e "\e[1;45;1;32mNo existing project => Cloning repo\e[0m"
             echo "$PROJECTS_PATH"
             ls $PROJECTS_PATH 
             cd $PROJECTS_PATH
             git clone https://github.com/guillermoVicenteGonzalez/vue-synth.git
           fi
-          echo "existing project => pulling from repo"
-          echo "$PROJECT_PATH"
+          echo -e "\e[1;45;1;32mExisting project => pulling from repo\e[0m"
           cd $PROJECT_PATH
           git pull
 
@@ -28,7 +25,6 @@ jobs:
         env:
           PROJECT_PATH: ${{secrets.PROJECT_PATH}}
         run: |
-          cd
           cd $PROJECT_PATH
           cd docker
           docker compose up front-prod -d
