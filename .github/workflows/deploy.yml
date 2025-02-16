@@ -12,7 +12,7 @@ jobs:
         run: |
           cd
           echo "$(pwd)"
-          if [ ! -d "$PROJECT_PATH" ]; then
+          if [ ! -d $PROJECT_PATH ]; then
             echo "no existing project => Cloning repo"
             echo "$PROJECTS_PATH"
             ls $PROJECTS_PATH 
