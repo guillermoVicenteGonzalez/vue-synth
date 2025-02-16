@@ -1,16 +1,31 @@
 name: deploy pipeline
 run-name: ${{ github.actor }} is deploying vsynth
-on: [push]
+on:
+  push:
+    branches:
+      - "main"
 jobs:
   configure-update:
     runs-on: self-hosted
     steps:
       - name: pull from repo
+        env:
+          PROJECT_PATH: ${{secrets.PROJECT_PATH}}
+          PROJECTS_PATH: ${{secrets.PROJECTS_PATH}}
         run: |
-          cd projects/vsynth
+          if [ ! -d $PROJECT_PATH ]; then
+            echo -e "\e[1;32mNo existing project => Cloning repo\e[0m"
+            cd $PROJECTS_PATH
+            git clone https://github.com/guillermoVicenteGonzalez/vue-synth.git
+          fi
+          echo -e "\e[1;32mExisting project => pulling from repo\e[0m"
+          cd $PROJECT_PATH
           git pull
 
-      - name: rebuild docker container
+      - name: build docker container
+        env:
+          PROJECT_PATH: ${{secrets.PROJECT_PATH}}
         run: |
-          cd projects/vsynth
-          docker compose up front-prod
+          cd $PROJECT_PATH
+          cd docker
+          docker compose up front-prod -d
