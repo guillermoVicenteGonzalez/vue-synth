@@ -11,13 +11,11 @@ jobs:
           PROJECTS_PATH: ${{secrets.PROJECTS_PATH}}
         run: |
           if [ ! -d $PROJECT_PATH ]; then
-            echo -e "\e[1;45;1;32mNo existing project => Cloning repo\e[0m"
-            echo "$PROJECTS_PATH"
-            ls $PROJECTS_PATH 
+            echo -e "\e[1;32mNo existing project => Cloning repo\e[0m"
             cd $PROJECTS_PATH
             git clone https://github.com/guillermoVicenteGonzalez/vue-synth.git
           fi
-          echo -e "\e[1;45;1;32mExisting project => pulling from repo\e[0m"
+          echo -e "\e[1;32mExisting project => pulling from repo\e[0m"
           cd $PROJECT_PATH
           git pull
 
