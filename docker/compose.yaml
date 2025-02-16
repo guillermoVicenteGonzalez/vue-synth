@@ -28,5 +28,5 @@ services:
           target: /app/src
           action: sync
     ports:
-      - 5174:5174
+      - 5175:5174
     profiles: [production]
