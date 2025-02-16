@@ -11,6 +11,7 @@ jobs:
           PROJECTS_PATH: ${{secrets.PROJECTS_PATH}}
         run: |
           cd
+          echo "$(pwd)"
           if [ ! -d "$PROJECT_PATH" ]; then
             echo "no existing project => Cloning repo"
             echo "$PROJECTS_PATH"
