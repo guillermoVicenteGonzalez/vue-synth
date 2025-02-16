@@ -1,0 +1,16 @@
+name: deploy pipeline
+run-name: ${{ github.actor }} is deploying vsynth
+on: [push]
+jobs:
+  configure-update:
+    runs-on: self-hosted
+    steps:
+      - name: pull from repo
+        run: |
+          cd projects/vsynth
+          git pull
+
+      - name: rebuild docker container
+        run: |
+          cd projects/vsynth
+          docker compose up front-prod
