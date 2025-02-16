@@ -13,10 +13,12 @@ jobs:
           cd
           if [ ! -d "$PROJECT_PATH" ]; then
             echo "no existing project => Cloning repo"
+            echo "$PROJECTS_PATH"
             cd "$PROJECTS_PATH"
             git clone https://github.com/guillermoVicenteGonzalez/vue-synth.git
           fi
           echo "existing project => pulling from repo"
+          echo "$PROJECT_PATH"
           cd "$PROJECT_PATH"
           git pull
 
