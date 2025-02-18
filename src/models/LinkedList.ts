@@ -319,7 +319,6 @@ export class EffectChain extends LinkedList<AudioEffect> {
 		this.source = source;
 
 		this.source.connect(exit);
-		console.error(this.length);
 	}
 
 	// !revisar
@@ -429,6 +428,7 @@ export class EffectChain extends LinkedList<AudioEffect> {
 
 			currentNode = currentNode.next;
 		}
+
 		super.clean();
 	}
 

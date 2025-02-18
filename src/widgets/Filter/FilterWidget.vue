@@ -62,7 +62,7 @@ import VsSelector from "@/components/common/VsSelector/VsSelector.vue";
 import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
 import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
 import type AudioCluster from "@/models/AudioCluster";
-import type AudioModule from "@/models/AudioModule";
+import AudioModule from "@/models/AudioModule";
 import FilterHandler from "@/models/FilterHandler";
 import { computed, onMounted, ref, watch } from "vue";
 
@@ -105,15 +105,23 @@ watch(disabled, () => {
 	else source.value.attachEffect(filter.value);
 });
 
-watch(source, () => {
+watch(sources.modules, () => {
 	console.log("changed");
+	console.log(source.value);
+	if (source.value) {
+		const exists = sources.modules.includes(source.value);
+		if (!exists) source.value = undefined;
+	}
+	// console.log(source.value);
+	// handleSelectModule();
+	// source.value = undefined;
 });
 
 const emit = defineEmits<{
 	(e: "delete", value: BiquadFilterNode | undefined): void;
 }>();
 
-function handleSelectModule(moduleName: string | undefined) {
+function handleSelectModule(moduleName: string | undefined = undefined) {
 	//we detach the current module from the in	ternal component filter
 	if (!moduleName || moduleName == "") {
 		if (!source.value) return;
