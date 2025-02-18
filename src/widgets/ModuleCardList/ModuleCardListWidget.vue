@@ -16,11 +16,7 @@ import ModuleCardWidget from "@/widgets/ModuleCard/ModuleCardWidget.vue";
 const cluster = defineModel<AudioCluster>();
 
 function deleteModule(index: number) {
-	/**
-	 * ! This should be a method of the cluster
-	 */
-	cluster.value?.modules[index].destroyModule();
-	cluster.value?.modules.splice(index, 1);
+	if (cluster.value) cluster.value.deleteModuleByIndex(index);
 }
 </script>
 

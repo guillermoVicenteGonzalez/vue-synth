@@ -105,22 +105,28 @@ watch(disabled, () => {
 	else source.value.attachEffect(filter.value);
 });
 
+/**
+ * Every time sources change (additions or deletion of modules)
+ * We check that our current source still exist.
+ * If it does not exist => we reset the source to undefined-
+ * This covers the scenario where a module that had this filter attached is deleted
+ */
 watch(sources.modules, () => {
-	console.log("changed");
-	console.log(source.value);
 	if (source.value) {
 		const exists = sources.modules.includes(source.value);
 		if (!exists) source.value = undefined;
 	}
-	// console.log(source.value);
-	// handleSelectModule();
-	// source.value = undefined;
 });
 
 const emit = defineEmits<{
 	(e: "delete", value: BiquadFilterNode | undefined): void;
 }>();
 
+/**
+ * Given a module name, searches sources.modules for it and assigns it to source
+ * If no module name is provided => detachment, we detach the filter from the previous source and assign source = undefined
+ * @param moduleName
+ */
 function handleSelectModule(moduleName: string | undefined = undefined) {
 	//we detach the current module from the in	ternal component filter
 	if (!moduleName || moduleName == "") {
