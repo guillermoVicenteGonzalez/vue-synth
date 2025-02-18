@@ -119,7 +119,6 @@ export class SynthModule {
 	 */
 	play(note: Note) {
 		this.sources = this.#createSynthSources(this.audioCluster, note);
-		console.table(this.envelope);
 		this.sources.forEach(source =>
 			source.play(
 				this.envelope.attack,

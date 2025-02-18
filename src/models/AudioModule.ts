@@ -6,6 +6,9 @@ export type AudioEffect = AudioNode | BiquadFilterNode;
 
 //Remember it goes osc(maybe end) -> effects(end) -> gain -> exit
 
+/**
+ *
+ */
 export default class AudioModule {
 	name: string;
 	wave: Wave;
@@ -77,7 +80,6 @@ export default class AudioModule {
 	 * If the effect is the last one in the chain, the gain node becomes the end node
 	 * If no effect is specified, the last one in the chain is detached
 	 */
-	//Ideally this would be a linked list.
 	detachEffect(effect?: AudioEffect) {
 		if (effect) return this.effects.detachNodeByValue(effect);
 		else return this.effects.pop();
@@ -144,8 +146,8 @@ export default class AudioModule {
 	 * Handles the destruction of the module so no trash remains afterwards
 	 */
 	destroyModule() {
-		// this.input.stop();
 		this.gainNode.disconnect(this.exit);
+		this.effects.clean();
 	}
 
 	/**

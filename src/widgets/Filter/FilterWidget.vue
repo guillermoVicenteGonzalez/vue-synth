@@ -105,6 +105,10 @@ watch(disabled, () => {
 	else source.value.attachEffect(filter.value);
 });
 
+watch(source, () => {
+	console.log("changed");
+});
+
 const emit = defineEmits<{
 	(e: "delete", value: BiquadFilterNode | undefined): void;
 }>();

@@ -8,6 +8,9 @@
 	>
 		<div class="ModuleCard__handle">
 			<ToggleButton v-model="disabled"></ToggleButton>
+			<VsButton variant="round" class="delete-btn" @click="deleteModule"
+				>X</VsButton
+			>
 		</div>
 
 		<div class="ModuleCard__left-slot">
@@ -67,6 +70,7 @@
 
 <script setup lang="ts">
 import ToggleButton from "@/components/common/ToggleButton/ToggleButton.vue";
+import VsButton from "@/components/common/VsButton/VsButton.vue";
 import VsCard from "@/components/common/VsCard/VsCard.vue";
 import VsSelector from "@/components/common/VsSelector/VsSelector.vue";
 import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
@@ -78,6 +82,10 @@ import { computed, ref, watch } from "vue";
 const audioModule = defineModel<AudioModule>();
 const disabled = ref<boolean>(false);
 const zoom = ref<number>(300);
+
+const emit = defineEmits<{
+	(e: "delete", module: AudioModule | undefined): void;
+}>();
 
 const ModuleCardStyles = computed(() => {
 	return `ModuleCard ${disabled.value ? "ModuleCard--disabled" : null}`;
@@ -94,6 +102,10 @@ watch(disabled, () => {
 function onWaveChangeCB() {
 	audioModule.value?.updateModule();
 	return;
+}
+
+function deleteModule() {
+	emit("delete", audioModule.value);
 }
 </script>
 
@@ -113,9 +125,11 @@ $disabled-color: gray;
 	// background-color: global.$primary-color;
 
 	&__handle {
-		background-color: $handle-bg-color;
+		width: 100%;
 		height: 100%;
+		background-color: black;
 		display: flex;
+		gap: 1rem;
 		flex-direction: column;
 		align-items: center;
 		justify-content: start;
