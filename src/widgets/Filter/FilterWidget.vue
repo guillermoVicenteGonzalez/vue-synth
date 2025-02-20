@@ -64,7 +64,7 @@ import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
 import type AudioCluster from "@/models/AudioCluster";
 import AudioModule from "@/models/AudioModule";
 import FilterHandler from "@/models/FilterHandler";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 
 enum filterTypes {
 	lowpass = "lowpass",
@@ -159,6 +159,15 @@ onMounted(() => {
 	if (context != null && filter.value != undefined) {
 		filterHandler.value.setNode(filter.value);
 	}
+});
+
+onUnmounted(() => {
+	//si hay source => detach
+	if (source.value) {
+		handleSelectModule();
+	}
+	//filter = null;
+	// filter.value = undefined;
 });
 </script>
 

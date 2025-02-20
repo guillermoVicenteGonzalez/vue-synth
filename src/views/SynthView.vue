@@ -97,6 +97,9 @@ function createFilter(sourceCtx: AudioContext) {
 }
 
 function deleteAll() {
+	MainAudioCluster.value.modules.forEach(module => {
+		module.destroyModule();
+	});
 	effects.value = [];
 	MainAudioCluster.value.modules = [];
 }

@@ -23,15 +23,19 @@
 			<div class="ModuleCard__sliders">
 				<VsSlider
 					v-model="audioModule.wave.amplitude"
+					class="ModuleCard__slider"
 					:disabled="disabled"
-					:label="audioModule.wave.amplitude"
+					label="amp"
 					:max="50"
-					:min="0"
+					step="0.01"
+					:min="0.01"
 					orientation="vertical"
 					@change="onWaveChangeCB"
 				></VsSlider>
+
 				<VsSlider
 					v-model="audioModule.wave.frequency"
+					class="ModuleCard__slider"
 					:disabled="disabled"
 					label="freq"
 					:max="1000"
@@ -81,7 +85,7 @@ import { computed, ref, watch } from "vue";
 
 const audioModule = defineModel<AudioModule>();
 const disabled = ref<boolean>(false);
-const zoom = ref<number>(300);
+const zoom = ref<number>(10000);
 
 const emit = defineEmits<{
 	(e: "delete", module: AudioModule | undefined): void;

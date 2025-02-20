@@ -1,10 +1,10 @@
 <template>
 	<div v-if="cluster" class="ModuleCardList">
 		<ModuleCardWidget
-			v-for="(module, index) in cluster.modules"
+			v-for="(_module, index) in cluster.modules"
 			:key="index"
 			v-model="cluster.modules[index]"
-			@delete="m => deleteModule(index)"
+			@delete="deleteModule(index)"
 		></ModuleCardWidget>
 	</div>
 </template>
