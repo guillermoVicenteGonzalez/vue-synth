@@ -1,18 +1,29 @@
 <template>
-	<div class="circle-slider">
+	<div class="circle-slider" @contextmenu="handleRightClick">
 		<div
 			ref="knob"
 			class="circle-slider__knob"
+			@mouseleave="isRotating = false"
 			@mousemove="e => handleProgress(e, min, max)"
 			@mousedown="isRotating = true"
 			@mouseup="isRotating = false"
 		>
-			<span>{{ progress }}</span>
+			<span>{{ progress.toFixed(2) }}</span>
 		</div>
 
-		<svg width="200" height="200" :style="cssVars">
-			<circle class="circle circle--inner" cx="100" cy="100" r="90"></circle>
-			<circle class="circle circle--outer" cx="100" cy="100" r="90"></circle>
+		<svg width="100%" height="100%" :style="cssVars">
+			<circle
+				class="circle circle--inner"
+				cx="50%"
+				cy="50%"
+				:r="radius"
+			></circle>
+			<circle
+				class="circle circle--outer"
+				cx="50%"
+				cy="50%"
+				:r="radius"
+			></circle>
 		</svg>
 	</div>
 </template>
@@ -25,6 +36,7 @@ interface CircleSliderProps {
 	underColor?: string;
 	min?: number;
 	max?: number;
+	disabled?: boolean;
 }
 
 const {
@@ -35,13 +47,14 @@ const {
 } = defineProps<CircleSliderProps>();
 
 const progress = defineModel<number>({
-	default: 50,
+	default: 0,
 });
 
+const size = 70;
 const isRotating = ref();
 const knob = useTemplateRef("knob");
-const radius = 90;
-const circunferenceLength = computed(() => 2 * Math.PI * radius);
+const radius = computed(() => size / 2 - 10);
+const circunferenceLength = computed(() => 2 * Math.PI * radius.value);
 const strokeDasharray = computed(() => circunferenceLength.value * 0.75);
 const dashOffset = computed(
 	() =>
@@ -49,7 +62,7 @@ const dashOffset = computed(
 		strokeDasharray.value * valueToPercentage(progress.value, min, max)
 );
 const cssVars = computed(() => ({
-	"--circle-radius": radius,
+	"--circle-radius": `${radius.value}px`,
 	"--under-color": underColor,
 	"--fill-color": fillColor,
 	"--stroke-dash": strokeDasharray.value,
@@ -120,21 +133,29 @@ function percentageToValue(
 function valueToPercentage(value: number, min: number = 0, max: number = 1) {
 	return (value - min) / (max - min);
 }
+
+function handleRightClick(e: MouseEvent) {
+	e.preventDefault();
+}
+
+// function calculateDimensions() {}
 </script>
 
 <style lang="scss" scoped>
+$size: 70px;
 .circle-slider {
-	width: 300px;
-	height: 300px;
+	width: $size;
+	height: $size;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	position: relative;
 
 	&__knob {
+		cursor: pointer;
 		z-index: 1;
-		width: 200px;
-		height: 200px;
+		width: $size;
+		height: $size;
 		background-color: transparent;
 		border-radius: 50%;
 		position: absolute;
@@ -153,7 +174,7 @@ function valueToPercentage(value: number, min: number = 0, max: number = 1) {
 	cursor: pointer;
 	z-index: 3;
 	fill: none;
-	stroke-width: 15px;
+	stroke-width: 5px;
 	transform-origin: center;
 	transform: rotate(135deg);
 	stroke-linecap: round;

@@ -21,7 +21,7 @@
 				@change="onWaveChangeCB"
 			></VsSelector>
 			<div class="ModuleCard__sliders">
-				<VsSlider
+				<!-- <VsSlider
 					v-model="audioModule.wave.amplitude"
 					class="ModuleCard__slider"
 					:disabled="disabled"
@@ -31,8 +31,14 @@
 					:min="0.01"
 					orientation="vertical"
 					@change="onWaveChangeCB"
-				></VsSlider>
+				></VsSlider> -->
 
+				<CircleSlider
+					v-model="audioModule.wave.amplitude"
+					:min="0.01"
+					:max="50"
+				></CircleSlider>
+				<!--
 				<VsSlider
 					v-model="audioModule.wave.frequency"
 					class="ModuleCard__slider"
@@ -41,7 +47,13 @@
 					:max="1000"
 					orientation="vertical"
 					@change="onWaveChangeCB"
-				></VsSlider>
+				></VsSlider> -->
+
+				<CircleSlider
+					v-model="audioModule.wave.frequency"
+					:min="0.01"
+					:max="1000"
+				></CircleSlider>
 			</div>
 		</div>
 
@@ -73,6 +85,7 @@
 </template>
 
 <script setup lang="ts">
+import CircleSlider from "@/components/common/CircleSlider/CircleSlider.vue";
 import ToggleButton from "@/components/common/ToggleButton/ToggleButton.vue";
 import VsButton from "@/components/common/VsButton/VsButton.vue";
 import VsCard from "@/components/common/VsCard/VsCard.vue";
@@ -150,11 +163,14 @@ $disabled-color: gray;
 	&__sliders {
 		width: 100%;
 		flex: 1;
-
-		max-height: 100%;
 		display: flex;
-		justify-content: center;
+		flex-direction: column;
 		align-items: center;
+		justify-content: center;
+		max-height: 100%;
+		// display: flex;
+		// justify-content: center;
+		// align-items: center;
 	}
 
 	&__center-slot {
