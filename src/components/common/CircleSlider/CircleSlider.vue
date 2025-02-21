@@ -3,14 +3,16 @@
 		<div
 			ref="knob"
 			class="circle-slider__knob"
-			@mousemove="handleProgress"
+			@mousemove="e => handleProgress(e, min, max)"
 			@mousedown="isRotating = true"
 			@mouseup="isRotating = false"
-		></div>
+		>
+			<span>{{ progress }}</span>
+		</div>
 
-		<svg width="300" height="300" :style="cssVars">
-			<circle class="circle circle--inner" cx="150" cy="150" r="140"></circle>
-			<circle class="circle circle--outer" cx="150" cy="150" r="140"></circle>
+		<svg width="200" height="200" :style="cssVars">
+			<circle class="circle circle--inner" cx="100" cy="100" r="90"></circle>
+			<circle class="circle circle--outer" cx="100" cy="100" r="90"></circle>
 		</svg>
 	</div>
 </template>
@@ -19,12 +21,18 @@
 import { computed, ref, useTemplateRef } from "vue";
 
 interface CircleSliderProps {
-	fillColor: string;
-	underColor: string;
+	fillColor?: string;
+	underColor?: string;
+	min?: number;
+	max?: number;
 }
 
-const { fillColor = "#ff0000", underColor = "#000" } =
-	defineProps<CircleSliderProps>();
+const {
+	fillColor = "#ff0000",
+	underColor = "#000",
+	min = 0,
+	max = 100,
+} = defineProps<CircleSliderProps>();
 
 const progress = defineModel<number>({
 	default: 50,
@@ -32,11 +40,13 @@ const progress = defineModel<number>({
 
 const isRotating = ref();
 const knob = useTemplateRef("knob");
-const radius = 140;
+const radius = 90;
 const circunferenceLength = computed(() => 2 * Math.PI * radius);
 const strokeDasharray = computed(() => circunferenceLength.value * 0.75);
 const dashOffset = computed(
-	() => circunferenceLength.value - strokeDasharray.value * progress.value
+	() =>
+		circunferenceLength.value -
+		strokeDasharray.value * valueToPercentage(progress.value, min, max)
 );
 const cssVars = computed(() => ({
 	"--circle-radius": radius,
@@ -47,32 +57,68 @@ const cssVars = computed(() => ({
 	"--circ-length": circunferenceLength.value,
 }));
 
-function handleProgress(e: MouseEvent) {
+/**
+ * Calculates the position of the mouse inside the element and its angle to obtain the progress of the slider
+ * @param e the event object
+ * @param minVal minmum value the model can take
+ * @param maxVal maximum value the model can take
+ */
+function handleProgress(e: MouseEvent, minVal: number = 0, maxVal: number = 1) {
 	if (!isRotating.value || !knob.value) return;
 
 	//center position
-	const posX =
+	const centerX =
 		knob.value.getBoundingClientRect().left + knob.value.clientWidth / 2;
-	const posY =
+	const centerY =
 		knob.value.getBoundingClientRect().top + knob.value.clientHeight / 2;
 
-	console.log(`element center=> x:${posX} y:${posY}`);
-
-	console.log(`mouse position=> x:${e.clientX} y:${e.clientY}`);
-
-	const deltaX = e.clientX - posX;
-	const deltaY = e.clientY - posY;
+	const deltaX = e.clientX - centerX;
+	const deltaY = e.clientY - centerY;
 
 	// console.log(deltaX, deltaY);
 	console.log(`difference with center=> x:${deltaX} y:${deltaY}`);
 
+	//angle in radians
 	const angle = Math.atan2(deltaY, deltaX);
 	const angleDegs = (angle * 180) / Math.PI;
-	const rotationAngle = (angleDegs - 135 + 160) % 360;
 
-	progress.value = rotationAngle / 270;
+	//135 is how much the circle is rotated
+	// const pointerAngle = angleDegs - 135 - 45;
+	// const rotationAngle = (angleDegs + 230) % 360;
+	const rotationAngle = (angleDegs - 135 + 360) % 360;
+
+	//if we get to the top we stop
+	if (rotationAngle > 270) return;
+
+	const progressPercent = rotationAngle / 270;
+
+	progress.value = percentageToValue(progressPercent, minVal, maxVal);
 	console.log("\n");
 	// console.log(progress.value);
+}
+
+/**
+ * Transforms a percentage into its corresponding value between min and max
+ * @param percentage Progress of the slider in percentage
+ * @param min minimum value the model of the component can take
+ * @param max maximum value the model of the component can take
+ */
+function percentageToValue(
+	percentage: number,
+	min: number = 0,
+	max: number = 1
+) {
+	return percentage * (max - min) + min;
+}
+
+/**
+ * Turns a value into a percentage to fill the slider with
+ * @param value Current value of the component's model
+ * @param min minimum value the model of the component can take
+ * @param max maximum value the model of the component can take
+ */
+function valueToPercentage(value: number, min: number = 0, max: number = 1) {
+	return (value - min) / (max - min);
 }
 </script>
 
@@ -87,8 +133,8 @@ function handleProgress(e: MouseEvent) {
 
 	&__knob {
 		z-index: 1;
-		width: 300px;
-		height: 300px;
+		width: 200px;
+		height: 200px;
 		background-color: transparent;
 		border-radius: 50%;
 		position: absolute;
@@ -97,18 +143,14 @@ function handleProgress(e: MouseEvent) {
 		transform: translate(-50%, -50%);
 		overflow: hidden;
 
-		&::before {
-			content: "";
-
-			background-color: transparent;
-			width: 100%;
-			height: 100%;
-			z-index: -100;
-		}
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 }
 
 .circle {
+	cursor: pointer;
 	z-index: 3;
 	fill: none;
 	stroke-width: 15px;

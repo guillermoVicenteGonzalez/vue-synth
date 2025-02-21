@@ -1,13 +1,10 @@
-
 import type { Meta, StoryObj } from "@storybook/vue3";
-import  CircleSlider  from "./CircleSlider.vue"
-
-
+import CircleSlider from "./CircleSlider.vue";
 
 const meta: Meta<typeof CircleSlider> = {
-	title: 'CircleSlider',
-  component: CircleSlider,
-  argTypes: {},
+	title: "CircleSlider",
+	component: CircleSlider,
+	argTypes: {},
 };
 
 export default meta;
