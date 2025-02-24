@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, useTemplateRef } from "vue";
+import { computed, ref, useTemplateRef, watch } from "vue";
 
 type circleSliderVariants = "default" | "elevated";
 
@@ -62,6 +62,12 @@ const {
 
 const progress = defineModel<number>({
 	default: 0,
+});
+
+const emit = defineEmits<(e: "change", value: typeof progress.value) => void>();
+
+watch(progress, () => {
+	emit("change", progress.value);
 });
 
 // const size = 70;
@@ -108,8 +114,6 @@ function handleProgress(e: MouseEvent, minVal: number = 0, maxVal: number = 1) {
 	);
 
 	progress.value = percentageToValue(progressPercent, minVal, maxVal);
-
-	// console.log(progress.value);
 }
 
 function handleClick(e: MouseEvent) {
@@ -138,9 +142,6 @@ function calculateProgressPercent(
 	const deltaX = cursorX - centerX;
 	const deltaY = cursorY - centerY;
 
-	// console.log(deltaX, deltaY);
-	console.log(`difference with center=> x:${deltaX} y:${deltaY}`);
-
 	//angle in radians
 	const angle = Math.atan2(deltaY, deltaX);
 	const angleDegs = (angle * 180) / Math.PI;
@@ -157,7 +158,6 @@ function calculateProgressPercent(
 	const progressPercent = rotationAngle / 270;
 
 	return progressPercent;
-	// console.log(progress.value);
 }
 
 /**

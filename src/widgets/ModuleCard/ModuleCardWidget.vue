@@ -38,6 +38,7 @@
 					:disabled="disabled"
 					:min="0.01"
 					:max="50"
+					@change="onWaveChangeCB"
 				></CircleSlider>
 				<!--
 				<VsSlider
@@ -55,6 +56,7 @@
 					:disabled="disabled"
 					:min="0.01"
 					:max="1000"
+					@change="onWaveChangeCB"
 				></CircleSlider>
 			</div>
 		</div>
