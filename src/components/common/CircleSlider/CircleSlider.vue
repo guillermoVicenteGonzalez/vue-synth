@@ -31,10 +31,25 @@
 			></circle>
 		</svg>
 	</div>
+
+	<ContextMenu
+		class="circle-slider__context-menu"
+		:visible="contextMenuVisible"
+		:pos-x="contextMenuPos.x"
+		:pos-y="contextMenuPos.y"
+		@close="contextMenuVisible = false"
+	>
+		<ul>
+			<li>Set value</li>
+			<li>Reset defaul</li>
+			<li>Copy value</li>
+		</ul>
+	</ContextMenu>
 </template>
 
 <script setup lang="ts">
 import { computed, ref, useTemplateRef, watch } from "vue";
+import ContextMenu from "../ContextMenu/ContextMenu.vue";
 
 type circleSliderVariants = "default" | "elevated";
 
@@ -82,6 +97,10 @@ const dashOffset = computed(
 		strokeDasharray.value * valueToPercentage(progress.value, min, max)
 );
 
+//context menu vars
+const contextMenuVisible = ref(false);
+const contextMenuPos = ref<{ x: number; y: number }>({ x: 0, y: 0 });
+
 const cssClasses = computed(() => ({
 	"circle-slider--disabled": disabled,
 	[`circle-slider--${variant}`]: variant != null,
@@ -121,6 +140,12 @@ function handleClick(e: MouseEvent) {
 	handleProgress(e, min, max);
 	isRotating.value = false;
 }
+
+// function resetDefault() {}
+
+// function copuValue() {}
+
+// function setNewValue() {}
 
 /**
  * Calculates the position of the mouse inside the element and its angle to obtain the progress of the slider
@@ -186,6 +211,9 @@ function valueToPercentage(value: number, min: number = 0, max: number = 1) {
 
 function handleRightClick(e: MouseEvent) {
 	e.preventDefault();
+	contextMenuVisible.value = true;
+	contextMenuPos.value.x = e.clientX;
+	contextMenuPos.value.y = e.clientY;
 }
 
 // function calculateDimensions() {}
@@ -244,6 +272,23 @@ function handleRightClick(e: MouseEvent) {
 			stroke: var(--fill-color);
 			stroke-dasharray: var(--circ-length);
 			stroke-dashoffset: var(--stroke-offset);
+		}
+	}
+
+	&__context-menu {
+		padding: 1rem 0;
+		overflow: hidden;
+		ul {
+			list-style: none;
+
+			li {
+				font-size: 1.6rem;
+				padding: 0.5rem 2rem;
+				&:hover {
+					cursor: pointer;
+					background-color: lightgray;
+				}
+			}
 		}
 	}
 

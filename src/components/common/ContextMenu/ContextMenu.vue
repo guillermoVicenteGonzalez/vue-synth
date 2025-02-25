@@ -1,0 +1,68 @@
+<template v-if="visible">
+	<div
+		v-if="visible"
+		ref="selfReference"
+		class="context-menu"
+		:class="classObject"
+	>
+		<slot></slot>
+		<div class="overlay" @click="handleCloseMenu"></div>
+	</div>
+</template>
+
+<script setup lang="ts">
+import useClickOutside from "@/composables/useClickOutside";
+import { computed, ref } from "vue";
+
+type ContextMenuAnimations = "top" | "bot" | "left" | "right" | null;
+
+interface ContextMenuProps {
+	posX?: number;
+	posY?: number;
+	animation?: ContextMenuAnimations;
+	visible?: boolean;
+}
+
+const {
+	posX = 0,
+	posY = 0,
+	animation,
+	visible = false,
+} = defineProps<ContextMenuProps>();
+
+const emit = defineEmits<(e: "close") => void>();
+
+const selfReference = ref();
+
+useClickOutside(selfReference, () => {
+	emit("close");
+});
+
+const classObject = computed(() => ({
+	[`context-menu--${animation}`]: animation,
+}));
+
+function handleCloseMenu() {
+	if (visible) emit("close");
+}
+</script>
+
+<style lang="scss" scoped>
+.context-menu {
+	z-index: 10;
+	background-color: #fff;
+	position: absolute;
+	top: v-bind(posY);
+	left: v-bind(posX);
+	padding: 2rem;
+	border-radius: 10px;
+	box-shadow: 0px 1px 3px 1px #00000026;
+}
+
+.overlay {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	z-index: 90;
+}
+</style>

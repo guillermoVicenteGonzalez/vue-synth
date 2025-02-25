@@ -9,7 +9,9 @@
 
 		"baseUrl": ".",
 		"paths": {
-			"@/*": ["./src/*"]
+			"@/*": ["./src/*"],
+			"@components/*": ["./src/components/*"],
+			"@composables/*": ["./src/composables/*"]
 		},
 
 		//linting
