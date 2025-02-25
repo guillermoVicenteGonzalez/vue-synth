@@ -72,7 +72,10 @@ function handleKeyRelease(e: KeyboardEvent) {
 	}
 }
 
-//refactor
+/**
+ * TODO
+ * ! REFACTOR
+ */
 function playNote() {
 	if (sourceCluster.modules.length > 0) {
 		synthModule.play(note);
@@ -81,26 +84,13 @@ function playNote() {
 
 function stopNote() {
 	synthModule.stop();
-	// oscillators.forEach(osc => {
-	// 	osc.stop();
-	// 	osc.disconnect();
-	// });
-
-	// for (const osc of oscillators) {
-	// 	osc.stop();
-	// 	osc.disconnect();
-	// }
-
-	// oscillators = [];
 }
 
 function notePressed() {
 	playNote();
-	// oscillators.push(...oscs);
 }
 
 function keySetup() {
-	console.log(keycode);
 	document.addEventListener("keydown", handleKeyPress);
 	document.addEventListener("keyup", handleKeyRelease);
 }

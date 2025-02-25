@@ -62,9 +62,9 @@ import VsSelector from "@/components/common/VsSelector/VsSelector.vue";
 import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
 import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
 import type AudioCluster from "@/models/AudioCluster";
-import type AudioModule from "@/models/AudioModule";
+import AudioModule from "@/models/AudioModule";
 import FilterHandler from "@/models/FilterHandler";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 
 enum filterTypes {
 	lowpass = "lowpass",
@@ -105,11 +105,29 @@ watch(disabled, () => {
 	else source.value.attachEffect(filter.value);
 });
 
+/**
+ * Every time sources change (additions or deletion of modules)
+ * We check that our current source still exist.
+ * If it does not exist => we reset the source to undefined-
+ * This covers the scenario where a module that had this filter attached is deleted
+ */
+watch(sources.modules, () => {
+	if (source.value) {
+		const exists = sources.modules.includes(source.value);
+		if (!exists) source.value = undefined;
+	}
+});
+
 const emit = defineEmits<{
 	(e: "delete", value: BiquadFilterNode | undefined): void;
 }>();
 
-function handleSelectModule(moduleName: string | undefined) {
+/**
+ * Given a module name, searches sources.modules for it and assigns it to source
+ * If no module name is provided => detachment, we detach the filter from the previous source and assign source = undefined
+ * @param moduleName
+ */
+function handleSelectModule(moduleName: string | undefined = undefined) {
 	//we detach the current module from the in	ternal component filter
 	if (!moduleName || moduleName == "") {
 		if (!source.value) return;
@@ -141,6 +159,15 @@ onMounted(() => {
 	if (context != null && filter.value != undefined) {
 		filterHandler.value.setNode(filter.value);
 	}
+});
+
+onUnmounted(() => {
+	//si hay source => detach
+	if (source.value) {
+		handleSelectModule();
+	}
+	//filter = null;
+	// filter.value = undefined;
 });
 </script>
 

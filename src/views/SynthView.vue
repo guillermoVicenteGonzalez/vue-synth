@@ -3,18 +3,17 @@
 		<template #header>Header</template>
 		<template #components>
 			<div class="components">
-				<ModuleCardListWidget
-					v-model="VisualizationAudioCluster"
-				></ModuleCardListWidget>
+				<ModuleCardListWidget v-model="MainAudioCluster"></ModuleCardListWidget>
 				<!-- Esto tiene que ser un widget -->
 				<EffectListWidget
 					v-model="effects"
 					:context="mainContext"
-					:sources="VisualizationAudioCluster"
+					:sources="MainAudioCluster"
 				></EffectListWidget>
 				<div class="components__controls">
 					<VsButton @click="createNewModule">New Wave</VsButton>
 					<VsButton @click="createEffect('filter')">New filter</VsButton>
+					<VsButton @click="deleteAll()">Delete all</VsButton>
 				</div>
 			</div>
 		</template>
@@ -37,7 +36,7 @@
 			<KeyboardWidget
 				:envelope="envelope"
 				:context="mainContext"
-				:source-cluster="VisualizationAudioCluster"
+				:source-cluster="MainAudioCluster"
 			></KeyboardWidget>
 		</template>
 		<template #footer>
@@ -65,7 +64,7 @@ const MAX_EFFECTS = 5;
 // const audioModules = ref<AudioModule[]>([]);
 const mainContext = ref<AudioContext>(new AudioContext());
 const merger = ref<ChannelMergerNode>(mainContext.value.createChannelMerger(1));
-const VisualizationAudioCluster = ref<AudioCluster>(
+const MainAudioCluster = ref<AudioCluster>(
 	new AudioCluster(mainContext.value, merger.value)
 );
 const envelope = ref<AudioEnvelope>({
@@ -77,19 +76,9 @@ const envelope = ref<AudioEnvelope>({
 
 const effects = ref<AudioEffect[]>([]);
 
-// const waves = computed((): Wave[] => {
-// 	// return audioModules.value.map(module => module.wave);
-// 	if (
-// 		!VisualizationAudioCluster.value ||
-// 		VisualizationAudioCluster.value.modules.length == 0
-// 	)
-// 		return [];
-// 	return VisualizationAudioCluster.value.modules.map(module => module.wave);
-// });
-
 function createNewModule() {
-	const waveName = `wave ${VisualizationAudioCluster.value.modules.length}`;
-	VisualizationAudioCluster.value.createModule(waveName, "sine");
+	const waveName = `wave ${MainAudioCluster.value.modules.length}`;
+	MainAudioCluster.value.createModule(waveName, "sine");
 }
 
 function createEffect(effectType: string) {
@@ -105,6 +94,14 @@ function createFilter(sourceCtx: AudioContext) {
 	newFilter.type = "lowpass";
 	newFilter.frequency.setTargetAtTime(200, sourceCtx.currentTime, 0);
 	return newFilter;
+}
+
+function deleteAll() {
+	MainAudioCluster.value.modules.forEach(module => {
+		module.destroyModule();
+	});
+	effects.value = [];
+	MainAudioCluster.value.modules = [];
 }
 
 onMounted(() => {

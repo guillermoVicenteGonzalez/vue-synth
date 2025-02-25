@@ -42,8 +42,9 @@ export default class AudioCluster {
 	}
 
 	deleteModuleByIndex(index: number) {
-		const deleted = this.modules.splice(index, 1);
-		return deleted[0];
+		const deleted = this.modules.splice(index, 1)[0];
+		deleted.destroyModule();
+		return deleted;
 	}
 
 	deleteModule(module: AudioModule) {

@@ -1,9 +1,10 @@
 <template>
 	<div v-if="cluster" class="ModuleCardList">
 		<ModuleCardWidget
-			v-for="(module, index) in cluster.modules"
+			v-for="(_module, index) in cluster.modules"
 			:key="index"
 			v-model="cluster.modules[index]"
+			@delete="deleteModule(index)"
 		></ModuleCardWidget>
 	</div>
 </template>
@@ -13,6 +14,10 @@ import type AudioCluster from "@/models/AudioCluster";
 import ModuleCardWidget from "@/widgets/ModuleCard/ModuleCardWidget.vue";
 
 const cluster = defineModel<AudioCluster>();
+
+function deleteModule(index: number) {
+	if (cluster.value) cluster.value.deleteModuleByIndex(index);
+}
 </script>
 
 <style lang="scss" scoped>

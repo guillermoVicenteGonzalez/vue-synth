@@ -8,6 +8,9 @@
 	>
 		<div class="ModuleCard__handle">
 			<ToggleButton v-model="disabled"></ToggleButton>
+			<VsButton variant="round" class="delete-btn" @click="deleteModule"
+				>X</VsButton
+			>
 		</div>
 
 		<div class="ModuleCard__left-slot">
@@ -18,23 +21,45 @@
 				@change="onWaveChangeCB"
 			></VsSelector>
 			<div class="ModuleCard__sliders">
-				<VsSlider
+				<!-- <VsSlider
 					v-model="audioModule.wave.amplitude"
+					class="ModuleCard__slider"
 					:disabled="disabled"
-					:label="audioModule.wave.amplitude"
+					label="amp"
 					:max="50"
-					:min="0"
+					step="0.01"
+					:min="0.01"
 					orientation="vertical"
 					@change="onWaveChangeCB"
-				></VsSlider>
+				></VsSlider> -->
+
+				<CircleSlider
+					v-model="audioModule.wave.amplitude"
+					:default-value="10"
+					:disabled="disabled"
+					:min="0.01"
+					:max="50"
+					@change="onWaveChangeCB"
+				></CircleSlider>
+				<!--
 				<VsSlider
 					v-model="audioModule.wave.frequency"
+					class="ModuleCard__slider"
 					:disabled="disabled"
 					label="freq"
 					:max="1000"
 					orientation="vertical"
 					@change="onWaveChangeCB"
-				></VsSlider>
+				></VsSlider> -->
+
+				<CircleSlider
+					v-model="audioModule.wave.frequency"
+					:default-value="440"
+					:disabled="disabled"
+					:min="0.01"
+					:max="1000"
+					@change="onWaveChangeCB"
+				></CircleSlider>
 			</div>
 		</div>
 
@@ -66,7 +91,9 @@
 </template>
 
 <script setup lang="ts">
+import CircleSlider from "@/components/common/CircleSlider/CircleSlider.vue";
 import ToggleButton from "@/components/common/ToggleButton/ToggleButton.vue";
+import VsButton from "@/components/common/VsButton/VsButton.vue";
 import VsCard from "@/components/common/VsCard/VsCard.vue";
 import VsSelector from "@/components/common/VsSelector/VsSelector.vue";
 import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
@@ -77,7 +104,11 @@ import { computed, ref, watch } from "vue";
 
 const audioModule = defineModel<AudioModule>();
 const disabled = ref<boolean>(false);
-const zoom = ref<number>(300);
+const zoom = ref<number>(10000);
+
+const emit = defineEmits<{
+	(e: "delete", module: AudioModule | undefined): void;
+}>();
 
 const ModuleCardStyles = computed(() => {
 	return `ModuleCard ${disabled.value ? "ModuleCard--disabled" : null}`;
@@ -94,6 +125,10 @@ watch(disabled, () => {
 function onWaveChangeCB() {
 	audioModule.value?.updateModule();
 	return;
+}
+
+function deleteModule() {
+	emit("delete", audioModule.value);
 }
 </script>
 
@@ -113,9 +148,11 @@ $disabled-color: gray;
 	// background-color: global.$primary-color;
 
 	&__handle {
-		background-color: $handle-bg-color;
+		width: 100%;
 		height: 100%;
+		background-color: black;
 		display: flex;
+		gap: 1rem;
 		flex-direction: column;
 		align-items: center;
 		justify-content: start;
@@ -132,11 +169,14 @@ $disabled-color: gray;
 	&__sliders {
 		width: 100%;
 		flex: 1;
-
-		max-height: 100%;
 		display: flex;
-		justify-content: center;
+		flex-direction: column;
 		align-items: center;
+		justify-content: center;
+		max-height: 100%;
+		// display: flex;
+		// justify-content: center;
+		// align-items: center;
 	}
 
 	&__center-slot {

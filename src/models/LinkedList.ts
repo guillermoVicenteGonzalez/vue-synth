@@ -286,6 +286,18 @@ export class LinkedList<T> {
 	printList() {
 		if (this.first != null) this.#recursiveRun(this.first);
 	}
+
+	clean() {
+		let current = this.first;
+		while (current != null) {
+			const next = current.next;
+			current.next = null;
+			current.prev = null;
+			current = next;
+		}
+		this.first = this.last = null;
+		this.length = 0;
+	}
 }
 
 /**
@@ -396,6 +408,28 @@ export class EffectChain extends LinkedList<AudioEffect> {
 		detached.value.disconnect(nextNode);
 
 		return detached;
+	}
+
+	clean() {
+		if (this.length == 0 || this.first == null) {
+			this.source.disconnect(this.exit);
+			return;
+		}
+
+		let currentNode: LinkedNode<AudioEffect> | null = this.first;
+		this.source.disconnect(this.first?.value);
+
+		while (currentNode != null) {
+			if (!currentNode.next) currentNode.value.disconnect(this.exit);
+			else {
+				const nextNode = currentNode.next;
+				currentNode.value.disconnect(nextNode.value);
+			}
+
+			currentNode = currentNode.next;
+		}
+
+		super.clean();
 	}
 
 	// detachEffect(value: AudioEffect) {}

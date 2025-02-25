@@ -28,12 +28,12 @@
   - [ ] Distortion
   - [ ] LFO's
 - [ ] Controls
-  - [ ] Writable module freqs
-  - [ ] Module Freq reset to 440
-  - [ ] Module deletion
-  - [ ] Global clear
-    - [ ] Filters
-    - [ ] Modules
+  - [x] Writable module freqs
+  - [x] Module Freq reset to 440
+  - [x] Module deletion
+  - [x] Global clear
+    - [x] Filters
+    - [x] Modules
   - [ ] Global "detuning"
   - [ ] Wheel
 - [ ] Global volume controls
