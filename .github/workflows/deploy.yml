@@ -28,4 +28,4 @@ jobs:
         run: |
           cd $PROJECT_PATH
           cd docker
-          docker compose up front-prod -d
+          docker compose up --build front-prod -d
