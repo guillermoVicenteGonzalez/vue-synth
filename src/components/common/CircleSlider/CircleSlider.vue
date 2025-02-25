@@ -13,7 +13,7 @@
 			@mousedown="isRotating = true"
 			@mouseup="isRotating = false"
 		>
-			<span class="circle-slider__text">{{ progress.toFixed(0) }}</span>
+			<span class="circle-slider__text">{{ progress }}</span>
 		</div>
 
 		<svg width="100%" height="100%" :style="cssVars">
@@ -39,10 +39,14 @@
 		:pos-y="contextMenuPos.y"
 		@close="contextMenuVisible = false"
 	>
-		<ul>
-			<li>Set value</li>
-			<li>Reset defaul</li>
-			<li>Copy value</li>
+		<div v-if="valueInputVisible" class="circle-slider__context-menu__input">
+			<input v-model.number="progress" type="number" :min="min" :max="max" />
+		</div>
+
+		<ul v-else>
+			<li @click="setNewValue">Set value</li>
+			<li @click="resetDefault">Reset defaul</li>
+			<li @click="copyValue">Copy value</li>
 		</ul>
 	</ContextMenu>
 </template>
@@ -62,6 +66,7 @@ interface CircleSliderProps {
 	disabled?: boolean;
 	size?: number;
 	variant?: circleSliderVariants;
+	defaultValue?: number;
 }
 
 const {
@@ -72,6 +77,7 @@ const {
 	size = 80,
 	strokeWidth = ".8rem",
 	disabled = true,
+	defaultValue = 0,
 	variant,
 } = defineProps<CircleSliderProps>();
 
@@ -100,6 +106,7 @@ const dashOffset = computed(
 //context menu vars
 const contextMenuVisible = ref(false);
 const contextMenuPos = ref<{ x: number; y: number }>({ x: 0, y: 0 });
+const valueInputVisible = ref(false);
 
 const cssClasses = computed(() => ({
 	"circle-slider--disabled": disabled,
@@ -132,7 +139,9 @@ function handleProgress(e: MouseEvent, minVal: number = 0, maxVal: number = 1) {
 		e.clientY
 	);
 
-	progress.value = percentageToValue(progressPercent, minVal, maxVal);
+	progress.value = percentageToValue(progressPercent, minVal, maxVal).toFixed(
+		0
+	);
 }
 
 function handleClick(e: MouseEvent) {
@@ -141,11 +150,20 @@ function handleClick(e: MouseEvent) {
 	isRotating.value = false;
 }
 
-// function resetDefault() {}
+function resetDefault() {
+	progress.value = defaultValue;
+	contextMenuVisible.value = false;
+}
 
-// function copuValue() {}
+function copyValue() {
+	navigator.clipboard.writeText(progress.value.toString());
+	contextMenuVisible.value = false;
+}
 
-// function setNewValue() {}
+function setNewValue() {
+	console.log("set new value");
+	valueInputVisible.value = true;
+}
 
 /**
  * Calculates the position of the mouse inside the element and its angle to obtain the progress of the slider
@@ -212,6 +230,7 @@ function valueToPercentage(value: number, min: number = 0, max: number = 1) {
 function handleRightClick(e: MouseEvent) {
 	e.preventDefault();
 	contextMenuVisible.value = true;
+	valueInputVisible.value = false;
 	contextMenuPos.value.x = e.clientX;
 	contextMenuPos.value.y = e.clientY;
 }
@@ -278,6 +297,20 @@ function handleRightClick(e: MouseEvent) {
 	&__context-menu {
 		padding: 1rem 0;
 		overflow: hidden;
+
+		&__input {
+			padding: 1rem;
+			display: flex;
+			flex-direction: column;
+
+			input {
+				width: 10rem;
+				font-size: 1.6rem;
+				min-height: 3rem;
+				padding: 0rem 1rem;
+			}
+		}
+
 		ul {
 			list-style: none;
 
