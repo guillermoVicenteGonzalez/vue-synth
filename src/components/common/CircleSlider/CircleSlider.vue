@@ -40,7 +40,13 @@
 		@close="contextMenuVisible = false"
 	>
 		<div v-if="valueInputVisible" class="circle-slider__context-menu__input">
-			<input v-model.number="progress" type="number" :min="min" :max="max" />
+			<input
+				v-model.number="progress"
+				type="number"
+				:min="min"
+				:max="max"
+				:step="1"
+			/>
 		</div>
 
 		<ul v-else>
@@ -139,8 +145,8 @@ function handleProgress(e: MouseEvent, minVal: number = 0, maxVal: number = 1) {
 		e.clientY
 	);
 
-	progress.value = percentageToValue(progressPercent, minVal, maxVal).toFixed(
-		0
+	progress.value = Number(
+		percentageToValue(progressPercent, minVal, maxVal).toFixed(0)
 	);
 }
 

@@ -35,6 +35,7 @@
 
 				<CircleSlider
 					v-model="audioModule.wave.amplitude"
+					:default-value="10"
 					:disabled="disabled"
 					:min="0.01"
 					:max="50"
@@ -53,6 +54,7 @@
 
 				<CircleSlider
 					v-model="audioModule.wave.frequency"
+					:default-value="440"
 					:disabled="disabled"
 					:min="0.01"
 					:max="1000"
