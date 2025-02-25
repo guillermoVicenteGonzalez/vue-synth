@@ -6,7 +6,6 @@
 		:class="classObject"
 	>
 		<slot></slot>
-		<div class="overlay" @click="handleCloseMenu"></div>
 	</div>
 </template>
 
@@ -35,11 +34,11 @@ const emit = defineEmits<(e: "close") => void>();
 const selfReference = ref();
 
 useClickOutside(selfReference, () => {
-	emit("close");
+	handleCloseMenu();
 });
 
 const classObject = computed(() => ({
-	[`context-menu--${animation}`]: animation,
+	[`context-menu--${animation}-animation`]: animation,
 }));
 
 function handleCloseMenu() {
@@ -48,7 +47,11 @@ function handleCloseMenu() {
 </script>
 
 <style lang="scss" scoped>
+$animation-duration: 0.1s;
+$animation-timing-function: ease-in;
+
 .context-menu {
+	interpolate-size: allow-keywords;
 	z-index: 10;
 	background-color: #fff;
 	position: absolute;
@@ -57,12 +60,46 @@ function handleCloseMenu() {
 	padding: 2rem;
 	border-radius: 10px;
 	box-shadow: 0px 1px 3px 1px #00000026;
+
+	animation-duration: $animation-duration;
+	animation-timing-function: $animation-timing-function;
+
+	&--bot-animation {
+		animation-name: contextMenuAnimationBot;
+	}
+
+	&--top-animation {
+		animation-name: contextMenuAnimationTop;
+	}
 }
 
-.overlay {
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	z-index: 90;
+@keyframes contextMenuAnimationBot {
+	0% {
+		height: 0;
+		opacity: 0;
+	}
+
+	50% {
+		opacity: 1;
+	}
+
+	100% {
+		height: auto;
+	}
+}
+
+@keyframes contextMenuAnimationTop {
+	0% {
+		height: 0;
+		opacity: 0;
+	}
+
+	50% {
+		opacity: 1;
+	}
+
+	100% {
+		height: auto;
+	}
 }
 </style>

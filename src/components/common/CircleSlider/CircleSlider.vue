@@ -33,6 +33,7 @@
 	</div>
 
 	<ContextMenu
+		animation="bot"
 		class="circle-slider__context-menu"
 		:visible="contextMenuVisible"
 		:pos-x="contextMenuPos.x"
