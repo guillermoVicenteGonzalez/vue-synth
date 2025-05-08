@@ -25,6 +25,8 @@ const {
 	height = "100px",
 	minWidth = "10px",
 	minHeight = "50px",
+	maxWidth = "100%",
+	maxHeight = "100%",
 } = defineProps<VSCardProps>();
 </script>
 

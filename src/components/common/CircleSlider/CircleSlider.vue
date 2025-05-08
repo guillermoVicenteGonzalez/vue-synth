@@ -349,5 +349,13 @@ function handleRightClick(e: MouseEvent) {
 			}
 		}
 	}
+
+	@include respond(tab-port) {
+		--slider-size: 7rem;
+	}
+
+	@include respond(phone) {
+		--slider-size: 2rem;
+	}
 }
 </style>
