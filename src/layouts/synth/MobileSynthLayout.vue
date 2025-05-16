@@ -13,13 +13,17 @@
 					<slot name="filters" :active="true"> </slot>
 				</VsTab>
 			</VsTabs>
-			<div class="mobile-layout__components__actions">
-				<slot name="actions"></slot>
-			</div>
 		</div>
 
-		<div class="mobile-layout__display">
+		<div class="mobile-layout__actions">
+			<slot name="actions"></slot>
+		</div>
+
+		<div class="mobile-layout__analyser">
 			<slot name="analyser"></slot>
+		</div>
+
+		<div class="mobile-layout__envelope">
 			<slot name="envelope"></slot>
 		</div>
 
@@ -105,28 +109,35 @@ $piano-min-h: 0;
 		max-height: 40%;
 
 		display: grid;
-		grid-template-rows: 9fr 1fr;
+		// grid-template-rows: 9fr 1fr;
 
 		&__cards {
 			display: flex;
 			flex-direction: column;
 		}
-
-		&__actions {
-			// position: absolute;
-			gap: 1rem;
-		}
 	}
 
-	&__display {
-		height: fit-content;
-		min-height: 30%;
-		max-height: 40%;
+	&__actions {
+		// position: absolute;
+		gap: 1rem;
+		display: flex;
+		justify-content: space-around;
+	}
+
+	&__envelope {
+		max-height: 20%;
+		height: 100%;
+	}
+
+	&__analyser {
+		max-height: 10%;
+		height: 100%;
 	}
 
 	&__piano {
 		height: fit-content;
 		max-height: 20%;
+		height: 100%;
 		flex-basis: minmax(0, $piano-max-h);
 		background-color: green;
 	}

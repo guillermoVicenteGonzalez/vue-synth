@@ -8,7 +8,7 @@
 				:class="{ 'tabs__selector--active': index == activeTab }"
 				@click="handleSelectTab(index)"
 			>
-				{{ tab }} {{ index }}
+				{{ tab }}
 			</li>
 		</ul>
 
@@ -40,12 +40,15 @@ function handleSelectTab(i: number) {
 	height: 100%;
 	width: 100%;
 	overflow: hidden;
+	display: flex;
+	flex-direction: column;
 
 	&__navigation {
 		display: flex;
 		justify-content: center;
 		list-style: none;
 		gap: 4rem;
+		margin-bottom: 1.5rem;
 	}
 
 	&__content {
