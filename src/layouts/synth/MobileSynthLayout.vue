@@ -30,10 +30,6 @@
 		<div class="mobile-layout__piano">
 			<slot name="piano"></slot>
 		</div>
-
-		<div class="mobile-layout__footer">
-			<!-- <slot name="footer"></slot> -->
-		</div>
 	</div>
 </template>
 
