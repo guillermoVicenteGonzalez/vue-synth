@@ -125,6 +125,7 @@ const model = defineModel<AudioEnvelope>({
 		padding: 2rem;
 		align-content: center;
 		justify-content: space-around;
+		grid-template-rows: auto;
 	}
 
 	// height: fit-content;

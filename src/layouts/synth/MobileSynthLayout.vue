@@ -1,34 +1,45 @@
 <template>
-	<div class="synth-layout">
-		<div class="synth-layout__header">
+	<div class="mobile-layout">
+		<div class="mobile-layout__header">
 			<slot name="header"> </slot>
 		</div>
-		<VsTabs></VsTabs>
-		<div class="synth-layout__components">
-			<!-- <slot name="components"></slot> -->
-			<slot name="waves"></slot>
-			<slot name="filters"></slot>
-			<slot name="actions"></slot>
+		<div class="mobile-layout__components">
+			<VsTabs v-model="activeTab" :items="tabItems">
+				<VsTab :active="activeTab == 0">
+					<slot name="waves"></slot>
+				</VsTab>
+
+				<VsTab :active="activeTab == 1">
+					<slot name="filters" :active="true"> </slot>
+				</VsTab>
+			</VsTabs>
+			<div class="mobile-layout__components__actions">
+				<slot name="actions"></slot>
+			</div>
 		</div>
 
-		<div class="synth-layout__display">
-			<!-- <slot name="display"></slot> -->
-			<slot name="envelope"></slot>
+		<div class="mobile-layout__display">
 			<slot name="analyser"></slot>
+			<slot name="envelope"></slot>
 		</div>
 
-		<div class="synth-layout__piano">
+		<div class="mobile-layout__piano">
 			<slot name="piano"></slot>
 		</div>
 
-		<div class="synth-layout__footer">
+		<div class="mobile-layout__footer">
 			<!-- <slot name="footer"></slot> -->
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
+import VsTab from "@/components/common/VsTab/VsTab.vue";
 import VsTabs from "@/components/common/VsTabs/VsTabs.vue";
+import { ref } from "vue";
+
+const activeTab = ref<number>(0);
+const tabItems: string[] = ["waves", "filters", "effects"];
 </script>
 
 <style lang="scss" scoped>
@@ -56,7 +67,10 @@ $max-piano-h: 2fr;
 $min-footer-h: 0.5rem;
 $max-footer-h: 0.5fr;
 
-.synth-layout {
+$piano-max-h: 10rem;
+$piano-min-h: 0;
+
+.mobile-layout {
 	width: 100vw;
 	height: 100vh;
 
@@ -76,14 +90,45 @@ $max-footer-h: 0.5fr;
 	}
 
 	&__components {
-		background-color: purple;
-		width: 100%;
-		height: 50%;
+		// position: relative;
+		// background-color: purple;
+		// width: 100%;
+		// height: 50%;
 
-		height: 100%;
-		width: 100%;
-		grid-template-rows: minmax(80%, 10fr) minmax(10%, 1fr);
-		gap: 0.5rem;
+		// height: 100%;
+		// max-height: 50%;
+		// width: 100%;
+		// grid-template-rows: minmax(80%, 10fr) minmax(10%, 1fr);
+		// gap: 0.5rem;
+		background-color: purple;
+		min-height: 40%;
+		max-height: 40%;
+
+		display: grid;
+		grid-template-rows: 9fr 1fr;
+
+		&__cards {
+			display: flex;
+			flex-direction: column;
+		}
+
+		&__actions {
+			// position: absolute;
+			gap: 1rem;
+		}
+	}
+
+	&__display {
+		height: fit-content;
+		min-height: 30%;
+		max-height: 40%;
+	}
+
+	&__piano {
+		height: fit-content;
+		max-height: 20%;
+		flex-basis: minmax(0, $piano-max-h);
+		background-color: green;
 	}
 }
 </style>

@@ -1,14 +1,14 @@
 <template>
-	<div class="synth-layout">
-		<div class="synth-layout__components">
+	<div class="portrait-layout">
+		<div class="portrait-layout__components">
 			<slot name="waves"></slot>
 			<slot name="filters"></slot>
-			<div class="synth-layout__components__actions">
+			<div class="portrait-layout__components__actions">
 				<slot name="actions"></slot>
 			</div>
 		</div>
 
-		<div class="synth-layout__display">
+		<div class="portrait-layout__display">
 			<slot name="envelope"></slot>
 			<slot name="analyser"></slot>
 			<!-- <FoldContainer>
@@ -19,7 +19,7 @@
 			</FoldContainer> -->
 		</div>
 
-		<div class="synth-layout__piano">
+		<div class="portrait-layout__piano">
 			<FoldContainer>
 				<template #button-content>Show piano</template>
 				<template #content>
@@ -46,7 +46,7 @@ $max-display-h: 35%;
 $piano-max-h: 10rem;
 $piano-min-h: 0;
 
-.synth-layout {
+.portrait-layout {
 	width: 100vw;
 	height: 100vh;
 
