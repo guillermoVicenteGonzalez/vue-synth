@@ -5,6 +5,8 @@
 		@mouseleave="isPressed = false"
 		@mouseup="isPressed = false"
 		@mousedown="isPressed = true"
+		@touchstart.prevent="isPressed = true"
+		@touchend.prevent="isPressed = false"
 	>
 		{{ note.name }}<br />{{ note.black }}
 	</button>
@@ -105,15 +107,15 @@ onUnmounted(() => eventCleanup());
 </script>
 
 <style lang="scss" scoped>
-$key-width: 3rem;
 $pressed-color: gray;
 $key-color: #fff;
 
 .keyboard-key {
+	--key-width: 3rem;
 	border: none;
 	background-color: $key-color;
-	height: 100%;
-	width: $key-width;
+	// height: 100%;
+	width: var(--key-width);
 	cursor: pointer;
 
 	&--pressed {
@@ -123,8 +125,16 @@ $key-color: #fff;
 
 	&--black {
 		background-color: black;
-		width: calc($key-width / 2);
+		width: calc(var(--key-width) / 2);
 		height: 70%;
+	}
+
+	@include respond(tab-port) {
+		--key-width: 5rem;
+
+		&--black {
+			width: calc(var(--key-width) / 2.5);
+		}
 	}
 }
 </style>

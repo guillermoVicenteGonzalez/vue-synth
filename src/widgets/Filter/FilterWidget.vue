@@ -1,10 +1,5 @@
 <template>
-	<VsCard
-		max-height="20rem"
-		max-width="50rem"
-		min-height="17rem"
-		:class="filterCardStyles"
-	>
+	<VsCard max-height="20rem" min-height="17rem" :class="filterCardStyles">
 		<div class="filterCard__handle">
 			<ToggleButton v-model="disabled"></ToggleButton>
 

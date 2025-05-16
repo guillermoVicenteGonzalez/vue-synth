@@ -32,8 +32,8 @@ const classObject = computed(() => {
 .vs-button {
 	// min-width: 100px;
 	// min-height: 50px;
-	width: 100px;
-	height: 50px;
+	width: 10rem;
+	height: 5rem;
 	border: none;
 	outline: none;
 	cursor: pointer;
@@ -51,6 +51,13 @@ const classObject = computed(() => {
 		width: 2rem;
 		height: 2rem;
 		color: black;
+	}
+
+	&:not(&--round) {
+		@include respond(tab-port) {
+			width: 8arem;
+			height: 3rem;
+		}
 	}
 }
 </style>

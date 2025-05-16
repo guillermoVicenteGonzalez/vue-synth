@@ -1,36 +1,31 @@
 <template>
-	<SynthLayout>
+	<component :is="currentLayout">
 		<template #header>Header</template>
-		<template #components>
-			<div class="components">
-				<ModuleCardListWidget v-model="MainAudioCluster"></ModuleCardListWidget>
-				<!-- Esto tiene que ser un widget -->
-				<EffectListWidget
-					v-model="effects"
-					:context="mainContext"
-					:sources="MainAudioCluster"
-				></EffectListWidget>
-				<div class="components__controls">
-					<VsButton @click="createNewModule">New Wave</VsButton>
-					<VsButton @click="createEffect('filter')">New filter</VsButton>
-					<VsButton @click="deleteAll()">Delete all</VsButton>
-				</div>
-			</div>
+		<template #waves>
+			<ModuleCardListWidget v-model="MainAudioCluster"></ModuleCardListWidget>
 		</template>
-		<template #display>
-			<div class="displays">
-				<div class="displays__pure">
-					<!-- <SumWavesDisplay :waves="waves"></SumWavesDisplay> -->
-					<EnvelopeControlWidget v-model="envelope" />
-				</div>
-				<div class="displays__analyser">
-					<WaveAnalyser
-						:source="merger"
-						:canvas-width="1080"
-						:canvas-height="200"
-					></WaveAnalyser>
-				</div>
-			</div>
+		<template #filters>
+			<EffectListWidget
+				v-if="MainAudioCluster"
+				v-model="effects"
+				:context="mainContext"
+				:sources="MainAudioCluster"
+			></EffectListWidget>
+		</template>
+		<template #actions>
+			<VsButton @click="createNewModule">New Wave</VsButton>
+			<VsButton @click="createEffect('filter')">New filter</VsButton>
+			<VsButton @click="deleteAll()">Delete all</VsButton>
+		</template>
+		<template #envelope>
+			<EnvelopeControlWidget v-model="envelope" />
+		</template>
+		<template #analyser>
+			<WaveAnalyser
+				:source="merger"
+				:canvas-width="1080"
+				:canvas-height="200"
+			></WaveAnalyser>
 		</template>
 		<template #piano>
 			<KeyboardWidget
@@ -43,12 +38,15 @@
 			Footer
 			<RouterLink to="/home">asdas</RouterLink>
 		</template>
-	</SynthLayout>
+	</component>
 </template>
 
 <script setup lang="ts">
 import VsButton from "@/components/common/VsButton/VsButton.vue";
 import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
+import { useMonitorSize } from "@/composables/useMonitorSize";
+import MobileSynthLayout from "@/layouts/synth/MobileSynthLayout.vue";
+import PortraitSynthLayout from "@/layouts/synth/PortraitSynthLayout.vue";
 import SynthLayout from "@/layouts/synth/SynthLayout.vue";
 import AudioCluster from "@/models/AudioCluster";
 import type { AudioEnvelope } from "@/models/AudioEnvelope";
@@ -57,7 +55,21 @@ import EffectListWidget from "@/widgets/EffectList/EffectListWidget.vue";
 import EnvelopeControlWidget from "@/widgets/EnvelopeControl/EnvelopeControlWidget.vue";
 import KeyboardWidget from "@/widgets/Keyboard/KeyboardWidget.vue";
 import ModuleCardListWidget from "@/widgets/ModuleCardList/ModuleCardListWidget.vue";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
+
+const { isMobile, browserHeight } = useMonitorSize();
+
+const currentLayout = computed(() => {
+	if (isMobile.value) {
+		return MobileSynthLayout;
+	}
+
+	if (browserHeight.value < 800) {
+		return PortraitSynthLayout;
+	}
+
+	return SynthLayout;
+});
 
 const MAX_EFFECTS = 5;
 
@@ -120,30 +132,20 @@ onMounted(() => {
 
 	&__controls {
 		grid-column: 1/-1;
-		background-color: green;
+		background-color: transparent;
 		position: relative;
 		bottom: 0;
-		height: 10rem;
-	}
-}
-
-.displays {
-	height: 100%;
-	resize: both;
-
-	display: grid;
-	grid-template-rows: [first-row start] minmax(200px, 3fr) [second-row end] minmax(
-			200px,
-			1fr
-		);
-
-	&__pure {
-		grid-row: first-row / second-row;
+		height: fit-content;
 		padding: 1rem;
+		gap: 1rem;
 	}
 
-	&__analyser {
-		grid-row: second-row / -1;
+	@include respond(tab-port) {
+		display: grid;
+	}
+
+	@include respond(phone) {
+		// display:;
 	}
 }
 

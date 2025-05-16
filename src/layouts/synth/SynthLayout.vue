@@ -5,11 +5,16 @@
 		</div>
 
 		<div class="synth-layout__components">
-			<slot name="components"></slot>
+			<slot name="waves"></slot>
+			<slot name="filters"></slot>
+			<div class="synth-layout__components__actions">
+				<slot name="actions"></slot>
+			</div>
 		</div>
 
 		<div class="synth-layout__display">
-			<slot name="display"></slot>
+			<slot name="envelope"></slot>
+			<slot name="analyser"></slot>
 		</div>
 
 		<div class="synth-layout__piano">
@@ -17,7 +22,7 @@
 		</div>
 
 		<div class="synth-layout__footer">
-			<slot name="footer"></slot>
+			<!-- <slot name="footer"></slot> -->
 		</div>
 	</div>
 </template>
@@ -79,6 +84,19 @@ $max-footer-h: 0.5fr;
 		grid-column: cards-start / cards-end;
 		background-color: $components-bg-color;
 		overflow: hidden;
+
+		height: 100%;
+		width: 100%;
+
+		display: grid;
+		grid-template-columns: 4fr 3fr;
+		grid-template-rows: minmax(75%, 10fr) minmax(3.5rem, 1fr);
+		gap: 0.5rem;
+
+		&__actions {
+			grid-column: 1/-1;
+			gap: 1rem;
+		}
 	}
 
 	&__display {
@@ -89,6 +107,15 @@ $max-footer-h: 0.5fr;
 		resize: both;
 
 		background-color: #fabada;
+
+		height: 100%;
+		resize: both;
+
+		display: grid;
+		grid-template-rows: [first-row start] minmax(200px, 3fr) [second-row end] minmax(
+				200px,
+				1fr
+			);
 	}
 
 	&__piano {
@@ -109,9 +136,116 @@ $max-footer-h: 0.5fr;
 		$min-components-w: 40rem;
 	}
 
-	@include global.respond(tab-land) {
+	@include respond(tab-land) {
 		background-color: red !important	;
 		$min-components-w: 30rem;
+	}
+
+	@include respond(tab-port) {
+		$min-body-h: 10vh;
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows:
+			[header-start] minmax($min-header-h, $max-header-h)
+			[header-end body-start] minmax($min-body-h, $max-body-h)
+			[body-end visualization-start] minmax(50px, 150px)
+			[visualization-end piano-start] minmax(50px, 100px);
+
+		&__header {
+			background-color: black;
+			grid-column: 1/ -1;
+			grid-row: header-start / header-end;
+			width: 100%;
+		}
+
+		&__components {
+			grid-row: body-start / body-end;
+			background-color: purple;
+			grid-column: 1 / -1;
+			overflow: hidden;
+
+			height: 100%;
+			width: 100%;
+			display: grid;
+			grid-template-columns: 4fr 3fr;
+			grid-template-rows: minmax(80%, 10fr) minmax(10%, 1fr);
+			gap: 0.5rem;
+		}
+
+		&__display {
+			// visibility: hidden;
+			grid-row: visualization-start / visualization-end;
+			grid-column: 1 / -1;
+			background-color: $display-bg-color;
+			overflow: hidden;
+			resize: both;
+
+			background-color: #fabada;
+		}
+
+		&__footer {
+			visibility: hidden;
+			grid-row: footer-start / footer-end;
+			grid-column: 1/ -1;
+			// height: $footer-h;
+			background-color: $footer-bg-color;
+			background-color: purple;
+		}
+
+		&__piano {
+			grid-row: piano-start / piano-end;
+			grid-column: 1 / -1;
+			background-color: rgb(48, 48, 48);
+		}
+	}
+
+	@include respond(phone) {
+		$min-body-h: 60vh;
+		grid-template-columns: 1fr;
+		grid-template-rows:
+			[header-start] minmax($min-header-h, $max-header-h)
+			[header-end body-start] minmax(7rem, 100rem)
+			[body-end visualization-start] 100px
+			[visualization-end piano-start] 200px;
+
+		&__header {
+			background-color: black;
+			grid-column: 1/ -1;
+			grid-row: header-start / header-end;
+			width: 100%;
+		}
+
+		&__components {
+			grid-row: body-start / body-end;
+			background-color: purple;
+			grid-column: 1 / -1;
+			overflow: hidden;
+		}
+
+		&__display {
+			// visibility: hidden;
+			grid-row: visualization-start / visualization-end;
+			grid-column: 1 / -1;
+			background-color: $display-bg-color;
+			overflow: hidden;
+			resize: both;
+
+			background-color: #fabada;
+		}
+
+		&__footer {
+			visibility: hidden;
+			grid-row: footer-start / footer-end;
+			grid-column: 1/ -1;
+			// height: $footer-h;
+			background-color: $footer-bg-color;
+			background-color: purple;
+		}
+
+		&__piano {
+			grid-row: piano-start / piano-end;
+			grid-column: 1 / -1;
+			background-color: rgb(48, 48, 48);
+		}
 	}
 }
 </style>

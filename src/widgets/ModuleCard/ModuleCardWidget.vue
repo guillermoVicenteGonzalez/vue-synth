@@ -2,7 +2,6 @@
 	<VsCard
 		v-if="audioModule"
 		max-height="20rem"
-		max-width="50rem"
 		min-height="17rem"
 		:class="ModuleCardStyles"
 	>
@@ -138,6 +137,7 @@ $handle-padding: 1rem;
 $disabled-color: gray;
 
 .ModuleCard {
+	width: 100%;
 	display: grid;
 	grid-template-columns:
 		[handle-start] minmax(30px, 0.5fr)
@@ -216,6 +216,9 @@ $disabled-color: gray;
 			background-color: rgba($disabled-color, 0.1);
 			backdrop-filter: blur(1px);
 		}
+	}
+
+	@include respond(phone) {
 	}
 }
 </style>
