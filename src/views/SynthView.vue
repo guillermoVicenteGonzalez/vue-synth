@@ -2,31 +2,27 @@
 	<component :is="currentLayout">
 		<template #header>Header</template>
 		<template #components>
-			<ModuleCardListWidget v-model="MainAudioCluster"></ModuleCardListWidget>
-			<!-- Esto tiene que ser un widget -->
-			<EffectListWidget
-				v-model="effects"
+			<WaveControls
+				v-model:cluster="MainAudioCluster"
+				v-model:effects="effects"
 				:context="mainContext"
-				:sources="MainAudioCluster"
-			></EffectListWidget>
-			<div class="components__controls">
-				<VsButton @click="createNewModule">New Wave</VsButton>
-				<VsButton @click="createEffect('filter')">New filter</VsButton>
-				<VsButton @click="deleteAll()">Delete all</VsButton>
-			</div>
+			>
+				<template #actions>
+					<VsButton @click="createNewModule">New Wave</VsButton>
+					<VsButton @click="createEffect('filter')">New filter</VsButton>
+					<VsButton @click="deleteAll()">Delete all</VsButton>
+				</template>
+			</WaveControls>
 		</template>
-		<template #display>
-			<div class="displays__pure">
-				<!-- <SumWavesDisplay :waves="waves"></SumWavesDisplay> -->
-				<EnvelopeControlWidget v-model="envelope" />
-			</div>
-			<div class="displays__analyser">
-				<WaveAnalyser
-					:source="merger"
-					:canvas-width="1080"
-					:canvas-height="200"
-				></WaveAnalyser>
-			</div>
+		<template #envelope>
+			<EnvelopeControlWidget v-model="envelope" />
+		</template>
+		<template #analyser>
+			<WaveAnalyser
+				:source="merger"
+				:canvas-width="1080"
+				:canvas-height="200"
+			></WaveAnalyser>
 		</template>
 		<template #piano>
 			<KeyboardWidget
@@ -52,10 +48,9 @@ import SynthLayout from "@/layouts/synth/SynthLayout.vue";
 import AudioCluster from "@/models/AudioCluster";
 import type { AudioEnvelope } from "@/models/AudioEnvelope";
 import { type AudioEffect } from "@/models/AudioModule";
-import EffectListWidget from "@/widgets/EffectList/EffectListWidget.vue";
 import EnvelopeControlWidget from "@/widgets/EnvelopeControl/EnvelopeControlWidget.vue";
 import KeyboardWidget from "@/widgets/Keyboard/KeyboardWidget.vue";
-import ModuleCardListWidget from "@/widgets/ModuleCardList/ModuleCardListWidget.vue";
+import WaveControls from "@/widgets/WaveControls/WaveControls.vue";
 import { computed, onMounted, ref } from "vue";
 
 const { isMobile, browserHeight } = useMonitorSize();
@@ -133,7 +128,7 @@ onMounted(() => {
 
 	&__controls {
 		grid-column: 1/-1;
-		background-color: green;
+		background-color: transparent;
 		position: relative;
 		bottom: 0;
 		height: fit-content;

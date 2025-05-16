@@ -5,14 +5,29 @@
 		</div>
 
 		<div class="synth-layout__display">
-			<slot name="display"></slot>
+			<slot name="envelope"></slot>
+			<slot name="analyser"></slot>
+			<!-- <FoldContainer>
+				<template #button-content>Show display</template>
+				<template #content>
+					<slot name="display"></slot>
+				</template>
+			</FoldContainer> -->
 		</div>
 
 		<div class="synth-layout__piano">
-			<slot name="piano"></slot>
+			<FoldContainer>
+				<template #button-content>Show piano</template>
+				<template #content>
+					<slot name="piano"></slot>
+				</template>
+			</FoldContainer>
 		</div>
 	</div>
 </template>
+<script setup lang="ts">
+import FoldContainer from "@/components/common/FoldContainer/FoldContainer.vue";
+</script>
 
 <style lang="scss" scoped>
 $header-color: black;
@@ -23,6 +38,9 @@ $footer-bg-color: blueviolet;
 
 $min-display-h: 3rem;
 $max-display-h: 35%;
+
+$piano-max-h: 10rem;
+$piano-min-h: 0;
 
 .synth-layout {
 	width: 100vw;
@@ -35,27 +53,27 @@ $max-display-h: 35%;
 
 	display: flex;
 	flex-direction: column;
+	justify-content: space-between;
 
 	&__components {
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
-		flex-basis: 5rem;
+		// min-height: 40%;
+		// max-height: 50%;
 		min-height: 40%;
-		max-height: 50%;
+		height: 100%;
 	}
 
 	&__display {
-		padding: 0.2rem;
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-
-		grid-template-rows: minmax($min-display-h, 100%);
-		max-height: $max-display-h;
+		height: fit-content;
+		max-height: 30%;
 	}
 
 	&__piano {
-		height: 100%;
-		display: block;
+		height: fit-content;
+		max-height: 20%;
+		flex-basis: minmax(0, $piano-max-h);
+		background-color: green;
 	}
 }
 </style>

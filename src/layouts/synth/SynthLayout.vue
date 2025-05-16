@@ -9,7 +9,8 @@
 		</div>
 
 		<div class="synth-layout__display">
-			<slot name="display"></slot>
+			<slot name="envelope"></slot>
+			<slot name="analyser"></slot>
 		</div>
 
 		<div class="synth-layout__piano">

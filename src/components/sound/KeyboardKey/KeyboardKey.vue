@@ -114,7 +114,7 @@ $key-color: #fff;
 .keyboard-key {
 	border: none;
 	background-color: $key-color;
-	height: 100%;
+	// height: 100%;
 	width: $key-width;
 	cursor: pointer;
 
