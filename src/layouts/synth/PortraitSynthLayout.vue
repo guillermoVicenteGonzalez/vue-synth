@@ -61,13 +61,12 @@ $piano-min-h: 0;
 
 	&__components {
 		min-height: 20rem;
-		max-height: 50%;
+		max-height: 30%;
 		height: 100%;
-		background-color: red;
 
 		display: grid;
 		grid-template-columns: 4fr 3fr;
-		grid-template-rows: minmax(75%, 10fr) minmax(3.5rem, 1fr);
+		grid-template-rows: minmax(5, 10fr) minmax(3.5rem, 1fr);
 		gap: 0.5rem;
 
 		&__actions {
@@ -78,13 +77,13 @@ $piano-min-h: 0;
 
 	&__display {
 		height: fit-content;
-		min-height: 30%;
-		max-height: 40%;
+		min-height: 25%;
+		max-height: 30%;
 	}
 
 	&__piano {
 		height: fit-content;
-		max-height: 20%;
+		min-height: 25%;
 		flex-basis: minmax(0, $piano-max-h);
 		background-color: green;
 	}
