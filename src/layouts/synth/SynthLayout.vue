@@ -83,10 +83,6 @@ $max-footer-h: 0.5fr;
 
 		height: 100%;
 		width: 100%;
-		display: grid;
-		grid-template-columns: 4fr 3fr;
-		grid-template-rows: minmax(80%, 10fr) minmax(10%, 1fr);
-		gap: 0.5rem;
 	}
 
 	&__display {

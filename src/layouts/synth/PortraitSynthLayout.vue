@@ -56,17 +56,14 @@ $piano-min-h: 0;
 	justify-content: space-between;
 
 	&__components {
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		// min-height: 40%;
-		// max-height: 50%;
-		min-height: 40%;
+		min-height: 20rem;
 		height: 100%;
 	}
 
 	&__display {
 		height: fit-content;
-		max-height: 30%;
+		min-height: 30%;
+		max-height: 40%;
 	}
 
 	&__piano {
