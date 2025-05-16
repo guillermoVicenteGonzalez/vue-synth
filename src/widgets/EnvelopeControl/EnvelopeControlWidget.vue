@@ -119,6 +119,14 @@ const model = defineModel<AudioEnvelope>({
 	display: grid;
 	grid-template-rows: 2fr 1fr;
 
+	@include respond(tab-port) {
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1.5rem;
+		padding: 2rem;
+		align-content: center;
+		justify-content: space-around;
+	}
+
 	// height: fit-content;
 	&__display {
 		// max-height: 100px;

@@ -5,7 +5,11 @@
 		</div>
 
 		<div class="synth-layout__components">
-			<slot name="components"></slot>
+			<slot name="waves"></slot>
+			<slot name="filters"></slot>
+			<div class="synth-layout__components__actions">
+				<slot name="actions"></slot>
+			</div>
 		</div>
 
 		<div class="synth-layout__display">
@@ -83,6 +87,16 @@ $max-footer-h: 0.5fr;
 
 		height: 100%;
 		width: 100%;
+
+		display: grid;
+		grid-template-columns: 4fr 3fr;
+		grid-template-rows: minmax(75%, 10fr) minmax(3.5rem, 1fr);
+		gap: 0.5rem;
+
+		&__actions {
+			grid-column: 1/-1;
+			gap: 1rem;
+		}
 	}
 
 	&__display {

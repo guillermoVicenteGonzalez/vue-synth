@@ -1,7 +1,11 @@
 <template>
 	<div class="synth-layout">
 		<div class="synth-layout__components">
-			<slot name="components"></slot>
+			<slot name="waves"></slot>
+			<slot name="filters"></slot>
+			<div class="synth-layout__components__actions">
+				<slot name="actions"></slot>
+			</div>
 		</div>
 
 		<div class="synth-layout__display">
@@ -57,7 +61,19 @@ $piano-min-h: 0;
 
 	&__components {
 		min-height: 20rem;
+		max-height: 50%;
 		height: 100%;
+		background-color: red;
+
+		display: grid;
+		grid-template-columns: 4fr 3fr;
+		grid-template-rows: minmax(75%, 10fr) minmax(3.5rem, 1fr);
+		gap: 0.5rem;
+
+		&__actions {
+			grid-column: 1/-1;
+			gap: 1rem;
+		}
 	}
 
 	&__display {

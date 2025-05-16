@@ -5,7 +5,10 @@
 		</div>
 		<VsTabs></VsTabs>
 		<div class="synth-layout__components">
-			<slot name="components"></slot>
+			<!-- <slot name="components"></slot> -->
+			<slot name="waves"></slot>
+			<slot name="filters"></slot>
+			<slot name="actions"></slot>
 		</div>
 
 		<div class="synth-layout__display">

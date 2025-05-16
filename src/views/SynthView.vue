@@ -1,18 +1,21 @@
 <template>
 	<component :is="currentLayout">
 		<template #header>Header</template>
-		<template #components>
-			<WaveControls
-				v-model:cluster="MainAudioCluster"
-				v-model:effects="effects"
+		<template #waves>
+			<ModuleCardListWidget v-model="MainAudioCluster"></ModuleCardListWidget>
+		</template>
+		<template #filters>
+			<EffectListWidget
+				v-if="MainAudioCluster"
+				v-model="effects"
 				:context="mainContext"
-			>
-				<template #actions>
-					<VsButton @click="createNewModule">New Wave</VsButton>
-					<VsButton @click="createEffect('filter')">New filter</VsButton>
-					<VsButton @click="deleteAll()">Delete all</VsButton>
-				</template>
-			</WaveControls>
+				:sources="MainAudioCluster"
+			></EffectListWidget>
+		</template>
+		<template #actions>
+			<VsButton @click="createNewModule">New Wave</VsButton>
+			<VsButton @click="createEffect('filter')">New filter</VsButton>
+			<VsButton @click="deleteAll()">Delete all</VsButton>
 		</template>
 		<template #envelope>
 			<EnvelopeControlWidget v-model="envelope" />
@@ -48,9 +51,10 @@ import SynthLayout from "@/layouts/synth/SynthLayout.vue";
 import AudioCluster from "@/models/AudioCluster";
 import type { AudioEnvelope } from "@/models/AudioEnvelope";
 import { type AudioEffect } from "@/models/AudioModule";
+import EffectListWidget from "@/widgets/EffectList/EffectListWidget.vue";
 import EnvelopeControlWidget from "@/widgets/EnvelopeControl/EnvelopeControlWidget.vue";
 import KeyboardWidget from "@/widgets/Keyboard/KeyboardWidget.vue";
-import WaveControls from "@/widgets/WaveControls/WaveControls.vue";
+import ModuleCardListWidget from "@/widgets/ModuleCardList/ModuleCardListWidget.vue";
 import { computed, onMounted, ref } from "vue";
 
 const { isMobile, browserHeight } = useMonitorSize();
