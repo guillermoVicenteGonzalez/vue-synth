@@ -5,8 +5,8 @@
 		@mouseleave="isPressed = false"
 		@mouseup="isPressed = false"
 		@mousedown="isPressed = true"
-		@touchstart.prevent="isPressed = true"
-		@touchend.prevent="isPressed = false"
+		@touchstart="isPressed = true"
+		@touchend="isPressed = false"
 	>
 		{{ note.name }}<br />{{ note.black }}
 	</button>
