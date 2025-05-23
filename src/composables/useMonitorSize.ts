@@ -14,14 +14,11 @@ export function useMonitorSize() {
 	});
 
 	const browserResized = () => {
-		alert("mounted");
-
 		sizes.browserWidth = window.innerWidth;
 		sizes.browserHeight = window.innerHeight;
 		sizes.deviceWidth = screen.width;
 		sizes.deviceHeight = screen.height;
 		sizes.isMobile = isMobile();
-		console.log(sizes.isMobile);
 	};
 
 	onMounted(() => {

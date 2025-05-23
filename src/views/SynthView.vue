@@ -61,16 +61,12 @@ const { isMobile, browserHeight } = useMonitorSize();
 
 const currentLayout = computed(() => {
 	if (isMobile) {
-		console.log("mobile");
 		return MobileSynthLayout;
 	}
 
 	if (browserHeight.value < 800) {
-		console.log("portrait");
 		return PortraitSynthLayout;
 	}
-
-	console.log("Synth");
 
 	return SynthLayout;
 });
