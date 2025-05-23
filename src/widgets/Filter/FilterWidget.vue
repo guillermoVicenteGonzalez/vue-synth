@@ -126,7 +126,6 @@ function handleSelectModule(moduleName: string | undefined = undefined) {
 	//we detach the current module from the in	ternal component filter
 	if (!moduleName || moduleName == "") {
 		if (!source.value) return;
-		console.log("detaching");
 		source.value.detachEffect(filter.value);
 		source.value = undefined;
 	}
