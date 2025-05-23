@@ -1,24 +1,27 @@
 import { onMounted, onUnmounted, reactive, toRefs } from "vue";
 
 export function useMonitorSize() {
+	const isMobile = () => {
+		return window.innerWidth <= 600;
+	};
+
 	const sizes = reactive({
 		browserWidth: window.innerWidth,
 		deviceWidth: screen.width,
 		browserHeight: window.innerHeight,
 		deviceHeight: screen.height,
-		isMobile: false,
+		isMobile: isMobile(),
 	});
 
 	const browserResized = () => {
+		alert("mounted");
+
 		sizes.browserWidth = window.innerWidth;
 		sizes.browserHeight = window.innerHeight;
 		sizes.deviceWidth = screen.width;
 		sizes.deviceHeight = screen.height;
 		sizes.isMobile = isMobile();
-	};
-
-	const isMobile = () => {
-		return window.innerWidth <= 600 ? true : false;
+		console.log(sizes.isMobile);
 	};
 
 	onMounted(() => {

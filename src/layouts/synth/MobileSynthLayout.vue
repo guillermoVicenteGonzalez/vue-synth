@@ -85,7 +85,10 @@ $piano-min-h: 0;
 		background-color: $header-color;
 		color: $header-text-color;
 		height: 3rem;
-		flex-basis: 3rem;
+		// flex-basis: 3rem;
+		// flex-grow: 0;
+		// flex-shrink: 0;
+		flex: 0 0 3rem;
 		width: 100%;
 	}
 
@@ -101,8 +104,9 @@ $piano-min-h: 0;
 		// grid-template-rows: minmax(80%, 10fr) minmax(10%, 1fr);
 		// gap: 0.5rem;
 		background-color: purple;
-		min-height: 40%;
-		max-height: 40%;
+		// min-height: 40%;
+		// max-height: 40%;
+		flex: 0 0 40%;
 
 		display: grid;
 		// grid-template-rows: 9fr 1fr;
@@ -121,7 +125,7 @@ $piano-min-h: 0;
 	}
 
 	&__envelope {
-		max-height: 20%;
+		max-height: 25%;
 		height: 100%;
 	}
 
@@ -132,10 +136,11 @@ $piano-min-h: 0;
 
 	&__piano {
 		height: fit-content;
-		max-height: 20%;
-		height: 100%;
+		max-height: 25%;
+		// height: 100%;
 		flex-basis: minmax(0, $piano-max-h);
 		background-color: green;
+		flex: 0 0 30%;
 	}
 }
 </style>

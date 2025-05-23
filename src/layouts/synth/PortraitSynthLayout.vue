@@ -9,8 +9,13 @@
 		</div>
 
 		<div class="portrait-layout__display">
-			<slot name="envelope"></slot>
-			<slot name="analyser"></slot>
+			<FoldContainer>
+				<template #button-content>Show controls</template>
+				<template #content>
+					<slot name="envelope"></slot>
+					<slot name="analyser"></slot>
+				</template>
+			</FoldContainer>
 			<!-- <FoldContainer>
 				<template #button-content>Show display</template>
 				<template #content>
