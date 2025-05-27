@@ -1,41 +1,43 @@
 <template>
 	<div class="portrait-layout">
+		<div class="portrait-layout__header">
+			<slot name="analyser"></slot>
+		</div>
+
 		<div class="portrait-layout__components">
 			<slot name="waves"></slot>
 			<slot name="filters"></slot>
-			<div class="portrait-layout__components__actions">
-				<slot name="actions"></slot>
+		</div>
+
+		<div class="portrait-layout__actions">
+			<div><slot name="actions"></slot></div>
+			<div>
+				<VsTabs v-model="activeTab" :items="tabItems"></VsTabs>
 			</div>
 		</div>
 
 		<div class="portrait-layout__display">
-			<FoldContainer>
-				<template #button-content>Show controls</template>
-				<template #content>
-					<slot name="envelope"></slot>
-					<slot name="analyser"></slot>
-				</template>
-			</FoldContainer>
-			<!-- <FoldContainer>
-				<template #button-content>Show display</template>
-				<template #content>
-					<slot name="display"></slot>
-				</template>
-			</FoldContainer> -->
+			<VsTab :active="activeTab == 0">
+				<slot name="envelope"></slot>
+			</VsTab>
+
+			<VsTab :active="activeTab == 1"> <slot name="piano"></slot> </VsTab>
+
+			<VsTab :active="activeTab == 2">
+				<slot name="display"></slot>
+			</VsTab>
 		</div>
 
-		<div class="portrait-layout__piano">
-			<FoldContainer>
-				<template #button-content>Show piano</template>
-				<template #content>
-					<slot name="piano"></slot>
-				</template>
-			</FoldContainer>
-		</div>
+		<slot name="piano"></slot>
 	</div>
 </template>
 <script setup lang="ts">
-import FoldContainer from "@/components/common/FoldContainer/FoldContainer.vue";
+import VsTab from "@/components/common/VsTab/VsTab.vue";
+import VsTabs from "@/components/common/VsTabs/VsTabs.vue";
+import { ref } from "vue";
+
+const tabItems = ["envelope", "piano", "effects"];
+const activeTab = ref<number>(0);
 </script>
 
 <style lang="scss" scoped>
@@ -64,26 +66,33 @@ $piano-min-h: 0;
 	flex-direction: column;
 	justify-content: space-between;
 
+	&__header {
+		max-height: 10%;
+	}
+
 	&__components {
-		min-height: 20rem;
-		max-height: 30%;
+		min-height: 40%;
+		max-height: 40%;
 		height: 100%;
 
 		display: grid;
 		grid-template-columns: 4fr 3fr;
 		grid-template-rows: minmax(5, 10fr) minmax(3.5rem, 1fr);
 		gap: 0.5rem;
+	}
 
-		&__actions {
-			grid-column: 1/-1;
-			gap: 1rem;
-		}
+	&__actions {
+		gap: 1rem;
+		height: 10%;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		font-size: 1.6rem;
 	}
 
 	&__display {
 		height: fit-content;
-		min-height: 25%;
-		max-height: 30%;
+		min-height: 40%;
+		max-height: 40%;
 	}
 
 	&__piano {
