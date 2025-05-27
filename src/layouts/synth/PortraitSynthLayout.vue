@@ -55,10 +55,10 @@ $piano-min-h: 0;
 
 .portrait-layout {
 	width: 100vw;
-	height: 100vh;
+	height: 100dvh;
 
 	max-width: 100vw;
-	max-height: 100vh;
+	max-height: 100dvh;
 
 	overflow: hidden;
 

@@ -130,6 +130,14 @@ $key-color: #fff;
 	}
 
 	@include respond(tab-port) {
+		--key-width: 7rem;
+
+		&--black {
+			width: calc(var(--key-width) / 2.5);
+		}
+	}
+
+	@include respond(phone) {
 		--key-width: 5rem;
 
 		&--black {
