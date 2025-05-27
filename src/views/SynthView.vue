@@ -57,10 +57,10 @@ import KeyboardWidget from "@/widgets/Keyboard/KeyboardWidget.vue";
 import ModuleCardListWidget from "@/widgets/ModuleCardList/ModuleCardListWidget.vue";
 import { computed, onMounted, ref } from "vue";
 
-const { isMobile, browserHeight } = useMonitorSize();
+const { isMobile, browserHeight, browserWidth } = useMonitorSize();
 
 const currentLayout = computed(() => {
-	if (isMobile) {
+	if (browserWidth.value <= 600) {
 		return MobileSynthLayout;
 	}
 

@@ -8,7 +8,7 @@
   - [ ] Visuals
   - [ ] Key functionality
     - [x] Natural keys
-    - [ ] Altered keys
+    - [x] Altered keys
     - [ ] Change central note
 - [ ] Audio module effects
   - [ ] Wave distortion => wave shaper
