@@ -20,7 +20,7 @@
 				@change="onWaveChangeCB"
 			></VsSelector>
 			<div class="ModuleCard__sliders">
-				<!-- <VsSlider
+				<VsSlider
 					v-model="audioModule.wave.amplitude"
 					class="ModuleCard__slider"
 					:disabled="disabled"
@@ -30,17 +30,18 @@
 					:min="0.01"
 					orientation="vertical"
 					@change="onWaveChangeCB"
-				></VsSlider> -->
+				></VsSlider>
 
 				<CircleSlider
 					v-model="audioModule.wave.amplitude"
+					class="ModuleCard__circle-slider"
 					:default-value="10"
 					:disabled="disabled"
 					:min="0.01"
 					:max="50"
 					@change="onWaveChangeCB"
 				></CircleSlider>
-				<!--
+
 				<VsSlider
 					v-model="audioModule.wave.frequency"
 					class="ModuleCard__slider"
@@ -49,10 +50,11 @@
 					:max="1000"
 					orientation="vertical"
 					@change="onWaveChangeCB"
-				></VsSlider> -->
+				></VsSlider>
 
 				<CircleSlider
 					v-model="audioModule.wave.frequency"
+					class="ModuleCard__circle-slider"
 					:default-value="440"
 					:disabled="disabled"
 					:min="0.01"
@@ -174,9 +176,25 @@ $disabled-color: gray;
 		align-items: center;
 		justify-content: center;
 		max-height: 100%;
-		// display: flex;
-		// justify-content: center;
-		// align-items: center;
+
+		@include respond(phone) {
+			flex-direction: row;
+		}
+	}
+
+	&__slider {
+		display: none;
+		@include respond(phone) {
+			display: flex;
+			flex-direction: column;
+		}
+	}
+
+	&__circle-slider {
+		display: block;
+		@include respond(phone) {
+			display: none;
+		}
 	}
 
 	&__center-slot {

@@ -54,7 +54,7 @@ $animation-timing-function: ease-in;
 	interpolate-size: allow-keywords;
 	z-index: 10;
 	background-color: #fff;
-	position: absolute;
+	position: fixed;
 	top: v-bind(posY);
 	left: v-bind(posX);
 	padding: 2rem;
