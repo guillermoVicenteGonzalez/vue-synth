@@ -168,7 +168,6 @@ function copyValue() {
 }
 
 function setNewValue() {
-	console.log("set new value");
 	valueInputVisible.value = true;
 }
 

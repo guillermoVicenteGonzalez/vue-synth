@@ -107,6 +107,7 @@ $piano-min-h: 0;
 		// min-height: 40%;
 		// max-height: 40%;
 		flex: 0 0 40%;
+		max-height: 40%;
 
 		display: grid;
 		// grid-template-rows: 9fr 1fr;
