@@ -7,7 +7,11 @@ export type AudioEffect = AudioNode | BiquadFilterNode;
 //Remember it goes osc(maybe end) -> effects(end) -> gain -> exit
 
 /**
- *
+ * Represents a basic audio source.
+ * It has a wave that serves as its model
+ * Then it has an input and exit nodes what will be attached at first
+ * Effects will be attacked between input and exit.
+ * SynthSource nodes (oscilladors) will be attached to input
  */
 export default class AudioModule {
 	name: string;
@@ -18,6 +22,9 @@ export default class AudioModule {
 	input: AudioNode;
 	exit: AudioNode; // Should be the merger or the ctx destination
 	disabled: boolean;
+	private _voices: number = 1;
+	private _voicesDetune: number = 0;
+	private max_voices: number = 20;
 
 	/**
 	 *
@@ -52,6 +59,32 @@ export default class AudioModule {
 		/**
 			The input is
 		*/
+	}
+
+	set voices(voicesNumber: number) {
+		if (voicesNumber > this.max_voices) {
+			this._voices = this.max_voices;
+		}
+
+		if (voicesNumber < 0) {
+			this._voices = 0;
+		}
+
+		this._voices = voicesNumber;
+	}
+
+	get voices(): number {
+		return this._voices;
+	}
+
+	set voicesDetune(detunePercentage: number) {
+		if (detunePercentage > 100) this._voicesDetune = 100;
+		if (detunePercentage < 0) this._voicesDetune = 0;
+		this._voicesDetune = detunePercentage;
+	}
+
+	get voicesDetune(): number {
+		return this._voicesDetune;
 	}
 
 	/**

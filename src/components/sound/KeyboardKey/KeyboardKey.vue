@@ -20,7 +20,7 @@ import { SynthModule } from "@/models/SynthSource";
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 
 interface KeyboardKeyProps {
-	keycode?: string;
+	keycode?: string; //If the key has a keycode, when that keycode (letter) is pressed on the keyboard, the play method will be used
 	context: AudioContext;
 	sourceCluster: AudioCluster;
 	note: Note;
