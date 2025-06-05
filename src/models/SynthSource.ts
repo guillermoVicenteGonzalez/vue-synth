@@ -12,7 +12,7 @@ export class SynthSource {
 	oscillators: OscillatorNode[] = [];
 	outputNode: AudioNode;
 	context: AudioContext;
-	voices: number = 5;
+	private _voices: number = 1;
 	detune: number = 100;
 
 	/**
@@ -20,7 +20,13 @@ export class SynthSource {
 	 * @param ctx - Audio context where the synth source will be created
 	 * @param output - Node where the output of the synth source will be connected to
 	 */
-	constructor(w: Wave, ctx: AudioContext, output: AudioNode) {
+	constructor(
+		w: Wave,
+		ctx: AudioContext,
+		output: AudioNode,
+		voices: number = 1
+	) {
+		this.voices = voices;
 		const { oscillators, gain } = this.#createSynthSource(w, ctx);
 		// this.osc = oscillator;
 		this.oscillators = oscillators;
@@ -32,6 +38,26 @@ export class SynthSource {
 		this.outputNode = output;
 		this.gain.connect(this.outputNode);
 		this.context = ctx;
+	}
+
+	set voices(v: number) {
+		// this.oscillators.forEach(o => {
+		// 	o.stop();
+		// 	o.disconnect(this.gain);
+		// });
+		// this.oscillators = [];
+		// for (let v = 0; v < this.voices; v++) {
+		// 	const osc = ctx.createOscillator();
+		// 	osc.frequency.setValueAtTime(w.frequency, ctx.currentTime);
+		// 	osc.type = w.form;
+		// 	oscillators.push(osc);
+		// 	osc.connect(gainNode);
+		// }
+		this._voices = v;
+	}
+
+	get voices(): number {
+		return this._voices;
 	}
 
 	/**
@@ -196,10 +222,12 @@ export class SynthModule {
 			const synthSource = new SynthSource(
 				module.wave,
 				this.context,
-				module.input
+				module.input,
+				module.voices
 			);
 			synthSource.setDetune(note.detune);
-			synthSource.addUnisonDetune(15);
+			synthSource.voices = module.voices;
+			synthSource.addUnisonDetune(module.voicesDetune);
 			sources.push(synthSource);
 		}
 

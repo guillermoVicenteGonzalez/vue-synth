@@ -64,7 +64,7 @@ const currentLayout = computed(() => {
 		return MobileSynthLayout;
 	}
 
-	if (browserHeight.value < 600) {
+	if (browserHeight.value < 500) {
 		return PortraitSynthLayout;
 	}
 

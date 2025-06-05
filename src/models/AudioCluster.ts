@@ -4,7 +4,9 @@ import type { waveForms } from "./wave";
 import Wave from "./wave";
 
 const MAX_MODULES = 5;
-
+/**
+ * The main module of the synth app. Contains a series of audio modules
+ */
 export default class AudioCluster {
 	modules: AudioModule[];
 	exit: AudioNode;
