@@ -34,8 +34,8 @@ $components-bg-color: white;
 $display-bg-color: white;
 $footer-bg-color: blueviolet;
 
-$min-components-w: 70rem;
-$max-components-w: 4fr;
+$min-components-w: 80rem;
+$max-components-w: 5fr;
 
 $min-display-w: 40rem;
 $max-display-w: 5fr;

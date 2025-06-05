@@ -60,11 +60,11 @@ import { computed, onMounted, ref } from "vue";
 const { isMobile, browserHeight, browserWidth } = useMonitorSize();
 
 const currentLayout = computed(() => {
-	if (browserWidth.value <= 600) {
+	if (browserWidth.value <= 400) {
 		return MobileSynthLayout;
 	}
 
-	if (browserHeight.value < 800) {
+	if (browserHeight.value < 500) {
 		return PortraitSynthLayout;
 	}
 

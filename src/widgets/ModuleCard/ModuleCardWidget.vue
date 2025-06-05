@@ -87,7 +87,49 @@
 			></VsSlider>
 		</div>
 
-		<div class="ModuleCard__right-slot"></div>
+		<div class="ModuleCard__right-slot">
+			<VsSlider
+				v-model="audioModule.voices"
+				class="ModuleCard__slider"
+				:disabled="disabled"
+				label="voices"
+				:max="16"
+				:step="1"
+				:min="1"
+				orientation="vertical"
+				@change="onWaveChangeCB"
+			></VsSlider>
+
+			<CircleSlider
+				v-model="audioModule.voices"
+				class="ModuleCard__circle-slider"
+				:default-value="10"
+				:disabled="disabled"
+				:min="1"
+				:max="16"
+				@change="onWaveChangeCB"
+			></CircleSlider>
+
+			<VsSlider
+				v-model="audioModule.voicesDetune"
+				class="ModuleCard__slider"
+				:disabled="disabled"
+				label="detune"
+				:max="100"
+				orientation="vertical"
+				@change="onWaveChangeCB"
+			></VsSlider>
+
+			<CircleSlider
+				v-model="audioModule.voicesDetune"
+				class="ModuleCard__circle-slider"
+				:default-value="20"
+				:disabled="disabled"
+				:min="0.01"
+				:max="100"
+				@change="onWaveChangeCB"
+			></CircleSlider>
+		</div>
 	</VsCard>
 </template>
 
@@ -142,11 +184,12 @@ $disabled-color: gray;
 	width: 100%;
 	display: grid;
 	grid-template-columns:
-		[handle-start] minmax(30px, 0.5fr)
-		[handle-end left-start] minmax(20px, 2fr)
-		[left-end body-start] minmax(100px, 6fr)
-		[body-end right-start] minmax(20px, 1fr);
-	grid-template-rows: minmax(10px, 1fr);
+		[handle-start] minmax(3rem, 0.5fr)
+		[handle-end left-start] minmax(2rem, 2fr)
+		[left-end body-start] minmax(10rem, 6fr)
+		[body-end right-start] minmax(8rem, 1fr);
+
+	grid-template-rows: minmax(1rem, 1fr);
 	// background-color: global.$primary-color;
 
 	&__handle {
@@ -220,6 +263,17 @@ $disabled-color: gray;
 		&__name-input {
 			flex-shrink: 0;
 			flex-basis: 10%;
+		}
+	}
+
+	&__right-slot {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+
+		@include respond(phone) {
+			flex-direction: row;
 		}
 	}
 

@@ -9,23 +9,55 @@ import type Wave from "./wave";
  */
 export class SynthSource {
 	gain: GainNode;
-	osc: OscillatorNode;
+	oscillators: OscillatorNode[] = [];
 	outputNode: AudioNode;
 	context: AudioContext;
+	private _voices: number = 1;
+	detune: number = 100;
 
 	/**
 	 * @param w - Wave object that will be used as reference
 	 * @param ctx - Audio context where the synth source will be created
 	 * @param output - Node where the output of the synth source will be connected to
 	 */
-	constructor(w: Wave, ctx: AudioContext, output: AudioNode) {
-		const { oscillator, gain } = this.#createSynthSource(w, ctx);
-		this.osc = oscillator;
+	constructor(
+		w: Wave,
+		ctx: AudioContext,
+		output: AudioNode,
+		voices: number = 1
+	) {
+		this.voices = voices;
+		const { oscillators, gain } = this.#createSynthSource(w, ctx);
+		// this.osc = oscillator;
+		this.oscillators = oscillators;
 		this.gain = gain;
-		this.osc.start();
+		this.oscillators.forEach(o => {
+			o.start();
+		});
+		// this.osc.start();
 		this.outputNode = output;
 		this.gain.connect(this.outputNode);
 		this.context = ctx;
+	}
+
+	set voices(v: number) {
+		// this.oscillators.forEach(o => {
+		// 	o.stop();
+		// 	o.disconnect(this.gain);
+		// });
+		// this.oscillators = [];
+		// for (let v = 0; v < this.voices; v++) {
+		// 	const osc = ctx.createOscillator();
+		// 	osc.frequency.setValueAtTime(w.frequency, ctx.currentTime);
+		// 	osc.type = w.form;
+		// 	oscillators.push(osc);
+		// 	osc.connect(gainNode);
+		// }
+		this._voices = v;
+	}
+
+	get voices(): number {
+		return this._voices;
 	}
 
 	/**
@@ -35,23 +67,58 @@ export class SynthSource {
 	 * @returns - {oscillator: OscillatorNode, gain:GainNode}
 	 */
 	#createSynthSource(w: Wave, ctx: AudioContext) {
-		const osc = ctx.createOscillator();
-		osc.frequency.setValueAtTime(w.frequency, ctx.currentTime);
-		osc.type = w.form;
-
 		const gainNode = ctx.createGain();
 		gainNode.gain.value = 0;
-		osc.connect(gainNode);
-		return { oscillator: osc, gain: gainNode };
+
+		const oscillators: OscillatorNode[] = [];
+
+		for (let v = 0; v < this.voices; v++) {
+			const osc = ctx.createOscillator();
+			osc.frequency.setValueAtTime(w.frequency, ctx.currentTime);
+			osc.type = w.form;
+			oscillators.push(osc);
+			osc.connect(gainNode);
+		}
+
+		return { oscillators, gain: gainNode };
 	}
 
 	setDetune(detune: number) {
-		this.osc.detune.value = detune;
+		// this.osc.detune.value = detune;
+		this.oscillators.forEach(o => {
+			o.detune.value = detune;
+		});
+	}
+
+	/**
+	 * When a source has multiple voices with detune. An additional detune is added to each oscillator
+	 * A detune percentage of 100% should mean a tone => 200 detune. That detune is applied on both sides.
+	 * This means that if I hit re/D note with 100% detune and two voices, 2 notes should sound => do/C and mi/E
+	 * @param detune
+	 */
+	addUnisonDetune(detunePercentage: number) {
+		// this.osc.detune.value += detunePercentage;
+		const detune = detunePercentage * 2;
+		const tranches = this.oscillators.length;
+		if (tranches <= 1) return;
+
+		const increment: number = (detune / tranches) * 2;
+		let appliedDetune = -detunePercentage;
+
+		this.oscillators.forEach(o => {
+			o.detune.value = o.detune.value + appliedDetune;
+			console.log(
+				`oscillator detune ${o.detune.value}. Increment ${appliedDetune}`
+			);
+			appliedDetune += increment;
+		});
 	}
 
 	delete() {
-		this.osc.stop();
-		this.osc.disconnect(this.gain);
+		this.oscillators.forEach(o => {
+			o.stop();
+			o.disconnect(this.gain);
+		});
 		this.gain.disconnect(this.outputNode);
 	}
 
@@ -95,6 +162,10 @@ export class SynthSource {
 	}
 }
 
+/**
+ * A synthModule consisting of a series of SynthSources
+ * For every AudioModule in a cluster, there will be a source that will be attacked to this class's synthSources
+ */
 export class SynthModule {
 	sources: SynthSource[];
 	context: AudioContext;
@@ -151,9 +222,12 @@ export class SynthModule {
 			const synthSource = new SynthSource(
 				module.wave,
 				this.context,
-				module.input
+				module.input,
+				module.voices
 			);
 			synthSource.setDetune(note.detune);
+			synthSource.voices = module.voices;
+			synthSource.addUnisonDetune(module.voicesDetune);
 			sources.push(synthSource);
 		}
 
