@@ -27,8 +27,6 @@
 				<slot name="display"></slot>
 			</VsTab>
 		</div>
-
-		<slot name="piano"></slot>
 	</div>
 </template>
 <script setup lang="ts">
