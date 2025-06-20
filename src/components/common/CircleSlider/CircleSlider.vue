@@ -30,32 +30,32 @@
 				:r="radius"
 			></circle>
 		</svg>
-
-		<ContextMenu
-			animation="bot"
-			class="circle-slider__context-menu"
-			:visible="contextMenuVisible"
-			:pos-x="contextMenuPos.x"
-			:pos-y="contextMenuPos.y"
-			@close="contextMenuVisible = false"
-		>
-			<div v-if="valueInputVisible" class="circle-slider__context-menu__input">
-				<input
-					v-model.number="progress"
-					type="number"
-					:min="min"
-					:max="max"
-					:step="1"
-				/>
-			</div>
-
-			<ul v-else>
-				<li @click="setNewValue">Set value</li>
-				<li @click="resetDefault">Reset defaul</li>
-				<li @click="copyValue">Copy value</li>
-			</ul>
-		</ContextMenu>
 	</div>
+
+	<ContextMenu
+		animation="bot"
+		class="circle-slider__context-menu"
+		:visible="contextMenuVisible"
+		:pos-x="contextMenuPos.x"
+		:pos-y="contextMenuPos.y"
+		@close="contextMenuVisible = false"
+	>
+		<div v-if="valueInputVisible" class="circle-slider__context-menu__input">
+			<input
+				v-model.number="progress"
+				type="number"
+				:min="min"
+				:max="max"
+				:step="1"
+			/>
+		</div>
+
+		<ul v-else>
+			<li @click="setNewValue">Set value</li>
+			<li @click="resetDefault">Reset defaul</li>
+			<li @click="copyValue">Copy value</li>
+		</ul>
+	</ContextMenu>
 </template>
 
 <script setup lang="ts">
@@ -237,8 +237,10 @@ function handleRightClick(e: MouseEvent) {
 	e.preventDefault();
 	contextMenuVisible.value = true;
 	valueInputVisible.value = false;
-	contextMenuPos.value.x = e.clientX;
-	contextMenuPos.value.y = e.clientY;
+	contextMenuPos.value.x = e.clientX - 1000;
+	contextMenuPos.value.y = e.clientY - 1000;
+
+	console.log(contextMenuPos.value.vlaue);
 }
 
 // function calculateDimensions() {}

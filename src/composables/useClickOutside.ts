@@ -26,9 +26,11 @@ export default function useClickOutside(
 
 	onMounted(() => {
 		window.addEventListener("click", listener);
+		// window.addEventListener("contextmenu", listener);
 	});
 
 	onBeforeUnmount(() => {
 		window.removeEventListener("click", listener);
+		// window.removeEventListener("contextmenu", listener);
 	});
 }
