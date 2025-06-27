@@ -40,14 +40,14 @@ $max-components-w: 5fr;
 $min-display-w: 40rem;
 $max-display-w: 5fr;
 
-$min-header-h: 2rem;
-$max-header-h: 0.5fr;
+$min-header-h: 3rem;
+$max-header-h: 4rem;
 
 $min-body-h: 7rem;
 $max-body-h: 7fr;
 
-$min-piano-h: 2rem;
-$max-piano-h: 2fr;
+$min-piano-h: 1.5rem;
+$max-piano-h: 1.5fr;
 
 $min-footer-h: 0.5rem;
 $max-footer-h: 0.5fr;

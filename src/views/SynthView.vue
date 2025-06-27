@@ -1,6 +1,19 @@
 <template>
 	<component :is="currentLayout">
-		<template #header>Header</template>
+		<template #header>
+			<HeaderWidgetWidget>
+				<template #controls>
+					<HeaderControlsWidget></HeaderControlsWidget>
+				</template>
+				<template #visualizer>
+					<WaveAnalyser
+						:source="merger"
+						:canvas-width="1080"
+						:canvas-height="100"
+					></WaveAnalyser>
+				</template>
+			</HeaderWidgetWidget>
+		</template>
 		<template #waves>
 			<ModuleCardListWidget v-model="MainAudioCluster"></ModuleCardListWidget>
 		</template>
@@ -53,6 +66,8 @@ import type { AudioEnvelope } from "@/models/AudioEnvelope";
 import { type AudioEffect } from "@/models/AudioModule";
 import EffectListWidget from "@/widgets/EffectList/EffectListWidget.vue";
 import EnvelopeControlWidget from "@/widgets/EnvelopeControl/EnvelopeControlWidget.vue";
+import HeaderControlsWidget from "@/widgets/HeaderControls/HeaderControlsWidget.vue";
+import HeaderWidgetWidget from "@/widgets/HeaderWidget/HeaderWidgetWidget.vue";
 import KeyboardWidget from "@/widgets/Keyboard/KeyboardWidget.vue";
 import ModuleCardListWidget from "@/widgets/ModuleCardList/ModuleCardListWidget.vue";
 import { computed, onMounted, ref } from "vue";
