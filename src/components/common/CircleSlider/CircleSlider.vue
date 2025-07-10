@@ -237,8 +237,12 @@ function handleRightClick(e: MouseEvent) {
 	e.preventDefault();
 	contextMenuVisible.value = true;
 	valueInputVisible.value = false;
-	contextMenuPos.value.x = e.clientX - 1000;
-	contextMenuPos.value.y = e.clientY - 1000;
+	contextMenuPos.value.x = e.clientX;
+	contextMenuPos.value.y = e.clientY;
+
+	console.warn(
+		`posx: ${contextMenuPos.value.x}\nposy:${contextMenuPos.value.y}`
+	);
 }
 
 // function calculateDimensions() {}
