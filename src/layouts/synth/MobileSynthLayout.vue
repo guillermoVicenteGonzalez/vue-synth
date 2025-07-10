@@ -4,7 +4,7 @@
 			<slot name="header"> </slot>
 		</div>
 		<div class="mobile-layout__components">
-			<VsTabs v-model="activeTab" :items="tabItems">
+			<VsTabs v-model="activeTab" :items="tabItems" class="mobile-layout__tabs">
 				<VsTab :active="activeTab == 0">
 					<slot name="waves"></slot>
 				</VsTab>
@@ -39,35 +39,28 @@ import VsTabs from "@/components/common/VsTabs/VsTabs.vue";
 import { ref } from "vue";
 
 const activeTab = ref<number>(0);
-const tabItems: string[] = ["waves", "filters", "effects"];
+const tabItems: string[] = ["waves", "filters"];
 </script>
 
 <style lang="scss" scoped>
 $header-color: black;
 $header-text-color: white;
-$components-bg-color: white;
-$display-bg-color: white;
-$footer-bg-color: blueviolet;
 
-$min-components-w: 70rem;
-$max-components-w: 4fr;
+$base-components-h: 40%;
 
-$min-display-w: 40rem;
-$max-display-w: 5fr;
+$base-actions-h: 4rem;
 
-$min-header-h: 2rem;
-$max-header-h: 0.5fr;
+$base-enveloppe-h: 25%;
+
+$base-analyser-h: 10%;
+
+$min-header-h: 4rem;
+$max-header-h: 5rem;
 
 $min-body-h: 7rem;
 $max-body-h: 7fr;
 
-$min-piano-h: 2rem;
-$max-piano-h: 2fr;
-
-$min-footer-h: 0.5rem;
-$max-footer-h: 0.5fr;
-
-$piano-max-h: 10rem;
+$piano-max-h: 15rem;
 $piano-min-h: 0;
 
 .mobile-layout {
@@ -84,38 +77,25 @@ $piano-min-h: 0;
 	&__header {
 		background-color: $header-color;
 		color: $header-text-color;
-		height: 3rem;
-		// flex-basis: 3rem;
-		// flex-grow: 0;
-		// flex-shrink: 0;
-		flex: 0 0 3rem;
+
+		flex: 1 0 $min-header-h;
+		max-height: $max-header-h;
 		width: 100%;
 	}
 
-	&__components {
-		// position: relative;
-		// background-color: purple;
-		// width: 100%;
-		// height: 50%;
+	&__tabs {
+		margin: 1rem 0;
+	}
 
-		// height: 100%;
-		// max-height: 50%;
-		// width: 100%;
-		// grid-template-rows: minmax(80%, 10fr) minmax(10%, 1fr);
-		// gap: 0.5rem;
+	&__components {
 		background-color: purple;
-		// min-height: 40%;
-		// max-height: 40%;
-		flex: 0 0 40%;
-		max-height: 40%;
+
+		flex: 1 1 $base-components-h;
+		max-height: $base-components-h;
 
 		display: grid;
-		// grid-template-rows: 9fr 1fr;
 
-		&__cards {
-			display: flex;
-			flex-direction: column;
-		}
+		overflow: hidden;
 	}
 
 	&__actions {
@@ -123,25 +103,28 @@ $piano-min-h: 0;
 		gap: 1rem;
 		display: flex;
 		justify-content: space-around;
+
+		flex: 0 0 $base-actions-h;
 	}
 
 	&__envelope {
-		max-height: 25%;
-		height: 100%;
+		// max-height: 25%;
+		// height: 100%;
+		flex: 0 0 $base-enveloppe-h;
 	}
 
 	&__analyser {
-		max-height: 10%;
+		max-height: $base-analyser-h;
 		height: 100%;
+
+		flex: 0 0 $base-analyser-h;
 	}
 
 	&__piano {
 		height: fit-content;
-		max-height: 25%;
-		// height: 100%;
-		flex-basis: minmax(0, $piano-max-h);
+
 		background-color: green;
-		flex: 0 0 30%;
+		flex: 1 0 $piano-max-h;
 	}
 }
 </style>

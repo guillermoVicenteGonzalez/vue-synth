@@ -4,6 +4,7 @@
 		ref="selfReference"
 		class="context-menu"
 		:class="classObject"
+		:style="{ top: posX + 'px', left: posY + 'px' }"
 	>
 		<slot></slot>
 	</div>
@@ -55,8 +56,8 @@ $animation-timing-function: ease-in;
 	z-index: 10;
 	background-color: #fff;
 	position: fixed;
-	top: v-bind(posY);
-	left: v-bind(posX);
+	// top: v-bind(posY);
+	// left: v-bind(posX);
 	padding: 2rem;
 	border-radius: 10px;
 	box-shadow: 0px 1px 3px 1px #00000026;

@@ -42,13 +42,12 @@ function handleSelectTab(i: number) {
 	overflow: hidden;
 	display: flex;
 	flex-direction: column;
-
+	color: v-bind(textColor);
 	&__navigation {
 		display: flex;
 		justify-content: center;
 		list-style: none;
 		gap: 4rem;
-		margin-bottom: 1.5rem;
 	}
 
 	&__content {
