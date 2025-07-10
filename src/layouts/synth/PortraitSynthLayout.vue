@@ -1,7 +1,7 @@
 <template>
 	<div class="portrait-layout">
-		<div class="portrait-layout__header">
-			<slot name="analyser"></slot>
+		<div class="mobile-layout__header">
+			<slot name="header"> </slot>
 		</div>
 
 		<div class="portrait-layout__components">
@@ -34,7 +34,7 @@ import VsTab from "@/components/common/VsTab/VsTab.vue";
 import VsTabs from "@/components/common/VsTabs/VsTabs.vue";
 import { ref } from "vue";
 
-const tabItems = ["envelope", "piano", "effects"];
+const tabItems = ["envelope", "piano"];
 const activeTab = ref<number>(0);
 </script>
 
