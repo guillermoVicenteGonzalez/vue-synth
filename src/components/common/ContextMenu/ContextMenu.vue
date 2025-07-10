@@ -4,7 +4,7 @@
 		ref="selfReference"
 		class="context-menu"
 		:class="classObject"
-		:style="{ top: posY + 'px', left: posX + 'px' }"
+		:style="{ top: posX + 'px', left: posY + 'px' }"
 	>
 		<slot></slot>
 	</div>

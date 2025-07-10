@@ -8,9 +8,9 @@
 				<template #visualizer>
 					<WaveAnalyser
 						:source="merger"
-						:canvas-width="2080"
+						:canvas-width="3080"
 						:canvas-height="200"
-						:brush-size="10"
+						:brush-size="7"
 					></WaveAnalyser>
 				</template>
 			</HeaderWidgetWidget>
