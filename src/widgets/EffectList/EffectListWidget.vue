@@ -5,7 +5,7 @@
 			:key="index"
 			v-model:filter="effects[index] as BiquadFilterNode"
 			:context="context"
-			:sources="sources"
+			:sources="sources as AudioCluster"
 			@delete="deleteEffect(index)"
 		></FilterWidget>
 	</div>
@@ -14,10 +14,11 @@
 <script setup lang="ts">
 import type AudioCluster from "@/models/AudioCluster";
 import type { AudioEffect } from "@/models/AudioModule";
+import type { UnwrapRef } from "vue";
 import FilterWidget from "../Filter/FilterWidget.vue";
 
 interface EffectListWidgetProps {
-	sources: AudioCluster;
+	sources: UnwrapRef<AudioCluster>;
 	context: AudioContext;
 }
 

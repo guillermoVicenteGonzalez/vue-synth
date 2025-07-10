@@ -8,14 +8,17 @@
 				<template #visualizer>
 					<WaveAnalyser
 						:source="merger"
-						:canvas-width="1080"
-						:canvas-height="100"
+						:canvas-width="2080"
+						:canvas-height="200"
+						:brush-size="10"
 					></WaveAnalyser>
 				</template>
 			</HeaderWidgetWidget>
 		</template>
 		<template #waves>
-			<ModuleCardListWidget v-model="MainAudioCluster"></ModuleCardListWidget>
+			<ModuleCardListWidget
+				v-model="MainAudioCluster as AudioCluster"
+			></ModuleCardListWidget>
 		</template>
 		<template #filters>
 			<EffectListWidget
@@ -44,7 +47,7 @@
 			<KeyboardWidget
 				:envelope="envelope"
 				:context="mainContext"
-				:source-cluster="MainAudioCluster"
+				:source-cluster="MainAudioCluster as AudioCluster"
 			></KeyboardWidget>
 		</template>
 		<template #footer>
