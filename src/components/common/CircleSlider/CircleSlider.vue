@@ -240,7 +240,7 @@ function handleRightClick(e: MouseEvent) {
 	contextMenuPos.value.x = e.clientX;
 	contextMenuPos.value.y = e.clientY;
 
-	console.warn(
+	console.error(
 		`posx: ${contextMenuPos.value.x}\nposy:${contextMenuPos.value.y}`
 	);
 }
