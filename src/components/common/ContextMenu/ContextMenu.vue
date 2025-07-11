@@ -4,7 +4,7 @@
 		ref="selfReference"
 		class="context-menu"
 		:class="classObject"
-		:style="{ top: posX + 'px', left: posY + 'px' }"
+		:style="{ top: posY + 'px', left: posX + 'px' }"
 	>
 		<slot></slot>
 	</div>
@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import useClickOutside from "@/composables/useClickOutside";
-import { computed, ref } from "vue";
+import { computed, onUnmounted, ref } from "vue";
 
 type ContextMenuAnimations = "top" | "bot" | "left" | "right" | null;
 
@@ -45,6 +45,16 @@ const classObject = computed(() => ({
 function handleCloseMenu() {
 	if (visible) emit("close");
 }
+
+function handleKeyDown(e: KeyboardEvent) {
+	if (e.key === "Escape") handleCloseMenu();
+}
+
+document.addEventListener("keydown", handleKeyDown);
+
+onUnmounted(() => {
+	document.removeEventListener("keypress", handleKeyDown);
+});
 </script>
 
 <style lang="scss" scoped>
