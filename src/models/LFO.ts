@@ -16,6 +16,7 @@ export class LFO {
 		this.osc.frequency.value = this._wave.frequency;
 		this.gain.gain.value = this._wave.amplitude;
 		this.osc.start();
+		this.osc.connect(this.gain);
 	}
 
 	set frequency(f: number) {
@@ -29,7 +30,8 @@ export class LFO {
 
 	set amplitude(a: number) {
 		this._wave.amplitude = a;
-		this.gain.gain.value = this._wave.amplitude / 50;
+		this.gain.gain.value = this._wave.amplitude;
+		// this.gain.gain.value = this._wave.amplitude / 50;
 	}
 
 	get amplitude(): number {
@@ -50,11 +52,16 @@ export class LFO {
 	}
 
 	connect(d: AudioParam) {
-		if (this.destination != null) this.gain.disconnect(this.destination);
+		if (this.destination != null) {
+			console.warn("Destination is not null");
+			this.gain.disconnect();
+		}
 
 		this.destination = d;
 		this.gain.connect(this.destination);
-		this.osc.connect(d);
+
+		console.log(this.gain.gain.value);
+		console.log(this.osc.frequency.value);
 	}
 
 	disconnect(d?: AudioParam) {

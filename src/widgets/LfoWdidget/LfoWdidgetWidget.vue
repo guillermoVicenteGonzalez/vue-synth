@@ -31,7 +31,6 @@
 					:paused="disabled"
 				></WaveCanvas> -->
 				<p>{{ selectedModule }}</p>
-				<p>{{ testGain.gain.value }}</p>
 			</div>
 			<!-- <WaveCanvas :wave="lfo.wave"></WaveCanvas> -->
 			<div class="lfo-widget__controls">
@@ -109,19 +108,24 @@ function connectLFO() {
 	lfo.value.disconnect();
 
 	console.warn("connecting testGain");
-	lfo.value.connect(testGain.value.gain);
 
 	if (!modulableParameterName.value || !selectedModule.value) return;
 
 	if (selectedModule.value instanceof AudioModule) {
 		console.warn("connecting gain");
 		lfo.value.connect(selectedModule.value.gainNode.gain);
+		return;
 	}
 
 	if (selectedModule.value instanceof BiquadFilterNode) {
+		console.log("connecting biquad filter");
 		const filter: BiquadFilterNode = selectedModule.value;
 		lfo.value.connect(filter.frequency);
+		return;
 	}
+
+	console.log("No value to attach???");
+	console.warn(selectedModule.value);
 }
 </script>
 
