@@ -37,7 +37,10 @@
 			<EnvelopeControlWidget v-model="envelope" />
 		</template>
 		<template #analyser>
-			<LfoWdidgetWidget :context="mainContext"></LfoWdidgetWidget>
+			<LfoWdidgetWidget
+				:context="mainContext"
+				:sources="lfoSources"
+			></LfoWdidgetWidget>
 		</template>
 		<template #piano>
 			<KeyboardWidget
@@ -62,15 +65,17 @@ import PortraitSynthLayout from "@/layouts/synth/PortraitSynthLayout.vue";
 import SynthLayout from "@/layouts/synth/SynthLayout.vue";
 import AudioCluster from "@/models/AudioCluster";
 import type { AudioEnvelope } from "@/models/AudioEnvelope";
-import { type AudioEffect } from "@/models/AudioModule";
+import AudioModule, { type AudioEffect } from "@/models/AudioModule";
 import EffectListWidget from "@/widgets/EffectList/EffectListWidget.vue";
 import EnvelopeControlWidget from "@/widgets/EnvelopeControl/EnvelopeControlWidget.vue";
 import HeaderControlsWidget from "@/widgets/HeaderControls/HeaderControlsWidget.vue";
 import HeaderWidgetWidget from "@/widgets/HeaderWidget/HeaderWidgetWidget.vue";
 import KeyboardWidget from "@/widgets/Keyboard/KeyboardWidget.vue";
-import LfoWdidgetWidget from "@/widgets/LfoWdidget/LfoWdidgetWidget.vue";
+import LfoWdidgetWidget, {
+	type LfoSource,
+} from "@/widgets/LfoWdidget/LfoWdidgetWidget.vue";
 import ModuleCardListWidget from "@/widgets/ModuleCardList/ModuleCardListWidget.vue";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, type Ref, type UnwrapRef } from "vue";
 
 const { browserHeight, browserWidth } = useMonitorSize();
 
@@ -93,7 +98,7 @@ const MAX_EFFECTS = 5;
 // const audioModules = ref<AudioModule[]>([]);
 const mainContext = ref<AudioContext>(new AudioContext());
 const merger = ref<ChannelMergerNode>(mainContext.value.createChannelMerger(1));
-const MainAudioCluster = ref<AudioCluster>(
+const MainAudioCluster: Ref<UnwrapRef<AudioCluster>> = ref<AudioCluster>(
 	new AudioCluster(mainContext.value, merger.value)
 );
 const envelope = ref<AudioEnvelope>({
@@ -104,6 +109,15 @@ const envelope = ref<AudioEnvelope>({
 });
 
 const effects = ref<AudioEffect[]>([]);
+
+// const lfoSources = computed<AudioModule[]>(() => new AudioCluster(mainContext.value, merger.value).modules);
+const lfoSources = computed<LfoSource[]>(() => {
+	const modules: AudioModule[] = MainAudioCluster.value
+		.modules as AudioModule[];
+	const effs: AudioNode[] = effects.value;
+	const sources: LfoSource[] = [];
+	return sources.concat(...effs, ...modules);
+});
 
 function createNewModule() {
 	const waveName = `wave ${MainAudioCluster.value.modules.length}`;

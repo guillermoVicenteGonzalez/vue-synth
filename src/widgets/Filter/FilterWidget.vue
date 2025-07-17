@@ -38,6 +38,8 @@
 				:canvas-width="zoom"
 			></WaveAnalyser>
 
+			<p>{{ filter?.frequency.value }}</p>
+
 			<VsSlider
 				v-if="source"
 				v-model="zoom"
