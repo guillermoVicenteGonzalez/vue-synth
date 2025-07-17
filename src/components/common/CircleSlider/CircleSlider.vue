@@ -94,7 +94,7 @@ const {
 	max = 100,
 	size = 80,
 	strokeWidth = ".8rem",
-	disabled = true,
+	disabled = false,
 	defaultValue = 0,
 	variant,
 } = defineProps<CircleSliderProps>();

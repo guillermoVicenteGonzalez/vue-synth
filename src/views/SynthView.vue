@@ -37,11 +37,7 @@
 			<EnvelopeControlWidget v-model="envelope" />
 		</template>
 		<template #analyser>
-			<WaveAnalyser
-				:source="merger"
-				:canvas-width="1080"
-				:canvas-height="200"
-			></WaveAnalyser>
+			<LfoWdidgetWidget :context="mainContext"></LfoWdidgetWidget>
 		</template>
 		<template #piano>
 			<KeyboardWidget
@@ -72,6 +68,7 @@ import EnvelopeControlWidget from "@/widgets/EnvelopeControl/EnvelopeControlWidg
 import HeaderControlsWidget from "@/widgets/HeaderControls/HeaderControlsWidget.vue";
 import HeaderWidgetWidget from "@/widgets/HeaderWidget/HeaderWidgetWidget.vue";
 import KeyboardWidget from "@/widgets/Keyboard/KeyboardWidget.vue";
+import LfoWdidgetWidget from "@/widgets/LfoWdidget/LfoWdidgetWidget.vue";
 import ModuleCardListWidget from "@/widgets/ModuleCardList/ModuleCardListWidget.vue";
 import { computed, onMounted, ref } from "vue";
 
