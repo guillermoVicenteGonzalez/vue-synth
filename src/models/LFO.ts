@@ -52,10 +52,11 @@ export class LFO {
 	}
 
 	connect(d: AudioParam) {
-		if (this.destination != null) {
-			console.warn("Destination is not null");
-			this.gain.disconnect();
-		}
+		// if (this.destination != null) {
+		// 	console.warn("Destination is not null");
+		// 	this.gain.disconnect();
+		// }
+		this.disconnect();
 
 		this.destination = d;
 		this.gain.connect(this.destination);
@@ -64,23 +65,15 @@ export class LFO {
 		console.log(this.osc.frequency.value);
 	}
 
-	disconnect(d?: AudioParam) {
-		if (this.destination == null) {
-			console.error("The LFO is not connected to any node");
-			return;
+	disconnect() {
+		if (this.destination != null) {
+			try {
+				this.gain.disconnect(this.destination);
+			} catch (err) {
+				console.log(err);
+			}
 		}
 
-		if (!d && this.destination != null) {
-			this.gain.disconnect(this.destination);
-			return;
-		}
-
-		if (d != this.destination) {
-			console.error(
-				"The provided destination and the current connection are different"
-			);
-		}
-
-		this.gain.disconnect(this.destination);
+		this.destination = null;
 	}
 }

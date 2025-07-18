@@ -5,31 +5,38 @@
 		</div>
 		<div class="lfo-widget" :class="dynamicClass">
 			<div class="lfo-widget__selectors">
+				<h3>Waveform:</h3>
 				<VsSelector
 					v-model="lfo.waveform"
 					:items="Object.keys(waveForms)"
 					:disabled="disabled"
 				/>
+				<h3>Module:</h3>
 				<VsSelector
 					v-model="selectedModuleName"
 					:items="sourceNames"
 					:disabled="disabled"
 				/>
+				<h3>Parameter:</h3>
 				<VsSelector
 					v-model="modulableParameterName"
 					:items="connectionOptions"
 					:disabled="disabled"
 					@change="connectLFO"
 				/>
+
+				<VsButton variant="round" class="delete-btn" @click="handleClear"
+					>X</VsButton
+				>
 			</div>
 
 			<div class="lfo-widget__display">
 				<!-- <WaveCanvas :canvas-height="100" :canvas-width="100"></WaveCanvas> -->
-				<!-- <WaveCanvas
+				<WaveCanvas
 					:wave="lfo.wave"
 					:canvas-width="1000"
 					:paused="disabled"
-				></WaveCanvas> -->
+				></WaveCanvas>
 				<p>{{ selectedModule }}</p>
 			</div>
 			<!-- <WaveCanvas :wave="lfo.wave"></WaveCanvas> -->
@@ -40,6 +47,9 @@
 				></CircleSlider>
 				<CircleSlider
 					v-model="lfo.amplitude"
+					:default-value="100"
+					:max="300"
+					:min="0"
 					:disabled="disabled"
 				></CircleSlider>
 			</div>
@@ -50,17 +60,14 @@
 <script setup lang="ts">
 import CircleSlider from "@/components/common/CircleSlider/CircleSlider.vue";
 import ToggleButton from "@/components/common/ToggleButton/ToggleButton.vue";
+import VsButton from "@/components/common/VsButton/VsButton.vue";
 import VsCard from "@/components/common/VsCard/VsCard.vue";
 import VsSelector from "@/components/common/VsSelector/VsSelector.vue";
+import WaveCanvas from "@/components/waves/WaveCanvas/WaveCanvas.vue";
 import AudioModule from "@/models/AudioModule";
 import { LFO } from "@/models/LFO";
 import { waveForms } from "@/models/wave";
 import { computed, ref } from "vue";
-
-const ModulableProperties = {
-	frequency: "frequency",
-	amplitude: "amplitude",
-};
 
 export type LfoSource = AudioModule | AudioNode;
 
@@ -75,8 +82,6 @@ const lfo = ref<LFO>(new LFO(context));
 const dynamicClass = computed(() => {
 	return disabled.value ? `lfo-widget-card--disabled` : "";
 });
-
-const testGain = ref<GainNode>(context.createGain());
 
 const sourceNames = computed<string[]>(() =>
 	sources.map((s, index) => {
@@ -107,25 +112,24 @@ const modulableParameterName = ref<string>();
 function connectLFO() {
 	lfo.value.disconnect();
 
-	console.warn("connecting testGain");
-
 	if (!modulableParameterName.value || !selectedModule.value) return;
 
 	if (selectedModule.value instanceof AudioModule) {
-		console.warn("connecting gain");
 		lfo.value.connect(selectedModule.value.gainNode.gain);
 		return;
 	}
 
 	if (selectedModule.value instanceof BiquadFilterNode) {
-		console.log("connecting biquad filter");
 		const filter: BiquadFilterNode = selectedModule.value;
 		lfo.value.connect(filter.frequency);
 		return;
 	}
+}
 
-	console.log("No value to attach???");
-	console.warn(selectedModule.value);
+function handleClear() {
+	lfo.value.disconnect();
+	selectedModuleName.value = "";
+	modulableParameterName.value = "";
 }
 </script>
 
