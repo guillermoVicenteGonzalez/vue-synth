@@ -14,7 +14,7 @@
 
 		<div class="synth-layout__display">
 			<slot name="envelope"></slot>
-			<slot name="analyser"></slot>
+			<slot name="lfo"></slot>
 		</div>
 
 		<div class="synth-layout__piano">
@@ -51,6 +51,12 @@ $max-piano-h: 1.5fr;
 
 $min-footer-h: 0.1rem;
 $max-footer-h: 0.3fr;
+
+$min-enveloppe-h: 20rem;
+$max-enveloppe-h: 3fr;
+
+$min-lfo-h: 20rem;
+$max-lfo-h: 1fr;
 
 .synth-layout {
 	width: 100vw;
@@ -112,10 +118,10 @@ $max-footer-h: 0.3fr;
 		resize: both;
 
 		display: grid;
-		grid-template-rows: [first-row start] minmax(200px, 3fr) [second-row end] minmax(
-				200px,
-				1fr
-			);
+		grid-template-rows: [first-row start] minmax(
+				$min-enveloppe-h,
+				$max-enveloppe-h
+			) [second-row end] minmax($min-lfo-h $max-lfo-h);
 	}
 
 	&__piano {

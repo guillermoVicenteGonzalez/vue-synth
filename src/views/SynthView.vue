@@ -36,7 +36,7 @@
 		<template #envelope>
 			<EnvelopeControlWidget v-model="envelope" />
 		</template>
-		<template #analyser>
+		<template #lfo>
 			<LfoWdidgetWidget
 				:context="mainContext"
 				:sources="lfoSources"
@@ -116,7 +116,9 @@ const lfoSources = computed<LfoSource[]>(() => {
 		.modules as AudioModule[];
 	const effs: AudioNode[] = effects.value;
 	const sources: LfoSource[] = [];
-	return sources.concat(...effs, ...modules);
+	return sources
+		.concat(...effs, ...modules)
+		.concat(MainAudioCluster.value as AudioCluster);
 });
 
 function createNewModule() {

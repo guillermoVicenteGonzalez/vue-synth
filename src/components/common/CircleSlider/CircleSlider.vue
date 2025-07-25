@@ -85,6 +85,7 @@ interface CircleSliderProps {
 	size?: number;
 	variant?: circleSliderVariants;
 	defaultValue?: number;
+	step?: number;
 }
 
 const {
@@ -97,6 +98,7 @@ const {
 	disabled = false,
 	defaultValue = 0,
 	variant,
+	step = 0,
 } = defineProps<CircleSliderProps>();
 
 const progress = defineModel<number>({
@@ -158,7 +160,7 @@ function handleProgress(e: MouseEvent, minVal: number = 0, maxVal: number = 1) {
 	);
 
 	progress.value = Number(
-		percentageToValue(progressPercent, minVal, maxVal).toFixed(0)
+		percentageToValue(progressPercent, minVal, maxVal).toFixed(step)
 	);
 }
 

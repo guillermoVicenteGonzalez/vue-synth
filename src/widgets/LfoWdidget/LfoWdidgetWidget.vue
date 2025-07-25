@@ -35,9 +35,9 @@
 				<WaveCanvas
 					:wave="lfo.wave"
 					:canvas-width="1000"
+					:canvas-height="50"
 					:paused="disabled"
 				></WaveCanvas>
-				<p>{{ selectedModule }}</p>
 			</div>
 			<!-- <WaveCanvas :wave="lfo.wave"></WaveCanvas> -->
 			<div class="lfo-widget__controls">
@@ -48,8 +48,9 @@
 				<CircleSlider
 					v-model="lfo.amplitude"
 					:default-value="100"
-					:max="300"
-					:min="0"
+					:max="minMaxLFOStrengh.max"
+					:min="minMaxLFOStrengh.min"
+					:step="minMaxLFOStrengh.step"
 					:disabled="disabled"
 				></CircleSlider>
 			</div>
@@ -64,12 +65,13 @@ import VsButton from "@/components/common/VsButton/VsButton.vue";
 import VsCard from "@/components/common/VsCard/VsCard.vue";
 import VsSelector from "@/components/common/VsSelector/VsSelector.vue";
 import WaveCanvas from "@/components/waves/WaveCanvas/WaveCanvas.vue";
+import AudioCluster from "@/models/AudioCluster";
 import AudioModule from "@/models/AudioModule";
 import { LFO } from "@/models/LFO";
 import { waveForms } from "@/models/wave";
 import { computed, ref } from "vue";
 
-export type LfoSource = AudioModule | AudioNode;
+export type LfoSource = AudioModule | AudioNode | AudioCluster;
 
 interface LfoWdidgetWidgetProps {
 	context: AudioContext;
@@ -86,7 +88,8 @@ const dynamicClass = computed(() => {
 const sourceNames = computed<string[]>(() =>
 	sources.map((s, index) => {
 		if (s instanceof AudioModule) return s.name;
-		else if (s instanceof AudioNode) return `filter ${index}`;
+		else if (s instanceof BiquadFilterNode) return `filter ${index}`;
+		else if (s instanceof AudioCluster) return `global`;
 		else return `unknown ${index}`;
 	})
 );
@@ -104,6 +107,8 @@ const connectionOptions = computed(() => {
 		return ["frequency", "amplitude"];
 	else if (selectedModule.value instanceof BiquadFilterNode)
 		return ["cuttof frequency"];
+	else if (selectedModule.value instanceof AudioCluster) return ["global gain"];
+
 	return [];
 });
 
@@ -124,7 +129,50 @@ function connectLFO() {
 		lfo.value.connect(filter.frequency);
 		return;
 	}
+
+	if (selectedModule.value instanceof AudioCluster) {
+		const cluster: AudioCluster = selectedModule.value;
+		lfo.value.connect(cluster.gain.gain);
+		// lfo.value.connect(merger.);
+		return;
+	}
 }
+
+/**
+ * minimum and maximum strength of the lfo depending on the type of module attached
+ * The modulated parameter should also be taken into account
+ */
+const minMaxLFOStrengh = computed(() => {
+	if (selectedModule.value instanceof AudioCluster) {
+		return {
+			min: -1,
+			max: 1,
+			step: 2,
+		};
+	}
+
+	if (selectedModule.value instanceof BiquadFilterNode) {
+		return {
+			min: 0,
+			max: 1000,
+			step: 0,
+		};
+	}
+
+	if (selectedModule.value instanceof AudioModule) {
+		return {
+			min: 0,
+			max: 100,
+			step: 0,
+		};
+	}
+
+	return {
+		min: 0,
+		max: 100,
+		step: 0,
+	};
+});
 
 function handleClear() {
 	lfo.value.disconnect();
@@ -188,11 +236,13 @@ $disabled-color: gray;
 	}
 
 	&__display {
-		height: auto;
-		flex: 1 0 80%;
+		// height: max-content;
+		flex: 1 1 70%;
 	}
 
 	&__controls {
+		height: max-content;
+		// flex: 1 1 20%;
 	}
 
 	&--disabled {
