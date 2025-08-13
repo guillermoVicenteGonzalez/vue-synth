@@ -69,7 +69,7 @@ import AudioCluster from "@/models/AudioCluster";
 import AudioModule from "@/models/AudioModule";
 import { LFO } from "@/models/LFO";
 import { waveForms } from "@/models/wave";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 
 export type LfoSource = AudioModule | AudioNode | AudioCluster;
 
@@ -114,6 +114,9 @@ const connectionOptions = computed(() => {
 
 const modulableParameterName = ref<string>();
 
+/**
+ * Handles the disconnection from the previous module and the connection of the new one attending to the type of node it is
+ */
 function connectLFO() {
 	lfo.value.disconnect();
 
@@ -179,6 +182,11 @@ function handleClear() {
 	selectedModuleName.value = "";
 	modulableParameterName.value = "";
 }
+
+//If the module we are tracking is null => we should reset.
+watch(selectedModule, () => {
+	if (selectedModule.value == null) handleClear();
+});
 </script>
 
 <style lang="scss" scoped>
