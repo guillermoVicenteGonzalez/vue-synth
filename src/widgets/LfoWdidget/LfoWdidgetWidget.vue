@@ -183,6 +183,12 @@ function handleClear() {
 	modulableParameterName.value = "";
 }
 
+function handleDisable() {
+	lfo.value.disabled = disabled.value;
+}
+
+watch(disabled, handleDisable);
+
 //If the module we are tracking is null => we should reset.
 watch(selectedModule, () => {
 	if (selectedModule.value == null) handleClear();

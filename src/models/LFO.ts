@@ -60,9 +60,6 @@ export class LFO {
 
 		this.destination = d;
 		this.gain.connect(this.destination);
-
-		console.log(this.gain.gain.value);
-		console.log(this.osc.frequency.value);
 	}
 
 	disconnect() {
@@ -75,5 +72,19 @@ export class LFO {
 		}
 
 		this.destination = null;
+	}
+
+	set disabled(f: boolean) {
+		this._disabled = f;
+
+		if (this._disabled) {
+			this.osc.disconnect(this.gain);
+		} else {
+			this.osc.connect(this.gain);
+		}
+	}
+
+	get disabled() {
+		return this._disabled;
 	}
 }
