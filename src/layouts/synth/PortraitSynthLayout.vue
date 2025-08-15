@@ -24,7 +24,7 @@
 			<VsTab :active="activeTab == 1"> <slot name="piano"></slot> </VsTab>
 
 			<VsTab :active="activeTab == 2">
-				<slot name="display"></slot>
+				<slot name="lfo"></slot>
 			</VsTab>
 		</div>
 	</div>
@@ -34,7 +34,7 @@ import VsTab from "@/components/common/VsTab/VsTab.vue";
 import VsTabs from "@/components/common/VsTabs/VsTabs.vue";
 import { ref } from "vue";
 
-const tabItems = ["envelope", "piano"];
+const tabItems = ["envelope", "piano", "LFO"];
 const activeTab = ref<number>(0);
 </script>
 

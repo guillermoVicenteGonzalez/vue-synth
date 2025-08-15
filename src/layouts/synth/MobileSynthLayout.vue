@@ -19,8 +19,8 @@
 			<slot name="actions"></slot>
 		</div>
 
-		<div class="mobile-layout__analyser">
-			<slot name="analyser"></slot>
+		<div class="mobile-layout__lfo">
+			<slot name="lfo"></slot>
 		</div>
 
 		<div class="mobile-layout__envelope">
@@ -113,7 +113,7 @@ $piano-min-h: 0;
 		flex: 0 0 $base-enveloppe-h;
 	}
 
-	&__analyser {
+	&__lfo {
 		max-height: $base-analyser-h;
 		height: 100%;
 

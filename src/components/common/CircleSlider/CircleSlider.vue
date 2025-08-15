@@ -70,7 +70,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, useTemplateRef, watch } from "vue";
+import { computed, ref, useTemplateRef, watch, watchEffect } from "vue";
 import ContextMenu from "../ContextMenu/ContextMenu.vue";
 
 type circleSliderVariants = "default" | "elevated";
@@ -85,6 +85,7 @@ interface CircleSliderProps {
 	size?: number;
 	variant?: circleSliderVariants;
 	defaultValue?: number;
+	step?: number;
 }
 
 const {
@@ -94,9 +95,10 @@ const {
 	max = 100,
 	size = 80,
 	strokeWidth = ".8rem",
-	disabled = true,
+	disabled = false,
 	defaultValue = 0,
 	variant,
+	step = 0,
 } = defineProps<CircleSliderProps>();
 
 const progress = defineModel<number>({
@@ -142,6 +144,11 @@ const cssVars = computed(() => ({
 	"--slider-size": `${size / 10}rem`,
 }));
 
+watchEffect(() => {
+	if (progress.value > max) progress.value = max;
+	if (progress.value < min) progress.value = min;
+});
+
 /**
  * Calculates the position of the mouse inside the element and its angle to obtain the progress of the slider
  * @param e the event object
@@ -158,7 +165,7 @@ function handleProgress(e: MouseEvent, minVal: number = 0, maxVal: number = 1) {
 	);
 
 	progress.value = Number(
-		percentageToValue(progressPercent, minVal, maxVal).toFixed(0)
+		percentageToValue(progressPercent, minVal, maxVal).toFixed(step)
 	);
 }
 

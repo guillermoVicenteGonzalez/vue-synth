@@ -14,6 +14,7 @@ interface WaveCanvasProps {
 	canvasHeight?: number;
 	lineColor?: string;
 	filled?: boolean;
+	lineWidth?: number;
 }
 
 const myCanvas = ref<HTMLCanvasElement>();
@@ -27,6 +28,7 @@ const {
 	canvasHeight,
 	canvasWidth,
 	lineColor,
+	lineWidth = 1,
 } = defineProps<WaveCanvasProps>();
 
 function paintWave(w: Wave, ctx: CanvasRenderingContext2D, step = 0): boolean {
@@ -47,6 +49,7 @@ function paintWave(w: Wave, ctx: CanvasRenderingContext2D, step = 0): boolean {
 	}
 
 	if (lineColor) ctx.strokeStyle = lineColor;
+	ctx.lineWidth = lineWidth;
 	ctx.stroke();
 	return true;
 }
