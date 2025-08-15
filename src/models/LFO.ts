@@ -87,4 +87,12 @@ export class LFO {
 	get disabled() {
 		return this._disabled;
 	}
+
+	get oscillator() {
+		return this.osc;
+	}
+
+	get exit() {
+		return this.gain;
+	}
 }

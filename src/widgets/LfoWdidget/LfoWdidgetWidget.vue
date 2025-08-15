@@ -33,9 +33,10 @@
 			<div class="lfo-widget__display">
 				<!-- <WaveCanvas :canvas-height="100" :canvas-width="100"></WaveCanvas> -->
 				<WaveCanvas
+					class="lfo-widget__canvas"
+					:canvas-width="canvasDynamicDimensions.width"
+					:canvas-height="canvasDynamicDimensions.height"
 					:wave="lfo.wave"
-					:canvas-width="1000"
-					:canvas-height="50"
 					:paused="disabled"
 				></WaveCanvas>
 			</div>
@@ -177,6 +178,20 @@ const minMaxLFOStrengh = computed(() => {
 	};
 });
 
+const canvasDynamicDimensions = computed(() => {
+	if (minMaxLFOStrengh.value.max <= 1) {
+		return {
+			width: 500,
+			height: 70,
+		};
+	}
+
+	return {
+		width: 2000,
+		height: 300,
+	};
+});
+
 function handleClear() {
 	lfo.value.disconnect();
 	selectedModuleName.value = "";
@@ -242,7 +257,7 @@ $disabled-color: gray;
 
 	&__selectors {
 		height: 3rem;
-		flex: 1 0 100%;
+		flex: 1 1 100%;
 
 		display: flex;
 		gap: 1rem;
@@ -256,7 +271,14 @@ $disabled-color: gray;
 
 	&__controls {
 		height: max-content;
-		// flex: 1 1 20%;
+		min-width: 10rem;
+	}
+
+	&__canvas {
+		flex-grow: 0;
+		flex-shrink: 1;
+		max-height: 100%;
+		aspect-ratio: 3;
 	}
 
 	&--disabled {

@@ -70,7 +70,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, useTemplateRef, watch } from "vue";
+import { computed, ref, useTemplateRef, watch, watchEffect } from "vue";
 import ContextMenu from "../ContextMenu/ContextMenu.vue";
 
 type circleSliderVariants = "default" | "elevated";
@@ -143,6 +143,11 @@ const cssVars = computed(() => ({
 	"--stroke-width": strokeWidth,
 	"--slider-size": `${size / 10}rem`,
 }));
+
+watchEffect(() => {
+	if (progress.value > max) progress.value = max;
+	if (progress.value < min) progress.value = min;
+});
 
 /**
  * Calculates the position of the mouse inside the element and its angle to obtain the progress of the slider
