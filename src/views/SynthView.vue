@@ -37,10 +37,11 @@
 			<EnvelopeControlWidget v-model="envelope" />
 		</template>
 		<template #lfo>
-			<LfoWdidgetWidget
+			<LfoWidgetListWidget
+				:variant="lfoListVariant"
 				:context="mainContext"
 				:sources="lfoSources"
-			></LfoWdidgetWidget>
+			></LfoWidgetListWidget>
 		</template>
 		<template #piano>
 			<KeyboardWidget
@@ -71,9 +72,8 @@ import EnvelopeControlWidget from "@/widgets/EnvelopeControl/EnvelopeControlWidg
 import HeaderControlsWidget from "@/widgets/HeaderControls/HeaderControlsWidget.vue";
 import HeaderWidgetWidget from "@/widgets/HeaderWidget/HeaderWidgetWidget.vue";
 import KeyboardWidget from "@/widgets/Keyboard/KeyboardWidget.vue";
-import LfoWdidgetWidget, {
-	type LfoSource,
-} from "@/widgets/LfoWdidget/LfoWdidgetWidget.vue";
+import { type LfoSource } from "@/widgets/LfoWdidget/LfoWdidgetWidget.vue";
+import LfoWidgetListWidget from "@/widgets/LfoWidgetList/LfoWidgetListWidget.vue";
 import ModuleCardListWidget from "@/widgets/ModuleCardList/ModuleCardListWidget.vue";
 import { computed, onMounted, ref, type Ref, type UnwrapRef } from "vue";
 
@@ -91,6 +91,10 @@ const currentLayout = computed(() => {
 	}
 
 	return SynthLayout;
+});
+
+const lfoListVariant = computed(() => {
+	return browserWidth.value < 1400 ? "horizontal" : "vertical";
 });
 
 const MAX_EFFECTS = 5;

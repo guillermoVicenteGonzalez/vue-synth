@@ -34,7 +34,7 @@ $components-bg-color: white;
 $display-bg-color: white;
 $footer-bg-color: blueviolet;
 
-$min-components-w: 80rem;
+$min-components-w: 75rem;
 $max-components-w: 5fr;
 
 $min-display-w: 40rem;
@@ -118,10 +118,9 @@ $max-lfo-h: 1fr;
 		resize: both;
 
 		display: grid;
-		grid-template-rows: [first-row start] minmax(
-				$min-enveloppe-h,
-				$max-enveloppe-h
-			) [second-row end] minmax($min-lfo-h $max-lfo-h);
+		grid-template-rows:
+			[first-row start] minmax($min-enveloppe-h, $max-enveloppe-h)
+			[second-row end] minmax($min-lfo-h $max-lfo-h);
 	}
 
 	&__piano {
@@ -140,6 +139,10 @@ $max-lfo-h: 1fr;
 
 	@media screen and (max-width: 1900px) {
 		$min-components-w: 40rem;
+	}
+
+	@media screen and (max-width: 1600px) {
+		$footer-bg-color: yellow;
 	}
 
 	@include respond(tab-land) {

@@ -188,7 +188,7 @@ const canvasDynamicDimensions = computed(() => {
 
 	return {
 		width: 2000,
-		height: 300,
+		height: 400,
 	};
 });
 
@@ -267,6 +267,7 @@ $disabled-color: gray;
 	&__display {
 		// height: max-content;
 		flex: 1 1 70%;
+		// max-width: 80%;
 	}
 
 	&__controls {
