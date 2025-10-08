@@ -17,6 +17,7 @@
 					:min="0"
 					:max="10000"
 					label="cuttof"
+					:disabled="disabled"
 				></VsSlider>
 			</div>
 
@@ -34,14 +35,15 @@
 					></VsSelector>
 				</div>
 				<WaveAnalyser
+					v-if="source"
 					:line-color="primaryColor"
 					class="filterCard__analyser"
-					v-if="source"
 					:source="source.gainNode"
 					:canvas-width="zoom"
 				></WaveAnalyser>
 
 				<VsSlider
+					:disabled="disabled"
 					v-if="source"
 					v-model="zoom"
 					:min="400"

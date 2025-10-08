@@ -7,6 +7,8 @@
 				</template>
 				<template #visualizer>
 					<WaveAnalyser
+						class="main-analyser"
+						:line-color="primaryColor"
 						:source="merger"
 						:canvas-width="3080"
 						:canvas-height="200"
@@ -78,6 +80,7 @@ import ModuleCardListWidget from "@/widgets/ModuleCardList/ModuleCardListWidget.
 import { computed, onMounted, ref, type Ref, type UnwrapRef } from "vue";
 
 const { browserHeight, browserWidth } = useMonitorSize();
+const primaryColor = "#42d392";
 
 const currentLayout = computed(() => {
 	if (browserWidth.value <= 600) return MobileSynthLayout;
@@ -190,5 +193,9 @@ onMounted(() => {
 	background-color: red;
 	height: 20px;
 	width: 100px;
+}
+
+.main-analyser {
+	background-color: $bg-color-1;
 }
 </style>

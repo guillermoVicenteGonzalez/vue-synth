@@ -1,7 +1,7 @@
 <template>
 	<VsCard v-if="context" class="lfo-widget-card" :class="dynamicClass">
 		<div class="lfo-widget-card__handle">
-			<ToggleButton v-model="disabled"></ToggleButton>
+			<ToggleButton v-model="disabled" :color="primaryColor"></ToggleButton>
 		</div>
 		<div class="lfo-widget" :class="dynamicClass">
 			<div class="lfo-widget__selectors">
@@ -33,6 +33,7 @@
 			<div class="lfo-widget__display">
 				<!-- <WaveCanvas :canvas-height="100" :canvas-width="100"></WaveCanvas> -->
 				<WaveCanvas
+					:line-color="primaryColor"
 					class="lfo-widget__canvas"
 					:canvas-width="canvasDynamicDimensions.width"
 					:canvas-height="canvasDynamicDimensions.height"
@@ -43,10 +44,12 @@
 			<!-- <WaveCanvas :wave="lfo.wave"></WaveCanvas> -->
 			<div class="lfo-widget__controls">
 				<CircleSlider
+					:fill-color="primaryColor"
 					v-model="lfo.frequency"
 					:disabled="disabled"
 				></CircleSlider>
 				<CircleSlider
+					:fill-color="primaryColor"
 					v-model="lfo.amplitude"
 					:default-value="100"
 					:max="minMaxLFOStrengh.max"
@@ -78,6 +81,8 @@ interface LfoWdidgetWidgetProps {
 	context: AudioContext;
 	sources: LfoSource[];
 }
+
+const primaryColor = "#42d392";
 
 const { context, sources } = defineProps<LfoWdidgetWidgetProps>();
 const disabled = ref<boolean>(false);
@@ -219,10 +224,12 @@ $disabled-color: gray;
 	width: 100%;
 	height: 100%;
 	display: flex;
+	background-color: $bg-color-2;
+	color: $text-color;
 
 	&__handle {
 		flex: 0 0 3rem;
-		background-color: black;
+		background-color: $handle-bg-color;
 		display: flex;
 
 		flex-direction: column;
@@ -280,6 +287,7 @@ $disabled-color: gray;
 		flex-shrink: 1;
 		max-height: 100%;
 		aspect-ratio: 3;
+		background-color: $bg-color-1;
 	}
 
 	&--disabled {

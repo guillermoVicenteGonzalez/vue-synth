@@ -60,19 +60,19 @@ const {
 		// width: 100%;
 		list-style: none;
 		height: 3rem;
-		background-color: red;
+		background-color: black;
 		display: flex;
 	}
 
 	&__tab {
-		background-color: black;
+		background-color: $bg-color-3;
 		width: 5rem;
 		height: 100%;
 		border-radius: 10px;
 		cursor: pointer;
 
 		&--active {
-			background-color: gray;
+			background-color: $primary-color;
 		}
 	}
 

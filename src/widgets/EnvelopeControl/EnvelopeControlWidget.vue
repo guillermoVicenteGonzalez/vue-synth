@@ -2,7 +2,7 @@
 	<VsCard class="envelope-widget">
 		<!-- <div class="envelope-widget"> -->
 		<div class="envelope-widget__display">
-			<EnvelopeDisplay :envelope="model" />
+			<EnvelopeDisplay :envelope="model" :line-color="primaryColor" />
 		</div>
 
 		<div class="envelope-widget__controls">
@@ -89,6 +89,7 @@ import type { AudioEnvelope } from "@/models/AudioEnvelope";
 // interface EnvelopeControlWidgetProps {}
 
 // const {...} = defineProps<EnvelopeControlWidgetProps>();
+const primaryColor = "#42d392";
 
 const model = defineModel<AudioEnvelope>({
 	type: Object,
@@ -111,6 +112,9 @@ const model = defineModel<AudioEnvelope>({
 <style lang="scss" scoped>
 .envelope-widget {
 	// resize: both;
+	background-color: $bg-color-2;
+	color: $text-color;
+
 	padding: 2rem;
 	min-height: 4rem;
 	height: 100%;
@@ -137,6 +141,8 @@ const model = defineModel<AudioEnvelope>({
 		border: solid 1px black;
 		border-radius: 10px;
 		overflow: hidden;
+
+		background-color: $bg-color-1;
 	}
 
 	&__controls {
@@ -175,6 +181,8 @@ const model = defineModel<AudioEnvelope>({
 			flex-basis: 1rem;
 			flex-shrink: 1;
 			flex-grow: 0;
+			background-color: $bg-color-1;
+			color: white;
 		}
 	}
 }
