@@ -28,6 +28,6 @@ function deleteModule(index: number) {
 	flex-direction: column;
 	flex: 1;
 	gap: $gap-bg;
-	// padding: 1rem;
+	padding: $gap-bg $gap-df;
 }
 </style>

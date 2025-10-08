@@ -1,13 +1,10 @@
-
 import type { Meta, StoryObj } from "@storybook/vue3";
-import  WaveControls  from "./WaveControls.vue"
-
-
+import WaveControls from "./WaveControls.vue";
 
 const meta: Meta<typeof WaveControls> = {
-	title: 'WaveControls',
-  component: WaveControls,
-  argTypes: {},
+	title: "WaveControls",
+	component: WaveControls,
+	argTypes: {},
 };
 
 export default meta;

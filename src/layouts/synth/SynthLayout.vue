@@ -100,8 +100,8 @@ $max-lfo-h: 1fr;
 		display: grid;
 		grid-template-columns: 4fr 3fr;
 		grid-template-rows: minmax(75%, 10fr) minmax(3.5rem, 1fr);
-		gap: $gap-bg;
-		padding: $gap-bg;
+		// gap: $gap-bg;
+		// padding: $gap-bg;
 
 		&__actions {
 			grid-column: 1/-1;

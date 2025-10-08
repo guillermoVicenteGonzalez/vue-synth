@@ -1,13 +1,10 @@
-
 import type { Meta, StoryObj } from "@storybook/vue3";
-import  LfoWdidgetWidget  from "./LfoWdidgetWidget.vue"
-
-
+import LfoWdidgetWidget from "./LfoWdidgetWidget.vue";
 
 const meta: Meta<typeof LfoWdidgetWidget> = {
-	title: 'LfoWdidgetWidget',
-  component: LfoWdidgetWidget,
-  argTypes: {},
+	title: "LfoWdidgetWidget",
+	component: LfoWdidgetWidget,
+	argTypes: {},
 };
 
 export default meta;

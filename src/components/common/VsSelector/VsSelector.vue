@@ -63,7 +63,8 @@ function clearSelection() {
 	&__clear-btn {
 		border: none;
 		outline: none;
-		background-color: transparent;
+		background-color: $bg-color-1;
+		color: $text-color;
 	}
 
 	&__select {

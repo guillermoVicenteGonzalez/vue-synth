@@ -2,133 +2,140 @@
 	<VsCard
 		v-if="audioModule"
 		max-height="20rem"
-		min-height="17rem"
+		min-height="18rem"
 		:class="ModuleCardStyles"
 	>
 		<div class="ModuleCard__handle">
-			<ToggleButton v-model="disabled"></ToggleButton>
+			<ToggleButton v-model="disabled" :color="primaryColor"></ToggleButton>
 			<VsButton variant="round" class="delete-btn" @click="deleteModule"
 				>X</VsButton
 			>
 		</div>
 
-		<div class="ModuleCard__left-slot">
-			<VsSelector
-				v-model="audioModule.wave.form"
-				:disabled="disabled"
-				:items="Object.keys(waveForms)"
-				@change="onWaveChangeCB"
-			></VsSelector>
-			<div class="ModuleCard__sliders">
+		<div class="ModuleCard__body">
+			<div class="ModuleCard__left-slot">
+				<VsSelector
+					v-model="audioModule.wave.form"
+					:disabled="disabled"
+					:items="Object.keys(waveForms)"
+					@change="onWaveChangeCB"
+				></VsSelector>
+				<div class="ModuleCard__sliders">
+					<VsSlider
+						v-model="audioModule.wave.amplitude"
+						class="ModuleCard__slider"
+						:disabled="disabled"
+						label="amp"
+						:max="50"
+						step="0.01"
+						:min="0.01"
+						orientation="vertical"
+						@change="onWaveChangeCB"
+					></VsSlider>
+
+					<CircleSlider
+						v-model="audioModule.wave.amplitude"
+						class="ModuleCard__circle-slider"
+						:default-value="10"
+						:disabled="disabled"
+						:fill-color="primaryColor"
+						:min="0.01"
+						:max="50"
+						@change="onWaveChangeCB"
+					></CircleSlider>
+
+					<VsSlider
+						v-model="audioModule.wave.frequency"
+						class="ModuleCard__slider"
+						:disabled="disabled"
+						label="freq"
+						:max="1000"
+						orientation="vertical"
+						@change="onWaveChangeCB"
+					></VsSlider>
+
+					<CircleSlider
+						v-model="audioModule.wave.frequency"
+						class="ModuleCard__circle-slider"
+						:default-value="440"
+						:fill-color="primaryColor"
+						:disabled="disabled"
+						:min="0.01"
+						:max="1000"
+						@change="onWaveChangeCB"
+					></CircleSlider>
+				</div>
+			</div>
+
+			<div class="ModuleCard__center-slot">
+				<input
+					v-model="audioModule.name"
+					class="ModuleCard__center-slot__name-input"
+					type="text"
+					:disabled="disabled"
+				/>
+				<WaveCanvas
+					class="ModuleCard__center-slot__wave-canvas"
+					:wave="audioModule.wave"
+					:paused="disabled"
+					:canvas-width="zoom"
+					:line-color="primaryColor"
+				></WaveCanvas>
 				<VsSlider
-					v-model="audioModule.wave.amplitude"
+					v-model="zoom"
+					class="ModuleCard__center-slot__zoom-slider"
+					:min="400"
+					:max="10000"
+					:label="zoom"
+					:disabled="disabled"
+				></VsSlider>
+			</div>
+
+			<div class="ModuleCard__right-slot">
+				<VsSlider
+					v-model="audioModule.voices"
 					class="ModuleCard__slider"
 					:disabled="disabled"
-					label="amp"
-					:max="50"
-					step="0.01"
-					:min="0.01"
+					label="voices"
+					:max="16"
+					:step="1"
+					:min="1"
 					orientation="vertical"
 					@change="onWaveChangeCB"
 				></VsSlider>
 
 				<CircleSlider
-					v-model="audioModule.wave.amplitude"
+					v-model="audioModule.voices"
 					class="ModuleCard__circle-slider"
 					:default-value="10"
 					:disabled="disabled"
-					:min="0.01"
-					:max="50"
+					:min="1"
+					:fill-color="primaryColor"
+					:max="16"
 					@change="onWaveChangeCB"
 				></CircleSlider>
 
 				<VsSlider
-					v-model="audioModule.wave.frequency"
+					v-model="audioModule.voicesDetune"
 					class="ModuleCard__slider"
 					:disabled="disabled"
-					label="freq"
-					:max="1000"
+					label="detune"
+					:max="100"
 					orientation="vertical"
 					@change="onWaveChangeCB"
 				></VsSlider>
 
 				<CircleSlider
-					v-model="audioModule.wave.frequency"
+					v-model="audioModule.voicesDetune"
 					class="ModuleCard__circle-slider"
-					:default-value="440"
+					:default-value="20"
 					:disabled="disabled"
+					:fill-color="primaryColor"
 					:min="0.01"
-					:max="1000"
+					:max="100"
 					@change="onWaveChangeCB"
 				></CircleSlider>
 			</div>
-		</div>
-
-		<div class="ModuleCard__center-slot">
-			<input
-				v-model="audioModule.name"
-				class="ModuleCard__center-slot__name-input"
-				type="text"
-				:disabled="disabled"
-			/>
-			<WaveCanvas
-				class="ModuleCard__center-slot__wave-canvas"
-				:wave="audioModule.wave"
-				:paused="disabled"
-				:canvas-width="zoom"
-			></WaveCanvas>
-			<VsSlider
-				v-model="zoom"
-				class="ModuleCard__center-slot__zoom-slider"
-				:min="400"
-				:max="10000"
-				:label="zoom"
-				:disabled="disabled"
-			></VsSlider>
-		</div>
-
-		<div class="ModuleCard__right-slot">
-			<VsSlider
-				v-model="audioModule.voices"
-				class="ModuleCard__slider"
-				:disabled="disabled"
-				label="voices"
-				:max="16"
-				:step="1"
-				:min="1"
-				orientation="vertical"
-				@change="onWaveChangeCB"
-			></VsSlider>
-
-			<CircleSlider
-				v-model="audioModule.voices"
-				class="ModuleCard__circle-slider"
-				:default-value="10"
-				:disabled="disabled"
-				:min="1"
-				:max="16"
-				@change="onWaveChangeCB"
-			></CircleSlider>
-
-			<VsSlider
-				v-model="audioModule.voicesDetune"
-				class="ModuleCard__slider"
-				:disabled="disabled"
-				label="detune"
-				:max="100"
-				orientation="vertical"
-				@change="onWaveChangeCB"
-			></VsSlider>
-
-			<CircleSlider
-				v-model="audioModule.voicesDetune"
-				class="ModuleCard__circle-slider"
-				:default-value="20"
-				:disabled="disabled"
-				:min="0.01"
-				:max="100"
-				@change="onWaveChangeCB"
-			></CircleSlider>
 		</div>
 	</VsCard>
 </template>
@@ -145,6 +152,7 @@ import AudioModule from "@/models/AudioModule";
 import { waveForms } from "@/models/wave";
 import { computed, ref, watch } from "vue";
 
+const primaryColor = "#42d392";
 const audioModule = defineModel<AudioModule>();
 const disabled = ref<boolean>(false);
 const zoom = ref<number>(10000);
@@ -182,20 +190,17 @@ $disabled-color: gray;
 
 .ModuleCard {
 	width: 100%;
-	display: grid;
-	grid-template-columns:
-		[handle-start] minmax(3rem, 0.5fr)
-		[handle-end left-start] minmax(2rem, 2fr)
-		[left-end body-start] minmax(10rem, 6fr)
-		[body-end right-start] minmax(8rem, 1fr);
 
-	grid-template-rows: minmax(1rem, 1fr);
-	// background-color: global.$primary-color;
+	display: flex;
+	background-color: $bg-color-2;
+	color: $text-color;
 
 	&__handle {
+		flex: 0 0 3rem;
+
 		width: 100%;
 		height: 100%;
-		background-color: black;
+		background-color: $handle-bg-color;
 		display: flex;
 		gap: 1rem;
 		flex-direction: column;
@@ -203,6 +208,15 @@ $disabled-color: gray;
 		justify-content: start;
 		padding: $handle-padding 0 $handle-padding 0;
 		z-index: 2;
+	}
+
+	&__body {
+		padding: $gap-sm $gap-df;
+		display: grid;
+		grid-template-columns:
+			[handle-end left-start] minmax(2rem, 2fr)
+			[left-end body-start] minmax(10rem, 6fr)
+			[body-end right-start] minmax(8rem, 1fr);
 	}
 
 	&__left-slot {
@@ -253,6 +267,8 @@ $disabled-color: gray;
 			flex-shrink: 1;
 			max-height: 100%;
 			aspect-ratio: 3;
+			background-color: $bg-color-1;
+			border-radius: 0.5rem;
 		}
 
 		&__zoom-slider {
@@ -263,6 +279,8 @@ $disabled-color: gray;
 		&__name-input {
 			flex-shrink: 0;
 			flex-basis: 10%;
+			background-color: $bg-color-1;
+			color: $text-color;
 		}
 	}
 

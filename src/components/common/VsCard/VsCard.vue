@@ -44,10 +44,10 @@ const {
 .VSCard {
 	overflow: hidden;
 	// padding: 1.5rem;
-	border-radius: 10px;
+	border-radius: $border-radius-df;
 
 	&--default {
-		box-shadow: 0 0 0.5rem 0.2rem rgba(black, 0.2);
+		box-shadow: 0 0 0.5rem 0.2rem rgba($primary-color, 1);
 	}
 
 	&--outlined {

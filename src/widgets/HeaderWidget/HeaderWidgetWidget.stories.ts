@@ -1,13 +1,10 @@
-
 import type { Meta, StoryObj } from "@storybook/vue3";
-import  HeaderWidgetWidget  from "./HeaderWidgetWidget.vue"
-
-
+import HeaderWidgetWidget from "./HeaderWidgetWidget.vue";
 
 const meta: Meta<typeof HeaderWidgetWidget> = {
-	title: 'HeaderWidgetWidget',
-  component: HeaderWidgetWidget,
-  argTypes: {},
+	title: "HeaderWidgetWidget",
+	component: HeaderWidgetWidget,
+	argTypes: {},
 };
 
 export default meta;

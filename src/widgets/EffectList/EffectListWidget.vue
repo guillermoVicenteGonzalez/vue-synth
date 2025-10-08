@@ -38,7 +38,7 @@ function deleteEffect(index: number) {
 	display: flex;
 	flex-direction: column;
 	flex: 1;
-	gap: 1rem;
-	/* padding: 1rem; */
+	gap: $gap-bg;
+	padding: $gap-bg $gap-df;
 }
 </style>
