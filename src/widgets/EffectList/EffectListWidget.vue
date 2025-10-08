@@ -39,6 +39,6 @@ function deleteEffect(index: number) {
 	flex-direction: column;
 	flex: 1;
 	gap: 1rem;
-	padding: 1rem;
+	/* padding: 1rem; */
 }
 </style>

@@ -48,8 +48,8 @@ function draw() {
 	animationFrameId.value = requestAnimationFrame(draw);
 	analyser.getByteTimeDomainData(dataArray);
 
-	context.fillStyle = "rgb(200 200 200)";
-	context.fillRect(
+	// context.fillStyle = "rgb(200 200 200)";
+	context.clearRect(
 		0,
 		0,
 		analyserCanvas.value.width,
