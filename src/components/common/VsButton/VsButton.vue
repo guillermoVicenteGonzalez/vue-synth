@@ -32,11 +32,18 @@ const classObject = computed(() => {
 .vs-button {
 	// min-width: 100px;
 	// min-height: 50px;
-	width: 10rem;
+	min-width: 10rem;
+	width: auto;
 	height: 5rem;
 	border: none;
 	outline: none;
 	cursor: pointer;
+	border-radius: $border-radius-df;
+
+	// background: linear-gradient(135deg, $primary-color, $secondary-color);
+	background-color: $tertiary-color;
+	font-size: 1.6rem;
+	color: $text-color;
 
 	&--outlined {
 		background-color: red;

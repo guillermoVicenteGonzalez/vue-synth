@@ -1,6 +1,6 @@
 <template>
 	<div class="lfo-widget-list" :class="dynamicLayoutStyles">
-		<VsTab v-for="n in WIDGET_N" :active="activeTab == n">
+		<VsTab v-for="n in WIDGET_N" :key="n" :active="activeTab == n">
 			<LfoWdidgetWidget
 				:context="context"
 				:sources="sources"
@@ -9,9 +9,9 @@
 		<ul class="lfo-widget-list__tabs">
 			<li
 				v-for="n in WIDGET_N"
+				:key="n"
 				class="lfo-widget-list__tab"
 				:class="n == activeTab ? 'lfo-widget-list__tab--active' : ''"
-				:key="n"
 				@click="activeTab = n"
 			></li>
 		</ul>
@@ -55,24 +55,25 @@ const {
 	height: 100%;
 	display: flex;
 	flex-direction: column;
+	border-radius: $border-radius-df;
 
 	&__tabs {
 		// width: 100%;
 		list-style: none;
 		height: 3rem;
-		background-color: red;
+		background-color: black;
 		display: flex;
 	}
 
 	&__tab {
-		background-color: black;
+		background-color: $bg-color-3;
 		width: 5rem;
 		height: 100%;
 		border-radius: 10px;
 		cursor: pointer;
 
 		&--active {
-			background-color: gray;
+			background-color: $primary-color;
 		}
 	}
 

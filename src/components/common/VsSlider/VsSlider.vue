@@ -23,7 +23,6 @@ interface VsSliderProps {
 	variant?: VSSliderVariants;
 	orientation?: VSSliderOrientation;
 	label?: string | number;
-	labelColor?: string;
 	max?: number;
 	min?: number;
 }
@@ -32,7 +31,6 @@ const {
 	variant,
 	orientation = "horizontal",
 	label,
-	labelColor = "#000",
 	max,
 	min,
 	disabled = false,
@@ -70,7 +68,8 @@ const sliderClass = computed(() => {
 
 	&__label {
 		font-size: 1.6rem;
-		color: v-bind(labelColor);
+		// color: v-bind(labelColor);
+		color: $text-color;
 		text-align: center;
 	}
 

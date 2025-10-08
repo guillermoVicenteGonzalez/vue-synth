@@ -100,7 +100,7 @@ $piano-min-h: 0;
 
 	&__actions {
 		// position: absolute;
-		gap: 1rem;
+		gap: $gap-df;
 		display: flex;
 		justify-content: space-around;
 

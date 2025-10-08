@@ -1,13 +1,10 @@
-
 import type { Meta, StoryObj } from "@storybook/vue3";
-import  VsTab  from "./VsTab.vue"
-
-
+import VsTab from "./VsTab.vue";
 
 const meta: Meta<typeof VsTab> = {
-	title: 'VsTab',
-  component: VsTab,
-  argTypes: {},
+	title: "VsTab",
+	component: VsTab,
+	argTypes: {},
 };
 
 export default meta;

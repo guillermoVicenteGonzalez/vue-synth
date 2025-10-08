@@ -22,13 +22,15 @@
 		</div>
 
 		<div class="synth-layout__footer">
-			<!-- <slot name="footer"></slot> -->
+			<slot name="footer"></slot>
 		</div>
 	</div>
 </template>
 
 <style lang="scss" scoped>
-$header-color: black;
+$global-bg-color: $bg-color-1;
+
+$header-color: $primary-color;
 $header-text-color: white;
 $components-bg-color: white;
 $display-bg-color: white;
@@ -59,6 +61,8 @@ $min-lfo-h: 20rem;
 $max-lfo-h: 1fr;
 
 .synth-layout {
+	background-color: $global-bg-color;
+
 	width: 100vw;
 	height: 100vh;
 
@@ -88,7 +92,6 @@ $max-lfo-h: 1fr;
 	&__components {
 		grid-row: body-start / body-end;
 		grid-column: cards-start / cards-end;
-		background-color: $components-bg-color;
 		overflow: hidden;
 
 		height: 100%;
@@ -97,30 +100,35 @@ $max-lfo-h: 1fr;
 		display: grid;
 		grid-template-columns: 4fr 3fr;
 		grid-template-rows: minmax(75%, 10fr) minmax(3.5rem, 1fr);
-		gap: 0.5rem;
+		// gap: $gap-bg;
+		// padding: $gap-bg;
 
 		&__actions {
 			grid-column: 1/-1;
-			gap: 1rem;
+			display: flex;
+			justify-content: space-evenly;
+			gap: $gap-df;
+			align-items: center;
+
+			// // gap: 2rem;
 		}
 	}
 
 	&__display {
 		grid-row: body-start / body-end;
 		grid-column: visualization-start / visualization-end;
-		background-color: $display-bg-color;
 		overflow: hidden;
-		resize: both;
-
-		background-color: #fabada;
+		// resize: both;
 
 		height: 100%;
-		resize: both;
 
 		display: grid;
 		grid-template-rows:
 			[first-row start] minmax($min-enveloppe-h, $max-enveloppe-h)
 			[second-row end] minmax($min-lfo-h $max-lfo-h);
+
+		gap: $gap-bg;
+		padding: $gap-bg;
 	}
 
 	&__piano {

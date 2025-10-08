@@ -7,6 +7,8 @@
 				</template>
 				<template #visualizer>
 					<WaveAnalyser
+						class="main-analyser"
+						:line-color="primaryColor"
 						:source="merger"
 						:canvas-width="3080"
 						:canvas-height="200"
@@ -32,6 +34,8 @@
 			<VsButton @click="createNewModule">New Wave</VsButton>
 			<VsButton @click="createEffect('filter')">New filter</VsButton>
 			<VsButton @click="deleteAll()">Delete all</VsButton>
+			<VsSlider label="octave"></VsSlider>
+			<VsSlider label="volume"></VsSlider>
 		</template>
 		<template #envelope>
 			<EnvelopeControlWidget v-model="envelope" />
@@ -51,14 +55,14 @@
 			></KeyboardWidget>
 		</template>
 		<template #footer>
-			Footer
-			<RouterLink to="/home">asdas</RouterLink>
+			<VSFooter></VSFooter>
 		</template>
 	</component>
 </template>
 
 <script setup lang="ts">
 import VsButton from "@/components/common/VsButton/VsButton.vue";
+import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
 import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
 import { useMonitorSize } from "@/composables/useMonitorSize";
 import MobileSynthLayout from "@/layouts/synth/MobileSynthLayout.vue";
@@ -69,6 +73,7 @@ import type { AudioEnvelope } from "@/models/AudioEnvelope";
 import AudioModule, { type AudioEffect } from "@/models/AudioModule";
 import EffectListWidget from "@/widgets/EffectList/EffectListWidget.vue";
 import EnvelopeControlWidget from "@/widgets/EnvelopeControl/EnvelopeControlWidget.vue";
+import VSFooter from "@/widgets/Footer/VSFooter.vue";
 import HeaderControlsWidget from "@/widgets/HeaderControls/HeaderControlsWidget.vue";
 import HeaderWidgetWidget from "@/widgets/HeaderWidget/HeaderWidgetWidget.vue";
 import KeyboardWidget from "@/widgets/Keyboard/KeyboardWidget.vue";
@@ -78,6 +83,7 @@ import ModuleCardListWidget from "@/widgets/ModuleCardList/ModuleCardListWidget.
 import { computed, onMounted, ref, type Ref, type UnwrapRef } from "vue";
 
 const { browserHeight, browserWidth } = useMonitorSize();
+const primaryColor = "#42d392";
 
 const currentLayout = computed(() => {
 	if (browserWidth.value <= 600) return MobileSynthLayout;
@@ -190,5 +196,9 @@ onMounted(() => {
 	background-color: red;
 	height: 20px;
 	width: 100px;
+}
+
+.main-analyser {
+	background-color: $bg-color-1;
 }
 </style>

@@ -1,13 +1,10 @@
-
 import type { Meta, StoryObj } from "@storybook/vue3";
-import  FoldContainer  from "./FoldContainer.vue"
-
-
+import FoldContainer from "./FoldContainer.vue";
 
 const meta: Meta<typeof FoldContainer> = {
-	title: 'FoldContainer',
-  component: FoldContainer,
-  argTypes: {},
+	title: "FoldContainer",
+	component: FoldContainer,
+	argTypes: {},
 };
 
 export default meta;

@@ -1,7 +1,7 @@
 <template>
 	<VsCard v-if="context" class="lfo-widget-card" :class="dynamicClass">
 		<div class="lfo-widget-card__handle">
-			<ToggleButton v-model="disabled"></ToggleButton>
+			<ToggleButton v-model="disabled" :color="primaryColor"></ToggleButton>
 		</div>
 		<div class="lfo-widget" :class="dynamicClass">
 			<div class="lfo-widget__selectors">
@@ -33,6 +33,7 @@
 			<div class="lfo-widget__display">
 				<!-- <WaveCanvas :canvas-height="100" :canvas-width="100"></WaveCanvas> -->
 				<WaveCanvas
+					:line-color="primaryColor"
 					class="lfo-widget__canvas"
 					:canvas-width="canvasDynamicDimensions.width"
 					:canvas-height="canvasDynamicDimensions.height"
@@ -44,10 +45,12 @@
 			<div class="lfo-widget__controls">
 				<CircleSlider
 					v-model="lfo.frequency"
+					:fill-color="primaryColor"
 					:disabled="disabled"
 				></CircleSlider>
 				<CircleSlider
 					v-model="lfo.amplitude"
+					:fill-color="primaryColor"
 					:default-value="100"
 					:max="minMaxLFOStrengh.max"
 					:min="minMaxLFOStrengh.min"
@@ -78,6 +81,8 @@ interface LfoWdidgetWidgetProps {
 	context: AudioContext;
 	sources: LfoSource[];
 }
+
+const primaryColor = "#42d392";
 
 const { context, sources } = defineProps<LfoWdidgetWidgetProps>();
 const disabled = ref<boolean>(false);
@@ -219,10 +224,12 @@ $disabled-color: gray;
 	width: 100%;
 	height: 100%;
 	display: flex;
+	background-color: $bg-color-2;
+	color: $text-color;
 
 	&__handle {
 		flex: 0 0 3rem;
-		background-color: black;
+		background-color: $handle-bg-color;
 		display: flex;
 
 		flex-direction: column;
@@ -271,8 +278,12 @@ $disabled-color: gray;
 	}
 
 	&__controls {
-		height: max-content;
+		// height: max-content;
 		min-width: 10rem;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+		align-items: center;
 	}
 
 	&__canvas {
@@ -280,6 +291,8 @@ $disabled-color: gray;
 		flex-shrink: 1;
 		max-height: 100%;
 		aspect-ratio: 3;
+		background-color: $bg-color-1;
+		border-radius: $border-radius-df;
 	}
 
 	&--disabled {

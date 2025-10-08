@@ -15,7 +15,7 @@
 
 <style lang="scss" scoped>
 .vsynth-header {
-	background-color: purple;
+	background-color: $tertiary-color;
 	width: 100%;
 	height: 100%;
 
