@@ -55,6 +55,7 @@ const {
 	height: 100%;
 	display: flex;
 	flex-direction: column;
+	border-radius: $border-radius-df;
 
 	&__tabs {
 		// width: 100%;

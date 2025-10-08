@@ -278,8 +278,12 @@ $disabled-color: gray;
 	}
 
 	&__controls {
-		height: max-content;
+		// height: max-content;
 		min-width: 10rem;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
+		align-items: center;
 	}
 
 	&__canvas {
@@ -288,6 +292,7 @@ $disabled-color: gray;
 		max-height: 100%;
 		aspect-ratio: 3;
 		background-color: $bg-color-1;
+		border-radius: $border-radius-df;
 	}
 
 	&--disabled {

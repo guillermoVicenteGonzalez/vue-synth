@@ -8,7 +8,7 @@
 		@touchstart="isPressed = true"
 		@touchend="isPressed = false"
 	>
-		{{ note.name }}<br />{{ note.black }}
+		<!-- {{ note.name }}<br />{{ note.black }} -->
 	</button>
 </template>
 
@@ -112,10 +112,12 @@ $key-color: #fff;
 
 .keyboard-key {
 	--key-width: 3rem;
+	flex-shrink: 0;
 	border: none;
 	background-color: $key-color;
 	// height: 100%;
 	width: var(--key-width);
+
 	cursor: pointer;
 
 	&--pressed {

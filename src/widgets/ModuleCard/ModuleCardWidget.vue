@@ -211,7 +211,7 @@ $disabled-color: gray;
 	}
 
 	&__body {
-		padding: $gap-sm $gap-df;
+		padding: $gap-df;
 		display: grid;
 		grid-template-columns:
 			[handle-end left-start] minmax(2rem, 2fr)
@@ -242,6 +242,7 @@ $disabled-color: gray;
 		flex-direction: column;
 
 		&__wave-canvas {
+			margin-top: 0.5rem;
 			// max-height: 60%;
 			flex-grow: 0;
 			flex-shrink: 1;
