@@ -2,7 +2,7 @@
 	<VsCard
 		v-if="audioModule"
 		max-height="20rem"
-		min-height="18rem"
+		min-height="20rem"
 		:class="ModuleCardStyles"
 	>
 		<div class="ModuleCard__handle">
@@ -14,66 +14,66 @@
 
 		<div class="ModuleCard__body">
 			<div class="ModuleCard__left-slot">
-				<VsSelector
-					v-model="audioModule.wave.form"
+				<VsSlider
+					v-model="audioModule.wave.amplitude"
+					class="ModuleCard__slider"
 					:disabled="disabled"
-					:items="Object.keys(waveForms)"
+					label="amp"
+					:max="50"
+					step="0.01"
+					:min="0.01"
+					orientation="vertical"
 					@change="onWaveChangeCB"
-				></VsSelector>
-				<div class="ModuleCard__sliders">
-					<VsSlider
-						v-model="audioModule.wave.amplitude"
-						class="ModuleCard__slider"
-						:disabled="disabled"
-						label="amp"
-						:max="50"
-						step="0.01"
-						:min="0.01"
-						orientation="vertical"
-						@change="onWaveChangeCB"
-					></VsSlider>
+				></VsSlider>
 
-					<CircleSlider
-						v-model="audioModule.wave.amplitude"
-						class="ModuleCard__circle-slider"
-						:default-value="10"
-						:disabled="disabled"
-						:fill-color="primaryColor"
-						:min="0.01"
-						:max="50"
-						@change="onWaveChangeCB"
-					></CircleSlider>
+				<CircleSlider
+					v-model="audioModule.wave.amplitude"
+					class="ModuleCard__circle-slider"
+					:default-value="10"
+					:disabled="disabled"
+					:fill-color="primaryColor"
+					:min="0.01"
+					:max="50"
+					@change="onWaveChangeCB"
+				></CircleSlider>
 
-					<VsSlider
-						v-model="audioModule.wave.frequency"
-						class="ModuleCard__slider"
-						:disabled="disabled"
-						label="freq"
-						:max="1000"
-						orientation="vertical"
-						@change="onWaveChangeCB"
-					></VsSlider>
+				<VsSlider
+					v-model="audioModule.wave.frequency"
+					class="ModuleCard__slider"
+					:disabled="disabled"
+					label="freq"
+					:max="1000"
+					orientation="vertical"
+					@change="onWaveChangeCB"
+				></VsSlider>
 
-					<CircleSlider
-						v-model="audioModule.wave.frequency"
-						class="ModuleCard__circle-slider"
-						:default-value="440"
-						:fill-color="primaryColor"
-						:disabled="disabled"
-						:min="0.01"
-						:max="1000"
-						@change="onWaveChangeCB"
-					></CircleSlider>
-				</div>
+				<CircleSlider
+					v-model="audioModule.wave.frequency"
+					class="ModuleCard__circle-slider"
+					:default-value="440"
+					:fill-color="primaryColor"
+					:disabled="disabled"
+					:min="0.01"
+					:max="1000"
+					@change="onWaveChangeCB"
+				></CircleSlider>
 			</div>
 
 			<div class="ModuleCard__center-slot">
-				<input
-					v-model="audioModule.name"
-					class="ModuleCard__center-slot__name-input"
-					type="text"
-					:disabled="disabled"
-				/>
+				<div class="ModuleCard__inputs">
+					<VsSelector
+						v-model="audioModule.wave.form"
+						:disabled="disabled"
+						:items="Object.keys(waveForms)"
+						@change="onWaveChangeCB"
+					></VsSelector>
+					<input
+						v-model="audioModule.name"
+						class="ModuleCard__center-slot__name-input"
+						type="text"
+						:disabled="disabled"
+					/>
+				</div>
 				<WaveCanvas
 					class="ModuleCard__center-slot__wave-canvas"
 					:wave="audioModule.wave"
@@ -219,26 +219,6 @@ $disabled-color: gray;
 			[body-end right-start] minmax(8rem, 1fr);
 	}
 
-	&__left-slot {
-		display: grid;
-		grid-template-rows: minmax(10%, 1fr) minmax(50%, 8fr);
-		height: 100%;
-	}
-
-	&__sliders {
-		width: 100%;
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		max-height: 100%;
-
-		@include respond(phone) {
-			flex-direction: row;
-		}
-	}
-
 	&__slider {
 		display: none;
 		@include respond(phone) {
@@ -277,17 +257,25 @@ $disabled-color: gray;
 		}
 
 		&__name-input {
-			flex-shrink: 0;
-			flex-basis: 10%;
+			// flex-shrink: 1;
+			// flex-basis: 10%;
+			// flex-grow: 0;
+			width: 100%;
 			background-color: $bg-color-1;
 			color: $text-color;
 		}
 	}
 
+	&__inputs {
+		width: 100%;
+		display: flex;
+	}
+
+	&__left-slot,
 	&__right-slot {
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
+		justify-content: space-evenly;
 		align-items: center;
 
 		@include respond(phone) {

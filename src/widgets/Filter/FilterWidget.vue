@@ -1,50 +1,54 @@
 <template>
-	<VsCard max-height="20rem" min-height="18rem" :class="filterCardStyles">
+	<VsCard max-height="20rem" min-height="20rem" :class="filterCardStyles">
 		<div class="filterCard__handle">
-			<ToggleButton v-model="disabled"></ToggleButton>
+			<ToggleButton v-model="disabled" :color="primaryColor"></ToggleButton>
 
 			<VsButton variant="round" class="delete-btn" @click="deleteFilter"
 				>X</VsButton
 			>
 		</div>
 
-		<div class="filterCard__controls">
-			<VsSlider
-				v-if="filter"
-				v-model="filterHandler.cutoffFrequency"
-				orientation="vertical"
-				:min="0"
-				:max="10000"
-				label="cuttof"
-			></VsSlider>
-		</div>
-
-		<div class="filterCard__main">
-			<div class="filterCard__selectors">
-				<VsSelector
+		<div class="filterCard__body">
+			<div class="filterCard__controls">
+				<VsSlider
 					v-if="filter"
-					v-model="filterHandler.type"
-					:items="Object.keys(filterTypes)"
-				></VsSelector>
-				<VsSelector
-					clearable
-					:items="sources.modules.map(m => m.name)"
-					@change="handleSelectModule"
-				></VsSelector>
+					v-model="filterHandler.cutoffFrequency"
+					orientation="vertical"
+					:min="0"
+					:max="10000"
+					label="cuttof"
+				></VsSlider>
 			</div>
-			<WaveAnalyser
-				v-if="source"
-				:source="source.gainNode"
-				:canvas-width="zoom"
-			></WaveAnalyser>
 
-			<VsSlider
-				v-if="source"
-				v-model="zoom"
-				:min="400"
-				:max="1000"
-				:label="zoom"
-			></VsSlider>
+			<div class="filterCard__main">
+				<div class="filterCard__selectors">
+					<VsSelector
+						v-if="filter"
+						v-model="filterHandler.type"
+						:items="Object.keys(filterTypes)"
+					></VsSelector>
+					<VsSelector
+						clearable
+						:items="sources.modules.map(m => m.name)"
+						@change="handleSelectModule"
+					></VsSelector>
+				</div>
+				<WaveAnalyser
+					:line-color="primaryColor"
+					class="filterCard__analyser"
+					v-if="source"
+					:source="source.gainNode"
+					:canvas-width="zoom"
+				></WaveAnalyser>
+
+				<VsSlider
+					v-if="source"
+					v-model="zoom"
+					:min="400"
+					:max="1000"
+					:label="zoom"
+				></VsSlider>
+			</div>
 		</div>
 	</VsCard>
 </template>
@@ -78,6 +82,7 @@ interface FilterWidgetProps {
 	context: AudioContext;
 }
 const { sources, context } = defineProps<FilterWidgetProps>();
+const primaryColor = "#42d392";
 
 /**The filter node attached as model to the card.
  * It is created by the parent component (main view tipically)
@@ -170,15 +175,12 @@ $handle-padding: 1rem;
 $disabled-color: gray;
 
 .filterCard {
-	display: grid;
-	grid-template-columns:
-		[handle-start] minmax(30px, 1fr)
-		[handle-end controls-start] minmax(50px, 2fr)
-		[controls-end main-start] minmax(200px, 8fr);
-
-	grid-template-rows: minmax(10px, 1fr);
+	background-color: $bg-color-2;
+	display: flex;
 
 	&__handle {
+		flex: 0 0 3rem;
+
 		width: 100%;
 		height: 100%;
 		background-color: black;
@@ -191,6 +193,18 @@ $disabled-color: gray;
 		z-index: 2;
 	}
 
+	&__body {
+		padding: $gap-sm $gap-df;
+		width: 100%;
+		display: grid;
+		grid-template-columns:
+			[handle-end controls-start] minmax(50px, 2fr)
+			[controls-end main-start] minmax(200px, 8fr);
+
+		grid-template-rows: minmax(10px, 1fr);
+		gap: $gap-sm;
+	}
+
 	&__controls {
 		width: 100%;
 		height: 100%;
@@ -200,6 +214,11 @@ $disabled-color: gray;
 		display: flex;
 		justify-content: center;
 		align-items: center;
+	}
+
+	&__analyser {
+		background-color: $bg-color-1;
+		border-radius: 0.5rem;
 	}
 
 	&__selectors {
@@ -234,5 +253,11 @@ $disabled-color: gray;
 
 	.delete-btn {
 	}
+}
+
+.black-box {
+	// width: 100%;
+	// height: 100%;
+	// background-color: red;
 }
 </style>
