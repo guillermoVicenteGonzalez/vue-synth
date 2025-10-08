@@ -34,6 +34,8 @@
 			<VsButton @click="createNewModule">New Wave</VsButton>
 			<VsButton @click="createEffect('filter')">New filter</VsButton>
 			<VsButton @click="deleteAll()">Delete all</VsButton>
+			<VsSlider label="octave"></VsSlider>
+			<VsSlider label="volume"></VsSlider>
 		</template>
 		<template #envelope>
 			<EnvelopeControlWidget v-model="envelope" />
@@ -53,14 +55,14 @@
 			></KeyboardWidget>
 		</template>
 		<template #footer>
-			Footer
-			<RouterLink to="/home">asdas</RouterLink>
+			<VSFooter></VSFooter>
 		</template>
 	</component>
 </template>
 
 <script setup lang="ts">
 import VsButton from "@/components/common/VsButton/VsButton.vue";
+import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
 import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
 import { useMonitorSize } from "@/composables/useMonitorSize";
 import MobileSynthLayout from "@/layouts/synth/MobileSynthLayout.vue";
@@ -71,6 +73,7 @@ import type { AudioEnvelope } from "@/models/AudioEnvelope";
 import AudioModule, { type AudioEffect } from "@/models/AudioModule";
 import EffectListWidget from "@/widgets/EffectList/EffectListWidget.vue";
 import EnvelopeControlWidget from "@/widgets/EnvelopeControl/EnvelopeControlWidget.vue";
+import VSFooter from "@/widgets/Footer/VSFooter.vue";
 import HeaderControlsWidget from "@/widgets/HeaderControls/HeaderControlsWidget.vue";
 import HeaderWidgetWidget from "@/widgets/HeaderWidget/HeaderWidgetWidget.vue";
 import KeyboardWidget from "@/widgets/Keyboard/KeyboardWidget.vue";

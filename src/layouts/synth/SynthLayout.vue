@@ -22,7 +22,7 @@
 		</div>
 
 		<div class="synth-layout__footer">
-			<!-- <slot name="footer"></slot> -->
+			<slot name="footer"></slot>
 		</div>
 	</div>
 </template>
@@ -105,6 +105,11 @@ $max-lfo-h: 1fr;
 
 		&__actions {
 			grid-column: 1/-1;
+			display: flex;
+			justify-content: space-evenly;
+			gap: $gap-df;
+			align-items: center;
+
 			// // gap: 2rem;
 		}
 	}

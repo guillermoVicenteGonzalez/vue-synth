@@ -43,9 +43,9 @@
 				></WaveAnalyser>
 
 				<VsSlider
-					:disabled="disabled"
 					v-if="source"
 					v-model="zoom"
+					:disabled="disabled"
 					:min="400"
 					:max="1000"
 					:label="zoom"

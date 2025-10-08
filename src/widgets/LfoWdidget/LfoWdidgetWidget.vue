@@ -44,13 +44,13 @@
 			<!-- <WaveCanvas :wave="lfo.wave"></WaveCanvas> -->
 			<div class="lfo-widget__controls">
 				<CircleSlider
-					:fill-color="primaryColor"
 					v-model="lfo.frequency"
+					:fill-color="primaryColor"
 					:disabled="disabled"
 				></CircleSlider>
 				<CircleSlider
-					:fill-color="primaryColor"
 					v-model="lfo.amplitude"
+					:fill-color="primaryColor"
 					:default-value="100"
 					:max="minMaxLFOStrengh.max"
 					:min="minMaxLFOStrengh.min"
