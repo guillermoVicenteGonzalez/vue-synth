@@ -8,13 +8,15 @@
 		<div class="envelope-widget__controls">
 			<div class="envelope-widget__control">
 				<label>Attack</label>
-				<input
+
+				<VsSlider
 					v-model.number="model.attack"
-					type="range"
-					step="0.1"
-					min="0.01"
-					max="10"
-				/><input
+					class="envelope-widget__control__slider"
+					:max="10"
+					:min="0.01"
+					:step="0.01"
+				></VsSlider>
+				<input
 					v-model.number="model.attack"
 					step="0.1"
 					min="0.01"
@@ -25,13 +27,14 @@
 
 			<div class="envelope-widget__control">
 				<label>Decay</label>
-				<input
+
+				<VsSlider
 					v-model.number="model.decay"
-					type="range"
-					step="0.01"
-					min="0.01"
-					max="10"
-				/>
+					class="envelope-widget__control__slider"
+					:max="10"
+					:min="0.01"
+					:step="0.01"
+				></VsSlider>
 				<input
 					v-model.number="model.decay"
 					step="0.1"
@@ -43,13 +46,13 @@
 
 			<div class="envelope-widget__control">
 				<label>Sustain</label>
-				<input
+				<VsSlider
 					v-model.number="model.sustain"
-					type="range"
-					step="0.01"
-					min="0.01"
-					max="1"
-				/>
+					class="envelope-widget__control__slider"
+					:max="1"
+					:min="0.01"
+					:step="0.01"
+				></VsSlider>
 				<input
 					v-model.number="model.sustain"
 					step="0.01"
@@ -60,16 +63,17 @@
 			</div>
 
 			<div class="envelope-widget__control">
-				<label>Release</label>
+				<label class="envelope-widget__control__label">Release</label>
+				<VsSlider
+					v-model.number="model.release"
+					class="envelope-widget__control__slider"
+					:max="10"
+					:min="0.01"
+					:step="0.01"
+				></VsSlider>
 				<input
 					v-model.number="model.release"
-					type="range"
-					step="0.01"
-					min="0.01"
-					max="10"
-				/>
-				<input
-					v-model.number="model.release"
+					class="envelope-widget__control__input"
 					step="0.1"
 					min="0.01"
 					max="10"
@@ -84,6 +88,7 @@
 <script setup lang="ts">
 import EnvelopeDisplay from "@/components/EnvelopeDisplay/EnvelopeDisplay.vue";
 import VsCard from "@/components/common/VsCard/VsCard.vue";
+import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
 import type { AudioEnvelope } from "@/models/AudioEnvelope";
 
 // interface EnvelopeControlWidgetProps {}
@@ -161,6 +166,13 @@ const model = defineModel<AudioEnvelope>({
 		label {
 			flex-basis: 100%;
 			font-size: 1.6rem;
+		}
+
+		&__slider {
+			max-width: 30rem;
+			flex-basis: 1rem;
+			flex-grow: 1;
+			flex-shrink: 1;
 		}
 
 		/*probably redundant*/

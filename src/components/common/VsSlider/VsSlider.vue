@@ -6,6 +6,7 @@
 			type="range"
 			:min="min"
 			:max="max"
+			:step="step"
 			class="slider__input"
 			@input="emit('change', model)"
 		/>
@@ -25,10 +26,12 @@ interface VsSliderProps {
 	label?: string | number;
 	max?: number;
 	min?: number;
+	step?: number;
 }
 
 const {
 	variant,
+	step = 1,
 	orientation = "horizontal",
 	label,
 	max,
@@ -54,7 +57,7 @@ const sliderClass = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-$slider-width: 1.5rem;
+$slider-width: 1rem;
 
 .slider {
 	box-sizing: border-box;
@@ -85,7 +88,12 @@ $slider-width: 1.5rem;
 		-webkit-transition: 0.2s; /* 0.2 seconds transition on hover */
 		transition: opacity 0.2s;
 
-		&::-moz-range-track,
+		&::-moz-range-track {
+			height: $slider-width;
+			background: $bg-color-black;
+			border-radius: $border-radius-df;
+		}
+
 		&::-webkit-slider-runnable-track {
 			height: $slider-width;
 			background: $bg-color-black;
@@ -105,9 +113,14 @@ $slider-width: 1.5rem;
 		}
 
 		&::-moz-range-thumb {
+			border: none;
+			outline: none;
+
 			width: 25px; /* Set a specific slider handle width */
 			height: 25px; /* Slider handle height */
 			background: $primary-color; /* Green background */
+			border-radius: 50%;
+
 			cursor: pointer; /* Cursor on hover */
 			box-shadow: -407px 0 0 400px $primary-color;
 		}
@@ -131,10 +144,18 @@ $slider-width: 1.5rem;
 			writing-mode: vertical-lr;
 			direction: rtl;
 
-			&::-moz-range-track,
+			&::-moz-range-track {
+				height: 100%;
+				width: $slider-width;
+			}
+
 			&::-webkit-slider-runnable-track {
 				height: 100%;
 				width: $slider-width;
+			}
+
+			&::-moz-range-thumb {
+				box-shadow: 0 407px 0 400px $primary-color;
 			}
 
 			&::-webkit-slider-thumb {
