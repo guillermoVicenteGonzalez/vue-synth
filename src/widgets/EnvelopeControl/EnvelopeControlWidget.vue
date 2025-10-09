@@ -7,7 +7,7 @@
 
 		<div class="envelope-widget__controls">
 			<div class="envelope-widget__control">
-				<label>Attack</label>
+				<VsChip class="envelope-widget__control__label">Attack</VsChip>
 
 				<VsSlider
 					v-model.number="model.attack"
@@ -26,7 +26,7 @@
 			</div>
 
 			<div class="envelope-widget__control">
-				<label>Decay</label>
+				<VsChip class="envelope-widget__control__label">Decay</VsChip>
 
 				<VsSlider
 					v-model.number="model.decay"
@@ -45,7 +45,7 @@
 			</div>
 
 			<div class="envelope-widget__control">
-				<label>Sustain</label>
+				<VsChip class="envelope-widget__control__label">Sustain</VsChip>
 				<VsSlider
 					v-model.number="model.sustain"
 					class="envelope-widget__control__slider"
@@ -64,7 +64,7 @@
 			</div>
 
 			<div class="envelope-widget__control">
-				<label class="envelope-widget__control__label">Release</label>
+				<VsChip class="envelope-widget__control__label">Release</VsChip>
 				<VsSlider
 					v-model.number="model.release"
 					class="envelope-widget__control__slider"
@@ -89,6 +89,7 @@
 <script setup lang="ts">
 import EnvelopeDisplay from "@/components/EnvelopeDisplay/EnvelopeDisplay.vue";
 import VsCard from "@/components/common/VsCard/VsCard.vue";
+import VsChip from "@/components/common/VsChip/VsChip.vue";
 import VsNinput from "@/components/common/VsNinput/VsNinput.vue";
 import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
 import type { AudioEnvelope } from "@/models/AudioEnvelope";
@@ -164,15 +165,25 @@ const model = defineModel<AudioEnvelope>({
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0 2rem;
+		align-content: center;
 
-		label {
-			flex-basis: 100%;
+		&__label {
 			font-size: 1.6rem;
+			// flex-grow: 1;
+			flex-basis: 20%;
+			flex-grow: 1;
+			flex-shrink: 1;
 		}
 
 		&__slider {
 			// max-width: 30rem;
-			flex-basis: 60%;
+			flex-basis: 50%;
+			flex-grow: 1;
+			flex-shrink: 1;
+		}
+
+		&__input {
+			flex-basis: 20%;
 			flex-grow: 1;
 			flex-shrink: 1;
 		}
