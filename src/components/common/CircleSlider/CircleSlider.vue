@@ -60,7 +60,7 @@
 				/>
 			</div>
 
-			<ul v-else>
+			<ul v-else class="circle-slider__context-menu__items">
 				<li @click="setNewValue">Set value</li>
 				<li @click="resetDefault">Reset defaul</li>
 				<li @click="copyValue">Copy value</li>
@@ -348,7 +348,7 @@ function handleCloseContextMenu() {
 				padding: 0.5rem 2rem;
 				&:hover {
 					cursor: pointer;
-					background-color: lightgray;
+					background-color: $primary-color;
 				}
 			}
 		}
