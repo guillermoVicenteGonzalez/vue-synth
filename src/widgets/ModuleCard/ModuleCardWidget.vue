@@ -62,8 +62,8 @@
 			<div class="ModuleCard__center-slot">
 				<div class="ModuleCard__inputs">
 					<VsSelector
-						class="ModuleCard__center-slot__selector"
 						v-model="audioModule.wave.form"
+						class="ModuleCard__center-slot__selector"
 						:disabled="disabled"
 						:items="Object.keys(waveForms)"
 						@change="onWaveChangeCB"

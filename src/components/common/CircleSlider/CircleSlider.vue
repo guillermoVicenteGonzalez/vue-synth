@@ -363,10 +363,10 @@ function handleCloseContextMenu() {
 
 			&__circle {
 				&--inner {
-					stroke: rgb(100, 100, 100);
+					stroke: $disabled-color-1;
 				}
 				&--outer {
-					stroke: rgb(180, 180, 180);
+					stroke: $disabled-color-2;
 				}
 			}
 		}

@@ -1,5 +1,5 @@
 <template>
-	<div :class="sliderClass">
+	<div :class="sliderClass" class="slider">
 		<input
 			v-model="model"
 			:disabled="disabled"
@@ -51,9 +51,11 @@ const emit = defineEmits<{
 	(e: "change", value?: number): void;
 }>();
 
-const sliderClass = computed(() => {
-	return `slider ${variant ? `slider--${variant}` : ""} ${orientation == "vertical" ? "slider--vertical" : ""}`;
-});
+const sliderClass = computed(() => ({
+	[`slider--${variant}`]: variant,
+	[`slider--disabled`]: disabled,
+	[`slider--vertical`]: orientation == "vertical",
+}));
 </script>
 
 <style lang="scss" scoped>
@@ -69,6 +71,10 @@ $slider-width: 1rem;
 	gap: 0.5rem;
 
 	&__input {
+		--track-color: #{$bg-color-black};
+		--thumb-color: #{$primary-color};
+		--trail-color: #{$primary-color};
+
 		box-sizing: inherit;
 
 		// webkit overrides
@@ -78,7 +84,7 @@ $slider-width: 1rem;
 		width: 100%; /* Full-width */
 		height: $slider-width; /* Specified height */
 
-		background: $bg-color-black; /* Grey background */
+		background: var(--track-color); /* Grey background */
 		outline: none; /* Remove outline */
 
 		overflow: hidden;
@@ -90,13 +96,13 @@ $slider-width: 1rem;
 
 		&::-moz-range-track {
 			height: $slider-width;
-			background: $bg-color-black;
+			background: var(--track-color);
 			border-radius: $border-radius-df;
 		}
 
 		&::-webkit-slider-runnable-track {
 			height: $slider-width;
-			background: $bg-color-black;
+			background: var(--track-color);
 			border-radius: $border-radius-df;
 		}
 
@@ -106,10 +112,10 @@ $slider-width: 1rem;
 
 			width: $slider-width; /* Set a specific slider handle width */
 			height: $slider-width; /* Slider handle height */
-			background: $primary-color; /* Green background */
+			background: var(--thumb-color); /* Green background */
 			border-radius: 50%;
 			cursor: pointer; /* Cursor on hover */
-			box-shadow: -407px 0 0 400px $primary-color;
+			box-shadow: -407px 0 0 400px var(--trail-color);
 		}
 
 		&::-moz-range-thumb {
@@ -118,11 +124,11 @@ $slider-width: 1rem;
 
 			width: 25px; /* Set a specific slider handle width */
 			height: 25px; /* Slider handle height */
-			background: $primary-color; /* Green background */
+			background: var(--thumb-color); /* Green background */
 			border-radius: 50%;
 
 			cursor: pointer; /* Cursor on hover */
-			box-shadow: -407px 0 0 400px $primary-color;
+			box-shadow: -407px 0 0 400px var(--trail-color);
 		}
 	}
 
@@ -155,12 +161,20 @@ $slider-width: 1rem;
 			}
 
 			&::-moz-range-thumb {
-				box-shadow: 0 407px 0 400px $primary-color;
+				box-shadow: 0 407px 0 400px var(--trail-color);
 			}
 
 			&::-webkit-slider-thumb {
-				box-shadow: 0 407px 0 400px $primary-color;
+				box-shadow: 0 407px 0 400px var(--trail-color);
 			}
+		}
+	}
+
+	&--disabled {
+		.slider__input {
+			--trail-color: #{$disabled-color-2};
+			--thumb-color: #{$disabled-color-2};
+			--track-color: #{disabled-color-1};
 		}
 	}
 }
