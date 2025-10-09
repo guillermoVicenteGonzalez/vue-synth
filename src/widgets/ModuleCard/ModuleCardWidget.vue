@@ -20,7 +20,7 @@
 					:disabled="disabled"
 					label="amp"
 					:max="50"
-					step="0.01"
+					:step="0.01"
 					:min="0.01"
 					orientation="vertical"
 					@change="onWaveChangeCB"
@@ -67,12 +67,12 @@
 						:items="Object.keys(waveForms)"
 						@change="onWaveChangeCB"
 					></VsSelector>
-					<input
+
+					<VsTextInput
 						v-model="audioModule.name"
 						class="ModuleCard__center-slot__name-input"
-						type="text"
 						:disabled="disabled"
-					/>
+					></VsTextInput>
 				</div>
 				<WaveCanvas
 					class="ModuleCard__center-slot__wave-canvas"
@@ -147,6 +147,7 @@ import VsButton from "@/components/common/VsButton/VsButton.vue";
 import VsCard from "@/components/common/VsCard/VsCard.vue";
 import VsSelector from "@/components/common/VsSelector/VsSelector.vue";
 import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
+import VsTextInput from "@/components/common/VsTextInput/VsTextInput.vue";
 import WaveCanvas from "@/components/waves/WaveCanvas/WaveCanvas.vue";
 import AudioModule from "@/models/AudioModule";
 import { waveForms } from "@/models/wave";
@@ -242,7 +243,9 @@ $disabled-color: gray;
 		flex-direction: column;
 
 		&__wave-canvas {
-			margin-top: 0.5rem;
+			margin-top: $gap-df;
+			margin-bottom: $gap-df;
+
 			// max-height: 60%;
 			flex-grow: 0;
 			flex-shrink: 1;
@@ -262,7 +265,8 @@ $disabled-color: gray;
 			// flex-basis: 10%;
 			// flex-grow: 0;
 			width: 100%;
-			background-color: $bg-color-1;
+			flex-grow: 1;
+			flex-basis: 70%;
 			color: $text-color;
 		}
 	}
@@ -270,6 +274,7 @@ $disabled-color: gray;
 	&__inputs {
 		width: 100%;
 		display: flex;
+		gap: $gap-df;
 	}
 
 	&__left-slot,

@@ -1,3 +1,5 @@
+@use "./variables.scss" as *;
+
 @mixin respond($breakpoint) {
 	@if $breakpoint == phone {
 		//600px / 16 =37.5
@@ -23,4 +25,26 @@
 			@content;
 		} //1800 +
 	}
+}
+
+@mixin inputStyles {
+	min-width: 5rem;
+	// width: 2rem;
+	width: 100%;
+	max-width: 10rem;
+	min-height: 2.5rem;
+	height: 2.5rem;
+
+	flex-basis: 1rem;
+	flex-shrink: 1;
+	flex-grow: 0;
+
+	background-color: $bg-color-1;
+	color: white;
+
+	border: none;
+	outline: none;
+
+	border-radius: $border-radius-sm;
+	padding: 0.5rem;
 }

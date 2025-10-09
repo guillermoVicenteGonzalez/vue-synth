@@ -33,22 +33,14 @@ const model = defineModel<number>({
 	default: 0,
 });
 
-const VSNinputDynamicClass = computed(() => {
-	return [`VSNinput--${variant}`];
-});
+const VSNinputDynamicClass = computed(() => ({
+	[`VSNinput--${variant}`]: variant,
+}));
 </script>
 
 <style lang="scss" scoped>
 :where(.VSNinput) {
-	min-width: 5rem;
-	// width: 2rem;
-	width: 100%;
-	max-width: 10rem;
-	flex-basis: 1rem;
-	flex-shrink: 1;
-	flex-grow: 0;
-	background-color: $bg-color-1;
-	color: white;
+	@include inputStyles;
 }
 
 .VSNinput {
