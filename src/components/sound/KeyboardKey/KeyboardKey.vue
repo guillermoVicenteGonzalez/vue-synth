@@ -107,28 +107,39 @@ onUnmounted(() => eventCleanup());
 </script>
 
 <style lang="scss" scoped>
-$pressed-color: gray;
+$pressed-color: $primary-color;
 $key-color: #fff;
 
 .keyboard-key {
-	--key-width: 3rem;
+	--key-width: 4rem;
 	flex-shrink: 0;
 	border: none;
 	background-color: $key-color;
 	// height: 100%;
 	width: var(--key-width);
+	position: relative;
+	border-radius: 10px;
+	border: 1px solid #000;
+	border-radius: 5px;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+	transform-origin: 50% 0%;
 
 	cursor: pointer;
 
-	&--pressed {
-		background-color: $pressed-color;
-		transform: scale(0.9);
-	}
-
 	&--black {
 		background-color: black;
+
 		width: calc(var(--key-width) / 2);
 		height: 70%;
+
+		z-index: 2;
+		margin: 0 -10px 0 -10px;
+	}
+
+	&--pressed {
+		background-color: $pressed-color;
+		transform: scaleY(0.95);
 	}
 
 	@include respond(tab-port) {
