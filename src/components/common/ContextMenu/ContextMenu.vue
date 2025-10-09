@@ -62,9 +62,10 @@ $animation-duration: 0.1s;
 $animation-timing-function: ease-in;
 
 .context-menu {
+	background-color: $bg-color-3;
+
 	interpolate-size: allow-keywords;
 	z-index: 10;
-	background-color: #fff;
 	position: fixed;
 	// top: v-bind(posY);
 	// left: v-bind(posX);

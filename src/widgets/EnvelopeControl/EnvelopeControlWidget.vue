@@ -7,74 +7,79 @@
 
 		<div class="envelope-widget__controls">
 			<div class="envelope-widget__control">
-				<label>Attack</label>
-				<input
+				<VsChip class="envelope-widget__control__label">Attack</VsChip>
+
+				<VsSlider
 					v-model.number="model.attack"
-					type="range"
-					step="0.1"
-					min="0.01"
-					max="10"
-				/><input
+					class="envelope-widget__control__slider"
+					:max="10"
+					:min="0.01"
+					:step="0.01"
+				></VsSlider>
+				<VsNinput
 					v-model.number="model.attack"
-					step="0.1"
-					min="0.01"
-					max="10"
-					type="number"
-				/>
+					class="envelope-widget__control__input"
+					:step="0.1"
+					:min="0.01"
+					:max="10"
+				></VsNinput>
 			</div>
 
 			<div class="envelope-widget__control">
-				<label>Decay</label>
-				<input
+				<VsChip class="envelope-widget__control__label">Decay</VsChip>
+
+				<VsSlider
 					v-model.number="model.decay"
-					type="range"
-					step="0.01"
-					min="0.01"
-					max="10"
-				/>
-				<input
+					class="envelope-widget__control__slider"
+					:max="10"
+					:min="0.01"
+					:step="0.01"
+				></VsSlider>
+				<VsNinput
 					v-model.number="model.decay"
-					step="0.1"
-					min="0.01"
-					max="10"
-					type="number"
-				/>
+					class="envelope-widget__control__input"
+					:step="0.1"
+					:min="0.01"
+					:max="10"
+				></VsNinput>
 			</div>
 
 			<div class="envelope-widget__control">
-				<label>Sustain</label>
-				<input
+				<VsChip class="envelope-widget__control__label">Sustain</VsChip>
+				<VsSlider
 					v-model.number="model.sustain"
-					type="range"
-					step="0.01"
-					min="0.01"
-					max="1"
-				/>
-				<input
+					class="envelope-widget__control__slider"
+					:max="1"
+					:min="0.01"
+					:step="0.01"
+				></VsSlider>
+
+				<VsNinput
 					v-model.number="model.sustain"
-					step="0.01"
-					min="0.01"
-					max="10"
-					type="number"
-				/>
+					class="envelope-widget__control__input"
+					:step="0.1"
+					:min="0.01"
+					:max="1"
+				></VsNinput>
 			</div>
 
 			<div class="envelope-widget__control">
-				<label>Release</label>
-				<input
+				<VsChip class="envelope-widget__control__label">Release</VsChip>
+				<VsSlider
 					v-model.number="model.release"
-					type="range"
-					step="0.01"
-					min="0.01"
-					max="10"
-				/>
-				<input
+					class="envelope-widget__control__slider"
+					:max="10"
+					:min="0.01"
+					:step="0.01"
+				></VsSlider>
+
+				<VsNinput
 					v-model.number="model.release"
-					step="0.1"
-					min="0.01"
-					max="10"
-					type="number"
-				/>
+					class="envelope-widget__control__input"
+					:step="0.1"
+					:min="0.01"
+					:max="10"
+				></VsNinput>
 			</div>
 		</div>
 		<!-- </div> -->
@@ -84,6 +89,9 @@
 <script setup lang="ts">
 import EnvelopeDisplay from "@/components/EnvelopeDisplay/EnvelopeDisplay.vue";
 import VsCard from "@/components/common/VsCard/VsCard.vue";
+import VsChip from "@/components/common/VsChip/VsChip.vue";
+import VsNinput from "@/components/common/VsNinput/VsNinput.vue";
+import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
 import type { AudioEnvelope } from "@/models/AudioEnvelope";
 
 // interface EnvelopeControlWidgetProps {}
@@ -157,32 +165,27 @@ const model = defineModel<AudioEnvelope>({
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0 2rem;
+		align-content: center;
 
-		label {
-			flex-basis: 100%;
+		&__label {
 			font-size: 1.6rem;
-		}
-
-		/*probably redundant*/
-		input[type="range"] {
-			min-width: 5rem;
-			width: 100%;
-			max-width: 30rem;
-			flex-basis: 1rem;
+			// flex-grow: 1;
+			flex-basis: 20%;
 			flex-grow: 1;
 			flex-shrink: 1;
 		}
 
-		input[type="number"] {
-			min-width: 5rem;
-			// width: 2rem;
-			width: 100%;
-			max-width: 10rem;
-			flex-basis: 1rem;
+		&__slider {
+			// max-width: 30rem;
+			flex-basis: 50%;
+			flex-grow: 1;
 			flex-shrink: 1;
-			flex-grow: 0;
-			background-color: $bg-color-1;
-			color: white;
+		}
+
+		&__input {
+			flex-basis: 20%;
+			flex-grow: 1;
+			flex-shrink: 1;
 		}
 	}
 }

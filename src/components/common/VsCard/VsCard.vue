@@ -47,7 +47,7 @@ const {
 	border-radius: $border-radius-df;
 
 	&--default {
-		box-shadow: 0 0 0.5rem 0.2rem rgba($primary-color, 1);
+		box-shadow: 0 0 0.2rem 0.1rem rgba($primary-color, 1);
 	}
 
 	&--outlined {
