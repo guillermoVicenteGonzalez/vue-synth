@@ -171,8 +171,8 @@ const model = defineModel<AudioEnvelope>({
 		}
 
 		&__slider {
-			max-width: 30rem;
-			flex-basis: 1rem;
+			// max-width: 30rem;
+			flex-basis: 60%;
 			flex-grow: 1;
 			flex-shrink: 1;
 		}
