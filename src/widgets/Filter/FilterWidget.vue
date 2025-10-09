@@ -94,7 +94,7 @@ const filter = defineModel<BiquadFilterNode>("filter");
 const filterHandler = ref<FilterHandler>(new FilterHandler("lowpass", 400));
 /**Current audioModule connected to the filter */
 const source = ref<AudioModule>();
-const zoom = ref<number>();
+const zoom = ref<number>(400);
 const disabled = ref<boolean>(false);
 
 const filterCardStyles = computed(() => {
@@ -196,7 +196,7 @@ $disabled-color: gray;
 	}
 
 	&__body {
-		padding: $gap-sm $gap-df;
+		padding: $gap-df;
 		width: 100%;
 		display: grid;
 		grid-template-columns:
@@ -221,16 +221,19 @@ $disabled-color: gray;
 	&__analyser {
 		background-color: $bg-color-1;
 		border-radius: 0.5rem;
+		margin-top: $gap-df;
+		margin-bottom: $gap-df;
+
+		flex-grow: 0;
+		flex-shrink: 1;
+		max-height: 100%;
 	}
 
 	&__selectors {
 		display: flex;
 		justify-content: center;
 		align-items: center;
-
-		> * {
-			flex: 1;
-		}
+		gap: $gap-df;
 	}
 
 	&__main {

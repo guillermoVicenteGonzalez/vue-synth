@@ -62,6 +62,7 @@
 			<div class="ModuleCard__center-slot">
 				<div class="ModuleCard__inputs">
 					<VsSelector
+						class="ModuleCard__center-slot__selector"
 						v-model="audioModule.wave.form"
 						:disabled="disabled"
 						:items="Object.keys(waveForms)"
@@ -264,17 +265,28 @@ $disabled-color: gray;
 			// flex-shrink: 1;
 			// flex-basis: 10%;
 			// flex-grow: 0;
-			width: 100%;
 			flex-grow: 1;
 			flex-basis: 70%;
 			color: $text-color;
+		}
+
+		&__selector {
+			flex-grow: 1;
+			flex-basis: 100%;
 		}
 	}
 
 	&__inputs {
 		width: 100%;
 		display: flex;
+		justify-content: center;
 		gap: $gap-df;
+
+		> * {
+			width: 100%;
+			flex-basis: 100%;
+			flex-grow: 1;
+		}
 	}
 
 	&__left-slot,

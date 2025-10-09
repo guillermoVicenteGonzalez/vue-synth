@@ -53,11 +53,13 @@ function clearSelection() {
 
 <style lang="scss" scoped>
 .VS-Selector {
+	@include inputStyles;
 	border-radius: 5px;
 	width: 100%;
 	display: flex;
 	// background-color:red;
 	border: solid 1px black;
+	align-items: center;
 
 	&__select,
 	&__clear-btn {

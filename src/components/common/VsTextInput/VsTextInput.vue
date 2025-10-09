@@ -1,8 +1,8 @@
 <template>
 	<input
+		v-model="model"
 		type="text"
 		class="VsTextInput"
-		v-model="model"
 		:disabled="disabled"
 		:class="VsTextInputVariantClass"
 	/>

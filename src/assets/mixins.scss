@@ -28,16 +28,17 @@
 }
 
 @mixin inputStyles {
-	min-width: 5rem;
-	// width: 2rem;
-	width: 100%;
-	max-width: 10rem;
-	min-height: 2.5rem;
-	height: 2.5rem;
+	$min-input-width: 3rem;
 
-	flex-basis: 1rem;
+	min-width: $min-input-width;
+	// width: 2rem;
+	width: 100% !important;
+	min-height: 2.5rem;
+	height: 3rem;
+
+	flex-basis: $min-input-width;
 	flex-shrink: 1;
-	flex-grow: 0;
+	flex-grow: 1;
 
 	background-color: $bg-color-1;
 	color: white;
