@@ -16,13 +16,13 @@
 					:min="0.01"
 					:step="0.01"
 				></VsSlider>
-				<input
+				<VsNinput
 					v-model.number="model.attack"
-					step="0.1"
-					min="0.01"
-					max="10"
-					type="number"
-				/>
+					class="envelope-widget__control__input"
+					:step="0.1"
+					:min="0.01"
+					:max="10"
+				></VsNinput>
 			</div>
 
 			<div class="envelope-widget__control">
@@ -35,13 +35,13 @@
 					:min="0.01"
 					:step="0.01"
 				></VsSlider>
-				<input
+				<VsNinput
 					v-model.number="model.decay"
-					step="0.1"
-					min="0.01"
-					max="10"
-					type="number"
-				/>
+					class="envelope-widget__control__input"
+					:step="0.1"
+					:min="0.01"
+					:max="10"
+				></VsNinput>
 			</div>
 
 			<div class="envelope-widget__control">
@@ -53,13 +53,14 @@
 					:min="0.01"
 					:step="0.01"
 				></VsSlider>
-				<input
+
+				<VsNinput
 					v-model.number="model.sustain"
-					step="0.01"
-					min="0.01"
-					max="10"
-					type="number"
-				/>
+					class="envelope-widget__control__input"
+					:step="0.1"
+					:min="0.01"
+					:max="1"
+				></VsNinput>
 			</div>
 
 			<div class="envelope-widget__control">
@@ -71,14 +72,14 @@
 					:min="0.01"
 					:step="0.01"
 				></VsSlider>
-				<input
+
+				<VsNinput
 					v-model.number="model.release"
 					class="envelope-widget__control__input"
-					step="0.1"
-					min="0.01"
-					max="10"
-					type="number"
-				/>
+					:step="0.1"
+					:min="0.01"
+					:max="10"
+				></VsNinput>
 			</div>
 		</div>
 		<!-- </div> -->
@@ -88,6 +89,7 @@
 <script setup lang="ts">
 import EnvelopeDisplay from "@/components/EnvelopeDisplay/EnvelopeDisplay.vue";
 import VsCard from "@/components/common/VsCard/VsCard.vue";
+import VsNinput from "@/components/common/VsNinput/VsNinput.vue";
 import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
 import type { AudioEnvelope } from "@/models/AudioEnvelope";
 
@@ -173,28 +175,6 @@ const model = defineModel<AudioEnvelope>({
 			flex-basis: 1rem;
 			flex-grow: 1;
 			flex-shrink: 1;
-		}
-
-		/*probably redundant*/
-		input[type="range"] {
-			min-width: 5rem;
-			width: 100%;
-			max-width: 30rem;
-			flex-basis: 1rem;
-			flex-grow: 1;
-			flex-shrink: 1;
-		}
-
-		input[type="number"] {
-			min-width: 5rem;
-			// width: 2rem;
-			width: 100%;
-			max-width: 10rem;
-			flex-basis: 1rem;
-			flex-shrink: 1;
-			flex-grow: 0;
-			background-color: $bg-color-1;
-			color: white;
 		}
 	}
 }
