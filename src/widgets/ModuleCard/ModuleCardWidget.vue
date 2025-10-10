@@ -26,16 +26,18 @@
 					@change="onWaveChangeCB"
 				></VsSlider>
 
-				<CircleSlider
-					v-model="audioModule.wave.amplitude"
-					class="ModuleCard__circle-slider"
-					:default-value="10"
-					:disabled="disabled"
-					:fill-color="primaryColor"
-					:min="0.01"
-					:max="50"
-					@change="onWaveChangeCB"
-				></CircleSlider>
+				<VsTooltip text="Amplitude" orientation="right">
+					<CircleSlider
+						v-model="audioModule.wave.amplitude"
+						class="ModuleCard__circle-slider"
+						:default-value="10"
+						:disabled="disabled"
+						:fill-color="primaryColor"
+						:min="0.01"
+						:max="50"
+						@change="onWaveChangeCB"
+					></CircleSlider>
+				</VsTooltip>
 
 				<VsSlider
 					v-model="audioModule.wave.frequency"
@@ -47,23 +49,25 @@
 					@change="onWaveChangeCB"
 				></VsSlider>
 
-				<CircleSlider
-					v-model="audioModule.wave.frequency"
-					class="ModuleCard__circle-slider"
-					:default-value="440"
-					:fill-color="primaryColor"
-					:disabled="disabled"
-					:min="0.01"
-					:max="1000"
-					@change="onWaveChangeCB"
-				></CircleSlider>
+				<VsTooltip text="frequency" orientation="right">
+					<CircleSlider
+						v-model="audioModule.wave.frequency"
+						class="ModuleCard__circle-slider"
+						:default-value="440"
+						:fill-color="primaryColor"
+						:disabled="disabled"
+						:min="0.01"
+						:max="1000"
+						@change="onWaveChangeCB"
+					></CircleSlider>
+				</VsTooltip>
 			</div>
 
 			<div class="ModuleCard__center-slot">
 				<div class="ModuleCard__inputs">
 					<VsSelector
-						v-model="audioModule.wave.form"
 						class="ModuleCard__center-slot__selector"
+						v-model="audioModule.wave.form"
 						:disabled="disabled"
 						:items="Object.keys(waveForms)"
 						@change="onWaveChangeCB"
@@ -105,16 +109,18 @@
 					@change="onWaveChangeCB"
 				></VsSlider>
 
-				<CircleSlider
-					v-model="audioModule.voices"
-					class="ModuleCard__circle-slider"
-					:default-value="10"
-					:disabled="disabled"
-					:min="1"
-					:fill-color="primaryColor"
-					:max="16"
-					@change="onWaveChangeCB"
-				></CircleSlider>
+				<VsTooltip text="voices" orientation="left">
+					<CircleSlider
+						v-model="audioModule.voices"
+						class="ModuleCard__circle-slider"
+						:default-value="10"
+						:disabled="disabled"
+						:min="1"
+						:fill-color="primaryColor"
+						:max="16"
+						@change="onWaveChangeCB"
+					></CircleSlider>
+				</VsTooltip>
 
 				<VsSlider
 					v-model="audioModule.voicesDetune"
@@ -126,16 +132,18 @@
 					@change="onWaveChangeCB"
 				></VsSlider>
 
-				<CircleSlider
-					v-model="audioModule.voicesDetune"
-					class="ModuleCard__circle-slider"
-					:default-value="20"
-					:disabled="disabled"
-					:fill-color="primaryColor"
-					:min="0.01"
-					:max="100"
-					@change="onWaveChangeCB"
-				></CircleSlider>
+				<VsTooltip text="voices detune" orientation="left">
+					<CircleSlider
+						v-model="audioModule.voicesDetune"
+						class="ModuleCard__circle-slider"
+						:default-value="20"
+						:disabled="disabled"
+						:fill-color="primaryColor"
+						:min="0.01"
+						:max="100"
+						@change="onWaveChangeCB"
+					></CircleSlider>
+				</VsTooltip>
 			</div>
 		</div>
 	</VsCard>
@@ -149,6 +157,7 @@ import VsCard from "@/components/common/VsCard/VsCard.vue";
 import VsSelector from "@/components/common/VsSelector/VsSelector.vue";
 import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
 import VsTextInput from "@/components/common/VsTextInput/VsTextInput.vue";
+import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
 import WaveCanvas from "@/components/waves/WaveCanvas/WaveCanvas.vue";
 import AudioModule from "@/models/AudioModule";
 import { waveForms } from "@/models/wave";

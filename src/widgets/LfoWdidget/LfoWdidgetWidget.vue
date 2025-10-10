@@ -48,6 +48,7 @@
 					:fill-color="primaryColor"
 					:disabled="disabled"
 				></CircleSlider>
+				<VsChip class="lfo-widget__chip">Frequency</VsChip>
 				<CircleSlider
 					v-model="lfo.amplitude"
 					:fill-color="primaryColor"
@@ -57,6 +58,7 @@
 					:step="minMaxLFOStrengh.step"
 					:disabled="disabled"
 				></CircleSlider>
+				<VsChip class="lfo-widget__chip">Amplitude</VsChip>
 			</div>
 		</div>
 	</VsCard>
@@ -67,6 +69,7 @@ import CircleSlider from "@/components/common/CircleSlider/CircleSlider.vue";
 import ToggleButton from "@/components/common/ToggleButton/ToggleButton.vue";
 import VsButton from "@/components/common/VsButton/VsButton.vue";
 import VsCard from "@/components/common/VsCard/VsCard.vue";
+import VsChip from "@/components/common/VsChip/VsChip.vue";
 import VsSelector from "@/components/common/VsSelector/VsSelector.vue";
 import WaveCanvas from "@/components/waves/WaveCanvas/WaveCanvas.vue";
 import AudioCluster from "@/models/AudioCluster";
@@ -293,6 +296,11 @@ $disabled-color: gray;
 		aspect-ratio: 3;
 		background-color: $bg-color-1;
 		border-radius: $border-radius-df;
+	}
+
+	&__chip {
+		width: 100%;
+		font-size: 1.6rem;
 	}
 
 	&--disabled {
