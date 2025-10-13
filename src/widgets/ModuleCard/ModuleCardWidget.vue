@@ -1,8 +1,8 @@
 <template>
 	<VsCard
 		v-if="audioModule"
-		max-height="20rem"
-		min-height="20rem"
+		:max-height="MAX_CARD_HEIGHT"
+		:min-height="MAX_CARD_WIDTH"
 		:class="ModuleCardStyles"
 	>
 		<div class="ModuleCard__handle">
@@ -66,8 +66,8 @@
 			<div class="ModuleCard__center-slot">
 				<div class="ModuleCard__inputs">
 					<VsSelector
-						class="ModuleCard__center-slot__selector"
 						v-model="audioModule.wave.form"
+						class="ModuleCard__center-slot__selector"
 						:disabled="disabled"
 						:items="Object.keys(waveForms)"
 						@change="onWaveChangeCB"
@@ -132,7 +132,7 @@
 					@change="onWaveChangeCB"
 				></VsSlider>
 
-				<VsTooltip text="voices detune" orientation="left">
+				<VsTooltip text="voices" orientation="left">
 					<CircleSlider
 						v-model="audioModule.voicesDetune"
 						class="ModuleCard__circle-slider"
@@ -162,6 +162,9 @@ import WaveCanvas from "@/components/waves/WaveCanvas/WaveCanvas.vue";
 import AudioModule from "@/models/AudioModule";
 import { waveForms } from "@/models/wave";
 import { computed, ref, watch } from "vue";
+
+const MAX_CARD_WIDTH = "20rem";
+const MAX_CARD_HEIGHT = "20rem";
 
 const primaryColor = "#42d392";
 const audioModule = defineModel<AudioModule>();
@@ -201,6 +204,7 @@ $disabled-color: gray;
 
 .ModuleCard {
 	width: 100%;
+	height: 100%;
 
 	display: flex;
 	background-color: $bg-color-2;
@@ -222,12 +226,15 @@ $disabled-color: gray;
 	}
 
 	&__body {
+		height: 100%;
+		max-height: v-bind(MAX_CARD_HEIGHT);
+
 		padding: $gap-df;
 		display: grid;
 		grid-template-columns:
 			[handle-end left-start] minmax(2rem, 2fr)
 			[left-end body-start] minmax(10rem, 6fr)
-			[body-end right-start] minmax(8rem, 1fr);
+			[body-end right-start] minmax(8rem, 2fr);
 	}
 
 	&__slider {
@@ -236,6 +243,7 @@ $disabled-color: gray;
 			display: flex;
 			flex-direction: column;
 		}
+		height: 90%;
 	}
 
 	&__circle-slider {
@@ -247,6 +255,8 @@ $disabled-color: gray;
 
 	&__center-slot {
 		height: 100%;
+		max-height: v-bind(MAX_CARD_HEIGHT);
+
 		justify-content: center;
 		align-items: center;
 		display: flex;
@@ -259,8 +269,10 @@ $disabled-color: gray;
 			// max-height: 60%;
 			flex-grow: 0;
 			flex-shrink: 1;
-			max-height: 100%;
-			aspect-ratio: 3;
+
+			max-height: 50%;
+			// aspect-ratio: 3;
+
 			background-color: $bg-color-1;
 			border-radius: 0.5rem;
 		}
@@ -304,6 +316,9 @@ $disabled-color: gray;
 		flex-direction: column;
 		justify-content: space-evenly;
 		align-items: center;
+
+		height: 100%;
+		max-height: v-bind(MAX_CARD_HEIGHT);
 
 		@include respond(phone) {
 			flex-direction: row;

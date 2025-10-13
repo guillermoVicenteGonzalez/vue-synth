@@ -43,10 +43,13 @@ const tabItems: string[] = ["waves", "filters"];
 </script>
 
 <style lang="scss" scoped>
+$global-bg-color: $bg-color-1;
+
 $header-color: black;
 $header-text-color: white;
 
 $base-components-h: 40%;
+$min-components-h: 20rem;
 
 $base-actions-h: 4rem;
 
@@ -64,6 +67,9 @@ $piano-max-h: 15rem;
 $piano-min-h: 0;
 
 .mobile-layout {
+	background-color: $global-bg-color;
+	color: $text-color;
+
 	width: 100vw;
 	height: 100dvh;
 
@@ -75,7 +81,6 @@ $piano-min-h: 0;
 	flex-direction: column;
 
 	&__header {
-		background-color: $header-color;
 		color: $header-text-color;
 
 		flex: 1 0 $min-header-h;
@@ -88,10 +93,9 @@ $piano-min-h: 0;
 	}
 
 	&__components {
-		background-color: purple;
-
 		flex: 1 1 $base-components-h;
 		max-height: $base-components-h;
+		min-height: $min-components-h;
 
 		display: grid;
 

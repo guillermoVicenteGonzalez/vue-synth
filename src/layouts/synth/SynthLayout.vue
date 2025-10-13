@@ -39,7 +39,7 @@ $footer-bg-color: blueviolet;
 $min-components-w: 80rem;
 $max-components-w: 5fr;
 
-$min-display-w: 40rem;
+$min-display-w: 50rem;
 $max-display-w: 5fr;
 
 $min-header-h: 4rem;
@@ -123,9 +123,9 @@ $max-lfo-h: 1fr;
 		height: 100%;
 
 		display: grid;
-		grid-template-rows:
-			[first-row start] minmax($min-enveloppe-h, $max-enveloppe-h)
-			[second-row end] minmax($min-lfo-h $max-lfo-h);
+		// grid-template-rows:
+		// 	[first-row start] minmax($min-enveloppe-h, $max-enveloppe-h)
+		// 	[second-row end] minmax($min-lfo-h, $max-lfo-h);
 
 		gap: $gap-bg;
 		padding: $gap-bg;

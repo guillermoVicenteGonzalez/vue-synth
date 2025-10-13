@@ -88,7 +88,7 @@ const primaryColor = "#42d392";
 const currentLayout = computed(() => {
 	if (browserWidth.value <= 600) return MobileSynthLayout;
 
-	if (browserWidth.value <= 1200 && browserHeight.value > 600) {
+	if (browserWidth.value <= 1380 && browserHeight.value > 600) {
 		return MobileSynthLayout;
 	}
 
