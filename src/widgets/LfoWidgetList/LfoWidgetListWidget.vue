@@ -1,5 +1,5 @@
 <template>
-	<div class="lfo-widget-list" :class="dynamicLayoutStyles">
+	<VsCard class="lfo-widget-list" :class="dynamicLayoutStyles">
 		<VsTab v-for="n in WIDGET_N" :key="n" :active="activeTab == n">
 			<LfoWdidgetWidget
 				:context="context"
@@ -15,10 +15,11 @@
 				@click="activeTab = n"
 			></li>
 		</ul>
-	</div>
+	</VsCard>
 </template>
 
 <script setup lang="ts">
+import VsCard from "@/components/common/VsCard/VsCard.vue";
 import VsTab from "@/components/common/VsTab/VsTab.vue";
 import { computed, ref } from "vue";
 import type { LfoSource } from "../LfoWdidget/LfoWdidgetWidget.vue";
@@ -56,6 +57,7 @@ const {
 	display: flex;
 	flex-direction: column;
 	border-radius: $border-radius-df;
+	background-color: black;
 
 	&__tabs {
 		// width: 100%;
