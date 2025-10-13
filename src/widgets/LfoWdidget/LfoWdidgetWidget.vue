@@ -287,6 +287,11 @@ $disabled-color: gray;
 		flex-direction: column;
 		justify-content: space-around;
 		align-items: center;
+
+		@include respond(tab-port) {
+			min-width: 11rem;
+			flex-wrap: wrap;
+		}
 	}
 
 	&__canvas {

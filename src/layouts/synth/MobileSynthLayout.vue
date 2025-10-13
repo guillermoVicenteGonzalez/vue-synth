@@ -19,12 +19,22 @@
 			<slot name="actions"></slot>
 		</div>
 
-		<div class="mobile-layout__lfo">
-			<slot name="lfo"></slot>
-		</div>
+		<div class="mobile-layout__controls">
+			<VsTabs
+				v-model="controlsTab"
+				:items="controlsTabItems"
+				class="mobile-layout__controls__tabs"
+			>
+				<div class="mobile-layout__controls__content">
+					<VsTab :active="controlsTab == 0">
+						<slot name="lfo"></slot>
+					</VsTab>
 
-		<div class="mobile-layout__envelope">
-			<slot name="envelope"></slot>
+					<VsTab :active="controlsTab == 1">
+						<slot name="envelope"></slot>
+					</VsTab>
+				</div>
+			</VsTabs>
 		</div>
 
 		<div class="mobile-layout__piano">
@@ -39,7 +49,10 @@ import VsTabs from "@/components/common/VsTabs/VsTabs.vue";
 import { ref } from "vue";
 
 const activeTab = ref<number>(0);
+const controlsTab = ref<number>(0);
+
 const tabItems: string[] = ["waves", "filters"];
+const controlsTabItems = ["LFO", "enveloppe"];
 </script>
 
 <style lang="scss" scoped>
@@ -52,6 +65,8 @@ $base-components-h: 40%;
 $min-components-h: 20rem;
 
 $base-actions-h: 4rem;
+
+$base-controls-h: 35%;
 
 $base-enveloppe-h: 25%;
 
@@ -107,6 +122,8 @@ $piano-min-h: 0;
 		gap: $gap-df;
 		display: flex;
 		justify-content: space-around;
+		align-items: center;
+		margin: 1rem 0;
 
 		flex: 0 0 $base-actions-h;
 	}
@@ -122,6 +139,23 @@ $piano-min-h: 0;
 		height: 100%;
 
 		flex: 0 0 $base-analyser-h;
+	}
+
+	// LFO + enveloppe
+	&__controls {
+		height: 100%;
+		flex: 1 0 $base-controls-h;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+
+		&__tabs {
+			gap: 1rem;
+		}
+
+		&__content {
+			height: 100%;
+		}
 	}
 
 	&__piano {
