@@ -82,20 +82,28 @@ import { waveForms } from "@/models/wave";
 import { computed, ref, watch } from "vue";
 
 export type LfoSource = AudioModule | AudioNode | AudioCluster;
+export type LFOWidgetVariants = "default" | "minimal";
 
 interface LfoWdidgetWidgetProps {
 	context: AudioContext;
 	sources: LfoSource[];
+	variant?: LFOWidgetVariants;
 }
 
 const primaryColor = "#42d392";
 
-const { context, sources } = defineProps<LfoWdidgetWidgetProps>();
+const {
+	context,
+	sources,
+	variant = "default",
+} = defineProps<LfoWdidgetWidgetProps>();
 const disabled = ref<boolean>(false);
 const lfo = ref<LFO>(new LFO(context));
-const dynamicClass = computed(() => {
-	return disabled.value ? `lfo-widget-card--disabled` : "";
-});
+
+const dynamicClass = computed(() => ({
+	"lfo-widget-card--disabled": disabled.value,
+	[`lfo-widget--${variant}`]: variant,
+}));
 
 const sourceNames = computed<string[]>(() =>
 	sources.map((s, index) => {
@@ -324,7 +332,7 @@ $disabled-color: gray;
 		flex-grow: 0;
 		flex-shrink: 1;
 		max-height: 100%;
-		aspect-ratio: 3;
+		// aspect-ratio: 3;
 		background-color: $bg-color-1;
 		border-radius: $border-radius-df;
 	}
@@ -335,6 +343,27 @@ $disabled-color: gray;
 	}
 
 	&--disabled {
+	}
+
+	&--minimal {
+		.lfo-widget {
+			&__param-label {
+				display: none;
+			}
+
+			&__chip {
+				display: none;
+			}
+
+			&__display {
+				flex: 0 1 50%;
+				max-height: 50%;
+			}
+
+			&__controls {
+				flex-direction: row;
+			}
+		}
 	}
 
 	// grid-template-rows: 1fr 2fr 1fr;

@@ -69,10 +69,12 @@ html {
 
 	@include respond(tab-land) {
 		font-size: 56.29%;
+		font-size: 60%;
 	}
 
 	@include respond(tab-port) {
 		font-size: 60%;
+		font-size: 56.29%;
 	}
 
 	@include respond(phone) {

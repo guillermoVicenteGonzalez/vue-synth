@@ -1,6 +1,6 @@
 <template>
 	<div class="portrait-layout">
-		<div class="mobile-layout__header">
+		<div class="portrait-layout__header">
 			<slot name="header"> </slot>
 		</div>
 
@@ -9,8 +9,10 @@
 			<slot name="filters"></slot>
 		</div>
 
-		<div class="portrait-layout__actions">
-			<div><slot name="actions"></slot></div>
+		<div class="portrait-layout__middle-bar">
+			<div class="portrait-layout__actions">
+				<slot name="actions"></slot>
+			</div>
 			<div>
 				<VsTabs v-model="activeTab" :items="tabItems"></VsTabs>
 			</div>
@@ -18,7 +20,7 @@
 
 		<div class="portrait-layout__display">
 			<VsTab :active="activeTab == 0">
-				<slot name="envelope"></slot>
+				<slot name="envelope" variant="minimal"></slot>
 			</VsTab>
 
 			<VsTab :active="activeTab == 1"> <slot name="piano"></slot> </VsTab>
@@ -39,11 +41,15 @@ const activeTab = ref<number>(0);
 </script>
 
 <style lang="scss" scoped>
+$global-bg-color: $bg-color-1;
+
 $header-color: black;
 $header-text-color: white;
 $components-bg-color: white;
 $display-bg-color: white;
 $footer-bg-color: blueviolet;
+
+$min-components-h: 18rem;
 
 $min-display-h: 3rem;
 $max-display-h: 35%;
@@ -51,7 +57,12 @@ $max-display-h: 35%;
 $piano-max-h: 10rem;
 $piano-min-h: 0;
 
+$base-actions-h: 4rem;
+
 .portrait-layout {
+	background-color: $global-bg-color;
+	color: $text-color;
+
 	width: 100vw;
 	height: 100dvh;
 
@@ -65,11 +76,12 @@ $piano-min-h: 0;
 	justify-content: space-between;
 
 	&__header {
-		max-height: 10%;
+		max-height: 7rem;
+		overflow: hidden;
 	}
 
 	&__components {
-		min-height: 40%;
+		min-height: $min-components-h;
 		max-height: 40%;
 		height: 100%;
 
@@ -79,23 +91,34 @@ $piano-min-h: 0;
 		gap: 0.5rem;
 	}
 
-	&__actions {
+	&__middle-bar {
 		gap: 1rem;
+		min-height: 3rem;
 		height: 10%;
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		font-size: 1.6rem;
+		display: none;
+	}
+
+	&__actions {
+		gap: $gap-df;
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+		padding: 0.5rem;
+		flex: 0 0 $base-actions-h;
 	}
 
 	&__display {
 		height: fit-content;
-		min-height: 40%;
+		min-height: 50%;
 		max-height: 40%;
 	}
 
 	&__piano {
 		height: fit-content;
-		min-height: 25%;
+		min-height: 30%;
 		flex-basis: minmax(0, $piano-max-h);
 		background-color: green;
 	}
