@@ -1,7 +1,17 @@
 <template>
 	<div class="portrait-layout">
+		<VsButton
+			variant="round"
+			class="portrait-layout__drawer-btn"
+			@click="handleOpenDrawer"
+		>
+			<VsHamburgerIcon v-model="isDrawerActive"></VsHamburgerIcon>
+		</VsButton>
 		<div class="portrait-layout__header">
 			<slot name="header"> </slot>
+			<VsDrawer v-model="isDrawerActive">
+				<slot name="actions"></slot>
+			</VsDrawer>
 		</div>
 
 		<div class="portrait-layout__components">
@@ -10,9 +20,7 @@
 		</div>
 
 		<div class="portrait-layout__middle-bar">
-			<div class="portrait-layout__actions">
-				<slot name="actions"></slot>
-			</div>
+			<div class="portrait-layout__actions"></div>
 			<div>
 				<VsTabs v-model="activeTab" :items="tabItems"></VsTabs>
 			</div>
@@ -32,12 +40,20 @@
 	</div>
 </template>
 <script setup lang="ts">
+import VsButton from "@/components/common/VsButton/VsButton.vue";
+import VsDrawer from "@/components/common/VsDrawer/VsDrawer.vue";
+import VsHamburgerIcon from "@/components/common/VsHamburgerIcon/VsHamburgerIcon.vue";
 import VsTab from "@/components/common/VsTab/VsTab.vue";
 import VsTabs from "@/components/common/VsTabs/VsTabs.vue";
 import { ref } from "vue";
 
 const tabItems = ["envelope", "piano", "LFO"];
 const activeTab = ref<number>(0);
+const isDrawerActive = ref<boolean>(false);
+
+function handleOpenDrawer() {
+	isDrawerActive.value = !isDrawerActive.value;
+}
 </script>
 
 <style lang="scss" scoped>
@@ -57,6 +73,7 @@ $max-display-h: 35%;
 $piano-max-h: 10rem;
 $piano-min-h: 0;
 
+$header-h: 4rem;
 $base-actions-h: 4rem;
 
 .portrait-layout {
@@ -69,14 +86,28 @@ $base-actions-h: 4rem;
 	max-width: 100vw;
 	max-height: 100dvh;
 
-	overflow: hidden;
+	overflow: hidden !important;
 
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
 
+	&__drawer-btn {
+		--drawer-btn-dimensions: calc(#{$header-h} - #{$gap-df});
+		top: $gap-sm;
+		left: $gap-sm;
+		position: absolute;
+		width: var(--drawer-btn-dimensions);
+		height: var(--drawer-btn-dimensions);
+
+		background-color: $primary-color;
+		color: $text-color;
+		overflow: hidden;
+	}
+
 	&__header {
-		max-height: 7rem;
+		// max-height: 7rem;
+		height: $header-h;
 		overflow: hidden;
 	}
 
