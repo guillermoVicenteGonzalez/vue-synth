@@ -132,10 +132,9 @@ const model = defineModel<AudioEnvelope>({
 	grid-template-rows: 2fr 1fr;
 
 	@include respond(tab-port) {
-		grid-template-columns: repeat(2, 1fr);
-		gap: 1.5rem;
-		padding: 2rem;
-		align-content: center;
+		grid-template-rows: repeat(2, 1fr);
+		gap: $gap-bg;
+		padding: $gap-bg;
 		justify-content: space-around;
 		grid-template-rows: auto;
 	}
@@ -159,6 +158,10 @@ const model = defineModel<AudioEnvelope>({
 		grid-template-columns: repeat(2, 1fr);
 		grid-template-rows: repeat(2, 1fr);
 		gap: 0 5rem;
+
+		@include respond(tab-port) {
+			gap: $gap-bg;
+		}
 	}
 
 	&__control {
@@ -186,6 +189,10 @@ const model = defineModel<AudioEnvelope>({
 			flex-basis: 20%;
 			flex-grow: 1;
 			flex-shrink: 1;
+
+			@include respond(tab-port) {
+				margin-top: $gap-df;
+			}
 		}
 	}
 }

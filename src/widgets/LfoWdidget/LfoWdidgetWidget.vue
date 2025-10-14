@@ -5,21 +5,24 @@
 		</div>
 		<div class="lfo-widget" :class="dynamicClass">
 			<div class="lfo-widget__selectors">
-				<h3>Waveform:</h3>
+				<h3 class="lfo-widget__param-label">Waveform:</h3>
 				<VsSelector
 					v-model="lfo.waveform"
+					class="lfo-widget__selector"
 					:items="Object.keys(waveForms)"
 					:disabled="disabled"
 				/>
-				<h3>Module:</h3>
+				<h3 class="lfo-widget__param-label">Module:</h3>
 				<VsSelector
 					v-model="selectedModuleName"
+					class="lfo-widget__selector"
 					:items="sourceNames"
 					:disabled="disabled"
 				/>
-				<h3>Parameter:</h3>
+				<h3 class="lfo-widget__param-label">Parameter:</h3>
 				<VsSelector
 					v-model="modulableParameterName"
+					class="lfo-widget__selector"
 					:items="connectionOptions"
 					:disabled="disabled"
 					@change="connectLFO"
@@ -272,12 +275,34 @@ $disabled-color: gray;
 		display: flex;
 		gap: 1rem;
 		align-items: center;
+
+		@include respond(tab-port) {
+			height: auto;
+			flex-wrap: wrap;
+		}
+	}
+
+	&__param-label {
+		@include respond(tab-port) {
+			visibility: hidden;
+			display: none;
+		}
+	}
+
+	&__selector {
+		@include respond(tab-port) {
+			flex-basis: 2rem;
+			min-width: auto;
+		}
 	}
 
 	&__display {
 		// height: max-content;
 		flex: 1 1 70%;
 		// max-width: 80%;
+		@include respond(tab-port) {
+			flex: 1 1 50%;
+		}
 	}
 
 	&__controls {
@@ -287,6 +312,12 @@ $disabled-color: gray;
 		flex-direction: column;
 		justify-content: space-around;
 		align-items: center;
+
+		flex: 1 1 10rem;
+
+		@include respond(tab-port) {
+			// flex: 1 1 40%;
+		}
 	}
 
 	&__canvas {

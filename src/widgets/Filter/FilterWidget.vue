@@ -200,7 +200,7 @@ $disabled-color: gray;
 		width: 100%;
 		display: grid;
 		grid-template-columns:
-			[handle-end controls-start] minmax(50px, 2fr)
+			[handle-end controls-start] minmax(50px, 1fr)
 			[controls-end main-start] minmax(200px, 8fr);
 
 		grid-template-rows: minmax(10px, 1fr);
@@ -226,9 +226,7 @@ $disabled-color: gray;
 		margin-top: $gap-df;
 		margin-bottom: $gap-df;
 
-		flex-grow: 0;
-		flex-shrink: 1;
-		max-height: 100%;
+		max-height: 60%;
 	}
 
 	&__selectors {

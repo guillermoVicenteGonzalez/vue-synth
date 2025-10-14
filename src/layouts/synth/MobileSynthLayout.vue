@@ -19,12 +19,22 @@
 			<slot name="actions"></slot>
 		</div>
 
-		<div class="mobile-layout__lfo">
-			<slot name="lfo"></slot>
-		</div>
+		<div class="mobile-layout__controls">
+			<VsTabs
+				v-model="controlsTab"
+				:items="controlsTabItems"
+				class="mobile-layout__controls__tabs"
+			>
+				<div class="mobile-layout__controls__content">
+					<VsTab :active="controlsTab == 0">
+						<slot name="lfo"></slot>
+					</VsTab>
 
-		<div class="mobile-layout__envelope">
-			<slot name="envelope"></slot>
+					<VsTab :active="controlsTab == 1">
+						<slot name="envelope"></slot>
+					</VsTab>
+				</div>
+			</VsTabs>
 		</div>
 
 		<div class="mobile-layout__piano">
@@ -39,16 +49,24 @@ import VsTabs from "@/components/common/VsTabs/VsTabs.vue";
 import { ref } from "vue";
 
 const activeTab = ref<number>(0);
+const controlsTab = ref<number>(0);
+
 const tabItems: string[] = ["waves", "filters"];
+const controlsTabItems = ["LFO", "enveloppe"];
 </script>
 
 <style lang="scss" scoped>
+$global-bg-color: $bg-color-1;
+
 $header-color: black;
 $header-text-color: white;
 
 $base-components-h: 40%;
+$min-components-h: 28rem;
 
 $base-actions-h: 4rem;
+
+$base-controls-h: 40%;
 
 $base-enveloppe-h: 25%;
 
@@ -60,10 +78,13 @@ $max-header-h: 5rem;
 $min-body-h: 7rem;
 $max-body-h: 7fr;
 
-$piano-max-h: 15rem;
-$piano-min-h: 0;
+$max-piano-h: 15rem;
+$min-piano-h: 0;
 
 .mobile-layout {
+	background-color: $global-bg-color;
+	color: $text-color;
+
 	width: 100vw;
 	height: 100dvh;
 
@@ -75,7 +96,6 @@ $piano-min-h: 0;
 	flex-direction: column;
 
 	&__header {
-		background-color: $header-color;
 		color: $header-text-color;
 
 		flex: 1 0 $min-header-h;
@@ -88,10 +108,9 @@ $piano-min-h: 0;
 	}
 
 	&__components {
-		background-color: purple;
-
 		flex: 1 1 $base-components-h;
 		max-height: $base-components-h;
+		min-height: $min-components-h;
 
 		display: grid;
 
@@ -103,6 +122,8 @@ $piano-min-h: 0;
 		gap: $gap-df;
 		display: flex;
 		justify-content: space-around;
+		align-items: center;
+		margin: 1rem 0;
 
 		flex: 0 0 $base-actions-h;
 	}
@@ -110,21 +131,38 @@ $piano-min-h: 0;
 	&__envelope {
 		// max-height: 25%;
 		// height: 100%;
-		flex: 0 0 $base-enveloppe-h;
+		// flex: 0 0 $base-enveloppe-h;
+		height: 100%;
 	}
 
 	&__lfo {
-		max-height: $base-analyser-h;
 		height: 100%;
+	}
 
-		flex: 0 0 $base-analyser-h;
+	// LFO + enveloppe
+	&__controls {
+		height: 100%;
+		flex: 1 0 $base-controls-h;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+
+		&__tabs {
+			gap: 1rem;
+		}
+
+		&__content {
+			height: 100%;
+		}
 	}
 
 	&__piano {
 		height: fit-content;
 
+		min-height: $min-piano-h;
+
 		background-color: green;
-		flex: 1 0 $piano-max-h;
+		flex: 1 0 $max-piano-h;
 	}
 }
 </style>

@@ -377,7 +377,7 @@ function handleCloseContextMenu() {
 	}
 
 	@include respond(phone) {
-		--slider-size: 2rem;
+		--slider-size: 9rem;
 	}
 }
 </style>
