@@ -110,6 +110,9 @@ $max-lfo-h: 1fr;
 			gap: $gap-df;
 			align-items: center;
 
+			// background-color: $tertiary-color;
+			padding: $gap-df;
+
 			// // gap: 2rem;
 		}
 	}

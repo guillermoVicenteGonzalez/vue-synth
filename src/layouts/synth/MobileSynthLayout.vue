@@ -62,11 +62,11 @@ $header-color: black;
 $header-text-color: white;
 
 $base-components-h: 40%;
-$min-components-h: 20rem;
+$min-components-h: 28rem;
 
 $base-actions-h: 4rem;
 
-$base-controls-h: 35%;
+$base-controls-h: 40%;
 
 $base-enveloppe-h: 25%;
 
@@ -78,8 +78,8 @@ $max-header-h: 5rem;
 $min-body-h: 7rem;
 $max-body-h: 7fr;
 
-$piano-max-h: 15rem;
-$piano-min-h: 0;
+$max-piano-h: 15rem;
+$min-piano-h: 0;
 
 .mobile-layout {
 	background-color: $global-bg-color;
@@ -131,14 +131,12 @@ $piano-min-h: 0;
 	&__envelope {
 		// max-height: 25%;
 		// height: 100%;
-		flex: 0 0 $base-enveloppe-h;
+		// flex: 0 0 $base-enveloppe-h;
+		height: 100%;
 	}
 
 	&__lfo {
-		max-height: $base-analyser-h;
 		height: 100%;
-
-		flex: 0 0 $base-analyser-h;
 	}
 
 	// LFO + enveloppe
@@ -161,8 +159,10 @@ $piano-min-h: 0;
 	&__piano {
 		height: fit-content;
 
+		min-height: $min-piano-h;
+
 		background-color: green;
-		flex: 1 0 $piano-max-h;
+		flex: 1 0 $max-piano-h;
 	}
 }
 </style>
