@@ -14,8 +14,8 @@
 				<slot name="actions"></slot>
 				<hr />
 				<VsTabs
-					orientation="vertical"
 					v-model="activeTab"
+					orientation="vertical"
 					:items="tabItems"
 					class="portrait-layout__tabs"
 				></VsTabs>

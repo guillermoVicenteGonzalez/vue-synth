@@ -1,5 +1,9 @@
 <template>
-	<VsCard max-height="20rem" min-height="20rem" :class="filterCardStyles">
+	<VsCard
+		max-height="20rem"
+		:min-height="MIN_CARD_HEIGHT"
+		:class="filterCardStyles"
+	>
 		<div class="filterCard__handle">
 			<ToggleButton v-model="disabled" :color="primaryColor"></ToggleButton>
 
@@ -85,6 +89,8 @@ interface FilterWidgetProps {
 }
 const { sources, context } = defineProps<FilterWidgetProps>();
 const primaryColor = "#42d392";
+const MIN_CARD_HEIGHT = "17rem";
+const MAX_CARD_HEIGHT = "20rem";
 
 /**The filter node attached as model to the card.
  * It is created by the parent component (main view tipically)
@@ -179,6 +185,8 @@ $disabled-color: gray;
 .filterCard {
 	background-color: $bg-color-2;
 	display: flex;
+	width: 100%;
+	height: 100%;
 
 	&__handle {
 		flex: 0 0 3rem;
@@ -196,6 +204,8 @@ $disabled-color: gray;
 	}
 
 	&__body {
+		max-height: v-bind(MAX_CARD_HEIGHT);
+
 		padding: $gap-df;
 		width: 100%;
 		display: grid;
