@@ -7,23 +7,23 @@
 		>
 			<VsHamburgerIcon v-model="isDrawerActive"></VsHamburgerIcon>
 		</VsButton>
+
 		<div class="portrait-layout__header">
 			<slot name="header"> </slot>
 			<VsDrawer v-model="isDrawerActive">
 				<slot name="actions"></slot>
+				<hr />
+				<VsTabs
+					v-model="activeTab"
+					:items="tabItems"
+					class="portrait-layout__tabs"
+				></VsTabs>
 			</VsDrawer>
 		</div>
 
 		<div class="portrait-layout__components">
 			<slot name="waves"></slot>
 			<slot name="filters"></slot>
-		</div>
-
-		<div class="portrait-layout__middle-bar">
-			<div class="portrait-layout__actions"></div>
-			<div>
-				<VsTabs v-model="activeTab" :items="tabItems"></VsTabs>
-			</div>
 		</div>
 
 		<div class="portrait-layout__display">
@@ -122,36 +122,13 @@ $base-actions-h: 4rem;
 		gap: 0.5rem;
 	}
 
-	&__middle-bar {
-		gap: 1rem;
-		min-height: 3rem;
-		height: 10%;
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		font-size: 1.6rem;
-		display: none;
-	}
-
-	&__actions {
-		gap: $gap-df;
-		display: flex;
-		justify-content: space-around;
-		align-items: center;
-		padding: 0.5rem;
-		flex: 0 0 $base-actions-h;
-	}
-
 	&__display {
 		height: fit-content;
 		min-height: 50%;
 		max-height: 40%;
 	}
 
-	&__piano {
-		height: fit-content;
-		min-height: 30%;
-		flex-basis: minmax(0, $piano-max-h);
-		background-color: green;
+	&__tabs {
 	}
 }
 </style>

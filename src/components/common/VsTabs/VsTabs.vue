@@ -1,48 +1,65 @@
 <template>
-	<div class="tabs">
-		<ul class="tabs__navigation">
+	<div class="VsTabs" :class="VsTabsDynamicClasses">
+		<ul class="VsTabs__navigation">
 			<li
 				v-for="(tab, index) in items"
 				:key="tab + index"
-				class="tabs__selector"
-				:class="{ 'tabs__selector--active': index == activeTab }"
+				class="VsTabs__selector"
+				:class="{ 'VsTabs__selector--active': index == activeTab }"
 				@click="handleSelectTab(index)"
 			>
 				{{ tab }}
 			</li>
 		</ul>
 
-		<div class="tabs__content">
+		<div class="VsTabs__content">
 			<slot ref="myslot"></slot>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
+
+export type VsTabsVariant = "default";
+export type VsTabsOrientation = "horizontal" | "vertical";
+
 interface VsTabsProps {
 	items: string[];
 	textColor?: string;
 	highlightColor?: string;
-	variant?: string;
+	variant?: VsTabsVariant;
+	orientation?: VsTabsOrientation;
 }
 
-const { items, textColor } = defineProps<VsTabsProps>();
+const {
+	items,
+	textColor,
+	variant = "default",
+	orientation = "vertical",
+} = defineProps<VsTabsProps>();
 
 const activeTab = defineModel<number>();
 
 function handleSelectTab(i: number) {
 	activeTab.value = i;
 }
+
+const VsTabsDynamicClasses = computed(() => ({
+	[`VsTabs--${variant}`]: variant,
+	[`VsTabs--${orientation}`]: orientation,
+}));
 </script>
 
 <style lang="scss" scoped>
-.tabs {
+.VsTabs {
 	height: 100%;
 	width: 100%;
 	overflow: hidden;
 	display: flex;
 	flex-direction: column;
 	color: v-bind(textColor);
+
 	&__navigation {
 		display: flex;
 		justify-content: center;
@@ -63,6 +80,15 @@ function handleSelectTab(i: number) {
 		&--active {
 			text-decoration: underline;
 			font-weight: 800;
+		}
+	}
+
+	&--vertical {
+		.VsTabs {
+			&__navigation {
+				flex-direction: column;
+				gap: 1rem;
+			}
 		}
 	}
 }
