@@ -7,22 +7,22 @@
 			<div class="lfo-widget__selectors">
 				<h3 class="lfo-widget__param-label">Waveform:</h3>
 				<VsSelector
-					class="lfo-widget__selector"
 					v-model="lfo.waveform"
+					class="lfo-widget__selector"
 					:items="Object.keys(waveForms)"
 					:disabled="disabled"
 				/>
 				<h3 class="lfo-widget__param-label">Module:</h3>
 				<VsSelector
-					class="lfo-widget__selector"
 					v-model="selectedModuleName"
+					class="lfo-widget__selector"
 					:items="sourceNames"
 					:disabled="disabled"
 				/>
 				<h3 class="lfo-widget__param-label">Parameter:</h3>
 				<VsSelector
-					class="lfo-widget__selector"
 					v-model="modulableParameterName"
+					class="lfo-widget__selector"
 					:items="connectionOptions"
 					:disabled="disabled"
 					@change="connectLFO"
