@@ -2,7 +2,7 @@
 	<VsCard
 		v-if="audioModule"
 		:max-height="MAX_CARD_HEIGHT"
-		:min-height="MAX_CARD_WIDTH"
+		:min-height="MIN_CARD_HEIGHT"
 		:class="ModuleCardStyles"
 	>
 		<div class="ModuleCard__handle">
@@ -163,8 +163,8 @@ import AudioModule from "@/models/AudioModule";
 import { waveForms } from "@/models/wave";
 import { computed, ref, watch } from "vue";
 
-const MAX_CARD_WIDTH = "20rem";
 const MAX_CARD_HEIGHT = "20rem";
+const MIN_CARD_HEIGHT = "17rem";
 
 const primaryColor = "#42d392";
 const audioModule = defineModel<AudioModule>();

@@ -132,7 +132,27 @@ const model = defineModel<AudioEnvelope>({
 	grid-template-rows: 2fr 1fr;
 
 	@include respond(tab-port) {
+		grid-template-rows: auto;
+		grid-template-columns: repeat(2, 1fr);
+		gap: $gap-bg;
+		padding: $gap-bg;
+		justify-content: space-around;
+		grid-template-rows: auto;
+	}
+
+	@include respond(phone) {
 		grid-template-rows: repeat(2, 1fr);
+		grid-template-columns: auto;
+
+		gap: $gap-bg;
+		padding: $gap-bg;
+		justify-content: space-around;
+		grid-template-rows: auto;
+	}
+
+	@include respond(tab-land) {
+		grid-template-rows: auto;
+		grid-template-columns: repeat(2, 1fr);
 		gap: $gap-bg;
 		padding: $gap-bg;
 		justify-content: space-around;

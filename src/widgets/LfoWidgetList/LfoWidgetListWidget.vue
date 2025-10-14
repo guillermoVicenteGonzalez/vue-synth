@@ -2,6 +2,7 @@
 	<VsCard class="lfo-widget-list" :class="dynamicLayoutStyles">
 		<VsTab v-for="n in WIDGET_N" :key="n" :active="activeTab == n">
 			<LfoWdidgetWidget
+				:variant="widgetVariant"
 				:context="context"
 				:sources="sources"
 			></LfoWdidgetWidget>
@@ -22,7 +23,10 @@
 import VsCard from "@/components/common/VsCard/VsCard.vue";
 import VsTab from "@/components/common/VsTab/VsTab.vue";
 import { computed, ref } from "vue";
-import type { LfoSource } from "../LfoWdidget/LfoWdidgetWidget.vue";
+import type {
+	LfoSource,
+	LFOWidgetVariants,
+} from "../LfoWdidget/LfoWdidgetWidget.vue";
 import LfoWdidgetWidget from "../LfoWdidget/LfoWdidgetWidget.vue";
 
 const WIDGET_N = 4;
@@ -35,6 +39,7 @@ interface LfoWidgetListWidgetProps {
 	context: AudioContext;
 	sources: LfoSource[];
 	variant?: lfoWidgetListVariants;
+	widgetVariant?: LFOWidgetVariants;
 }
 
 const dynamicLayoutStyles = computed(() => {
@@ -47,6 +52,7 @@ const {
 	context,
 	sources,
 	variant = "vertical",
+	widgetVariant = "default",
 } = defineProps<LfoWidgetListWidgetProps>();
 </script>
 
@@ -70,7 +76,7 @@ const {
 	&__tab {
 		background-color: $bg-color-3;
 		width: 5rem;
-		height: 100%;
+		// height: 100%;
 		border-radius: 10px;
 		cursor: pointer;
 
@@ -90,7 +96,7 @@ const {
 		}
 
 		.lfo-widget-list__tab {
-			min-height: 5rem;
+			// min-height: 10rem;
 			height: 100%;
 		}
 	}
@@ -102,9 +108,11 @@ const {
 			padding: 0.5rem;
 			flex-direction: row;
 			gap: 0.5rem;
+			height: fit-content;
 		}
 
 		.lfo-widget-list__tab {
+			min-height: 3rem;
 			width: 100%;
 		}
 	}

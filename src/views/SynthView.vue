@@ -42,6 +42,7 @@
 		</template>
 		<template #lfo>
 			<LfoWidgetListWidget
+				:widget-variant="LFOlWidgetVariant"
 				:variant="lfoListVariant"
 				:context="mainContext"
 				:sources="lfoSources"
@@ -77,7 +78,10 @@ import VSFooter from "@/widgets/Footer/VSFooter.vue";
 import HeaderControlsWidget from "@/widgets/HeaderControls/HeaderControlsWidget.vue";
 import HeaderWidgetWidget from "@/widgets/HeaderWidget/HeaderWidgetWidget.vue";
 import KeyboardWidget from "@/widgets/Keyboard/KeyboardWidget.vue";
-import { type LfoSource } from "@/widgets/LfoWdidget/LfoWdidgetWidget.vue";
+import {
+	type LfoSource,
+	type LFOWidgetVariants,
+} from "@/widgets/LfoWdidget/LfoWdidgetWidget.vue";
 import LfoWidgetListWidget from "@/widgets/LfoWidgetList/LfoWidgetListWidget.vue";
 import ModuleCardListWidget from "@/widgets/ModuleCardList/ModuleCardListWidget.vue";
 import { computed, onMounted, ref, type Ref, type UnwrapRef } from "vue";
@@ -99,8 +103,12 @@ const currentLayout = computed(() => {
 	return SynthLayout;
 });
 
+const LFOlWidgetVariant = computed<LFOWidgetVariants>(() =>
+	currentLayout.value == PortraitSynthLayout ? "minimal" : "default"
+);
+
 const lfoListVariant = computed(() => {
-	return browserWidth.value < 1400 ? "horizontal" : "vertical";
+	return browserWidth.value < 800 ? "horizontal" : "vertical";
 });
 
 const MAX_EFFECTS = 5;
