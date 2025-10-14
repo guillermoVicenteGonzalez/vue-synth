@@ -14,6 +14,7 @@
 				<slot name="actions"></slot>
 				<hr />
 				<VsTabs
+					orientation="vertical"
 					v-model="activeTab"
 					:items="tabItems"
 					class="portrait-layout__tabs"
@@ -74,6 +75,7 @@ $piano-max-h: 10rem;
 $piano-min-h: 0;
 
 $header-h: 4rem;
+$header-min-h: 4rem;
 $base-actions-h: 4rem;
 
 .portrait-layout {
@@ -107,6 +109,7 @@ $base-actions-h: 4rem;
 
 	&__header {
 		// max-height: 7rem;
+		min-height: $header-min-h;
 		height: $header-h;
 		overflow: hidden;
 	}

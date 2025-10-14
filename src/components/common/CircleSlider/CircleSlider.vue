@@ -373,11 +373,11 @@ function handleCloseContextMenu() {
 	}
 
 	@include respond(tab-port) {
-		--slider-size: 7rem;
+		--slider-size: 8rem;
 	}
 
 	@include respond(phone) {
-		--slider-size: 9rem;
+		--slider-size: 10rem;
 	}
 }
 </style>

@@ -36,7 +36,7 @@ const {
 	items,
 	textColor,
 	variant = "default",
-	orientation = "vertical",
+	orientation = "horizontal",
 } = defineProps<VsTabsProps>();
 
 const activeTab = defineModel<number>();

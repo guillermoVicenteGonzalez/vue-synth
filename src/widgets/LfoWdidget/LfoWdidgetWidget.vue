@@ -356,7 +356,7 @@ $disabled-color: gray;
 			}
 
 			&__display {
-				flex: 0 1 50%;
+				flex: 0 1 70%;
 				max-height: 50%;
 			}
 

@@ -76,7 +76,7 @@ const {
 	&__tab {
 		background-color: $bg-color-3;
 		width: 5rem;
-		height: 100%;
+		// height: 100%;
 		border-radius: 10px;
 		cursor: pointer;
 
@@ -96,7 +96,7 @@ const {
 		}
 
 		.lfo-widget-list__tab {
-			min-height: 10rem;
+			// min-height: 10rem;
 			height: 100%;
 		}
 	}
