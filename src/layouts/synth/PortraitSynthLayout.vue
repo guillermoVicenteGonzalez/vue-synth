@@ -88,7 +88,7 @@ $base-actions-h: 4rem;
 	max-width: 100vw;
 	max-height: 100dvh;
 
-	overflow: hidden !important;
+	// overflow: hidden !important;
 
 	display: flex;
 	flex-direction: column;
