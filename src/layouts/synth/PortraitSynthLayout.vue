@@ -40,6 +40,10 @@
 				<slot name="lfo"></slot>
 			</VsTab>
 		</div>
+
+		<div class="portrait-layout__footer">
+			<slot name="footer"></slot>
+		</div>
 	</div>
 </template>
 <script setup lang="ts">
@@ -80,10 +84,10 @@ $header-max-h: 4rem;
 	color: $text-color;
 
 	width: 100vw;
-	height: 100dvh;
+	height: 100lvh;
 
 	max-width: 100dvw;
-	max-height: 100dvh;
+	max-height: 100lvh;
 
 	overflow: hidden !important;
 
@@ -130,10 +134,10 @@ $header-max-h: 4rem;
 	&__tabs {
 	}
 
-	&__footer {
-		overflow: hidden;
-		display: none;
-	}
+	// &__footer {
+	// 	overflow: hidden;
+	// 	display: none;
+	// }
 
 	&__drawer {
 		height: calc(100dvh - #{$header-h});
