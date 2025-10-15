@@ -43,11 +43,14 @@ $transition-time: 0.5s;
 
 	&--active {
 		// display: block;
+
 		.VsHamburgerIcon {
 			&__slice {
 				position: absolute;
 				display: none;
 				top: 50%;
+				width: 70%;
+				min-width: 2rem;
 
 				&:first-of-type {
 					display: block;

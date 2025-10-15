@@ -32,9 +32,6 @@ $global-bg-color: $bg-color-1;
 
 $header-color: $primary-color;
 $header-text-color: white;
-$components-bg-color: white;
-$display-bg-color: white;
-$footer-bg-color: blueviolet;
 
 $min-components-w: 80rem;
 $max-components-w: 5fr;
@@ -144,20 +141,13 @@ $max-lfo-h: 1fr;
 		grid-row: footer-start / footer-end;
 		grid-column: 1/ -1;
 		// height: $footer-h;
-		background-color: $footer-bg-color;
-		background-color: purple;
 	}
 
 	@media screen and (max-width: 1900px) {
 		$min-components-w: 40rem;
 	}
 
-	@media screen and (max-width: 1600px) {
-		$footer-bg-color: yellow;
-	}
-
 	@include respond(tab-land) {
-		background-color: red !important	;
 		$min-components-w: 30rem;
 	}
 
@@ -179,7 +169,6 @@ $max-lfo-h: 1fr;
 
 		&__components {
 			grid-row: body-start / body-end;
-			background-color: purple;
 			grid-column: 1 / -1;
 			overflow: hidden;
 
@@ -195,11 +184,8 @@ $max-lfo-h: 1fr;
 			// visibility: hidden;
 			grid-row: visualization-start / visualization-end;
 			grid-column: 1 / -1;
-			background-color: $display-bg-color;
 			overflow: hidden;
 			resize: both;
-
-			background-color: #fabada;
 		}
 
 		&__footer {
@@ -207,8 +193,6 @@ $max-lfo-h: 1fr;
 			grid-row: footer-start / footer-end;
 			grid-column: 1/ -1;
 			// height: $footer-h;
-			background-color: $footer-bg-color;
-			background-color: purple;
 		}
 
 		&__piano {
@@ -245,7 +229,6 @@ $max-lfo-h: 1fr;
 			// visibility: hidden;
 			grid-row: visualization-start / visualization-end;
 			grid-column: 1 / -1;
-			background-color: $display-bg-color;
 			overflow: hidden;
 			resize: both;
 
@@ -257,8 +240,6 @@ $max-lfo-h: 1fr;
 			grid-row: footer-start / footer-end;
 			grid-column: 1/ -1;
 			// height: $footer-h;
-			background-color: $footer-bg-color;
-			background-color: purple;
 		}
 
 		&__piano {
