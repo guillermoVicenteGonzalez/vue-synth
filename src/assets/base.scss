@@ -74,7 +74,7 @@ html {
 
 	@include respond(tab-port) {
 		font-size: 60%;
-		font-size: 56.29%;
+		font-size: 50%;
 	}
 
 	@include respond(phone) {
