@@ -32,15 +32,13 @@
 				<slot name="envelope" variant="minimal"></slot>
 			</VsTab>
 
-			<VsTab :active="activeTab == 1"> <slot name="piano"></slot> </VsTab>
+			<VsTab :active="activeTab == 1" class="portrait-layout__piano">
+				<slot name="piano"></slot>
+			</VsTab>
 
 			<VsTab :active="activeTab == 2">
 				<slot name="lfo"></slot>
 			</VsTab>
-		</div>
-
-		<div>
-			<slot name="footer"></slot>
 		</div>
 	</div>
 </template>
@@ -71,7 +69,7 @@ $min-components-h: 15rem;
 $max-components-h: 5fr;
 
 $min-display-h: 10rem;
-$max-display-h: 5fr;
+$max-display-h: 4.8fr;
 
 $header-h: 4rem;
 $header-min-h: 4rem;
@@ -84,7 +82,7 @@ $header-max-h: 4rem;
 	width: 100vw;
 	height: 100dvh;
 
-	max-width: 100vw;
+	max-width: 100dvw;
 	max-height: 100dvh;
 
 	overflow: hidden !important;
@@ -126,6 +124,7 @@ $header-max-h: 4rem;
 
 	&__display {
 		height: 100%;
+		width: 100%;
 	}
 
 	&__tabs {
@@ -138,6 +137,11 @@ $header-max-h: 4rem;
 
 	&__drawer {
 		height: calc(100dvh - #{$header-h});
+	}
+
+	&__piano {
+		max-width: 100dvw;
+		overflow: hidden;
 	}
 }
 </style>
