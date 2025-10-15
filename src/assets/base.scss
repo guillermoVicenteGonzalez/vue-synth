@@ -80,6 +80,8 @@ html {
 	@include respond(phone) {
 		font-size: 50%;
 	}
+
+	background-color: red;
 }
 
 body {
