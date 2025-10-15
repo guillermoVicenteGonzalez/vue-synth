@@ -10,7 +10,7 @@
 
 		<div class="portrait-layout__header">
 			<slot name="header"> </slot>
-			<VsDrawer v-model="isDrawerActive">
+			<!-- <VsDrawer v-model="isDrawerActive">
 				<slot name="actions"></slot>
 				<hr />
 				<VsTabs
@@ -19,7 +19,7 @@
 					:items="tabItems"
 					class="portrait-layout__tabs"
 				></VsTabs>
-			</VsDrawer>
+			</VsDrawer> -->
 		</div>
 
 		<div class="portrait-layout__components">
@@ -42,13 +42,11 @@
 </template>
 <script setup lang="ts">
 import VsButton from "@/components/common/VsButton/VsButton.vue";
-import VsDrawer from "@/components/common/VsDrawer/VsDrawer.vue";
 import VsHamburgerIcon from "@/components/common/VsHamburgerIcon/VsHamburgerIcon.vue";
 import VsTab from "@/components/common/VsTab/VsTab.vue";
-import VsTabs from "@/components/common/VsTabs/VsTabs.vue";
 import { ref } from "vue";
 
-const tabItems = ["envelope", "piano", "LFO"];
+// const tabItems = ["envelope", "piano", "LFO"];
 const activeTab = ref<number>(0);
 const isDrawerActive = ref<boolean>(false);
 
