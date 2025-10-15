@@ -84,10 +84,10 @@ $header-max-h: 4rem;
 	color: $text-color;
 
 	width: 100vw;
-	height: 100lvh;
+	height: 100%;
 
 	max-width: 100dvw;
-	max-height: 100lvh;
+	max-height: 100dvh;
 
 	overflow: hidden !important;
 

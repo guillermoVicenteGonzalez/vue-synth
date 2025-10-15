@@ -66,7 +66,7 @@ $animation-time: 0.5s;
 	}
 
 	&--top {
-		width: 100vw;
+		width: 100dvw;
 		height: $drawer-final-size;
 
 		.VsDrawer__content {
@@ -75,7 +75,7 @@ $animation-time: 0.5s;
 	}
 
 	&--bottom {
-		width: 100vw;
+		width: 100dvw;
 		height: $drawer-final-size;
 		bottom: 0;
 		left: 0;

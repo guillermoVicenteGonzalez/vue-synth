@@ -89,6 +89,10 @@ body {
 	font-weight: 400;
 	line-height: 1.6;
 
-	min-height: 100vh;
+	max-height: 100dvh;
 	min-height: -webkit-fill-available;
+}
+
+#app {
+	height: 100dvh;
 }
