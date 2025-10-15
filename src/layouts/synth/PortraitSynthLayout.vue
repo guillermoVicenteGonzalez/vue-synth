@@ -62,14 +62,12 @@ $global-bg-color: $bg-color-1;
 
 $header-color: black;
 $header-text-color: white;
-$components-bg-color: white;
-$display-bg-color: white;
 $footer-bg-color: blueviolet;
 
-$min-components-h: 18rem;
+$min-components-h: 15rem;
 
 $min-display-h: 3rem;
-$max-display-h: 35%;
+$max-display-h: 50%;
 
 $piano-max-h: 10rem;
 $piano-min-h: 0;
@@ -127,8 +125,8 @@ $base-actions-h: 4rem;
 
 	&__display {
 		height: fit-content;
-		min-height: 50%;
-		max-height: 40%;
+		min-height: $min-display-h;
+		max-height: $max-display-h;
 	}
 
 	&__tabs {
