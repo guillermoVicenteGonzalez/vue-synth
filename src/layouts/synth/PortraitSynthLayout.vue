@@ -10,7 +10,7 @@
 
 		<div class="portrait-layout__header">
 			<slot name="header"> </slot>
-			<!-- <VsDrawer v-model="isDrawerActive">
+			<VsDrawer v-model="isDrawerActive" class="portrait-layout__drawer">
 				<slot name="actions"></slot>
 				<hr />
 				<VsTabs
@@ -19,7 +19,7 @@
 					:items="tabItems"
 					class="portrait-layout__tabs"
 				></VsTabs>
-			</VsDrawer> -->
+			</VsDrawer>
 		</div>
 
 		<div class="portrait-layout__components">
@@ -38,15 +38,21 @@
 				<slot name="lfo"></slot>
 			</VsTab>
 		</div>
+
+		<div>
+			<slot name="footer"></slot>
+		</div>
 	</div>
 </template>
 <script setup lang="ts">
 import VsButton from "@/components/common/VsButton/VsButton.vue";
+import VsDrawer from "@/components/common/VsDrawer/VsDrawer.vue";
 import VsHamburgerIcon from "@/components/common/VsHamburgerIcon/VsHamburgerIcon.vue";
 import VsTab from "@/components/common/VsTab/VsTab.vue";
+import VsTabs from "@/components/common/VsTabs/VsTabs.vue";
 import { ref } from "vue";
 
-// const tabItems = ["envelope", "piano", "LFO"];
+const tabItems = ["envelope", "piano", "LFO"];
 const activeTab = ref<number>(0);
 const isDrawerActive = ref<boolean>(false);
 
@@ -60,19 +66,16 @@ $global-bg-color: $bg-color-1;
 
 $header-color: black;
 $header-text-color: white;
-$footer-bg-color: blueviolet;
 
 $min-components-h: 15rem;
+$max-components-h: 5fr;
 
-$min-display-h: 3rem;
-$max-display-h: 50%;
-
-$piano-max-h: 10rem;
-$piano-min-h: 0;
+$min-display-h: 10rem;
+$max-display-h: 5fr;
 
 $header-h: 4rem;
 $header-min-h: 4rem;
-$base-actions-h: 4rem;
+$header-max-h: 4rem;
 
 .portrait-layout {
 	background-color: $global-bg-color;
@@ -84,11 +87,13 @@ $base-actions-h: 4rem;
 	max-width: 100vw;
 	max-height: 100dvh;
 
-	// overflow: hidden !important;
+	overflow: hidden !important;
 
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
+	display: grid;
+	grid-template-rows:
+		[header-start] minmax($header-min-h, $header-h)
+		[header-end cards-start] minmax($min-components-h, $max-components-h)
+		[cards-end display-start] minmax($min-display-h, $max-display-h);
 
 	&__drawer-btn {
 		--drawer-btn-dimensions: calc(#{$header-h} - #{$gap-df});
@@ -105,14 +110,12 @@ $base-actions-h: 4rem;
 
 	&__header {
 		// max-height: 7rem;
-		min-height: $header-min-h;
-		height: $header-h;
+
 		overflow: hidden;
 	}
 
 	&__components {
 		min-height: $min-components-h;
-		max-height: 40%;
 		height: 100%;
 
 		display: grid;
@@ -122,12 +125,19 @@ $base-actions-h: 4rem;
 	}
 
 	&__display {
-		height: fit-content;
-		min-height: $min-display-h;
-		max-height: $max-display-h;
+		height: 100%;
 	}
 
 	&__tabs {
+	}
+
+	&__footer {
+		overflow: hidden;
+		display: none;
+	}
+
+	&__drawer {
+		height: calc(100dvh - #{$header-h});
 	}
 }
 </style>

@@ -33,9 +33,11 @@ $drawer-final-size: 20rem;
 $animation-time: 0.5s;
 
 .VsDrawer {
-	overflow: auto;
+	overflow-y: auto;
+	overflow-x: hidden;
 	background-color: $drawer-bg-color;
 	position: absolute;
+	height: 100%;
 
 	border-radius: $border-radius-df;
 	border-top-left-radius: 0;
