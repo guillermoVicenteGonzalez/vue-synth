@@ -55,6 +55,7 @@
 				:source-cluster="MainAudioCluster as AudioCluster"
 			></KeyboardWidget>
 		</template>
+
 		<template #footer>
 			<VSFooter></VSFooter>
 		</template>
