@@ -20,7 +20,6 @@
 					orientation="vertical"
 					:min="0"
 					:max="10000"
-					label="cuttof"
 					:disabled="disabled"
 				></VsSlider>
 			</div>
