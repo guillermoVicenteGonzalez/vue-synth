@@ -110,7 +110,7 @@ const dynamicClass = computed(() => ({
 }));
 
 const CircleSliderSize = computed<number>(() => {
-	if (browserWidth.value < 800) {
+	if (browserWidth.value < 1000) {
 		return 70;
 	}
 
