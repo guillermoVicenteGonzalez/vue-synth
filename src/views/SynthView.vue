@@ -38,9 +38,10 @@
 			<VsSlider label="octave"></VsSlider>
 			<VsSlider label="volume"></VsSlider> -->
 			<ActionsWidget
-				@createWave="createNewModule"
-				@createFilter="createEffect('filter')"
-				@deleteAll="deleteAll"
+				:orientation="ActionsWidgetOrientation"
+				@create-wave="createNewModule"
+				@create-filter="createEffect('filter')"
+				@delete-all="deleteAll"
 			></ActionsWidget>
 		</template>
 		<template #envelope>
@@ -77,7 +78,9 @@ import SynthLayout from "@/layouts/synth/SynthLayout.vue";
 import AudioCluster from "@/models/AudioCluster";
 import type { AudioEnvelope } from "@/models/AudioEnvelope";
 import AudioModule, { type AudioEffect } from "@/models/AudioModule";
-import ActionsWidget from "@/widgets/ActionsWidget/ActionsWidget.vue";
+import ActionsWidget, {
+	type ActionsWidgetOrientation,
+} from "@/widgets/ActionsWidget/ActionsWidget.vue";
 import EffectListWidget from "@/widgets/EffectList/EffectListWidget.vue";
 import EnvelopeControlWidget from "@/widgets/EnvelopeControl/EnvelopeControlWidget.vue";
 import VSFooter from "@/widgets/Footer/VSFooter.vue";
@@ -116,6 +119,10 @@ const LFOlWidgetVariant = computed<LFOWidgetVariants>(() =>
 const lfoListVariant = computed(() => {
 	return browserWidth.value < 800 ? "horizontal" : "vertical";
 });
+
+const ActionsWidgetOrientation = computed<ActionsWidgetOrientation>(() =>
+	currentLayout.value == PortraitSynthLayout ? "vertical" : "horizontal"
+);
 
 const MAX_EFFECTS = 5;
 
