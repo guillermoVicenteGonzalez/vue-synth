@@ -34,10 +34,10 @@ $header-color: $primary-color;
 $header-text-color: white;
 
 $min-components-w: 80rem;
-$max-components-w: 5fr;
+$max-components-w: 6fr;
 
 $min-display-w: 50rem;
-$max-display-w: 5fr;
+$max-display-w: 4fr;
 
 $min-header-h: 4rem;
 $max-header-h: 6rem;

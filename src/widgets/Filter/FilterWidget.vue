@@ -17,11 +17,16 @@
 				<VsSlider
 					v-if="filter"
 					v-model="filterHandler.cutoffFrequency"
+					class="filterCard__controls__slider"
 					orientation="vertical"
 					:min="0"
 					:max="10000"
 					:disabled="disabled"
-				></VsSlider>
+				>
+					<template #label>
+						<VsChip class="filterCard__controls__chip">Cutoff</VsChip>
+					</template>
+				</VsSlider>
 			</div>
 
 			<div class="filterCard__main">
@@ -62,6 +67,7 @@
 import ToggleButton from "@/components/common/ToggleButton/ToggleButton.vue";
 import VsButton from "@/components/common/VsButton/VsButton.vue";
 import VsCard from "@/components/common/VsCard/VsCard.vue";
+import VsChip from "@/components/common/VsChip/VsChip.vue";
 import VsSelector from "@/components/common/VsSelector/VsSelector.vue";
 import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
 import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
@@ -213,20 +219,39 @@ $disabled-color: gray;
 			[controls-end main-start] minmax(200px, 8fr);
 
 		grid-template-rows: minmax(10px, 1fr);
-		gap: $gap-sm;
+		gap: $gap-bg;
+
+		@include respond(tab-port) {
+			gap: $gap-sm;
+		}
 	}
 
 	&__controls {
-		width: 100%;
+		// width: 100%;
+		// height: 100%;
+		// flex: 1;
+
+		// max-height: 100%;
+		// display: flex;
+		// justify-content: center;
+		// align-items: center;
+
+		// flex-direction: column;
+
 		height: 100%;
-		flex: 1;
-
-		max-height: 100%;
 		display: flex;
-		justify-content: center;
+		flex-direction: column-reverse;
 		align-items: center;
+		justify-content: space-between;
 
-		flex-direction: column;
+		&__slider {
+			flex-direction: column-reverse;
+		}
+
+		&__chip {
+			font-size: 1.2rem;
+			flex-flow: 0;
+		}
 	}
 
 	&__analyser {
