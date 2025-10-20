@@ -89,7 +89,7 @@
 				<VsSlider
 					v-model="zoom"
 					class="ModuleCard__center-slot__zoom-slider"
-					:min="400"
+					:min="500"
 					:max="10000"
 					:label="zoom"
 					:disabled="disabled"
@@ -163,7 +163,8 @@ import AudioModule from "@/models/AudioModule";
 import { waveForms } from "@/models/wave";
 import { computed, ref, watch } from "vue";
 
-const MAX_CARD_HEIGHT = "20rem";
+// const MAX_CARD_HEIGHT = "20rem";
+const MAX_CARD_HEIGHT = "17rem";
 const MIN_CARD_HEIGHT = "17rem";
 
 const primaryColor = "#42d392";

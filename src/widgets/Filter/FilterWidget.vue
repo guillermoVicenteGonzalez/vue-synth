@@ -1,6 +1,6 @@
 <template>
 	<VsCard
-		max-height="20rem"
+		:max-height="MAX_CARD_HEIGHT"
 		:min-height="MIN_CARD_HEIGHT"
 		:class="filterCardStyles"
 	>
@@ -89,8 +89,8 @@ interface FilterWidgetProps {
 }
 const { sources, context } = defineProps<FilterWidgetProps>();
 const primaryColor = "#42d392";
+const MAX_CARD_HEIGHT = "17rem";
 const MIN_CARD_HEIGHT = "17rem";
-const MAX_CARD_HEIGHT = "20rem";
 
 /**The filter node attached as model to the card.
  * It is created by the parent component (main view tipically)
