@@ -210,8 +210,12 @@ const model = defineModel<AudioEnvelope>({
 			flex-grow: 1;
 			flex-shrink: 1;
 
-			@include respond(tab-port) {
+			@include respond(tab-land) {
 				margin-top: $gap-df;
+			}
+
+			@media (max-height: 25em) {
+				margin-top: 0;
 			}
 		}
 	}
