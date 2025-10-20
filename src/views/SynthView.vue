@@ -31,11 +31,17 @@
 			></EffectListWidget>
 		</template>
 		<template #actions>
-			<VsButton @click="createNewModule">New Wave</VsButton>
+			<!-- <VsButton @click="createNewModule">New Wave</VsButton>
 			<VsButton @click="createEffect('filter')">New filter</VsButton>
 			<VsButton @click="deleteAll()">Delete all</VsButton>
+			<RecordBtn></RecordBtn>
 			<VsSlider label="octave"></VsSlider>
-			<VsSlider label="volume"></VsSlider>
+			<VsSlider label="volume"></VsSlider> -->
+			<ActionsWidget
+				@createWave="createNewModule"
+				@createFilter="createEffect('filter')"
+				@deleteAll="deleteAll"
+			></ActionsWidget>
 		</template>
 		<template #envelope>
 			<EnvelopeControlWidget v-model="envelope" />
@@ -63,8 +69,6 @@
 </template>
 
 <script setup lang="ts">
-import VsButton from "@/components/common/VsButton/VsButton.vue";
-import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
 import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
 import { useMonitorSize } from "@/composables/useMonitorSize";
 import MobileSynthLayout from "@/layouts/synth/MobileSynthLayout.vue";
@@ -73,6 +77,7 @@ import SynthLayout from "@/layouts/synth/SynthLayout.vue";
 import AudioCluster from "@/models/AudioCluster";
 import type { AudioEnvelope } from "@/models/AudioEnvelope";
 import AudioModule, { type AudioEffect } from "@/models/AudioModule";
+import ActionsWidget from "@/widgets/ActionsWidget/ActionsWidget.vue";
 import EffectListWidget from "@/widgets/EffectList/EffectListWidget.vue";
 import EnvelopeControlWidget from "@/widgets/EnvelopeControl/EnvelopeControlWidget.vue";
 import VSFooter from "@/widgets/Footer/VSFooter.vue";

@@ -13,9 +13,11 @@ const VSButtonVariants = {
 	round: "vs-button--round",
 };
 
+export type VSButtonVariants = keyof typeof VSButtonVariants;
+
 interface VSButtonProps {
 	disabled?: boolean;
-	variant?: keyof typeof VSButtonVariants;
+	variant?: VSButtonVariants;
 }
 
 const { variant = "default", disabled = false } = defineProps<VSButtonProps>();

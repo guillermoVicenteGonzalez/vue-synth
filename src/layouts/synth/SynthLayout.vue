@@ -102,13 +102,6 @@ $max-lfo-h: 1fr;
 
 		&__actions {
 			grid-column: 1/-1;
-			display: flex;
-			justify-content: space-evenly;
-			gap: $gap-df;
-			align-items: center;
-
-			// background-color: $tertiary-color;
-			padding: $gap-df;
 
 			// // gap: 2rem;
 		}
