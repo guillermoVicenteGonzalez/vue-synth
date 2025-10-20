@@ -63,6 +63,10 @@ $animation-time: 0.5s;
 		display: flex;
 		flex-direction: column;
 		gap: $gap-bg;
+
+		@include respond(tab-port) {
+			padding: $gap-df;
+		}
 	}
 
 	&--top {

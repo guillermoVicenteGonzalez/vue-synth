@@ -73,15 +73,15 @@ html {
 	}
 
 	@include respond(tab-port) {
-		font-size: 60%;
+		// font-size: 60%;
 		font-size: 50%;
 	}
 
 	@include respond(phone) {
-		font-size: 50%;
+		font-size: 40%;
 	}
 
-	background-color: red;
+	background-color: black;
 }
 
 body {

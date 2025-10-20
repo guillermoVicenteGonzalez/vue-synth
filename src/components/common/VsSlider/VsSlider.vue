@@ -10,7 +10,9 @@
 			class="slider__input"
 			@input="emit('change', model)"
 		/>
-		<label v-if="label" class="slider__label">{{ label }}</label>
+		<div class="slider__label">
+			<slot name="label"> </slot>
+		</div>
 	</div>
 </template>
 
@@ -33,7 +35,6 @@ const {
 	variant,
 	step = 1,
 	orientation = "horizontal",
-	label,
 	max,
 	min,
 	disabled = false,
@@ -137,6 +138,7 @@ $slider-width: 1rem;
 		// color: v-bind(labelColor);
 		color: $text-color;
 		text-align: center;
+		margin-left: $gap-df;
 	}
 
 	&--vertical {

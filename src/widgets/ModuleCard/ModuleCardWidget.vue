@@ -29,6 +29,7 @@
 				<VsTooltip text="Amplitude" orientation="right">
 					<CircleSlider
 						v-model="audioModule.wave.amplitude"
+						:size="CircleSliderSize"
 						class="ModuleCard__circle-slider"
 						:default-value="10"
 						:disabled="disabled"
@@ -52,6 +53,7 @@
 				<VsTooltip text="frequency" orientation="right">
 					<CircleSlider
 						v-model="audioModule.wave.frequency"
+						:size="CircleSliderSize"
 						class="ModuleCard__circle-slider"
 						:default-value="440"
 						:fill-color="primaryColor"
@@ -89,7 +91,7 @@
 				<VsSlider
 					v-model="zoom"
 					class="ModuleCard__center-slot__zoom-slider"
-					:min="400"
+					:min="500"
 					:max="10000"
 					:label="zoom"
 					:disabled="disabled"
@@ -112,6 +114,7 @@
 				<VsTooltip text="voices" orientation="left">
 					<CircleSlider
 						v-model="audioModule.voices"
+						:size="CircleSliderSize"
 						class="ModuleCard__circle-slider"
 						:default-value="10"
 						:disabled="disabled"
@@ -135,6 +138,7 @@
 				<VsTooltip text="voices" orientation="left">
 					<CircleSlider
 						v-model="audioModule.voicesDetune"
+						:size="CircleSliderSize"
 						class="ModuleCard__circle-slider"
 						:default-value="20"
 						:disabled="disabled"
@@ -159,17 +163,20 @@ import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
 import VsTextInput from "@/components/common/VsTextInput/VsTextInput.vue";
 import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
 import WaveCanvas from "@/components/waves/WaveCanvas/WaveCanvas.vue";
+import { useMonitorSize } from "@/composables/useMonitorSize";
 import AudioModule from "@/models/AudioModule";
 import { waveForms } from "@/models/wave";
 import { computed, ref, watch } from "vue";
 
-const MAX_CARD_HEIGHT = "20rem";
+// const MAX_CARD_HEIGHT = "20rem";
+const MAX_CARD_HEIGHT = "17rem";
 const MIN_CARD_HEIGHT = "17rem";
 
 const primaryColor = "#42d392";
 const audioModule = defineModel<AudioModule>();
 const disabled = ref<boolean>(false);
 const zoom = ref<number>(10000);
+const { browserWidth } = useMonitorSize();
 
 const emit = defineEmits<{
 	(e: "delete", module: AudioModule | undefined): void;
@@ -177,6 +184,14 @@ const emit = defineEmits<{
 
 const ModuleCardStyles = computed(() => {
 	return `ModuleCard ${disabled.value ? "ModuleCard--disabled" : null}`;
+});
+
+const CircleSliderSize = computed<number>(() => {
+	if (browserWidth.value < 800) {
+		return 70;
+	}
+
+	return 80;
 });
 
 watch(disabled, () => {

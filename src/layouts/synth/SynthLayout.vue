@@ -57,6 +57,8 @@ $max-enveloppe-h: 3fr;
 $min-lfo-h: 20rem;
 $max-lfo-h: 1fr;
 
+$min-actions-h: 8rem;
+
 .synth-layout {
 	background-color: $global-bg-color;
 
@@ -96,19 +98,12 @@ $max-lfo-h: 1fr;
 
 		display: grid;
 		grid-template-columns: 4fr 3fr;
-		grid-template-rows: minmax(75%, 10fr) minmax(3.5rem, 1fr);
+		grid-template-rows: minmax(75%, 10fr) minmax($min-actions-h, 1.5fr);
 		// gap: $gap-bg;
 		// padding: $gap-bg;
 
 		&__actions {
 			grid-column: 1/-1;
-			display: flex;
-			justify-content: space-evenly;
-			gap: $gap-df;
-			align-items: center;
-
-			// background-color: $tertiary-color;
-			padding: $gap-df;
 
 			// // gap: 2rem;
 		}
