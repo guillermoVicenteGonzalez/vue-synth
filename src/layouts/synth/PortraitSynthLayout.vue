@@ -80,6 +80,12 @@ $header-h: 4rem;
 $header-min-h: 4rem;
 $header-max-h: 4rem;
 
+$min-waves-w: 45rem;
+$max-waves-w: 5fr;
+
+$min-filters-w: 3.5rem;
+$max-filters-w: 4fr;
+
 .portrait-layout {
 	background-color: $global-bg-color;
 	color: $text-color;
@@ -122,9 +128,12 @@ $header-max-h: 4rem;
 		height: 100%;
 
 		display: grid;
-		grid-template-columns: 4fr 3fr;
-		grid-template-rows: minmax(5, 10fr) minmax(3.5rem, 1fr);
-		gap: 0.5rem;
+		grid-template-columns: minmax($min-waves-w, $max-waves-w) minmax(
+				$min-filters-w,
+				$max-filters-w
+			);
+		// grid-template-rows: minmax($min-waves-w, 10fr) minmax(3.5rem, 1fr);
+		// gap: 0.5rem;
 	}
 
 	&__display {

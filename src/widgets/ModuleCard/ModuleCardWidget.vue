@@ -169,8 +169,8 @@ import { waveForms } from "@/models/wave";
 import { computed, ref, watch } from "vue";
 
 // const MAX_CARD_HEIGHT = "20rem";
-const MAX_CARD_HEIGHT = "20rem";
-const MIN_CARD_HEIGHT = "20rem";
+const MAX_CARD_HEIGHT = "17rem";
+const MIN_CARD_HEIGHT = "17rem";
 
 const primaryColor = "#42d392";
 const audioModule = defineModel<AudioModule>();
@@ -242,6 +242,7 @@ $disabled-color: gray;
 
 	&__body {
 		height: 100%;
+		width: 100%;
 		max-height: v-bind(MAX_CARD_HEIGHT);
 
 		padding: $gap-df;
@@ -250,6 +251,8 @@ $disabled-color: gray;
 			[handle-end left-start] minmax(2rem, 2fr)
 			[left-end body-start] minmax(10rem, 6fr)
 			[body-end right-start] minmax(8rem, 2fr);
+
+		grid-template-rows: minmax(10px, 1fr);
 	}
 
 	&__slider {
@@ -285,8 +288,8 @@ $disabled-color: gray;
 			flex-grow: 0;
 			flex-shrink: 1;
 
-			max-height: 50%;
 			// aspect-ratio: 3;
+			height: 100%;
 
 			background-color: $bg-color-1;
 			border-radius: 0.5rem;
