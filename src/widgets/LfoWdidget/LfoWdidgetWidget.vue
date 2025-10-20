@@ -48,12 +48,14 @@
 			<div class="lfo-widget__controls">
 				<CircleSlider
 					v-model="lfo.frequency"
+					:size="CircleSliderSize"
 					:fill-color="primaryColor"
 					:disabled="disabled"
 				></CircleSlider>
 				<VsChip class="lfo-widget__chip">Frequency</VsChip>
 				<CircleSlider
 					v-model="lfo.amplitude"
+					:size="CircleSliderSize"
 					:fill-color="primaryColor"
 					:default-value="100"
 					:max="minMaxLFOStrengh.max"
@@ -75,6 +77,7 @@ import VsCard from "@/components/common/VsCard/VsCard.vue";
 import VsChip from "@/components/common/VsChip/VsChip.vue";
 import VsSelector from "@/components/common/VsSelector/VsSelector.vue";
 import WaveCanvas from "@/components/waves/WaveCanvas/WaveCanvas.vue";
+import { useMonitorSize } from "@/composables/useMonitorSize";
 import AudioCluster from "@/models/AudioCluster";
 import AudioModule from "@/models/AudioModule";
 import { LFO } from "@/models/LFO";
@@ -89,6 +92,7 @@ interface LfoWdidgetWidgetProps {
 	sources: LfoSource[];
 	variant?: LFOWidgetVariants;
 }
+const { browserWidth } = useMonitorSize();
 
 const primaryColor = "#42d392";
 
@@ -104,6 +108,14 @@ const dynamicClass = computed(() => ({
 	"lfo-widget-card--disabled": disabled.value,
 	[`lfo-widget--${variant}`]: variant,
 }));
+
+const CircleSliderSize = computed<number>(() => {
+	if (browserWidth.value < 800) {
+		return 70;
+	}
+
+	return 80;
+});
 
 const sourceNames = computed<string[]>(() =>
 	sources.map((s, index) => {
