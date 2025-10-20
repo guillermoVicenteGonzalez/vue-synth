@@ -169,8 +169,8 @@ import { waveForms } from "@/models/wave";
 import { computed, ref, watch } from "vue";
 
 // const MAX_CARD_HEIGHT = "20rem";
-const MAX_CARD_HEIGHT = "17rem";
-const MIN_CARD_HEIGHT = "17rem";
+const MAX_CARD_HEIGHT = "20rem";
+const MIN_CARD_HEIGHT = "20rem";
 
 const primaryColor = "#42d392";
 const audioModule = defineModel<AudioModule>();
@@ -187,7 +187,7 @@ const ModuleCardStyles = computed(() => {
 });
 
 const CircleSliderSize = computed<number>(() => {
-	if (browserWidth.value < 800) {
+	if (browserWidth.value < 1000) {
 		return 70;
 	}
 
@@ -290,6 +290,10 @@ $disabled-color: gray;
 
 			background-color: $bg-color-1;
 			border-radius: 0.5rem;
+
+			@include respond(phone) {
+				max-height: 40%;
+			}
 		}
 
 		&__zoom-slider {
