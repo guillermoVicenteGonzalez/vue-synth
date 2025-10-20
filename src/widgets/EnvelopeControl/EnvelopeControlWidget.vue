@@ -182,12 +182,16 @@ const model = defineModel<AudioEnvelope>({
 		@include respond(tab-port) {
 			gap: $gap-bg;
 		}
+
+		@media (max-height: 25em) {
+			gap: $gap-sm;
+		}
 	}
 
 	&__control {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0 2rem;
+		gap: 0 $gap-bg;
 		align-content: center;
 
 		&__label {

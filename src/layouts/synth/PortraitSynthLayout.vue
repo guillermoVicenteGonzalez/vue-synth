@@ -70,10 +70,10 @@ $header-color: black;
 $header-text-color: white;
 
 $min-components-h: 15rem;
-$max-components-h: 5fr;
+$max-components-h: 5.2fr;
 
-$min-display-h: 10rem;
-$max-display-h: 4.8fr;
+$min-display-h: 9rem;
+$max-display-h: 4.5fr;
 
 $header-h: 4rem;
 $header-min-h: 4rem;

@@ -29,5 +29,9 @@ function deleteModule(index: number) {
 	flex: 1;
 	gap: $gap-bg;
 	padding: $gap-bg $gap-df;
+
+	@include respond(tab-land) {
+		padding: $gap-df;
+	}
 }
 </style>
