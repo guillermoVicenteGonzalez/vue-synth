@@ -126,6 +126,7 @@ $min-piano-h: 0;
 		margin: 1rem 0;
 
 		flex: 0 0 $base-actions-h;
+		padding: $gap-df;
 	}
 
 	&__envelope {
