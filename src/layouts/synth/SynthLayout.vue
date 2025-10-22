@@ -57,7 +57,7 @@ $max-enveloppe-h: 3fr;
 $min-lfo-h: 20rem;
 $max-lfo-h: 1fr;
 
-$min-actions-h: 8rem;
+$min-actions-h: 10rem;
 
 .synth-layout {
 	background-color: $global-bg-color;
@@ -104,7 +104,7 @@ $min-actions-h: 8rem;
 
 		&__actions {
 			grid-column: 1/-1;
-
+			padding: $gap-df;
 			// // gap: 2rem;
 		}
 	}

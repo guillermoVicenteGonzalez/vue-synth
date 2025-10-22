@@ -60,12 +60,12 @@
 		<div class="ActionsWidget__sliders">
 			<VsSlider label="octave">
 				<template #label>
-					<VsChip class="ActionsWidget__chip">Octave</VsChip>
+					<span class="ActionsWidget__chip">Octave</span>
 				</template>
 			</VsSlider>
 			<VsSlider label="volume">
 				<template #label>
-					<VsChip class="ActionsWidget__chip">Volume</VsChip>
+					<span class="ActionsWidget__chip">Volume</span>
 				</template>
 			</VsSlider>
 		</div>
@@ -76,7 +76,6 @@
 import VsButton, {
 	type VSButtonVariants,
 } from "@/components/common/VsButton/VsButton.vue";
-import VsChip from "@/components/common/VsChip/VsChip.vue";
 import VsSeparator, {
 	type VsSeparatorOrientation,
 } from "@/components/common/VsSeparator/VsSeparator.vue";
@@ -134,6 +133,10 @@ $action-size: 5rem;
 
 	// background-color: $tertiary-color;
 	padding: $gap-df;
+	background-color: $bg-color-2;
+	border-radius: $border-radius-bg;
+
+	height: 100%;
 
 	&__recording,
 	&__voices {
@@ -178,8 +181,9 @@ $action-size: 5rem;
 	}
 
 	&__chip {
+		display: block;
 		font-size: 1.6rem;
-		min-width: 8rem;
+		width: 7rem;
 	}
 
 	&--vertical {
