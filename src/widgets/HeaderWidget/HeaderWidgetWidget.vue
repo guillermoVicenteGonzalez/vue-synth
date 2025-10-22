@@ -1,6 +1,9 @@
 <template>
 	<header class="vsynth-header">
-		<slot name="controls"></slot>
+		<div class="vsynth-header__left">
+			<h2 class="vsynth-header__title">VSYNTH</h2>
+			<slot name="controls"></slot>
+		</div>
 		<div class="vsynth-header__visualizer">
 			<slot name="visualizer"></slot>
 		</div>
@@ -25,6 +28,17 @@
 	&__visualizer {
 		width: 100%;
 		min-height: 100%;
+	}
+
+	&__left {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	&__title {
+		align-self: center;
+		justify-self: center;
+		font-size: 2rem;
 	}
 }
 </style>

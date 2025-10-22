@@ -25,6 +25,8 @@ const tabDynamicClass = computed(() => ({
 	visibility: hidden;
 	overflow: hidden;
 
+	background-color: red;
+
 	&--active {
 		width: 100%;
 		height: 100%;
