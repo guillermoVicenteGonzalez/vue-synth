@@ -1,15 +1,15 @@
 <template>
 	<div class="VsTabs" :class="VsTabsDynamicClasses">
 		<ul class="VsTabs__navigation">
-			<li
+			<VsTabButton
 				v-for="(tab, index) in items"
 				:key="tab + index"
 				class="VsTabs__selector"
-				:class="{ 'VsTabs__selector--active': index == activeTab }"
+				:active="activeTab == index"
 				@click="handleSelectTab(index)"
 			>
 				{{ tab }}
-			</li>
+			</VsTabButton>
 		</ul>
 
 		<div class="VsTabs__content">
@@ -20,6 +20,7 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
+import VsTabButton from "../VsToggleButton/VsTabButton.vue";
 
 export type VsTabsVariant = "default";
 export type VsTabsOrientation = "horizontal" | "vertical";
@@ -64,7 +65,8 @@ const VsTabsDynamicClasses = computed(() => ({
 		display: flex;
 		justify-content: center;
 		list-style: none;
-		gap: 4rem;
+		min-height: 6rem;
+		height: fit-content;
 	}
 
 	&__content {
@@ -76,11 +78,7 @@ const VsTabsDynamicClasses = computed(() => ({
 	&__selector {
 		font-size: 2.2rem;
 		font-weight: 400;
-
-		&--active {
-			text-decoration: underline;
-			font-weight: 800;
-		}
+		width: 100%;
 	}
 
 	&--vertical {

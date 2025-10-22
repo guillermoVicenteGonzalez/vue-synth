@@ -33,12 +33,20 @@
 	&__left {
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
+
+		@include respond(phone) {
+			display: block;
+		}
 	}
 
 	&__title {
 		align-self: center;
 		justify-self: center;
 		font-size: 2rem;
+
+		@include respond(phone) {
+			display: none;
+		}
 	}
 }
 </style>

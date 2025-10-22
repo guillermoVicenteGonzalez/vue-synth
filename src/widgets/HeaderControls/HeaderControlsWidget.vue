@@ -1,18 +1,20 @@
 <template>
 	<ul class="header-controls">
-		<li
-			:class="handleActiveTabClass(item)"
-			class="header-controls__item"
+		<VsTabButton
 			v-for="item in tabItems"
 			:key="item"
+			:active="currentTab == item"
+			class="header-controls__item"
 			@click="handleSelectTab(item)"
 		>
 			{{ item }}
-		</li>
+		</VsTabButton>
 	</ul>
 </template>
 
 <script setup lang="ts">
+import VsTabButton from "@/components/common/VsToggleButton/VsTabButton.vue";
+
 const tabItems = <const>["Voice", "Effects"];
 type TabItem = (typeof tabItems)[number];
 const currentTab = defineModel<TabItem>({
@@ -21,10 +23,6 @@ const currentTab = defineModel<TabItem>({
 
 function handleSelectTab(tab: TabItem) {
 	currentTab.value = tab;
-}
-
-function handleActiveTabClass(tab: TabItem) {
-	if (tab === currentTab.value) return "header-controls__item--active";
 }
 </script>
 
@@ -48,11 +46,6 @@ $border-size: 0.3rem;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-
-		&--active {
-			background-color: $bg-color-3;
-			border-top: solid $border-size $primary-color;
-		}
 	}
 }
 </style>

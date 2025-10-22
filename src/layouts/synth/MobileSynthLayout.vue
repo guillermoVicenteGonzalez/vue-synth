@@ -103,10 +103,6 @@ $min-piano-h: 0;
 		width: 100%;
 	}
 
-	&__tabs {
-		margin: 1rem 0;
-	}
-
 	&__components {
 		flex: 1 1 $base-components-h;
 		max-height: $base-components-h;
@@ -123,7 +119,6 @@ $min-piano-h: 0;
 		display: flex;
 		justify-content: space-around;
 		align-items: center;
-		margin: 1rem 0;
 
 		flex: 0 0 $base-actions-h;
 		padding: $gap-df;
