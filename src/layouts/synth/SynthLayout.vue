@@ -34,7 +34,7 @@ $header-color: $primary-color;
 $header-text-color: white;
 
 $min-components-w: 80rem;
-$max-components-w: 6fr;
+$max-components-w: 5fr;
 
 $min-display-w: 50rem;
 $max-display-w: 4fr;

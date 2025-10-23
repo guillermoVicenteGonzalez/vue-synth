@@ -3,7 +3,7 @@
 		<template #header>
 			<HeaderWidgetWidget>
 				<template #controls>
-					<HeaderControlsWidget></HeaderControlsWidget>
+					<HeaderControlsWidget v-model="currentTab"></HeaderControlsWidget>
 				</template>
 				<template #visualizer>
 					<WaveAnalyser
@@ -87,7 +87,9 @@ import ActionsWidget, {
 import EffectListWidget from "@/widgets/EffectList/EffectListWidget.vue";
 import EnvelopeControlWidget from "@/widgets/EnvelopeControl/EnvelopeControlWidget.vue";
 import VSFooter from "@/widgets/Footer/VSFooter.vue";
-import HeaderControlsWidget from "@/widgets/HeaderControls/HeaderControlsWidget.vue";
+import HeaderControlsWidget, {
+	type TabItem,
+} from "@/widgets/HeaderControls/HeaderControlsWidget.vue";
 import HeaderWidgetWidget from "@/widgets/HeaderWidget/HeaderWidgetWidget.vue";
 import KeyboardWidget from "@/widgets/Keyboard/KeyboardWidget.vue";
 import {
@@ -102,6 +104,7 @@ const { browserHeight, browserWidth } = useMonitorSize();
 const primaryColor = "#42d392";
 
 const transposeAmount = ref<number>(0);
+const currentTab = ref<TabItem>("Voice");
 
 const currentLayout = computed(() => {
 	if (browserWidth.value <= 600) return MobileSynthLayout;
