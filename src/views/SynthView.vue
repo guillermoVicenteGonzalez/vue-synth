@@ -39,6 +39,7 @@
 			<VsSlider label="volume"></VsSlider> -->
 			<ActionsWidget
 				v-model:transpose="transposeAmount"
+				v-model:volume="MainAudioCluster.volume"
 				:orientation="ActionsWidgetOrientation"
 				@create-wave="createNewModule"
 				@create-filter="createEffect('filter')"

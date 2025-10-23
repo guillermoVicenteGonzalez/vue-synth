@@ -4,6 +4,15 @@ import type { waveForms } from "./wave";
 import Wave from "./wave";
 
 const MAX_MODULES = 5;
+const MAX_COMPRESSION = -100;
+const MIN_COMPRESSION = 0;
+
+const MAX_GAIN = 2;
+const MIN_GAIN = 0;
+
+const MAX_VOLUME = 100;
+const MIN_VOLUME = 0;
+
 /**
  * The main module of the synth app. Contains a series of audio modules
  */
@@ -11,7 +20,7 @@ export default class AudioCluster {
 	modules: AudioModule[];
 	exit: AudioNode;
 	compressor: DynamicsCompressorNode; //links all the audio modules. Is connected to global effects
-	gain: GainNode; //the gain of the module is connected to the global exit
+	private gain: GainNode; //the gain of the module is connected to the global exit
 	context: AudioContext;
 	effects: EffectChain;
 
@@ -26,6 +35,34 @@ export default class AudioCluster {
 		//compressor and gain are linked here
 		this.effects = new EffectChain(this.compressor, this.gain);
 		this.gain.connect(this.exit);
+	}
+
+	get volume() {
+		const diff = Math.abs(MAX_VOLUME - MIN_VOLUME);
+		const progressDiff = Math.abs(MAX_GAIN - MIN_GAIN);
+
+		const inc = diff / progressDiff;
+
+		return this.gain.gain.value * inc;
+	}
+
+	set volume(v: number) {
+		// this.gain.gain.setValueAtTime(v, this.context.currentTime);
+		// let newVolume = Math.max(v, MAX_GAIN);
+		// newVolume = Math.min(v, MIN_GAIN);
+		const diff = Math.abs(MAX_VOLUME - MIN_VOLUME);
+		const progressDiff = Math.abs(MAX_GAIN - MIN_GAIN);
+
+		const inc = diff / progressDiff;
+		const newVolume = v / inc;
+
+		this.gain.gain.value = newVolume;
+	}
+
+	set compression(c: number) {
+		let compressionAmount = Math.max(c, MIN_COMPRESSION);
+		compressionAmount = Math.min(c, MAX_COMPRESSION);
+		this.compressor.threshold.value = compressionAmount;
 	}
 
 	setExit(nExit: AudioNode) {

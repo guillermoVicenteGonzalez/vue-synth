@@ -60,7 +60,6 @@
 		<div class="ActionsWidget__sliders">
 			<VsSlider
 				v-model="transpose"
-				label="octave"
 				:min="MIN_TRANSPOSE"
 				:max="MAX_TRANSPOSE"
 				:step="1"
@@ -69,9 +68,9 @@
 					<span class="ActionsWidget__chip">Tranpose: {{ transpose }}</span>
 				</template>
 			</VsSlider>
-			<VsSlider label="volume" v-model="volume">
+			<VsSlider v-model="volume" label="volume" :min="0" :max="100" :step="1">
 				<template #label>
-					<span class="ActionsWidget__chip">Volume</span>
+					<span class="ActionsWidget__chip">Volume {{ volumeString }}%</span>
 				</template>
 			</VsSlider>
 		</div>
@@ -97,8 +96,8 @@ import {
 } from "lucide-vue-next";
 import { computed } from "vue";
 
-const MAX_TRANSPOSE = 12;
-const MIN_TRANSPOSE = -12;
+const MAX_TRANSPOSE = 24;
+const MIN_TRANSPOSE = -24;
 
 export type ActionsWidgetSize = "default" | "minimal";
 export type ActionsWidgetOrientation = "vertical" | "horizontal";
@@ -121,6 +120,10 @@ const buttonsVariant = computed<VSButtonVariants>(() => {
 const ActionsWidgetDynamicClass = computed(() => ({
 	[`ActionsWidget--${orientation}`]: orientation,
 }));
+
+const volumeString = computed<string>(() => {
+	return volume.value?.toFixed(2) ?? "0";
+});
 
 const SeparatorOrientation = computed<VsSeparatorOrientation>(() =>
 	orientation == "horizontal" ? "vertical" : "horizontal"
@@ -195,7 +198,8 @@ $action-size: 5rem;
 	&__chip {
 		display: block;
 		font-size: 1.6rem;
-		width: 10rem;
+		min-width: fit-content;
+		width: 12rem;
 	}
 
 	&--vertical {
