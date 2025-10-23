@@ -1,5 +1,5 @@
 <template>
-	<div class="VsDrawer" :class="VsDrawerClasses">
+	<div ref="drawerTemplateRef" class="VsDrawer" :class="VsDrawerClasses">
 		<div class="VsDrawer__content">
 			<slot></slot>
 		</div>
@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 
 export type VsDrawerVariants = "default" | "outlined";
 export type VsDrawerPosition = "top" | "bottom" | "left" | "right";
@@ -25,11 +25,21 @@ const VsDrawerClasses = computed(() => ({
 	[`VsDrawer--${variant}`]: variant,
 	[`VsDrawer--${position}`]: variant,
 }));
+
+const drawerTemplateRef = ref<HTMLTemplateElement>();
+
+// useClickOutside(drawerTemplateRef, () => {
+// 	// handleCloseDrawer();
+// });
+
+// function handleCloseDrawer() {
+// 	if (model.value == true) model.value = false;
+// }
 </script>
 
 <style scoped lang="scss">
 $drawer-bg-color: $bg-color-2;
-$drawer-final-size: 20rem;
+$drawer-final-size: 25rem;
 $animation-time: 0.5s;
 
 .VsDrawer {

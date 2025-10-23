@@ -53,6 +53,7 @@ $animation-time: 1s;
 		z-index: 1;
 
 		// height: max-content;
+		min-width: 5rem;
 		width: fit-content;
 
 		padding: 0.2rem $gap-df;

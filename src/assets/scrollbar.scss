@@ -1,0 +1,61 @@
+@use "./variables.scss" as *;
+
+$highlight-color: $primary-color;
+
+@supports selector(::-webkit-scrollbar) {
+	// the scrollbar.
+	::-webkit-scrollbar {
+		width: 1rem;
+		border-radius: $border-radius-bg;
+	}
+
+	// the buttons on the scrollbar (arrows pointing upwards and downwards).
+	::-webkit-scrollbar-button {
+		display: none;
+	}
+
+	// the draggable scrolling handle.
+	::-webkit-scrollbar-thumb {
+		background-color: $bg-color-3;
+		border-radius: $border-radius-bg;
+		transition: all 0.5s;
+
+		&:hover {
+			background: $highlight-color;
+		}
+
+		&:active {
+			background-color: rgba($highlight-color, 0.9);
+		}
+	}
+
+	// the track (progress bar) of the scrollbar.
+	::-webkit-scrollbar-track {
+		background-color: $bg-color-2;
+		border-radius: $border-radius-bg;
+	}
+
+	// the track (progress bar) NOT covered by the handle.
+	::-webkit-scrollbar-track-piece {
+	}
+
+	// the bottom corner of the scrollbar, where both horizontal and vertical scrollbars meet.
+	::-webkit-scrollbar-corner {
+		height: 10%;
+		border-radius: $border-radius-bg;
+	}
+}
+
+// @supports (scrollbar-color: auto) {
+// 	:root {
+// 		scrollbar-color: $bg-color-3 $bg-color-2;
+// 		scrollbar-width: thin;
+// 		scrollbar-arrow-color: red;
+// 	}
+
+// 	* {
+// 		scrollbar-color: inherit;
+// 		scrollbar-width: inherit;
+// 		scrollbar-arrow-color: inherit;
+// 	}
+// }
