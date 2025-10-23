@@ -17,7 +17,7 @@ import KeyboardKey from "@/components/sound/KeyboardKey/KeyboardKey.vue";
 import type AudioCluster from "@/models/AudioCluster";
 import type { AudioEnvelope } from "@/models/AudioEnvelope";
 import Note, { noteDetunes, type noteName } from "@/models/note";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 
 interface KeyboardWidgetProps {
 	envelope?: AudioEnvelope;
@@ -30,6 +30,8 @@ const {
 	sourceCluster = null,
 	envelope = undefined,
 } = defineProps<KeyboardWidgetProps>();
+
+const transpose = defineModel<number>({ default: 0 });
 
 const notes = ref<Note[]>([]);
 
@@ -88,6 +90,7 @@ function assignKeycode(note: Note) {
 }
 
 function setupNotes() {
+	notes.value = [];
 	for (let i = -3; Math.abs(i) <= 3; i++) {
 		for (const note in noteDetunes) {
 			const nNote = new Note(note as noteName, i);
@@ -95,6 +98,11 @@ function setupNotes() {
 		}
 	}
 }
+
+watch(transpose, () => {
+	Note.generalDetune = transpose.value;
+	setupNotes();
+});
 
 onMounted(() => {
 	setupNotes();

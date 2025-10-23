@@ -38,6 +38,7 @@
 			<VsSlider label="octave"></VsSlider>
 			<VsSlider label="volume"></VsSlider> -->
 			<ActionsWidget
+				v-model:transpose="transposeAmount"
 				:orientation="ActionsWidgetOrientation"
 				@create-wave="createNewModule"
 				@create-filter="createEffect('filter')"
@@ -57,6 +58,7 @@
 		</template>
 		<template #piano>
 			<KeyboardWidget
+				v-model="transposeAmount"
 				:envelope="envelope"
 				:context="mainContext"
 				:source-cluster="MainAudioCluster as AudioCluster"
@@ -97,6 +99,8 @@ import { computed, onMounted, ref, type Ref, type UnwrapRef } from "vue";
 
 const { browserHeight, browserWidth } = useMonitorSize();
 const primaryColor = "#42d392";
+
+const transposeAmount = ref<number>(0);
 
 const currentLayout = computed(() => {
 	if (browserWidth.value <= 600) return MobileSynthLayout;

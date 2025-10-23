@@ -51,13 +51,12 @@
 					}
 				"
 			>
-				<input
+				<VsNinput
 					v-model.number="progress"
-					type="number"
 					:min="min"
 					:max="max"
 					:step="1"
-				/>
+				></VsNinput>
 			</div>
 
 			<ul v-else class="circle-slider__context-menu__items">
@@ -72,6 +71,7 @@
 <script setup lang="ts">
 import { computed, ref, useTemplateRef, watch, watchEffect } from "vue";
 import ContextMenu from "../ContextMenu/ContextMenu.vue";
+import VsNinput from "../VsNinput/VsNinput.vue";
 
 type circleSliderVariants = "default" | "elevated";
 

@@ -58,12 +58,18 @@
 		></VsSeparator>
 
 		<div class="ActionsWidget__sliders">
-			<VsSlider label="octave">
+			<VsSlider
+				v-model="transpose"
+				label="octave"
+				:min="MIN_TRANSPOSE"
+				:max="MAX_TRANSPOSE"
+				:step="1"
+			>
 				<template #label>
-					<span class="ActionsWidget__chip">Octave</span>
+					<span class="ActionsWidget__chip">Tranpose: {{ transpose }}</span>
 				</template>
 			</VsSlider>
-			<VsSlider label="volume">
+			<VsSlider label="volume" v-model="volume">
 				<template #label>
 					<span class="ActionsWidget__chip">Volume</span>
 				</template>
@@ -91,6 +97,9 @@ import {
 } from "lucide-vue-next";
 import { computed } from "vue";
 
+const MAX_TRANSPOSE = 12;
+const MIN_TRANSPOSE = -12;
+
 export type ActionsWidgetSize = "default" | "minimal";
 export type ActionsWidgetOrientation = "vertical" | "horizontal";
 
@@ -101,6 +110,9 @@ interface ActionsWidgetProps {
 
 const { size = "minimal", orientation = "vertical" } =
 	defineProps<ActionsWidgetProps>();
+
+const transpose = defineModel<number>("transpose");
+const volume = defineModel<number>("volume");
 
 const buttonsVariant = computed<VSButtonVariants>(() => {
 	return size == "default" ? "default" : "round";
@@ -183,7 +195,7 @@ $action-size: 5rem;
 	&__chip {
 		display: block;
 		font-size: 1.6rem;
-		width: 7rem;
+		width: 10rem;
 	}
 
 	&--vertical {

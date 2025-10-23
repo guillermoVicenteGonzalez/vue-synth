@@ -19,7 +19,7 @@ const VsSeparatorDynamicStyles = computed(() => ({
 </script>
 
 <style scoped lang="scss">
-$separator-size: 0.25rem;
+$separator-size: 0.3rem;
 
 .VsSeparator {
 	border: none;
