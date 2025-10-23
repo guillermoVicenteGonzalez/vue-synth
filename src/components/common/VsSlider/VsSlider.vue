@@ -61,6 +61,7 @@ const sliderClass = computed(() => ({
 
 <style lang="scss" scoped>
 $slider-width: 1rem;
+$slider-min-length: 5rem;
 
 .slider {
 	box-sizing: border-box;
@@ -70,6 +71,15 @@ $slider-width: 1rem;
 	justify-content: center;
 	align-items: center;
 	gap: 0.5rem;
+
+	@include respond(tab-port) {
+		flex-wrap: wrap;
+		gap: 1rem;
+	}
+
+	// @include respond(phone) {
+	// 	flex-wrap: nowrap;
+	// }
 
 	&__input {
 		--track-color: #{$bg-color-black};
@@ -130,6 +140,10 @@ $slider-width: 1rem;
 
 			cursor: pointer; /* Cursor on hover */
 			box-shadow: -407px 0 0 400px var(--trail-color);
+		}
+
+		&--horizontal {
+			min-width: $slider-min-length;
 		}
 	}
 

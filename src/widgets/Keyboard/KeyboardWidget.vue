@@ -19,6 +19,9 @@ import type { AudioEnvelope } from "@/models/AudioEnvelope";
 import Note, { noteDetunes, type noteName } from "@/models/note";
 import { onMounted, ref, watch } from "vue";
 
+const MIN_OCTAVE = -4;
+const MAX_OCTAVE = 4;
+
 interface KeyboardWidgetProps {
 	envelope?: AudioEnvelope;
 	context: AudioContext;
@@ -91,7 +94,7 @@ function assignKeycode(note: Note) {
 
 function setupNotes() {
 	notes.value = [];
-	for (let i = -3; Math.abs(i) <= 3; i++) {
+	for (let i = MIN_OCTAVE; Math.abs(i) <= MAX_OCTAVE; i++) {
 		for (const note in noteDetunes) {
 			const nNote = new Note(note as noteName, i);
 			notes.value.push(nNote);

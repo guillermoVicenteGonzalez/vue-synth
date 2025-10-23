@@ -122,7 +122,7 @@ const ActionsWidgetDynamicClass = computed(() => ({
 }));
 
 const volumeString = computed<string>(() => {
-	return volume.value?.toFixed(2) ?? "0";
+	return volume.value?.toFixed(0) ?? "0";
 });
 
 const SeparatorOrientation = computed<VsSeparatorOrientation>(() =>

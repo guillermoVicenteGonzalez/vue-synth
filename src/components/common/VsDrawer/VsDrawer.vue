@@ -39,7 +39,7 @@ const drawerTemplateRef = ref<HTMLTemplateElement>();
 
 <style scoped lang="scss">
 $drawer-bg-color: $bg-color-2;
-$drawer-final-size: 20rem;
+$drawer-final-size: 25rem;
 $animation-time: 0.5s;
 
 .VsDrawer {
