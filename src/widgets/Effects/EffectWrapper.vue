@@ -1,11 +1,10 @@
 <template>
 	<!-- <component v-if="effect" v-model="effect" :is="componentType"></component> -->
-	<template v-if="effectType == 'DynamicsCompressorNode'">
-		<CompressionEffectWidget
-			v-model="effect as DynamicsCompressorNode"
-			class="EffectModule"
-		></CompressionEffectWidget>
-	</template>
+	<CompressionEffectWidget
+		v-if="effectType == 'DynamicsCompressorNode'"
+		v-model="effect as DynamicsCompressorNode"
+		class="EffectModule"
+	></CompressionEffectWidget>
 </template>
 
 <script setup lang="ts">
