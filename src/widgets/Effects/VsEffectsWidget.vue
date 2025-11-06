@@ -2,8 +2,8 @@
 	<div v-if="effects" class="VsEffectsWidget">
 		<EffectWrapper
 			v-for="(_effect, index) in effectsArray"
-			v-model="effectsArray[index]"
 			:key="index"
+			v-model="effectsArray[index]"
 		></EffectWrapper>
 	</div>
 </template>

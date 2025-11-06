@@ -7,7 +7,9 @@
 		<div class="synth-layout__components">
 			<slot name="waves"></slot>
 			<slot name="filters"></slot>
-			<slot name="effects"> </slot>
+			<div v-if="$slots.effects" class="synth-layout__effects">
+				<slot name="effects" class="effects"> </slot>
+			</div>
 			<div class="synth-layout__components__actions">
 				<slot name="actions"></slot>
 			</div>
@@ -87,6 +89,13 @@ $min-actions-h: 10rem;
 		color: $header-text-color;
 		grid-column: 1 / -1;
 		grid-row: header-start / header-end;
+	}
+
+	&__effects {
+		grid-column: 1/-1;
+		grid-row: 0/1;
+		min-height: 0;
+		height: 0;
 	}
 
 	&__components {
@@ -244,5 +253,9 @@ $min-actions-h: 10rem;
 			background-color: rgb(48, 48, 48);
 		}
 	}
+}
+
+.effects {
+	background-color: red;
 }
 </style>

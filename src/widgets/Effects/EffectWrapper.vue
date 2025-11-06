@@ -3,12 +3,12 @@
 	<template v-if="effectType == 'DynamicsCompressorNode'">
 		<CompressionEffectWidget
 			v-model="effect as DynamicsCompressorNode"
+			class="EffectModule"
 		></CompressionEffectWidget>
 	</template>
 </template>
 
 <script setup lang="ts">
- 
 import type { AudioEffect } from "@/models/AudioModule";
 import { computed } from "vue";
 import CompressionEffectWidget from "./CompressionEffectWidget.vue";
@@ -27,3 +27,12 @@ const effectType = computed(() => {
 // 	if (effect.value instanceof BiquadFilterNode) return FilterWidget;
 // });
 </script>
+
+<style scoped lang="scss">
+$module-height: 22rem;
+
+.EffectModule {
+	width: 100%;
+	height: $module-height;
+}
+</style>

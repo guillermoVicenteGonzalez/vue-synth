@@ -34,7 +34,9 @@
 
 		<template v-if="currentTab === 'Effects'" #effects>
 			<VsEffectsWidget
+				v-if="currentTab === 'Effects'"
 				v-model="MainAudioCluster.effects as EffectChain"
+				class="effects"
 			></VsEffectsWidget>
 		</template>
 
