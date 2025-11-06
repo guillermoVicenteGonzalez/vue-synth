@@ -7,6 +7,7 @@
 		<div class="synth-layout__components">
 			<slot name="waves"></slot>
 			<slot name="filters"></slot>
+			<slot name="effects"> </slot>
 			<div class="synth-layout__components__actions">
 				<slot name="actions"></slot>
 			</div>

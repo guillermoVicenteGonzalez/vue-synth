@@ -1,6 +1,6 @@
 class FilterHandler {
-	interalType: BiquadFilterType;
-	internalFrequency: number;
+	private interalType: BiquadFilterType;
+	private internalFrequency: number;
 	node?: BiquadFilterNode;
 
 	constructor(type: BiquadFilterType, cutFreq: number) {

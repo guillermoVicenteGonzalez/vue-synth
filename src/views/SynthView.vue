@@ -17,12 +17,13 @@
 				</template>
 			</HeaderWidgetWidget>
 		</template>
-		<template #waves>
+
+		<template v-if="currentTab === 'Voice'" #waves>
 			<ModuleCardListWidget
 				v-model="MainAudioCluster as AudioCluster"
 			></ModuleCardListWidget>
 		</template>
-		<template #filters>
+		<template v-if="currentTab === 'Voice'" #filters>
 			<EffectListWidget
 				v-if="MainAudioCluster"
 				v-model="effects"
@@ -30,13 +31,14 @@
 				:sources="MainAudioCluster"
 			></EffectListWidget>
 		</template>
+
+		<template v-if="currentTab === 'Effects'" #effects>
+			<VsEffectsWidget
+				v-model="MainAudioCluster.effects as EffectChain"
+			></VsEffectsWidget>
+		</template>
+
 		<template #actions>
-			<!-- <VsButton @click="createNewModule">New Wave</VsButton>
-			<VsButton @click="createEffect('filter')">New filter</VsButton>
-			<VsButton @click="deleteAll()">Delete all</VsButton>
-			<RecordBtn></RecordBtn>
-			<VsSlider label="octave"></VsSlider>
-			<VsSlider label="volume"></VsSlider> -->
 			<ActionsWidget
 				v-model:transpose="transposeAmount"
 				v-model:volume="MainAudioCluster.volume"
@@ -81,10 +83,12 @@ import SynthLayout from "@/layouts/synth/SynthLayout.vue";
 import AudioCluster from "@/models/AudioCluster";
 import type { AudioEnvelope } from "@/models/AudioEnvelope";
 import AudioModule, { type AudioEffect } from "@/models/AudioModule";
+import type { EffectChain } from "@/models/LinkedList";
 import ActionsWidget, {
 	type ActionsWidgetOrientation,
 } from "@/widgets/ActionsWidget/ActionsWidget.vue";
 import EffectListWidget from "@/widgets/EffectList/EffectListWidget.vue";
+import VsEffectsWidget from "@/widgets/Effects/VsEffectsWidget.vue";
 import EnvelopeControlWidget from "@/widgets/EnvelopeControl/EnvelopeControlWidget.vue";
 import VSFooter from "@/widgets/Footer/VSFooter.vue";
 import HeaderControlsWidget, {
@@ -188,8 +192,15 @@ function deleteAll() {
 	MainAudioCluster.value.modules = [];
 }
 
+function initializeEffects() {
+	const compression = MainAudioCluster.value.context.createDynamicsCompressor();
+
+	MainAudioCluster.value.effects.append(compression);
+}
+
 onMounted(() => {
 	merger.value.connect(mainContext.value.destination);
+	initializeEffects();
 });
 </script>
 

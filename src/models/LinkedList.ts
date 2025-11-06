@@ -298,6 +298,20 @@ export class LinkedList<T> {
 		this.first = this.last = null;
 		this.length = 0;
 	}
+
+	toArray(): T[] {
+		let current = this.first;
+		const arr: T[] = [];
+
+		if (current == null) return arr;
+
+		while (current != null) {
+			arr.push(current.value);
+			current = current.next;
+		}
+
+		return arr;
+	}
 }
 
 /**
