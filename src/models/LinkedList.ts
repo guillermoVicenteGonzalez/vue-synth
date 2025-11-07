@@ -85,7 +85,7 @@ export class LinkedList<T> {
 	 * @param value
 	 * @returns
 	 */
-	getNodeByValue(value: T) {
+	getNodeByValue(value: T): LinkedNode<T> | null {
 		let cont = 0;
 		let currentNode = this.first;
 

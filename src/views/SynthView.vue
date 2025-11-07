@@ -104,7 +104,14 @@ import {
 } from "@/widgets/LfoWdidget/LfoWdidgetWidget.vue";
 import LfoWidgetListWidget from "@/widgets/LfoWidgetList/LfoWidgetListWidget.vue";
 import ModuleCardListWidget from "@/widgets/ModuleCardList/ModuleCardListWidget.vue";
-import { computed, onMounted, ref, type Ref, type UnwrapRef } from "vue";
+import {
+	computed,
+	onMounted,
+	provide,
+	ref,
+	type Ref,
+	type UnwrapRef,
+} from "vue";
 
 const { browserHeight, browserWidth } = useMonitorSize();
 const primaryColor = "#42d392";
@@ -146,6 +153,7 @@ const merger = ref<ChannelMergerNode>(mainContext.value.createChannelMerger(1));
 const MainAudioCluster: Ref<UnwrapRef<AudioCluster>> = ref<AudioCluster>(
 	new AudioCluster(mainContext.value, merger.value)
 );
+provide("mainCluster", MainAudioCluster);
 const envelope = ref<AudioEnvelope>({
 	attack: 0.2,
 	decay: 0.4,

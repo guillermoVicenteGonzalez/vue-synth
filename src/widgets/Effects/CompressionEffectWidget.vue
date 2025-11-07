@@ -11,7 +11,7 @@
 			</div>
 		</div>
 		<div class="CompressionEffect__body">
-			<div class="CompressionEffect__body__control">
+			<div class="CompressionEffect__body__controls">
 				<CircleSlider
 					v-model="compressorHandler.threshold"
 					:min="-100"
@@ -19,8 +19,6 @@
 					:step="0.01"
 					:fill-color="primaryColor"
 				></CircleSlider>
-			</div>
-			<div class="CompressionEffect__body__control">
 				<CircleSlider
 					v-model="compressorHandler.knee"
 					:min="0"
@@ -28,8 +26,6 @@
 					:step="0.01"
 					:fill-color="primaryColor"
 				></CircleSlider>
-			</div>
-			<div class="CompressionEffect__body__control">
 				<CircleSlider
 					v-model="compressorHandler.attack"
 					:min="0"
@@ -37,8 +33,6 @@
 					:step="0.001"
 					:fill-color="primaryColor"
 				></CircleSlider>
-			</div>
-			<div class="CompressionEffect__body__control">
 				<CircleSlider
 					v-model="compressorHandler.ratio"
 					:min="1"
@@ -47,8 +41,12 @@
 					:fill-color="primaryColor"
 				></CircleSlider>
 			</div>
-			<div class="CompressionEffect__body__control"></div>
-			<div class="CompressionEffect__body__control"></div>
+			<CompressionAnalyser
+				v-if="compression && preCompressionSource"
+				class="CompressionEffect__body__visualization"
+				:compressed-source="compression"
+				:source="preCompressionSource"
+			></CompressionAnalyser>
 		</div>
 	</VsCard>
 </template>
@@ -57,16 +55,39 @@
 import CircleSlider from "@/components/common/CircleSlider/CircleSlider.vue";
 import ToggleButton from "@/components/common/ToggleButton/ToggleButton.vue";
 import VsCard from "@/components/common/VsCard/VsCard.vue";
+import CompressionAnalyser from "@/components/waves/CompressionAnalyser/CompressionAnalyser.vue";
+import AudioCluster from "@/models/AudioCluster";
+import type { AudioEffect } from "@/models/AudioModule";
 import { CompressionEffectHandler } from "@/models/effects/CompressionEffectHandler";
-import { ref } from "vue";
+import type { LinkedNode } from "@/models/LinkedList";
+import { inject, ref, type Ref } from "vue";
 
 const compression = defineModel<DynamicsCompressorNode>({ required: true });
 const compressorHandler = ref<CompressionEffectHandler>(
 	new CompressionEffectHandler(compression.value)
 );
 
+const cluster: Ref<AudioCluster> | undefined = inject("mainCluster");
+const preCompressionSource = ref<AudioNode>();
+
 const disabled = ref<boolean>();
 const primaryColor = "#42d392";
+
+function getSourcePreCompression() {
+	if (!cluster) return;
+
+	const clusterLinkedNode: LinkedNode<AudioEffect> | null =
+		cluster.value.effects.getNodeByValue(compression.value);
+
+	if (!clusterLinkedNode) return;
+
+	const prevNode = clusterLinkedNode.prev;
+	preCompressionSource.value =
+		prevNode == null ? cluster.value.effects.source : prevNode.value;
+	console.log(preCompressionSource.value);
+}
+
+getSourcePreCompression();
 </script>
 
 <style scoped lang="scss">
@@ -129,9 +150,15 @@ $handle-width: 4rem;
 		height: 100%;
 		gap: $gap-df;
 
-		&__control {
+		&__controls {
+			flex: 0 0 25rem;
+			display: flex;
+		}
+
+		&__visualization {
+			background-color: $bg-color-1;
+			border-radius: 0.5rem;
 			flex: 1 1 100%;
-			background-color: red;
 		}
 	}
 }
