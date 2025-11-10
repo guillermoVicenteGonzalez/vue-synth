@@ -24,8 +24,10 @@ const effectsArray = computed<AudioEffect[]>(() => {
 <style lang="scss" scoped>
 .VsEffectsWidget {
 	display: flex;
+	flex-direction: column-reverse;
 	width: 100%;
 
 	padding: $gap-df;
+	gap: $gap-df;
 }
 </style>

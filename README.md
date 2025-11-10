@@ -6,7 +6,7 @@
 
 - [-] Piano widget
   - [ ] Visuals
-  - [ ] Key functionality
+  - [x] Key functionality
     - [x] Natural keys
     - [x] Altered keys
     - [x] Change central note
@@ -24,7 +24,7 @@
   - [ ] Filters
   - [ ] Echo
   - [ ] Chorus
-  - [ ] Compression
+  - [x] Compression
   - [ ] Distortion
   - [x] LFO's
 - [ ] Controls

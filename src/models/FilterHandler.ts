@@ -42,4 +42,15 @@ class FilterHandler {
 	}
 }
 
+export enum FilterTypes {
+	lowpass = "lowpass",
+	highpass = "highpass",
+	bandpass = "bandpass",
+	lowshelf = "lowshelf",
+	highself = "highself",
+	peaking = "peaking",
+	notch = "notch",
+	allpass = "allpass",
+}
+
 export default FilterHandler;

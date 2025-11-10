@@ -268,7 +268,7 @@ function handleCloseContextMenu() {
  * This is kinda cheating
  */
 function toFixedFromStep(n: number): number {
-	let decimals: string = n.toString().split(".")[1];
+	const decimals: string = n.toString().split(".")[1];
 	if (!decimals) return 0;
 
 	return decimals.length;

@@ -34,7 +34,7 @@
 					<VsSelector
 						v-if="filter"
 						v-model="filterHandler.type"
-						:items="Object.keys(filterTypes)"
+						:items="Object.keys(FilterTypes)"
 					></VsSelector>
 					<VsSelector
 						clearable
@@ -73,19 +73,8 @@ import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
 import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
 import type AudioCluster from "@/models/AudioCluster";
 import AudioModule from "@/models/AudioModule";
-import FilterHandler from "@/models/FilterHandler";
+import FilterHandler, { FilterTypes } from "@/models/FilterHandler";
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
-
-enum filterTypes {
-	lowpass = "lowpass",
-	highpass = "highpass",
-	bandpass = "bandpass",
-	lowshelf = "lowshelf",
-	highself = "highself",
-	peaking = "peaking",
-	notch = "notch",
-	allpass = "allpass",
-}
 
 interface FilterWidgetProps {
 	/**All the waves we can apply filters to*/

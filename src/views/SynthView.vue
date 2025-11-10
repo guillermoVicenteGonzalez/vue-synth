@@ -204,7 +204,9 @@ function deleteAll() {
 
 function initializeEffects() {
 	const compression = MainAudioCluster.value.context.createDynamicsCompressor();
+	const filter = MainAudioCluster.value.context.createBiquadFilter();
 
+	MainAudioCluster.value.effects.append(filter);
 	MainAudioCluster.value.effects.append(compression);
 }
 
