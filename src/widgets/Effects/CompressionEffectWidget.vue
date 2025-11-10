@@ -12,34 +12,31 @@
 		</div>
 		<div class="CompressionEffect__body">
 			<div class="CompressionEffect__body__controls">
-				<CircleSlider
-					v-model="compressorHandler.threshold"
-					:min="-100"
-					:max="0"
-					:step="0.01"
-					:fill-color="primaryColor"
-				></CircleSlider>
-				<CircleSlider
-					v-model="compressorHandler.knee"
-					:min="0"
-					:max="40"
-					:step="0.01"
-					:fill-color="primaryColor"
-				></CircleSlider>
-				<CircleSlider
-					v-model="compressorHandler.attack"
-					:min="0"
-					:max="1"
-					:step="0.001"
-					:fill-color="primaryColor"
-				></CircleSlider>
-				<CircleSlider
-					v-model="compressorHandler.ratio"
-					:min="1"
-					:max="20"
-					:step="0.01"
-					:fill-color="primaryColor"
-				></CircleSlider>
+				<div class="CompressionEffect__body__control">
+					<VsChip class="CompressionEffect__chip">Attack</VsChip>
+
+					<CircleSlider
+						class="CompressionEffect__circle-slider"
+						v-model="compressorHandler.threshold"
+						:min="-100"
+						:max="0"
+						:step="0.01"
+						:fill-color="primaryColor"
+					></CircleSlider>
+				</div>
+
+				<div class="CompressionEffect__body__control">
+					<VsChip class="CompressionEffect__chip">Attack</VsChip>
+
+					<CircleSlider
+						class="CompressionEffect__circle-slider"
+						v-model="compressorHandler.knee"
+						:min="0"
+						:max="40"
+						:step="0.01"
+						:fill-color="primaryColor"
+					></CircleSlider>
+				</div>
 			</div>
 			<CompressionAnalyser
 				v-if="compression && preCompressionSource"
@@ -47,6 +44,33 @@
 				:compressed-source="compression"
 				:source="preCompressionSource"
 			></CompressionAnalyser>
+
+			<div class="CompressionEffect__body__controls">
+				<div class="CompressionEffect__body__control">
+					<VsChip class="CompressionEffect__chip">Attack</VsChip>
+
+					<CircleSlider
+						class="CompressionEffect__circle-slider"
+						v-model="compressorHandler.attack"
+						:min="0"
+						:max="1"
+						:step="0.001"
+						:fill-color="primaryColor"
+					></CircleSlider>
+				</div>
+
+				<div class="CompressionEffect__body__control">
+					<VsChip class="CompressionEffect__chip">Attack</VsChip>
+					<CircleSlider
+						class="CompressionEffect__circle-slider"
+						v-model="compressorHandler.ratio"
+						:min="1"
+						:max="20"
+						:step="0.01"
+						:fill-color="primaryColor"
+					></CircleSlider>
+				</div>
+			</div>
 		</div>
 	</VsCard>
 </template>
@@ -55,6 +79,7 @@
 import CircleSlider from "@/components/common/CircleSlider/CircleSlider.vue";
 import ToggleButton from "@/components/common/ToggleButton/ToggleButton.vue";
 import VsCard from "@/components/common/VsCard/VsCard.vue";
+import VsChip from "@/components/common/VsChip/VsChip.vue";
 import CompressionAnalyser from "@/components/waves/CompressionAnalyser/CompressionAnalyser.vue";
 import AudioCluster from "@/models/AudioCluster";
 import type { AudioEffect } from "@/models/AudioModule";
@@ -151,8 +176,17 @@ $handle-width: 4rem;
 		gap: $gap-df;
 
 		&__controls {
-			flex: 0 0 25rem;
+			flex: 0 0 15rem;
 			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		&__control {
+			display: flex;
+			flex-direction: column;
+			gap: $gap-df;
 		}
 
 		&__visualization {
@@ -160,6 +194,14 @@ $handle-width: 4rem;
 			border-radius: 0.5rem;
 			flex: 1 1 100%;
 		}
+	}
+
+	&__chip {
+		font-size: 1.6rem;
+	}
+
+	&__circle-slider {
+		color: $text-color;
 	}
 }
 </style>

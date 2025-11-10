@@ -28,7 +28,7 @@ const effectType = computed(() => {
 </script>
 
 <style scoped lang="scss">
-$module-height: 22rem;
+$module-height: 25rem;
 
 .EffectModule {
 	width: 100%;
