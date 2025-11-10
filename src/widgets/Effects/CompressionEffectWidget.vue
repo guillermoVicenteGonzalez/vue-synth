@@ -13,11 +13,11 @@
 		<div class="CompressionEffect__body">
 			<div class="CompressionEffect__body__controls">
 				<div class="CompressionEffect__body__control">
-					<VsChip class="CompressionEffect__chip">Attack</VsChip>
+					<VsChip class="CompressionEffect__chip">Threshold</VsChip>
 
 					<CircleSlider
-						class="CompressionEffect__circle-slider"
 						v-model="compressorHandler.threshold"
+						class="CompressionEffect__circle-slider"
 						:min="-100"
 						:max="0"
 						:step="0.01"
@@ -26,11 +26,11 @@
 				</div>
 
 				<div class="CompressionEffect__body__control">
-					<VsChip class="CompressionEffect__chip">Attack</VsChip>
+					<VsChip class="CompressionEffect__chip">Knee</VsChip>
 
 					<CircleSlider
-						class="CompressionEffect__circle-slider"
 						v-model="compressorHandler.knee"
+						class="CompressionEffect__circle-slider"
 						:min="0"
 						:max="40"
 						:step="0.01"
@@ -50,8 +50,8 @@
 					<VsChip class="CompressionEffect__chip">Attack</VsChip>
 
 					<CircleSlider
-						class="CompressionEffect__circle-slider"
 						v-model="compressorHandler.attack"
+						class="CompressionEffect__circle-slider"
 						:min="0"
 						:max="1"
 						:step="0.001"
@@ -60,10 +60,10 @@
 				</div>
 
 				<div class="CompressionEffect__body__control">
-					<VsChip class="CompressionEffect__chip">Attack</VsChip>
+					<VsChip class="CompressionEffect__chip">Ratio</VsChip>
 					<CircleSlider
-						class="CompressionEffect__circle-slider"
 						v-model="compressorHandler.ratio"
+						class="CompressionEffect__circle-slider"
 						:min="1"
 						:max="20"
 						:step="0.01"
@@ -187,6 +187,9 @@ $handle-width: 4rem;
 			display: flex;
 			flex-direction: column;
 			gap: $gap-df;
+			width: 100%;
+			align-items: center;
+			padding: $gap-sm;
 		}
 
 		&__visualization {
@@ -198,6 +201,8 @@ $handle-width: 4rem;
 
 	&__chip {
 		font-size: 1.6rem;
+		width: 70%;
+		text-align: center;
 	}
 
 	&__circle-slider {
