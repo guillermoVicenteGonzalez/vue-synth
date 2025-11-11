@@ -1,4 +1,5 @@
-import type { AudioEffect } from "./AudioModule";
+// import type { AudioEffect } from "./AudioModule";
+import { AudioEffect, MonoNodeEffect } from "./effects/AudioEffect";
 
 export class LinkedNode<T> {
 	value: T;
@@ -318,7 +319,7 @@ export class LinkedList<T> {
  * ! THIS SHOULDN'T BE gain:GainNode and source:Oscillator node.
  * If we later want another general effect chain whose input node is the exit of the general wave, we need source and exit to just be audioNodes
  */
-export class EffectChain extends LinkedList<AudioEffect> {
+export class FilterChain extends LinkedList<BiquadFilterNode> {
 	exit: AudioNode;
 	source: AudioNode;
 
@@ -331,6 +332,137 @@ export class EffectChain extends LinkedList<AudioEffect> {
 		super();
 		this.exit = exit;
 		this.source = source;
+
+		this.source.connect(exit);
+	}
+
+	// !revisar
+	append(value: BiquadFilterNode) {
+		//we call the method of the inherited LLclass
+		const node = super.append(value);
+
+		/**
+		 * the source node will be the oscillator (this.source) if the prev node is null
+		 * if not, the source node will be the one attached before the new node (prev)
+		 * When doing an append, the exit node is always the same, eg: The exit node
+		 */
+
+		const prevNode = node.prev == undefined ? this.source : node.prev.value;
+		const nextNode = this.exit;
+
+		prevNode.disconnect(nextNode);
+		prevNode.connect(node.value);
+		node.value.connect(nextNode);
+		return node;
+	}
+
+	//revisar
+	pop() {
+		const detached = super.pop();
+		if (detached == null) return null;
+
+		/**
+		 * The detached node will retain its former previous and next nodes
+		 * If detached.next is undefined it means the detached node used to be the last one => it was connected to exit
+		 * If the previous node is undefined => it was the oscillator
+		 *
+		 */
+
+		const prevNode =
+			detached.prev == undefined ? this.source : detached.prev.value;
+		const nextNode =
+			detached.next == undefined ? this.exit : detached.next.value;
+
+		/**
+		 * We diconnect the source from the detached node and the detached node from the previous exit.
+		 */
+
+		prevNode.disconnect(detached.value);
+		detached.value.disconnect(nextNode);
+		prevNode.connect(nextNode);
+
+		return detached;
+	}
+
+	appendAt(value: BiquadFilterNode, index: number) {
+		const newNode = super.appendAt(value, index);
+
+		if (!newNode) return null;
+
+		//if no prevnode => the prev is the source
+		const prevNode = newNode.prev == null ? this.source : newNode.prev.value;
+		//if no next node => the next is the exit
+		const nextNode = newNode.next == null ? this.exit : newNode.next.value;
+
+		/**
+		 * This should always work.
+		 * If it is the first node to be attached, source will disconnect from gain
+		 */
+
+		prevNode.disconnect(nextNode);
+		prevNode.connect(newNode.value);
+		newNode.value.connect(nextNode);
+		return newNode;
+	}
+
+	slice(index: number) {
+		const detached = super.slice(index);
+
+		if (!detached) return null;
+
+		//if it WAS the last element => pop has been executed and has reconnected audio
+		if (index == this.length) {
+			return detached;
+		}
+
+		const prevNode = detached.prev == null ? this.source : detached.prev.value;
+		const nextNode = detached.next == null ? this.exit : detached.next.value;
+
+		prevNode.disconnect(detached.value);
+		prevNode.connect(nextNode);
+		detached.value.disconnect(nextNode);
+
+		return detached;
+	}
+
+	clean() {
+		if (this.length == 0 || this.first == null) {
+			this.source.disconnect(this.exit);
+			return;
+		}
+
+		let currentNode: LinkedNode<BiquadFilterNode> | null = this.first;
+		this.source.disconnect(this.first?.value);
+
+		while (currentNode != null) {
+			if (!currentNode.next) currentNode.value.disconnect(this.exit);
+			else {
+				const nextNode = currentNode.next;
+				currentNode.value.disconnect(nextNode.value);
+			}
+
+			currentNode = currentNode.next;
+		}
+
+		super.clean();
+	}
+
+	// detachEffect(value: AudioEffect) {}
+}
+
+export class EffectChain extends LinkedList<AudioEffect> {
+	exit: MonoNodeEffect<AudioNode>;
+	source: MonoNodeEffect<AudioNode>;
+
+	/**
+	 * Creates a linked list of Audio nodes. The source and exit nodes are linked upon creation
+	 * @param source - The Audio node from whom the audio comes
+	 * @param exit - The audio node that serves as exit
+	 */
+	constructor(source: AudioNode, exit: AudioNode) {
+		super();
+		this.exit = new MonoNodeEffect(exit);
+		this.source = new MonoNodeEffect(source);
 
 		this.source.connect(exit);
 	}

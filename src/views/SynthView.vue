@@ -85,6 +85,7 @@ import SynthLayout from "@/layouts/synth/SynthLayout.vue";
 import AudioCluster from "@/models/AudioCluster";
 import type { AudioEnvelope } from "@/models/AudioEnvelope";
 import AudioModule, { type AudioEffect } from "@/models/AudioModule";
+import { CompressionEffect, FilterEffect } from "@/models/effects/AudioEffect";
 import type { EffectChain } from "@/models/LinkedList";
 import ActionsWidget, {
 	type ActionsWidgetOrientation,
@@ -203,8 +204,8 @@ function deleteAll() {
 }
 
 function initializeEffects() {
-	const compression = MainAudioCluster.value.context.createDynamicsCompressor();
-	const filter = MainAudioCluster.value.context.createBiquadFilter();
+	const compression = new CompressionEffect(MainAudioCluster.value.context);
+	const filter = new FilterEffect(MainAudioCluster.value.context);
 
 	MainAudioCluster.value.effects.append(filter);
 	MainAudioCluster.value.effects.append(compression);

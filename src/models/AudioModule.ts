@@ -1,4 +1,4 @@
-import { EffectChain } from "./LinkedList";
+import { FilterChain } from "./LinkedList";
 import type Wave from "./wave";
 
 //for future scalability
@@ -18,7 +18,7 @@ export default class AudioModule {
 	wave: Wave;
 	context: AudioContext;
 	gainNode: GainNode; //should always be the last one before exit
-	effects: EffectChain;
+	filters: FilterChain;
 	input: AudioNode;
 	exit: AudioNode; // Should be the merger or the ctx destination
 	disabled: boolean;
@@ -55,7 +55,7 @@ export default class AudioModule {
 		this.gainNode.connect(this.exit);
 		this.updateModule();
 
-		this.effects = new EffectChain(this.input, this.gainNode);
+		this.filters = new FilterChain(this.input, this.gainNode);
 		/**
 			The input is
 		*/
@@ -99,11 +99,11 @@ export default class AudioModule {
 	}
 
 	/**
-	 * @param {AudioEffect} nEffect
+	 * @param {BiquadFilterNode} nEffect
 	 * Attaches an Audio effect node to the last effect of the chain
 	 */
-	attachEffect(nEffect: AudioEffect) {
-		return this.effects.append(nEffect);
+	attachEffect(nEffect: BiquadFilterNode) {
+		return this.filters.append(nEffect);
 	}
 
 	/**
@@ -113,9 +113,9 @@ export default class AudioModule {
 	 * If the effect is the last one in the chain, the gain node becomes the end node
 	 * If no effect is specified, the last one in the chain is detached
 	 */
-	detachEffect(effect?: AudioEffect) {
-		if (effect) return this.effects.detachNodeByValue(effect);
-		else return this.effects.pop();
+	detachEffect(effect?: BiquadFilterNode) {
+		if (effect) return this.filters.detachNodeByValue(effect);
+		else return this.filters.pop();
 	}
 
 	/**
@@ -180,7 +180,7 @@ export default class AudioModule {
 	 */
 	destroyModule() {
 		this.gainNode.disconnect(this.exit);
-		this.effects.clean();
+		this.filters.clean();
 	}
 
 	/**
