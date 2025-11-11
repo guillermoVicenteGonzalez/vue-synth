@@ -1,5 +1,5 @@
 <template>
-	<EffectCard title="compression" v-model="disabled">
+	<EffectCard v-model="disabled" title="compression">
 		<template #body>
 			<div class="CompressionEffect__body">
 				<div class="CompressionEffect__body__controls">

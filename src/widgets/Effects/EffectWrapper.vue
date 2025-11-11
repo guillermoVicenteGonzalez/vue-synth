@@ -1,21 +1,27 @@
 <template>
-	<!-- <component v-if="effect" v-model="effect" :is="componentType"></component> -->
-	<CompressionEffectWidget
-		v-if="effectType == 'DynamicsCompressorNode'"
-		v-model="effect as DynamicsCompressorNode"
-		class="EffectModule"
-	></CompressionEffectWidget>
+	<div v-if="effect">
+		<!-- <component v-if="effect" v-model="effect" :is="componentType"></component> -->
+		<CompressionEffectWidget
+			v-if="effectType == 'CompressionEffect'"
+			v-model="effect.inputNode as DynamicsCompressorNode"
+			class="EffectModule"
+		></CompressionEffectWidget>
 
-	<FilterEffectWidget
-		v-if="effectType == 'BiquadFilterNode'"
-		v-model="effect as BiquadFilterNode"
-		class="EffectModule"
-	>
-	</FilterEffectWidget>
+		<FilterEffectWidget
+			v-if="effectType == 'FilterEffect'"
+			v-model="effect.inputNode as BiquadFilterNode"
+			class="EffectModule"
+		>
+		</FilterEffectWidget>
+	</div>
 </template>
 
 <script setup lang="ts">
-import type { AudioEffect } from "@/models/AudioModule";
+import {
+	AudioEffect,
+	CompressionEffect,
+	FilterEffect,
+} from "@/models/effects/AudioEffect";
 import { computed } from "vue";
 import CompressionEffectWidget from "./CompressionEffectWidget.vue";
 import FilterEffectWidget from "./FilterEffectWidget.vue";
@@ -23,10 +29,9 @@ import FilterEffectWidget from "./FilterEffectWidget.vue";
 const effect = defineModel<AudioEffect>();
 
 const effectType = computed(() => {
-	if (effect.value instanceof DynamicsCompressorNode)
-		return "DynamicsCompressorNode";
+	if (effect.value instanceof CompressionEffect) return "CompressionEffect";
 
-	if (effect.value instanceof BiquadFilterNode) return "BiquadFilterNode";
+	if (effect.value instanceof FilterEffect) return "FilterEffect";
 	return "unknown";
 });
 
