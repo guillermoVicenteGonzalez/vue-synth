@@ -3,7 +3,7 @@
 		<!-- <component v-if="effect" v-model="effect" :is="componentType"></component> -->
 		<CompressionEffectWidget
 			v-if="effectType == 'CompressionEffect'"
-			v-model="effect.inputNode as DynamicsCompressorNode"
+			v-model="effect as CompressionEffect"
 			class="EffectModule"
 		></CompressionEffectWidget>
 
@@ -17,11 +17,9 @@
 </template>
 
 <script setup lang="ts">
-import {
-	AudioEffect,
-	CompressionEffect,
-	FilterEffect,
-} from "@/models/effects/AudioEffect";
+import { AudioEffect } from "@/models/effects/AudioEffect";
+import { CompressionEffect } from "@/models/effects/CompressionEffect";
+import { FilterEffect } from "@/models/effects/FilterEffect";
 import { computed } from "vue";
 import CompressionEffectWidget from "./CompressionEffectWidget.vue";
 import FilterEffectWidget from "./FilterEffectWidget.vue";

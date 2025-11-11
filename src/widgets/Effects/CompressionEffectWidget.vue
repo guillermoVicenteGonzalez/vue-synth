@@ -7,7 +7,7 @@
 						<VsChip class="CompressionEffect__chip">Threshold</VsChip>
 
 						<CircleSlider
-							v-model="compressorHandler.threshold"
+							v-model="compression.threshold"
 							class="CompressionEffect__circle-slider"
 							:min="-100"
 							:max="0"
@@ -20,7 +20,7 @@
 						<VsChip class="CompressionEffect__chip">Knee</VsChip>
 
 						<CircleSlider
-							v-model="compressorHandler.knee"
+							v-model="compression.knee"
 							class="CompressionEffect__circle-slider"
 							:min="0"
 							:max="40"
@@ -32,7 +32,7 @@
 				<CompressionAnalyser
 					v-if="compression && preCompressionSource"
 					class="CompressionEffect__body__visualization"
-					:compressed-source="compression"
+					:compressed-source="compression.exitNode"
 					:source="preCompressionSource"
 				></CompressionAnalyser>
 
@@ -41,7 +41,7 @@
 						<VsChip class="CompressionEffect__chip">Attack</VsChip>
 
 						<CircleSlider
-							v-model="compressorHandler.attack"
+							v-model="compression.attack"
 							class="CompressionEffect__circle-slider"
 							:min="0"
 							:max="1"
@@ -53,7 +53,7 @@
 					<div class="CompressionEffect__body__control">
 						<VsChip class="CompressionEffect__chip">Ratio</VsChip>
 						<CircleSlider
-							v-model="compressorHandler.ratio"
+							v-model="compression.ratio"
 							class="CompressionEffect__circle-slider"
 							:min="1"
 							:max="20"
@@ -72,16 +72,13 @@ import CircleSlider from "@/components/common/CircleSlider/CircleSlider.vue";
 import VsChip from "@/components/common/VsChip/VsChip.vue";
 import CompressionAnalyser from "@/components/waves/CompressionAnalyser/CompressionAnalyser.vue";
 import AudioCluster from "@/models/AudioCluster";
-import type { AudioEffect } from "@/models/AudioModule";
-import { CompressionEffectHandler } from "@/models/effects/CompressionEffectHandler";
+import { AudioEffect } from "@/models/effects/AudioEffect";
+import { CompressionEffect } from "@/models/effects/CompressionEffect";
 import type { LinkedNode } from "@/models/LinkedList";
 import { inject, ref, type Ref } from "vue";
 import EffectCard from "./EffectCard.vue";
 
-const compression = defineModel<DynamicsCompressorNode>({ required: true });
-const compressorHandler = ref<CompressionEffectHandler>(
-	new CompressionEffectHandler(compression.value)
-);
+const compression = defineModel<CompressionEffect>({ required: true });
 
 const cluster: Ref<AudioCluster> | undefined = inject("mainCluster");
 const preCompressionSource = ref<AudioNode>();
@@ -98,8 +95,12 @@ function getSourcePreCompression() {
 	if (!clusterLinkedNode) return;
 
 	const prevNode = clusterLinkedNode.prev;
+	// preCompressionSource.value =
+	// 	prevNode == null ? cluster.value.effects.source : prevNode.value;
 	preCompressionSource.value =
-		prevNode == null ? cluster.value.effects.source : prevNode.value;
+		prevNode == null
+			? cluster.value.effects.source.exitNode
+			: prevNode.value.exitNode;
 	console.log(preCompressionSource.value);
 }
 

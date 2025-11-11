@@ -2,7 +2,6 @@ import { FilterChain } from "./LinkedList";
 import type Wave from "./wave";
 
 //for future scalability
-export type AudioEffect = AudioNode | BiquadFilterNode | DynamicsCompressorNode;
 
 //Remember it goes osc(maybe end) -> effects(end) -> gain -> exit
 

@@ -85,7 +85,8 @@ import SynthLayout from "@/layouts/synth/SynthLayout.vue";
 import AudioCluster from "@/models/AudioCluster";
 import type { AudioEnvelope } from "@/models/AudioEnvelope";
 import AudioModule from "@/models/AudioModule";
-import { CompressionEffect, FilterEffect } from "@/models/effects/AudioEffect";
+import { CompressionEffect } from "@/models/effects/CompressionEffect";
+import { FilterEffect } from "@/models/effects/FilterEffect";
 import type { EffectChain } from "@/models/LinkedList";
 import ActionsWidget, {
 	type ActionsWidgetOrientation,

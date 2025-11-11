@@ -35,25 +35,3 @@ export class MonoNodeEffect<T extends AudioNode> extends AudioEffect {
 		this.inputNode = node;
 	}
 }
-
-export class FilterEffect extends AudioEffect {
-	declare exitNode: BiquadFilterNode;
-	declare inputNode: BiquadFilterNode;
-
-	constructor(ctx: AudioContext) {
-		super();
-		this.exitNode = ctx.createBiquadFilter();
-		this.inputNode = this.exitNode;
-	}
-}
-
-export class CompressionEffect extends AudioEffect {
-	declare exitNode: DynamicsCompressorNode;
-	declare inputNude: DynamicsCompressorNode;
-
-	constructor(ctx: AudioContext) {
-		super();
-		this.exitNode = ctx.createDynamicsCompressor();
-		this.inputNode = this.exitNode;
-	}
-}
