@@ -26,7 +26,7 @@
 		<template v-if="currentTab === 'Voice'" #filters>
 			<EffectListWidget
 				v-if="MainAudioCluster"
-				v-model="effects"
+				v-model="filters"
 				:context="mainContext"
 				:sources="MainAudioCluster"
 			></EffectListWidget>
@@ -46,7 +46,7 @@
 				v-model:volume="MainAudioCluster.volume"
 				:orientation="ActionsWidgetOrientation"
 				@create-wave="createNewModule"
-				@create-filter="createEffect('filter')"
+				@create-filter="createFilter"
 				@delete-all="deleteAll"
 			></ActionsWidget>
 		</template>
@@ -84,7 +84,7 @@ import PortraitSynthLayout from "@/layouts/synth/PortraitSynthLayout.vue";
 import SynthLayout from "@/layouts/synth/SynthLayout.vue";
 import AudioCluster from "@/models/AudioCluster";
 import type { AudioEnvelope } from "@/models/AudioEnvelope";
-import AudioModule, { type AudioEffect } from "@/models/AudioModule";
+import AudioModule from "@/models/AudioModule";
 import { CompressionEffect, FilterEffect } from "@/models/effects/AudioEffect";
 import type { EffectChain } from "@/models/LinkedList";
 import ActionsWidget, {
@@ -146,7 +146,7 @@ const ActionsWidgetOrientation = computed<ActionsWidgetOrientation>(() =>
 	currentLayout.value == PortraitSynthLayout ? "vertical" : "horizontal"
 );
 
-const MAX_EFFECTS = 5;
+const MAX_FILTERS = 5;
 
 // const audioModules = ref<AudioModule[]>([]);
 const mainContext = ref<AudioContext>(new AudioContext());
@@ -162,16 +162,16 @@ const envelope = ref<AudioEnvelope>({
 	release: 0.2,
 });
 
-const effects = ref<AudioEffect[]>([]);
+const filters = ref<BiquadFilterNode[]>([]);
 
 // const lfoSources = computed<AudioModule[]>(() => new AudioCluster(mainContext.value, merger.value).modules);
 const lfoSources = computed<LfoSource[]>(() => {
 	const modules: AudioModule[] = MainAudioCluster.value
 		.modules as AudioModule[];
-	const effs: AudioNode[] = effects.value;
+	const fils: AudioNode[] = filters.value;
 	const sources: LfoSource[] = [];
 	return sources
-		.concat(...effs, ...modules)
+		.concat(...fils, ...modules)
 		.concat(MainAudioCluster.value as AudioCluster);
 });
 
@@ -180,18 +180,12 @@ function createNewModule() {
 	MainAudioCluster.value.createModule(waveName, "sine");
 }
 
-function createEffect(effectType: string) {
-	if (effects.value.length >= MAX_EFFECTS) return;
-	if (effectType == "filter") {
-		const nEffect = createFilter(mainContext.value);
-		effects.value.push(nEffect);
-	}
-}
-
-function createFilter(sourceCtx: AudioContext) {
-	const newFilter = sourceCtx.createBiquadFilter();
+function createFilter() {
+	if (filters.value.length >= MAX_FILTERS) return;
+	const newFilter = mainContext.value.createBiquadFilter();
 	newFilter.type = "lowpass";
-	newFilter.frequency.setTargetAtTime(200, sourceCtx.currentTime, 0);
+	newFilter.frequency.setTargetAtTime(200, mainContext.value.currentTime, 0);
+	filters.value.push(newFilter);
 	return newFilter;
 }
 
@@ -199,7 +193,7 @@ function deleteAll() {
 	MainAudioCluster.value.modules.forEach(module => {
 		module.destroyModule();
 	});
-	effects.value = [];
+	filters.value = [];
 	MainAudioCluster.value.modules = [];
 }
 
