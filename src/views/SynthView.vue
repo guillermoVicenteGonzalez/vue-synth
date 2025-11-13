@@ -26,7 +26,7 @@
 		<template v-if="currentTab === 'Voice'" #filters>
 			<EffectListWidget
 				v-if="MainAudioCluster"
-				v-model="filters"
+				v-model="filters as FilterHandler[]"
 				:context="mainContext"
 				:sources="MainAudioCluster"
 			></EffectListWidget>
@@ -87,6 +87,7 @@ import type { AudioEnvelope } from "@/models/AudioEnvelope";
 import AudioModule from "@/models/AudioModule";
 import { CompressionEffect } from "@/models/effects/CompressionEffect";
 import { FilterEffect } from "@/models/effects/FilterEffect";
+import FilterHandler from "@/models/FilterHandler";
 import type { EffectChain } from "@/models/LinkedList";
 import ActionsWidget, {
 	type ActionsWidgetOrientation,
@@ -163,13 +164,13 @@ const envelope = ref<AudioEnvelope>({
 	release: 0.2,
 });
 
-const filters = ref<BiquadFilterNode[]>([]);
+const filters = ref<FilterHandler[]>([]);
 
 // const lfoSources = computed<AudioModule[]>(() => new AudioCluster(mainContext.value, merger.value).modules);
 const lfoSources = computed<LfoSource[]>(() => {
 	const modules: AudioModule[] = MainAudioCluster.value
 		.modules as AudioModule[];
-	const fils: AudioNode[] = filters.value;
+	const fils: AudioNode[] = filters.value.map(f => f.filter);
 	const sources: LfoSource[] = [];
 	return sources
 		.concat(...fils, ...modules)
@@ -182,10 +183,9 @@ function createNewModule() {
 }
 
 function createFilter() {
+	console.error("Creating filter");
 	if (filters.value.length >= MAX_FILTERS) return;
-	const newFilter = mainContext.value.createBiquadFilter();
-	newFilter.type = "lowpass";
-	newFilter.frequency.setTargetAtTime(200, mainContext.value.currentTime, 0);
+	const newFilter = new FilterHandler(MainAudioCluster.value.context);
 	filters.value.push(newFilter);
 	return newFilter;
 }
@@ -193,6 +193,9 @@ function createFilter() {
 function deleteAll() {
 	MainAudioCluster.value.modules.forEach(module => {
 		module.destroyModule();
+	});
+	filters.value.forEach(filter => {
+		filter.detachModule();
 	});
 	filters.value = [];
 	MainAudioCluster.value.modules = [];

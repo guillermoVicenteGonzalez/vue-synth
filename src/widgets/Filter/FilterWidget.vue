@@ -16,7 +16,7 @@
 			<div class="filterCard__controls">
 				<VsSlider
 					v-if="filter"
-					v-model="filterHandler.cutoffFrequency"
+					v-model="filter.cuttofFrequency"
 					class="filterCard__controls__slider"
 					orientation="vertical"
 					:min="0"
@@ -33,7 +33,7 @@
 				<div class="filterCard__selectors">
 					<VsSelector
 						v-if="filter"
-						v-model="filterHandler.type"
+						v-model="filter.type"
 						:items="Object.keys(FilterTypes)"
 					></VsSelector>
 					<VsSelector
@@ -43,15 +43,15 @@
 					></VsSelector>
 				</div>
 				<WaveAnalyser
-					v-if="source"
+					v-if="filter"
 					:line-color="primaryColor"
 					class="filterCard__analyser"
-					:source="source.gainNode"
+					:source="filter.filter"
 					:canvas-width="zoom"
 				></WaveAnalyser>
 
 				<VsSlider
-					v-if="source"
+					v-if="filter"
 					v-model="zoom"
 					:disabled="disabled"
 					:min="400"
@@ -72,16 +72,15 @@ import VsSelector from "@/components/common/VsSelector/VsSelector.vue";
 import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
 import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
 import type AudioCluster from "@/models/AudioCluster";
-import AudioModule from "@/models/AudioModule";
 import FilterHandler, { FilterTypes } from "@/models/FilterHandler";
-import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import { computed, ref } from "vue";
 
 interface FilterWidgetProps {
 	/**All the waves we can apply filters to*/
 	sources: AudioCluster;
 	context: AudioContext;
 }
-const { sources, context } = defineProps<FilterWidgetProps>();
+const { sources } = defineProps<FilterWidgetProps>();
 const primaryColor = "#42d392";
 const MAX_CARD_HEIGHT = "17rem";
 const MIN_CARD_HEIGHT = "17rem";
@@ -89,23 +88,23 @@ const MIN_CARD_HEIGHT = "17rem";
 /**The filter node attached as model to the card.
  * It is created by the parent component (main view tipically)
  */
-const filter = defineModel<BiquadFilterNode>("filter");
-/**A helper for filter parameter reactive handling */
-const filterHandler = ref<FilterHandler>(new FilterHandler("lowpass", 400));
-/**Current audioModule connected to the filter */
-const source = ref<AudioModule>();
-const zoom = ref<number>(400);
-const disabled = ref<boolean>(false);
 
 const filterCardStyles = computed(() => {
 	return `filterCard ${disabled.value ? "filterCard--disabled" : null}`;
 });
 
-watch(disabled, () => {
-	if (!source.value || !filter.value) return;
-	if (disabled.value) source.value.detachEffect(filter.value);
-	else source.value.attachEffect(filter.value);
-});
+const zoom = ref<number>(400);
+const disabled = ref<boolean>(false);
+
+const filter = defineModel<FilterHandler>({ required: true });
+/**A helper for filter parameter reactive handling */
+/**Current audioModule connected to the filter */
+
+// watch(disabled, () => {
+// 	if (!source.value || !filter.value) return;
+// 	if (disabled.value) source.value.detachEffect(filter.value);
+// 	else source.value.attachEffect(filter.value);
+// });
 
 /**
  * Every time sources change (additions or deletion of modules)
@@ -113,28 +112,17 @@ watch(disabled, () => {
  * If it does not exist => we reset the source to undefined-
  * This covers the scenario where a module that had this filter attached is deleted
  */
-watch(sources.modules, () => {
-	if (source.value) {
-		const exists = sources.modules.includes(source.value);
-		if (!exists) source.value = undefined;
-	}
-});
+// watch(sources.modules, () => {
+// 	if (source.value) {
+// 		const exists = sources.modules.includes(source.value);
+// 		if (!exists) source.value = undefined;
+// 	}
+// });
 
-const emit = defineEmits<{
-	(e: "delete", value: BiquadFilterNode | undefined): void;
-}>();
-
-/**
- * Given a module name, searches sources.modules for it and assigns it to source
- * If no module name is provided => detachment, we detach the filter from the previous source and assign source = undefined
- * @param moduleName
- */
-function handleSelectModule(moduleName: string | undefined = undefined) {
-	//we detach the current module from the in	ternal component filter
+function handleSelectModule(moduleName: string | undefined) {
 	if (!moduleName || moduleName == "") {
-		if (!source.value) return;
-		source.value.detachEffect(filter.value);
-		source.value = undefined;
+		filter.value.detachModule();
+		return;
 	}
 
 	const newModule = sources.modules.find(module => {
@@ -143,33 +131,17 @@ function handleSelectModule(moduleName: string | undefined = undefined) {
 
 	if (!newModule) return;
 
-	if (source.value != undefined && filter.value != undefined) {
-		source.value.detachEffect(filter.value);
-	}
-
-	if (filter.value != undefined) newModule.attachEffect(filter.value);
-	source.value = newModule;
+	filter.value.attachModule(newModule);
 }
 
 function deleteFilter() {
-	handleSelectModule(undefined);
+	filter.value.detachModule();
 	emit("delete", filter.value);
 }
 
-onMounted(() => {
-	if (context != null && filter.value != undefined) {
-		filterHandler.value.setNode(filter.value);
-	}
-});
-
-onUnmounted(() => {
-	//si hay source => detach
-	if (source.value) {
-		handleSelectModule();
-	}
-	//filter = null;
-	// filter.value = undefined;
-});
+const emit = defineEmits<{
+	(e: "delete", value: FilterHandler | undefined): void;
+}>();
 </script>
 
 <style lang="scss" scoped>

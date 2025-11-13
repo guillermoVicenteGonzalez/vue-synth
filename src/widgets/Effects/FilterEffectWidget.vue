@@ -39,21 +39,15 @@ import VsChip from "@/components/common/VsChip/VsChip.vue";
 import VsSelector from "@/components/common/VsSelector/VsSelector.vue";
 import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
 import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
-import FilterHandler, { FilterTypes } from "@/models/FilterHandler";
-import { ref, watch } from "vue";
+import { FilterTypes } from "@/models/FilterHandler";
+import { ref } from "vue";
 import EffectCard from "./EffectCard.vue";
 
 const primaryColor = "#42d392";
 
 const disabled = ref<boolean>(false);
 const filter = defineModel<BiquadFilterNode>();
-const filterHandler = ref<FilterHandler>(new FilterHandler("lowpass", 400));
 const canvasZoom = ref<number>(600);
-
-watch(filter, () => {
-	if (filter.value && filterHandler.value)
-		filterHandler.value.setNode(filter.value);
-});
 </script>
 
 <style scoped lang="scss">

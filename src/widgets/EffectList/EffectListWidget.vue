@@ -1,19 +1,19 @@
 <template>
 	<div v-if="sources" class="effectList">
 		<FilterWidget
-			v-for="(_effect, index) in effects"
+			v-for="(_filter, index) in filters"
 			:key="index"
-			v-model:filter="effects[index] as BiquadFilterNode"
+			v-model="filters[index]"
 			:context="context"
 			:sources="sources as AudioCluster"
-			@delete="deleteEffect(index)"
+			@delete="deleteFilter(index)"
 		></FilterWidget>
 	</div>
 </template>
 
 <script setup lang="ts">
 import type AudioCluster from "@/models/AudioCluster";
-import type { AudioEffect } from "@/models/AudioModule";
+import type FilterHandler from "@/models/FilterHandler";
 import type { UnwrapRef } from "vue";
 import FilterWidget from "../Filter/FilterWidget.vue";
 
@@ -23,11 +23,11 @@ interface EffectListWidgetProps {
 }
 
 const { sources, context } = defineProps<EffectListWidgetProps>();
-const effects = defineModel<(AudioEffect | undefined)[]>({ default: [] });
+const filters = defineModel<FilterHandler[]>({ default: [] });
 
-function deleteEffect(index: number) {
-	const deletedEffects = effects.value.splice(index, 1);
-	deletedEffects[0] = undefined; //for garbage collection
+function deleteFilter(index: number) {
+	filters.value.splice(index, 1);
+	//deletedEffects[0] = null; //for garbage collection
 }
 </script>
 
@@ -36,7 +36,6 @@ function deleteEffect(index: number) {
 	height: 100%;
 	overflow-y: auto;
 	display: flex;
-	flex-direction: column;
 	flex: 1;
 	gap: $gap-bg;
 	padding: $gap-bg $gap-df;
