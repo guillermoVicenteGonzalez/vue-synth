@@ -1,6 +1,17 @@
 export abstract class AudioEffect {
 	declare exitNode: AudioNode;
 	declare inputNode: AudioNode;
+	private enabled: boolean = true;
+
+	set disabled(d: boolean) {
+		this.enabled = !d;
+		if (this.enabled) this.onEnable();
+		else this.onDisable();
+	}
+
+	get disabled(): boolean {
+		return !this.enabled;
+	}
 
 	connect(node: AudioNode | AudioEffect) {
 		try {
@@ -22,7 +33,9 @@ export abstract class AudioEffect {
 		}
 	}
 
-	disable() {}
+	protected abstract onDisable(): void;
+
+	protected abstract onEnable(): void;
 }
 
 export class MonoNodeEffect<T extends AudioNode> extends AudioEffect {
@@ -34,4 +47,7 @@ export class MonoNodeEffect<T extends AudioNode> extends AudioEffect {
 		this.exitNode = node;
 		this.inputNode = node;
 	}
+
+	declare protected onEnable: () => void;
+	declare protected onDisable: () => void;
 }

@@ -9,4 +9,8 @@ export class FilterEffect extends AudioEffect {
 		this.exitNode = ctx.createBiquadFilter();
 		this.inputNode = this.exitNode;
 	}
+
+	protected onDisable(): void {}
+
+	protected onEnable(): void {}
 }
