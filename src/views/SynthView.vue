@@ -183,7 +183,6 @@ function createNewModule() {
 }
 
 function createFilter() {
-	console.error("Creating filter");
 	if (filters.value.length >= MAX_FILTERS) return;
 	const newFilter = new FilterHandler(MainAudioCluster.value.context);
 	filters.value.push(newFilter);

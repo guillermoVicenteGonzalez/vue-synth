@@ -3,7 +3,7 @@
 		<select
 			id=""
 			v-model="model"
-			name=""
+			:name="name"
 			class="VS-Selector__select"
 			@change="emit('change', model)"
 		>
@@ -30,12 +30,14 @@ interface VsSelectorProps {
 	items: string[];
 	placeholder?: string;
 	clearable?: boolean;
+	name?: string;
 }
 
 const {
 	items = [],
 	placeholder,
 	clearable = false,
+	name,
 } = defineProps<VsSelectorProps>();
 
 const model = defineModel<string>();
@@ -73,6 +75,7 @@ function clearSelection() {
 		flex-basis: 100%;
 		border: none;
 		flex-shrink: 1;
+		width: 100%;
 	}
 
 	&__clear-btn {

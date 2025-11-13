@@ -38,8 +38,8 @@
 					></VsSelector>
 					<VsSelector
 						clearable
+						v-model="selectedModule"
 						:items="sources.modules.map(m => m.name)"
-						@change="handleSelectModule"
 					></VsSelector>
 				</div>
 				<WaveAnalyser
@@ -97,27 +97,15 @@ const zoom = ref<number>(400);
 const disabled = ref<boolean>(false);
 
 const filter = defineModel<FilterHandler>({ required: true });
-/**A helper for filter parameter reactive handling */
-/**Current audioModule connected to the filter */
+const selectedModule = computed({
+	get() {
+		return filter.value.module == null ? "no value" : filter.value.module.name;
+	},
 
-// watch(disabled, () => {
-// 	if (!source.value || !filter.value) return;
-// 	if (disabled.value) source.value.detachEffect(filter.value);
-// 	else source.value.attachEffect(filter.value);
-// });
-
-/**
- * Every time sources change (additions or deletion of modules)
- * We check that our current source still exist.
- * If it does not exist => we reset the source to undefined-
- * This covers the scenario where a module that had this filter attached is deleted
- */
-// watch(sources.modules, () => {
-// 	if (source.value) {
-// 		const exists = sources.modules.includes(source.value);
-// 		if (!exists) source.value = undefined;
-// 	}
-// });
+	set(name: string) {
+		handleSelectModule(name);
+	},
+});
 
 function handleSelectModule(moduleName: string | undefined) {
 	if (!moduleName || moduleName == "") {
@@ -250,14 +238,5 @@ $disabled-color: gray;
 			backdrop-filter: blur(1px);
 		}
 	}
-
-	.delete-btn {
-	}
-}
-
-.black-box {
-	// width: 100%;
-	// height: 100%;
-	// background-color: red;
 }
 </style>
