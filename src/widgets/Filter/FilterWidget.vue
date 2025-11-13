@@ -37,8 +37,8 @@
 						:items="Object.keys(FilterTypes)"
 					></VsSelector>
 					<VsSelector
-						clearable
 						v-model="selectedModule"
+						clearable
 						:items="sources.modules.map(m => m.name)"
 					></VsSelector>
 				</div>

@@ -113,7 +113,6 @@ function getSourcePreCompression() {
 		prevNode == null
 			? cluster.value.effects.source.exitNode
 			: prevNode.value.exitNode;
-	console.log(preCompressionSource.value);
 }
 
 getSourcePreCompression();

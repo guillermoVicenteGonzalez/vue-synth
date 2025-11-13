@@ -9,7 +9,7 @@
 
 		<FilterEffectWidget
 			v-if="effectType == 'FilterEffect'"
-			v-model="effect.inputNode as BiquadFilterNode"
+			v-model="effect as FilterEffect"
 			class="EffectModule"
 		>
 		</FilterEffectWidget>
