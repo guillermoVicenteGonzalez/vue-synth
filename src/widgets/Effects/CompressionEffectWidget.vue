@@ -1,5 +1,10 @@
 <template>
-	<EffectCard v-model="disabled" title="compression">
+	<EffectCard
+		v-model="compression.disabled"
+		title="compression"
+		class="CompressionEffect"
+		:class="dynamicClass"
+	>
 		<template #body>
 			<div class="CompressionEffect__body">
 				<div class="CompressionEffect__body__controls">
@@ -13,6 +18,7 @@
 							:max="0"
 							:step="0.01"
 							:fill-color="primaryColor"
+							:disabled="compression.disabled"
 						></CircleSlider>
 					</div>
 
@@ -26,6 +32,7 @@
 							:max="40"
 							:step="0.01"
 							:fill-color="primaryColor"
+							:disabled="compression.disabled"
 						></CircleSlider>
 					</div>
 				</div>
@@ -47,6 +54,7 @@
 							:max="1"
 							:step="0.001"
 							:fill-color="primaryColor"
+							:disabled="compression.disabled"
 						></CircleSlider>
 					</div>
 
@@ -59,6 +67,7 @@
 							:max="20"
 							:step="0.01"
 							:fill-color="primaryColor"
+							:disabled="compression.disabled"
 						></CircleSlider>
 					</div>
 				</div>
@@ -75,7 +84,7 @@ import AudioCluster from "@/models/AudioCluster";
 import { AudioEffect } from "@/models/effects/AudioEffect";
 import { CompressionEffect } from "@/models/effects/CompressionEffect";
 import type { LinkedNode } from "@/models/LinkedList";
-import { inject, ref, type Ref } from "vue";
+import { computed, inject, ref, type Ref } from "vue";
 import EffectCard from "./EffectCard.vue";
 
 const compression = defineModel<CompressionEffect>({ required: true });
@@ -83,8 +92,11 @@ const compression = defineModel<CompressionEffect>({ required: true });
 const cluster: Ref<AudioCluster> | undefined = inject("mainCluster");
 const preCompressionSource = ref<AudioNode>();
 
-const disabled = ref<boolean>();
 const primaryColor = "#42d392";
+
+const dynamicClass = computed(() => ({
+	"CompressionEffect--disabled": compression.value.disabled,
+}));
 
 function getSourcePreCompression() {
 	if (!cluster) return;
@@ -152,6 +164,21 @@ $handle-width: 4rem;
 
 	&__circle-slider {
 		color: $text-color;
+	}
+
+	&--disabled {
+		.CompressionEffect__body {
+			position: relative;
+
+			&::after {
+				content: "";
+				position: absolute;
+				height: 100%;
+				width: 100%;
+				background-color: rgba($disabled-color, 0.1);
+				backdrop-filter: blur(1px);
+			}
+		}
 	}
 }
 </style>
