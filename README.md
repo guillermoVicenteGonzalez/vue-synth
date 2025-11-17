@@ -6,10 +6,10 @@
 
 - [-] Piano widget
   - [ ] Visuals
-  - [ ] Key functionality
+  - [x] Key functionality
     - [x] Natural keys
     - [x] Altered keys
-    - [ ] Change central note
+    - [x] Change central note
 - [ ] Audio module effects
   - [ ] Wave distortion => wave shaper
   - [ ] Voices => possibly wave shaper?? or just a number to clone oscs
@@ -21,12 +21,16 @@
     - [x] Sustain
     - [x] Release
     - [x] Decay
-  - [ ] Filters
+  - [x] Filters
+  - [ ] Reset button for filters
   - [ ] Echo
   - [ ] Chorus
-  - [ ] Compression
+  - [x] Compression
   - [ ] Distortion
-  - [ ] LFO's
+  - [x] LFO's
+  - [ ] Flanger?
+  - [ ] Phaser
+  - [ ] Wha wha
 - [ ] Controls
   - [x] Writable module freqs
   - [x] Module Freq reset to 440
@@ -34,11 +38,11 @@
   - [x] Global clear
     - [x] Filters
     - [x] Modules
-  - [ ] Global "detuning"
+  - [x] Global "detuning"
   - [ ] Wheel
-- [ ] Global volume controls
-- [ ] Dynamic layouts / effects bar
-- [ ] Responsive
+- [x] Global volume controls
+- [x] Dynamic layouts / effects bar
+- [x] Responsive
 - [ ] MIDI interfacing
 
 ### What ifs

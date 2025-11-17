@@ -14,7 +14,9 @@
 				@mousedown="isRotating = true"
 				@mouseup="isRotating = false"
 			>
-				<span class="circle-slider__text">{{ progress }}</span>
+				<span class="circle-slider__text">{{
+					progress.toFixed(toFixedFromStep(step))
+				}}</span>
 			</div>
 
 			<svg width="100%" height="100%" :style="cssVars">
@@ -164,9 +166,7 @@ function handleProgress(e: MouseEvent, minVal: number = 0, maxVal: number = 1) {
 		e.clientY
 	);
 
-	progress.value = Number(
-		percentageToValue(progressPercent, minVal, maxVal).toFixed(step)
-	);
+	progress.value = percentageToValue(progressPercent, minVal, maxVal);
 }
 
 function handleClick(e: MouseEvent) {
@@ -261,6 +261,17 @@ function handleRightClick(e: MouseEvent) {
 
 function handleCloseContextMenu() {
 	contextMenuVisible.value = false;
+}
+
+/**
+ * Calculates the number of decimals to show based on the step parameter
+ * This is kinda cheating
+ */
+function toFixedFromStep(n: number): number {
+	const decimals: string = n.toString().split(".")[1];
+	if (!decimals) return 0;
+
+	return decimals.length;
 }
 
 // function calculateDimensions() {}

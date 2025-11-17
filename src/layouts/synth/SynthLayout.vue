@@ -7,6 +7,9 @@
 		<div class="synth-layout__components">
 			<slot name="waves"></slot>
 			<slot name="filters"></slot>
+			<div v-if="$slots.effects" class="synth-layout__effects">
+				<slot name="effects" class="effects"> </slot>
+			</div>
 			<div class="synth-layout__components__actions">
 				<slot name="actions"></slot>
 			</div>
@@ -27,6 +30,8 @@
 	</div>
 </template>
 
+<script setup lang="ts"></script>
+
 <style lang="scss" scoped>
 $global-bg-color: $bg-color-1;
 
@@ -34,7 +39,7 @@ $header-color: $primary-color;
 $header-text-color: white;
 
 $min-components-w: 80rem;
-$max-components-w: 6fr;
+$max-components-w: 5fr;
 
 $min-display-w: 50rem;
 $max-display-w: 4fr;
@@ -86,6 +91,13 @@ $min-actions-h: 10rem;
 		color: $header-text-color;
 		grid-column: 1 / -1;
 		grid-row: header-start / header-end;
+	}
+
+	&__effects {
+		grid-column: 1/-1;
+		grid-row: 0/1;
+		min-height: 0;
+		height: 100%;
 	}
 
 	&__components {
@@ -243,5 +255,9 @@ $min-actions-h: 10rem;
 			background-color: rgb(48, 48, 48);
 		}
 	}
+}
+
+.effects {
+	background-color: red;
 }
 </style>

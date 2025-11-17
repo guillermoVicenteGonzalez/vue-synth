@@ -18,6 +18,8 @@ interface EnvelopeDisplayProps {
 	canvasHeight?: number;
 	lineWidth?: number;
 	lineColor?: string;
+	envelopeWidth?: number;
+	envelopeHeight?: number;
 }
 
 const {
@@ -26,6 +28,8 @@ const {
 	canvasWidth = 1000,
 	lineWidth = 2,
 	lineColor = "red",
+	envelopeWidth = 10,
+	envelopeHeight = 1,
 } = defineProps<EnvelopeDisplayProps>();
 
 const classObject = computed(() => ({}));
@@ -48,15 +52,15 @@ function paintEnvelope(
 	if (!ctx) return;
 
 	//how long the total envelope can be
-	const envelopeSize = 30;
-	const envelopeHeight = 1;
+	const envelopeSize = envelopeWidth;
+	const envH = envelopeHeight;
 
 	const cWidth = ctx.canvas.width;
 	const cHeight = ctx.canvas.height;
 
 	ctx.clearRect(0, 0, cWidth, cHeight);
 
-	const sustainPos = cHeight * (envelopeHeight - env.sustain);
+	const sustainPos = cHeight * (envH - env.sustain);
 	let currentStep = 0;
 
 	ctx.beginPath();

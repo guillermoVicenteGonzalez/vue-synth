@@ -2,7 +2,12 @@
 	<VsCard class="envelope-widget">
 		<!-- <div class="envelope-widget"> -->
 		<div class="envelope-widget__display">
-			<EnvelopeDisplay :envelope="model" :line-color="primaryColor" />
+			<EnvelopeDisplay
+				:envelope="model"
+				:line-color="primaryColor"
+				:envelope-height="MAX_SUSTAIN"
+				:envelope-width="ENVELOPPE_WIDTH"
+			/>
 		</div>
 
 		<div class="envelope-widget__controls">
@@ -12,7 +17,7 @@
 				<VsSlider
 					v-model.number="model.attack"
 					class="envelope-widget__control__slider"
-					:max="10"
+					:max="MAX_ATTACK"
 					:min="0.01"
 					:step="0.01"
 				></VsSlider>
@@ -21,7 +26,7 @@
 					class="envelope-widget__control__input"
 					:step="0.1"
 					:min="0.01"
-					:max="10"
+					:max="MAX_ATTACK"
 				></VsNinput>
 			</div>
 
@@ -31,7 +36,7 @@
 				<VsSlider
 					v-model.number="model.decay"
 					class="envelope-widget__control__slider"
-					:max="10"
+					:max="MAX_DECAY"
 					:min="0.01"
 					:step="0.01"
 				></VsSlider>
@@ -40,7 +45,7 @@
 					class="envelope-widget__control__input"
 					:step="0.1"
 					:min="0.01"
-					:max="10"
+					:max="MAX_DECAY"
 				></VsNinput>
 			</div>
 
@@ -49,7 +54,7 @@
 				<VsSlider
 					v-model.number="model.sustain"
 					class="envelope-widget__control__slider"
-					:max="1"
+					:max="MAX_SUSTAIN"
 					:min="0.01"
 					:step="0.01"
 				></VsSlider>
@@ -59,7 +64,7 @@
 					class="envelope-widget__control__input"
 					:step="0.1"
 					:min="0.01"
-					:max="1"
+					:max="MAX_SUSTAIN"
 				></VsNinput>
 			</div>
 
@@ -68,7 +73,7 @@
 				<VsSlider
 					v-model.number="model.release"
 					class="envelope-widget__control__slider"
-					:max="10"
+					:max="MAX_RELEASE"
 					:min="0.01"
 					:step="0.01"
 				></VsSlider>
@@ -78,7 +83,7 @@
 					class="envelope-widget__control__input"
 					:step="0.1"
 					:min="0.01"
-					:max="10"
+					:max="MAX_RELEASE"
 				></VsNinput>
 			</div>
 		</div>
@@ -96,7 +101,13 @@ import type { AudioEnvelope } from "@/models/AudioEnvelope";
 
 // interface EnvelopeControlWidgetProps {}
 
-// const {...} = defineProps<EnvelopeControlWidgetProps>();
+const MAX_ATTACK = 5;
+const MAX_DECAY = 5;
+const MAX_SUSTAIN = 1;
+const MAX_RELEASE = 5;
+
+const ENVELOPPE_WIDTH = MAX_ATTACK + MAX_DECAY + MAX_RELEASE;
+
 const primaryColor = "#42d392";
 
 const model = defineModel<AudioEnvelope>({

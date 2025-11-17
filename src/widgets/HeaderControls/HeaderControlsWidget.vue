@@ -16,7 +16,7 @@
 import VsTabButton from "@/components/common/VsToggleButton/VsTabButton.vue";
 
 const tabItems = <const>["Voice", "Effects"];
-type TabItem = (typeof tabItems)[number];
+export type TabItem = (typeof tabItems)[number];
 const currentTab = defineModel<TabItem>({
 	default: "Voice",
 });

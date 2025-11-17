@@ -1,44 +1,98 @@
+import type AudioModule from "./AudioModule";
+
+// class FilterHandler {
+// 	private interalType: BiquadFilterType;
+// 	private internalFrequency: number;
+// 	node?: BiquadFilterNode;
+// 	module: AudioModule | null = null;
+
+// 	constructor(type: BiquadFilterType, cutFreq: number) {
+// 		this.cutoffFrequency = cutFreq;
+// 		this.interalType = type;
+// 		this.internalFrequency = cutFreq;
+// 	}
+
+// 	getNode() {
+// 		return this.node;
+// 	}
+
+// 	setNode(n_node: BiquadFilterNode) {
+// 		this.node = n_node;
+// 	}
+
+// 	set cutoffFrequency(freq: number) {
+// 		this.internalFrequency = freq;
+// 		if (this.node == null) return;
+// 		this.node.frequency.setTargetAtTime(
+// 			this.cutoffFrequency,
+// 			this.node.context.currentTime,
+// 			0
+// 		);
+// 	}
+
+// 	get cutoffFrequency() {
+// 		return this.internalFrequency;
+// 	}
+
+// 	set type(n_type: BiquadFilterType) {
+// 		this.interalType = n_type;
+// 		if (this.node == null) return;
+// 		this.node.type = this.interalType;
+// 	}
+
+// 	get type() {
+// 		return this.interalType;
+// 	}
+// }
+
+export enum FilterTypes {
+	lowpass = "lowpass",
+	highpass = "highpass",
+	bandpass = "bandpass",
+	lowshelf = "lowshelf",
+	highself = "highself",
+	peaking = "peaking",
+	notch = "notch",
+	allpass = "allpass",
+}
+
 class FilterHandler {
-	interalType: BiquadFilterType;
-	internalFrequency: number;
-	node?: BiquadFilterNode;
+	filter: BiquadFilterNode;
+	module: AudioModule | null = null;
 
-	constructor(type: BiquadFilterType, cutFreq: number) {
-		this.cutoffFrequency = cutFreq;
-		this.interalType = type;
-		this.internalFrequency = cutFreq;
+	constructor(ctx: AudioContext) {
+		this.filter = ctx.createBiquadFilter();
+		this.type = "lowpass";
+		this.cuttofFrequency = 200;
 	}
 
-	getNode() {
-		return this.node;
+	set cuttofFrequency(f: number) {
+		this.filter.frequency.value = f;
 	}
 
-	setNode(n_node: BiquadFilterNode) {
-		this.node = n_node;
+	get cuttofFrequency(): number {
+		return this.filter.frequency.value;
 	}
 
-	set cutoffFrequency(freq: number) {
-		this.internalFrequency = freq;
-		if (this.node == null) return;
-		this.node.frequency.setTargetAtTime(
-			this.cutoffFrequency,
-			this.node.context.currentTime,
-			0
-		);
+	set type(t: BiquadFilterType) {
+		this.filter.type = t;
 	}
 
-	get cutoffFrequency() {
-		return this.internalFrequency;
+	get type(): BiquadFilterType {
+		return this.filter.type;
 	}
 
-	set type(n_type: BiquadFilterType) {
-		this.interalType = n_type;
-		if (this.node == null) return;
-		this.node.type = this.interalType;
+	attachModule(m: AudioModule) {
+		this.detachModule();
+		this.module = m;
+		this.module.attachEffect(this.filter);
 	}
 
-	get type() {
-		return this.interalType;
+	detachModule() {
+		if (!this.module) return;
+
+		this.module.detachEffect(this.filter);
+		this.module = null;
 	}
 }
 
