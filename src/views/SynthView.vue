@@ -206,6 +206,9 @@ function initializeEffects() {
 	const filter = new FilterEffect(MainAudioCluster.value.context);
 	const flanger = new FlangerEffect(MainAudioCluster.value.context);
 
+	flanger.disabled = true;
+	filter.disabled = true;
+
 	MainAudioCluster.value.effects.append(filter);
 	MainAudioCluster.value.effects.append(flanger);
 	MainAudioCluster.value.effects.append(compression);

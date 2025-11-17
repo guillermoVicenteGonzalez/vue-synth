@@ -1,8 +1,6 @@
 import { LFO } from "../LFO";
 import { AudioEffect } from "./AudioEffect";
 
-const DEFAULT_GAIN = 1;
-
 export class FlangerEffect extends AudioEffect {
 	declare inputNode: AudioNode; //=> effectGain
 	declare exitNode: AudioNode; //=> wetGain
@@ -46,6 +44,11 @@ export class FlangerEffect extends AudioEffect {
 
 		//lfo that oscillates delay
 		this.lfo.connect(this.delayNode.delayTime);
+
+		this.feedback = 0.5;
+		this.depth = 0.002;
+		this.speed = 0.25;
+		this.delay = 0.005;
 	}
 
 	//controla el delay del delayNode duh
@@ -60,7 +63,8 @@ export class FlangerEffect extends AudioEffect {
 
 	set depth(d: number) {
 		if (this.disabled) return;
-		this.effectGain.gain.value = d;
+		// this.effectGain.gain.value = d;
+		this.lfo.amplitude = d;
 		this.internalEffectGain = d;
 	}
 
@@ -98,7 +102,7 @@ export class FlangerEffect extends AudioEffect {
 		this.feedbackNode.disconnect(this.inputNode);
 
 		//and reset the effect gain
-		this.effectGain.gain.value = DEFAULT_GAIN;
+		// this.effectGain.gain.value = DEFAULT_GAIN;
 	}
 
 	protected onEnable(): void {
@@ -109,6 +113,6 @@ export class FlangerEffect extends AudioEffect {
 		this.feedbackNode.connect(this.inputNode);
 
 		//and reset the effect gain
-		this.effectGain.gain.value = this.internalEffectGain;
+		// this.effectGain.gain.value = this.internalEffectGain;
 	}
 }

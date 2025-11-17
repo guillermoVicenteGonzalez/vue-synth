@@ -1,50 +1,54 @@
 <template>
-	<EffectCard class="FlangerEffect" v-model="flanger.disabled">
+	<EffectCard v-model="flanger.disabled" class="FlangerEffect" title="Flanger">
 		<template #body>
 			<div class="FlangerEffect__body">
 				<div class="FlangerEffect__body__controls">
 					<div class="FlangerEffect__control">
 						<VsChip class="FlangerEffect__chip">Delay</VsChip>
 						<CircleSlider
+							v-model="flanger.delay"
+							:disabled="flanger.disabled"
 							:fill-color="primaryColor"
 							:min="0"
 							:max="1"
-							:step="0.01"
+							:step="0.001"
 							class="FlangerEffect__circle-slider"
-							v-model="flanger.delay"
 						></CircleSlider>
 					</div>
 					<div class="FlangerEffect__control">
 						<VsChip class="FlangerEffect__chip">Depth</VsChip>
 						<CircleSlider
+							v-model="flanger.depth"
+							:disabled="flanger.disabled"
 							:fill-color="primaryColor"
 							:min="0"
-							:max="1"
-							:step="0.01"
+							:max="0.01"
+							:step="0.0001"
 							class="FlangerEffect__circle-slider"
-							v-model="flanger.depth"
 						></CircleSlider>
 					</div>
 					<div class="FlangerEffect__control">
 						<VsChip class="FlangerEffect__chip">Feedback</VsChip>
 						<CircleSlider
+							v-model="flanger.feedback"
+							:disabled="flanger.disabled"
 							:fill-color="primaryColor"
 							:min="0"
 							:max="1"
-							:step="0.01"
+							:step="0.001"
 							class="FlangerEffect__circle-slider"
-							v-model="flanger.feedback"
 						></CircleSlider>
 					</div>
 					<div class="FlangerEffect__control">
 						<VsChip class="FlangerEffect__chip">Speed</VsChip>
 						<CircleSlider
+							v-model="flanger.speed"
+							:disabled="flanger.disabled"
 							:fill-color="primaryColor"
 							:min="0"
-							:max="100"
-							:step="1"
+							:max="10"
+							:step="0.01"
 							class="FlangerEffect__circle-slider"
-							v-model="flanger.speed"
 						></CircleSlider>
 					</div>
 				</div>
@@ -94,6 +98,10 @@ $control-width: 40%;
 		font-size: 1.6rem;
 		width: 100%;
 		text-align: center;
+	}
+
+	&__circle-slider {
+		color: $text-color;
 	}
 }
 </style>
