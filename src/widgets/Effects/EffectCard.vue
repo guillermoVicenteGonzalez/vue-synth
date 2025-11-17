@@ -1,5 +1,5 @@
 <template>
-	<VsCard class="EffectCard">
+	<VsCard class="EffectCard" :class="dynamicClass">
 		<div class="EffectCard__handle">
 			<div class="EffectCard__handle__toggle-button">
 				<ToggleButton v-model="disabled" :color="primaryColor"></ToggleButton>
@@ -19,12 +19,16 @@
 <script setup lang="ts">
 import ToggleButton from "@/components/common/ToggleButton/ToggleButton.vue";
 import VsCard from "@/components/common/VsCard/VsCard.vue";
+import { computed } from "vue";
 
 interface EffectCardProps {
 	title?: string;
 }
 
 const { title } = defineProps<EffectCardProps>();
+const dynamicClass = computed(() => ({
+	"EffectCard--disabled": disabled.value,
+}));
 
 const primaryColor = "#42d392";
 const disabled = defineModel<boolean>();
@@ -86,6 +90,23 @@ $handle-width: 4rem;
 		padding: $gap-df;
 		width: 100%;
 		height: 100%;
+	}
+
+	&--disabled {
+		.EffectCard__body {
+			position: relative;
+
+			&::after {
+				content: "";
+				top: 0;
+				left: 0;
+				position: absolute;
+				height: 100%;
+				width: 100%;
+				background-color: rgba($disabled-color, 0.1);
+				backdrop-filter: blur(1px);
+			}
+		}
 	}
 }
 </style>

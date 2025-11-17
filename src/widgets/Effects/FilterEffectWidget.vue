@@ -1,7 +1,7 @@
 <template>
 	<EffectCard v-model="filter.disabled" title="Filter">
 		<template #body>
-			<div v-if="filter" class="Filter" :class="dynamicClass">
+			<div v-if="filter" class="Filter">
 				<div class="Filter__controls">
 					<VsSlider
 						v-model="filter.frequency"
@@ -51,17 +51,13 @@ import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
 import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
 import type { FilterEffect } from "@/models/effects/FilterEffect";
 import { FilterTypes } from "@/models/FilterHandler";
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import EffectCard from "./EffectCard.vue";
 
 const primaryColor = "#42d392";
 
 const filter = defineModel<FilterEffect>({ required: true });
 const canvasZoom = ref<number>(1000);
-
-const dynamicClass = computed(() => ({
-	"Filter--disabled": filter.value.disabled,
-}));
 </script>
 
 <style scoped lang="scss">
@@ -115,19 +111,6 @@ $disabled-color: gray;
 	&__analyser {
 		background-color: $bg-color-1;
 		border-radius: 0.5rem;
-	}
-
-	&--disabled {
-		position: relative;
-
-		&::after {
-			content: "";
-			position: absolute;
-			height: 100%;
-			width: 100%;
-			background-color: rgba($disabled-color, 0.1);
-			backdrop-filter: blur(1px);
-		}
 	}
 }
 </style>
