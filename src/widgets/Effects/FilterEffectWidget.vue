@@ -4,8 +4,8 @@
 			<div v-if="filter" class="Filter" :class="dynamicClass">
 				<div class="Filter__controls">
 					<VsSlider
-						:disabled="filter.disabled"
 						v-model="filter.frequency"
+						:disabled="filter.disabled"
 						:min="0"
 						:max="10000"
 						class="Filter__controls__slider"
@@ -71,7 +71,7 @@ $disabled-color: gray;
 .Filter {
 	width: 100%;
 	height: 100%;
-	// padding: $gap-df;
+	padding: $gap-df;
 
 	display: grid;
 	grid-template-columns:

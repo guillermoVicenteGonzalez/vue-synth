@@ -19,10 +19,10 @@ export class CompressionEffect extends AudioEffect {
 		this.exitNode = ctx.createDynamicsCompressor();
 		this.inputNode = this.exitNode;
 
-		this.localAttack = this.attack;
-		this.localKnee = this.knee;
-		this.localRatio = this.ratio;
-		this.localThreshold = this.threshold;
+		this.localAttack = this.exitNode.attack.value;
+		this.localKnee = this.exitNode.knee.value;
+		this.localRatio = this.exitNode.ratio.value;
+		this.localThreshold = this.exitNode.threshold.value;
 	}
 
 	set attack(a: number) {
@@ -32,7 +32,8 @@ export class CompressionEffect extends AudioEffect {
 	}
 
 	get attack(): number {
-		return this.exitNode.attack.value;
+		// return this.exitNode.attack.value;
+		return this.localAttack;
 	}
 
 	set threshold(t: number) {
@@ -42,7 +43,8 @@ export class CompressionEffect extends AudioEffect {
 	}
 
 	get threshold(): number {
-		return this.exitNode.threshold.value;
+		// return this.exitNode.threshold.value;
+		return this.localThreshold;
 	}
 
 	set ratio(r: number) {
@@ -52,7 +54,8 @@ export class CompressionEffect extends AudioEffect {
 	}
 
 	get ratio(): number {
-		return this.exitNode.ratio.value;
+		// return this.exitNode.ratio.value;
+		return this.localRatio;
 	}
 
 	set knee(k: number) {
@@ -62,7 +65,8 @@ export class CompressionEffect extends AudioEffect {
 	}
 
 	get knee(): number {
-		return this.exitNode.knee.value;
+		// return this.exitNode.knee.value;
+		return this.localKnee;
 	}
 
 	get reduction(): number {
