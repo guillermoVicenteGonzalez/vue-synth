@@ -22,6 +22,7 @@
     - [x] Release
     - [x] Decay
   - [x] Filters
+  - [ ] Reset button for filters
   - [ ] Echo
   - [ ] Chorus
   - [x] Compression

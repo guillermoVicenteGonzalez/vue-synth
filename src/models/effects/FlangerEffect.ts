@@ -101,5 +101,14 @@ export class FlangerEffect extends AudioEffect {
 		this.effectGain.gain.value = DEFAULT_GAIN;
 	}
 
-	protected onEnable(): void {}
+	protected onEnable(): void {
+		//we connect the delayed signal
+		this.delayNode.connect(this.exitNode);
+
+		//then we connect the feedback signal
+		this.feedbackNode.connect(this.inputNode);
+
+		//and reset the effect gain
+		this.effectGain.gain.value = this.internalEffectGain;
+	}
 }
