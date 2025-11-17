@@ -87,6 +87,7 @@ import type { AudioEnvelope } from "@/models/AudioEnvelope";
 import AudioModule from "@/models/AudioModule";
 import { CompressionEffect } from "@/models/effects/CompressionEffect";
 import { FilterEffect } from "@/models/effects/FilterEffect";
+import { FlangerEffect } from "@/models/effects/FlangerEffect";
 import FilterHandler from "@/models/FilterHandler";
 import type { EffectChain } from "@/models/LinkedList";
 import ActionsWidget, {
@@ -203,8 +204,10 @@ function deleteAll() {
 function initializeEffects() {
 	const compression = new CompressionEffect(MainAudioCluster.value.context);
 	const filter = new FilterEffect(MainAudioCluster.value.context);
+	const flanger = new FlangerEffect(MainAudioCluster.value.context);
 
 	MainAudioCluster.value.effects.append(filter);
+	MainAudioCluster.value.effects.append(flanger);
 	MainAudioCluster.value.effects.append(compression);
 }
 

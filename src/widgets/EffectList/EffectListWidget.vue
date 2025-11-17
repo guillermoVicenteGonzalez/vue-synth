@@ -36,6 +36,7 @@ function deleteFilter(index: number) {
 	height: 100%;
 	overflow-y: auto;
 	display: flex;
+	flex-direction: column;
 	flex: 1;
 	gap: $gap-bg;
 	padding: $gap-bg $gap-df;

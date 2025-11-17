@@ -30,6 +30,8 @@
 	</div>
 </template>
 
+<script setup lang="ts"></script>
+
 <style lang="scss" scoped>
 $global-bg-color: $bg-color-1;
 
@@ -95,7 +97,7 @@ $min-actions-h: 10rem;
 		grid-column: 1/-1;
 		grid-row: 0/1;
 		min-height: 0;
-		height: 0;
+		height: 100%;
 	}
 
 	&__components {

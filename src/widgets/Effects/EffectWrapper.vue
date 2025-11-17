@@ -4,15 +4,18 @@
 		<CompressionEffectWidget
 			v-if="effectType == 'CompressionEffect'"
 			v-model="effect as CompressionEffect"
-			class="EffectModule"
 		></CompressionEffectWidget>
 
 		<FilterEffectWidget
 			v-if="effectType == 'FilterEffect'"
 			v-model="effect as FilterEffect"
-			class="EffectModule"
 		>
 		</FilterEffectWidget>
+
+		<FlangerEffectWidget
+			v-if="effectType == 'FlangerEffect'"
+			v-model="effect as FlangerEffect"
+		></FlangerEffectWidget>
 	</div>
 </template>
 
@@ -20,9 +23,11 @@
 import { AudioEffect } from "@/models/effects/AudioEffect";
 import { CompressionEffect } from "@/models/effects/CompressionEffect";
 import { FilterEffect } from "@/models/effects/FilterEffect";
+import { FlangerEffect } from "@/models/effects/FlangerEffect";
 import { computed } from "vue";
 import CompressionEffectWidget from "./CompressionEffectWidget.vue";
 import FilterEffectWidget from "./FilterEffectWidget.vue";
+import FlangerEffectWidget from "./FlangerEffectWidget.vue";
 
 const effect = defineModel<AudioEffect>();
 
@@ -30,6 +35,8 @@ const effectType = computed(() => {
 	if (effect.value instanceof CompressionEffect) return "CompressionEffect";
 
 	if (effect.value instanceof FilterEffect) return "FilterEffect";
+
+	if (effect.value instanceof FlangerEffect) return "FlangerEffect";
 	return "unknown";
 });
 
@@ -42,9 +49,4 @@ const effectType = computed(() => {
 
 <style scoped lang="scss">
 $module-height: 25rem;
-
-.EffectModule {
-	width: 100%;
-	height: $module-height;
-}
 </style>

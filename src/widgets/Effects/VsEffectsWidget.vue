@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import type { AudioEffect } from "@/models/AudioModule";
+import { AudioEffect } from "@/models/effects/AudioEffect";
 import { EffectChain } from "@/models/LinkedList";
 import { computed } from "vue";
 import EffectWrapper from "./EffectWrapper.vue";
@@ -26,8 +26,11 @@ const effectsArray = computed<AudioEffect[]>(() => {
 	display: flex;
 	flex-direction: column-reverse;
 	width: 100%;
+	height: 100%;
 
 	padding: $gap-df;
 	gap: $gap-df;
+
+	overflow-y: auto;
 }
 </style>
