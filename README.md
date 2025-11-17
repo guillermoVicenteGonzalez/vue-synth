@@ -21,12 +21,15 @@
     - [x] Sustain
     - [x] Release
     - [x] Decay
-  - [ ] Filters
+  - [x] Filters
   - [ ] Echo
   - [ ] Chorus
   - [x] Compression
   - [ ] Distortion
   - [x] LFO's
+  - [ ] Flanger?
+  - [ ] Phaser
+  - [ ] Wha wha
 - [ ] Controls
   - [x] Writable module freqs
   - [x] Module Freq reset to 440
