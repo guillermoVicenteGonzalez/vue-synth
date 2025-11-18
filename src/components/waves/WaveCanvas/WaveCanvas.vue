@@ -29,6 +29,7 @@ const {
 	canvasWidth,
 	lineColor,
 	lineWidth = 1,
+	filled = false,
 } = defineProps<WaveCanvasProps>();
 
 function paintWave(w: Wave, ctx: CanvasRenderingContext2D, step = 0): boolean {
@@ -50,6 +51,13 @@ function paintWave(w: Wave, ctx: CanvasRenderingContext2D, step = 0): boolean {
 
 	if (lineColor) ctx.strokeStyle = lineColor;
 	ctx.lineWidth = lineWidth;
+
+	if (filled) {
+		const fillStyleColor = ctx.strokeStyle + "40";
+		ctx.fillStyle = fillStyleColor;
+		ctx.fill();
+	}
+
 	ctx.stroke();
 	return true;
 }

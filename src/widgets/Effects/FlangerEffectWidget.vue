@@ -53,7 +53,31 @@
 					</div>
 				</div>
 
-				<div class="FlangerEffect__body__display"></div>
+				<div class="FlangerEffect__body__display">
+					<MultiWaveAnalyser :sources="flangerSources"></MultiWaveAnalyser>
+				</div>
+
+				<div class="FlangerEffect__body__sources">
+					<VsChip class="FlangerEffect__body__sources__title"
+						>Visualization</VsChip
+					>
+					<div
+						v-for="(source, index) in flangerSources"
+						:key="index"
+						class="FlangerEffect__source-control"
+					>
+						<ToggleButton
+							v-model="source.disabled"
+							:disabled="flanger.disabled"
+							:true-value="false"
+							:color="source.color"
+							class="FlangerEffect__source-control__toggle-btn"
+						></ToggleButton>
+						<VsChip class="FlangerEffect__source-control__chip">{{
+							source.name
+						}}</VsChip>
+					</div>
+				</div>
 			</div>
 		</template>
 	</EffectCard>
@@ -61,37 +85,88 @@
 
 <script setup lang="ts">
 import CircleSlider from "@/components/common/CircleSlider/CircleSlider.vue";
+import ToggleButton from "@/components/common/ToggleButton/ToggleButton.vue";
 import VsChip from "@/components/common/VsChip/VsChip.vue";
+import MultiWaveAnalyser, {
+	type analyserSource,
+} from "@/components/waves/MultiWaveAnnalyser/MultiWaveAnalyser.vue";
 import type { FlangerEffect } from "@/models/effects/FlangerEffect";
+import { ref } from "vue";
 import EffectCard from "./EffectCard.vue";
 
 const flanger = defineModel<FlangerEffect>({ required: true });
 const primaryColor = "#42d392";
+// const secondaryColor = "#9242d3";
+const tertiaryColor = "#E681E2";
+const complementaryColor = "#89CAE7";
+
+interface flangerEffectSources extends analyserSource {
+	name: string;
+}
+
+const flangerSources = ref<flangerEffectSources[]>([
+	{
+		node: flanger.value.inputNode,
+		color: primaryColor,
+		disabled: true,
+		name: "input",
+	},
+	{ node: flanger.value.exitNode, color: complementaryColor, name: "exit" },
+	{ node: flanger.value.getDelayNode(), color: tertiaryColor, name: "delay" },
+]);
 </script>
 
 <style lang="scss" scoped>
-$max-controls-width: 22rem;
-$control-width: 40%;
+$max-controls-width: 20rem;
+$max-wave-width: 10rem;
 
 .FlangerEffect {
 	&__body {
 		display: flex;
 		height: 100%;
+		gap: $gap-bg;
+		padding: 0 $gap-df;
 
 		&__controls {
 			display: flex;
 			height: 100%;
+			max-height: 100%;
 			flex: 0 0 $max-controls-width;
 			flex-wrap: wrap;
 			gap: $gap-df;
+
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			grid-template-rows: repeat(2, 1fr);
+		}
+
+		&__display {
+			flex: 1 1 100%;
+			background-color: $bg-color-1;
+			border-radius: 0.5rem;
+		}
+
+		&__sources {
+			flex: 0 0 $max-wave-width;
+			display: flex;
+			flex-direction: column;
+			gap: $gap-df;
+			justify-content: space-around;
+
+			&__title {
+				font-size: 1.6rem;
+				width: 100%;
+			}
 		}
 	}
 
 	&__control {
-		width: $control-width;
+		width: 100%;
 		display: flex;
 		gap: $gap-df;
 		flex-direction: column;
+		justify-content: center;
+		align-items: center;
 	}
 
 	&__chip {
@@ -102,6 +177,23 @@ $control-width: 40%;
 
 	&__circle-slider {
 		color: $text-color;
+	}
+
+	&__source-control {
+		display: flex;
+		gap: $gap-df;
+		align-items: center;
+
+		&__chip {
+			// width: 100%;
+			flex: 1 1 100%;
+			font-size: 1.6rem;
+			text-align: center;
+		}
+
+		&__toggle-btn {
+			// flex: 1 1 100%;
+		}
 	}
 }
 </style>

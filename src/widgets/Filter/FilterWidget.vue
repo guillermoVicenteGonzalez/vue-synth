@@ -7,9 +7,15 @@
 		<div class="filterCard__handle">
 			<ToggleButton v-model="disabled" :color="primaryColor"></ToggleButton>
 
-			<VsButton variant="round" class="delete-btn" @click="deleteFilter"
-				>X</VsButton
-			>
+			<VsButton variant="round" class="delete-btn" @click="deleteFilter">
+				<VsTooltip
+					class="delete-btn__tooltip"
+					delay="2s"
+					orientation="right"
+					text="delete filter"
+				>
+					<X class="delete-btn__icon"></X> </VsTooltip
+			></VsButton>
 		</div>
 
 		<div class="filterCard__body">
@@ -70,9 +76,11 @@ import VsCard from "@/components/common/VsCard/VsCard.vue";
 import VsChip from "@/components/common/VsChip/VsChip.vue";
 import VsSelector from "@/components/common/VsSelector/VsSelector.vue";
 import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
+import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
 import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
 import type AudioCluster from "@/models/AudioCluster";
 import FilterHandler, { FilterTypes } from "@/models/FilterHandler";
+import { X } from "lucide-vue-next";
 import { computed, ref } from "vue";
 
 interface FilterWidgetProps {
@@ -172,6 +180,13 @@ $disabled-color: gray;
 
 		@include respond(tab-port) {
 			gap: $gap-sm;
+		}
+	}
+
+	.delete-btn {
+		&__icon {
+			padding: 0.2rem;
+			@include iconButton;
 		}
 	}
 

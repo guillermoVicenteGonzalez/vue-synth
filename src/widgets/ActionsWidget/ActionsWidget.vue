@@ -183,10 +183,7 @@ $action-size: 5rem;
 		padding: $gap-df;
 
 		&__icon {
-			color: $text-color;
-			width: 100%;
-			height: 100%;
-			margin: auto;
+			@include iconButton;
 		}
 
 		&--round {

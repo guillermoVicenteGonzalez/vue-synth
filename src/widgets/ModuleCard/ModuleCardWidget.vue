@@ -7,9 +7,20 @@
 	>
 		<div class="ModuleCard__handle">
 			<ToggleButton v-model="disabled" :color="primaryColor"></ToggleButton>
-			<VsButton variant="round" class="delete-btn" @click="deleteModule"
-				>X</VsButton
+			<VsButton
+				variant="round"
+				class="ModuleCard__delete-btn"
+				@click="deleteModule"
 			>
+				<VsTooltip
+					class="delete-btn__tooltip"
+					delay="2s"
+					orientation="right"
+					text="delete wave"
+				>
+					<X class="delete-btn__icon"></X>
+				</VsTooltip>
+			</VsButton>
 		</div>
 
 		<div class="ModuleCard__body">
@@ -86,13 +97,15 @@
 					:wave="audioModule.wave"
 					:paused="disabled"
 					:canvas-width="zoom"
+					:canvas-height="canvasHeight"
 					:line-color="primaryColor"
+					:filled="true"
 				></WaveCanvas>
 				<VsSlider
 					v-model="zoom"
 					class="ModuleCard__center-slot__zoom-slider"
 					:min="500"
-					:max="10000"
+					:max="1000"
 					:label="zoom"
 					:disabled="disabled"
 				></VsSlider>
@@ -166,6 +179,7 @@ import WaveCanvas from "@/components/waves/WaveCanvas/WaveCanvas.vue";
 import { useMonitorSize } from "@/composables/useMonitorSize";
 import AudioModule from "@/models/AudioModule";
 import { waveForms } from "@/models/wave";
+import { X } from "lucide-vue-next";
 import { computed, ref, watch } from "vue";
 
 // const MAX_CARD_HEIGHT = "20rem";
@@ -176,6 +190,15 @@ const primaryColor = "#42d392";
 const audioModule = defineModel<AudioModule>();
 const disabled = ref<boolean>(false);
 const zoom = ref<number>(10000);
+
+const canvasHeight = computed(() => {
+	if (audioModule.value?.wave.form === "sawtooth") {
+		return 1000;
+	}
+
+	return 100;
+});
+
 const { browserWidth } = useMonitorSize();
 
 const emit = defineEmits<{
@@ -253,6 +276,13 @@ $disabled-color: gray;
 			[body-end right-start] minmax(8rem, 2fr);
 
 		grid-template-rows: minmax(10px, 1fr);
+	}
+
+	.delete-btn {
+		&__icon {
+			padding: 0.2rem;
+			@include iconButton;
+		}
 	}
 
 	&__slider {

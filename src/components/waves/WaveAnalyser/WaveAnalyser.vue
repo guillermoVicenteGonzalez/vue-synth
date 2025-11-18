@@ -15,6 +15,7 @@ interface WaveAnalyserProps {
 	source: AudioNode;
 	lineColor?: string;
 	brushSize?: number;
+	filled?: boolean;
 }
 
 const {
@@ -23,6 +24,7 @@ const {
 	canvasHeight,
 	lineColor = "#000",
 	brushSize = 2,
+	filled = false,
 } = defineProps<WaveAnalyserProps>();
 
 const analyserCanvas = ref();
@@ -78,6 +80,13 @@ function draw() {
 	}
 
 	context.lineTo(analyserCanvas.value.width, analyserCanvas.value.height / 2);
+
+	if (filled) {
+		const fillStyleColor = context.strokeStyle + "50";
+		context.fillStyle = fillStyleColor;
+		context.fill();
+	}
+
 	context.stroke();
 }
 
