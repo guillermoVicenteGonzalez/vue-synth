@@ -7,7 +7,7 @@ export class FlangerEffect extends AudioEffect {
 
 	private effectGain: GainNode;
 	private lfo: LFO;
-	private delayNode: DelayNode;
+	public delayNode: DelayNode;
 	private wetGainNode: GainNode;
 	private feedbackNode: GainNode;
 
@@ -114,5 +114,9 @@ export class FlangerEffect extends AudioEffect {
 
 		//and reset the effect gain
 		// this.effectGain.gain.value = this.internalEffectGain;
+	}
+
+	public getDelayNode(): DelayNode {
+		return this.delayNode;
 	}
 }
