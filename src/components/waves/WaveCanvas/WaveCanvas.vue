@@ -56,7 +56,6 @@ function paintWave(w: Wave, ctx: CanvasRenderingContext2D, step = 0): boolean {
 		const fillStyleColor = ctx.strokeStyle + "40";
 		ctx.fillStyle = fillStyleColor;
 		ctx.fill();
-		console.log("filling");
 	}
 
 	ctx.stroke();

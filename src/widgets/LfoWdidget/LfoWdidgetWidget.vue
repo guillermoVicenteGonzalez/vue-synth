@@ -28,9 +28,15 @@
 					@change="connectLFO"
 				/>
 
-				<VsButton variant="round" class="delete-btn" @click="handleClear"
-					>X</VsButton
-				>
+				<VsButton variant="round" class="delete-btn" @click="handleClear">
+					<VsTooltip
+						class="delete-btn__tooltip"
+						delay="2s"
+						orientation="right"
+						text="clear selection"
+					>
+						<X class="delete-btn__icon"></X> </VsTooltip
+				></VsButton>
 			</div>
 
 			<div class="lfo-widget__display">
@@ -76,12 +82,14 @@ import VsButton from "@/components/common/VsButton/VsButton.vue";
 import VsCard from "@/components/common/VsCard/VsCard.vue";
 import VsChip from "@/components/common/VsChip/VsChip.vue";
 import VsSelector from "@/components/common/VsSelector/VsSelector.vue";
+import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
 import WaveCanvas from "@/components/waves/WaveCanvas/WaveCanvas.vue";
 import { useMonitorSize } from "@/composables/useMonitorSize";
 import AudioCluster from "@/models/AudioCluster";
 import AudioModule from "@/models/AudioModule";
 import { LFO } from "@/models/LFO";
 import { waveForms } from "@/models/wave";
+import { X } from "lucide-vue-next";
 import { computed, ref, watch } from "vue";
 
 export type LfoSource = AudioModule | AudioNode | AudioCluster;
@@ -276,6 +284,13 @@ $disabled-color: gray;
 			background-color: rgba($disabled-color, 0.1);
 			backdrop-filter: blur(1px);
 		}
+	}
+}
+
+.delete-btn {
+	&__icon {
+		padding: 0.2rem;
+		@include iconButton;
 	}
 }
 
