@@ -7,7 +7,7 @@ export class FlangerEffect extends AudioEffect {
 
 	private effectGain: GainNode;
 	private lfo: LFO;
-	public delayNode: DelayNode;
+	private delayNode: DelayNode;
 	private wetGainNode: GainNode;
 	private feedbackNode: GainNode;
 

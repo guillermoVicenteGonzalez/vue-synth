@@ -87,6 +87,7 @@
 					:paused="disabled"
 					:canvas-width="zoom"
 					:line-color="primaryColor"
+					:filled="true"
 				></WaveCanvas>
 				<VsSlider
 					v-model="zoom"
