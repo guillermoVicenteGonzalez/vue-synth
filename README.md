@@ -12,10 +12,10 @@
     - [x] Change central note
 - [ ] Audio module effects
   - [ ] Wave distortion => wave shaper
-  - [ ] Voices => possibly wave shaper?? or just a number to clone oscs
-    - [ ] Voice detuning
+  - [x] Voices => possibly wave shaper?? or just a number to clone oscs
+    - [x] Voice detuning
 - [ ] Global effects
-  - [ ] widget
+  - [x] widget
   - [x] Envelope?
     - [x] Attack
     - [x] Sustain
@@ -28,7 +28,7 @@
   - [x] Compression
   - [ ] Distortion
   - [x] LFO's
-  - [ ] Flanger?
+  - [x] Flanger?
   - [ ] Phaser
   - [ ] Wha wha
 - [ ] Controls
