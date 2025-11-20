@@ -11,6 +11,8 @@ export default class DelayEffect extends AudioEffect {
 	private delayNode: DelayNode;
 	private feedBackNode: GainNode;
 	private wetGainNode: GainNode;
+	//I use an aditional gain node to control the volume of the effect without affecting the feedback mitigation
+	private delayGain: GainNode;
 
 	constructor(ctx: AudioContext) {
 		super();
@@ -19,6 +21,7 @@ export default class DelayEffect extends AudioEffect {
 		this.feedBackNode = ctx.createGain();
 		this.effectGainNode = ctx.createGain();
 		this.wetGainNode = ctx.createGain();
+		this.delayGain = ctx.createGain();
 
 		this.inputNode = this.effectGainNode;
 		this.exitNode = this.wetGainNode;
@@ -27,7 +30,10 @@ export default class DelayEffect extends AudioEffect {
 
 		this.inputNode.connect(this.delayNode);
 		this.delayNode.connect(this.feedBackNode);
-		this.feedBackNode.connect(this.exitNode);
+		this.delayNode.connect(this.delayGain);
+
+		// this.feedBackNode.connect(this.exitNode);
+		this.delayGain.connect(this.exitNode);
 		//connecting the feedback back to the delay creates a feedback loop WITHOUT using the input node
 		this.feedBackNode.connect(this.delayNode);
 
@@ -53,6 +59,15 @@ export default class DelayEffect extends AudioEffect {
 
 	get feedback(): number {
 		return this.feedBackNode.gain.value;
+	}
+
+	set gain(g: number) {
+		if (this.disabled) return;
+		this.delayGain.gain.value = g;
+	}
+
+	get gain(): number {
+		return this.delayGain.gain.value;
 	}
 
 	protected onDisable(): void {

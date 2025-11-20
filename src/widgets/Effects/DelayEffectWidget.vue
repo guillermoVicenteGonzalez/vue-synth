@@ -27,6 +27,18 @@
 							:step="0.01"
 						></CircleSlider>
 					</div>
+					<div class="DelayEffect__control">
+						<VsChip class="DelayEffect__chip">Gain</VsChip>
+						<CircleSlider
+							:disabled="delayEffect.disabled"
+							v-model="delayEffect.gain"
+							class="DelayEffect__circle-slider"
+							:fill-color="primaryColor"
+							:min="0"
+							:max="1"
+							:step="0.01"
+						></CircleSlider>
+					</div>
 				</div>
 
 				<div class="DelayEffect__body__visualization"></div>
@@ -55,12 +67,17 @@ const delayEffect = defineModel<DelayEffect>({ required: true });
 		gap: $gap-df;
 
 		&__controls {
-			flex: 0 0 15rem;
+			flex: 0 0 30rem;
 			display: flex;
-			flex-direction: column;
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			grid-template-rows: repeat(2, 1fr);
+
 			align-items: center;
 			height: 100%;
 			justify-content: space-between;
+
+			gap: $gap-df;
 		}
 
 		&__visualization {
@@ -84,7 +101,7 @@ const delayEffect = defineModel<DelayEffect>({ required: true });
 	}
 
 	&__chip {
-		width: 70%;
+		width: 100%;
 		font-size: 1.6rem;
 		text-align: center;
 	}
