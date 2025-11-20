@@ -210,6 +210,7 @@ function initializeEffects() {
 
 	flanger.disabled = true;
 	filter.disabled = true;
+	delay.disabled = true;
 
 	MainAudioCluster.value.effects.append(filter);
 	MainAudioCluster.value.effects.append(flanger);

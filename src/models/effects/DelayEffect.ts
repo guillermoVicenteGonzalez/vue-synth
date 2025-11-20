@@ -1,6 +1,7 @@
 import { AudioEffect } from "./AudioEffect";
 
-const DEFAULT_DELAY = 0.6;
+const DEFAULT_DELAY = 0.3;
+const DEFAULT_FEEDBACK = 0.4;
 
 export default class DelayEffect extends AudioEffect {
 	declare exitNode: AudioNode;
@@ -31,6 +32,7 @@ export default class DelayEffect extends AudioEffect {
 		this.feedBackNode.connect(this.delayNode);
 
 		this.rate = DEFAULT_DELAY;
+		this.feedback = DEFAULT_FEEDBACK;
 	}
 
 	set rate(d: number) {
