@@ -9,6 +9,7 @@ export default class DelayEffect extends AudioEffect {
 	private effectGainNode: GainNode;
 	private delayNode: DelayNode;
 	private feedBackNode: GainNode;
+	private wetGainNode: GainNode;
 
 	constructor(ctx: AudioContext) {
 		super();
@@ -16,13 +17,18 @@ export default class DelayEffect extends AudioEffect {
 		this.delayNode = ctx.createDelay();
 		this.feedBackNode = ctx.createGain();
 		this.effectGainNode = ctx.createGain();
+		this.wetGainNode = ctx.createGain();
 
 		this.inputNode = this.effectGainNode;
-		this.exitNode = this.effectGainNode;
+		this.exitNode = this.wetGainNode;
+
+		this.inputNode.connect(this.exitNode);
 
 		this.inputNode.connect(this.delayNode);
 		this.delayNode.connect(this.feedBackNode);
-		this.feedBackNode.connect(this.inputNode);
+		this.feedBackNode.connect(this.exitNode);
+		//connecting the feedback back to the delay creates a feedback loop WITHOUT using the input node
+		this.feedBackNode.connect(this.delayNode);
 
 		this.rate = DEFAULT_DELAY;
 	}
@@ -41,6 +47,10 @@ export default class DelayEffect extends AudioEffect {
 		if (this.disabled) return;
 
 		this.feedBackNode.gain.value = f;
+	}
+
+	get feedback(): number {
+		return this.feedBackNode.gain.value;
 	}
 
 	protected onDisable(): void {
