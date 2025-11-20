@@ -11,7 +11,7 @@ export default class DelayEffect extends AudioEffect {
 	private delayNode: DelayNode;
 	private feedBackNode: GainNode;
 	private wetGainNode: GainNode;
-	//I use an aditional gain node to control the volume of the effect without affecting the feedback mitigation
+	//I use an aditional gain node to control the volume of the effect without affecting the feedback mitigation or the original wave
 	private delayGain: GainNode;
 
 	constructor(ctx: AudioContext) {

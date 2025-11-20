@@ -6,8 +6,8 @@
 					<div class="DelayEffect__control">
 						<VsChip class="DelayEffect__chip">Rate</VsChip>
 						<CircleSlider
-							:disabled="delayEffect.disabled"
 							v-model="delayEffect.rate"
+							:disabled="delayEffect.disabled"
 							class="DelayEffect__circle-slider"
 							:fill-color="primaryColor"
 							:min="0"
@@ -18,8 +18,8 @@
 					<div class="DelayEffect__control">
 						<VsChip class="DelayEffect__chip">Feedback</VsChip>
 						<CircleSlider
-							:disabled="delayEffect.disabled"
 							v-model="delayEffect.feedback"
+							:disabled="delayEffect.disabled"
 							class="DelayEffect__circle-slider"
 							:fill-color="primaryColor"
 							:min="0"
@@ -30,8 +30,8 @@
 					<div class="DelayEffect__control">
 						<VsChip class="DelayEffect__chip">Gain</VsChip>
 						<CircleSlider
-							:disabled="delayEffect.disabled"
 							v-model="delayEffect.gain"
+							:disabled="delayEffect.disabled"
 							class="DelayEffect__circle-slider"
 							:fill-color="primaryColor"
 							:min="0"

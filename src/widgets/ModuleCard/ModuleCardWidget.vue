@@ -99,7 +99,6 @@
 					:canvas-width="zoom"
 					:canvas-height="canvasHeight"
 					:line-color="primaryColor"
-					:filled="true"
 				></WaveCanvas>
 				<VsSlider
 					v-model="zoom"
