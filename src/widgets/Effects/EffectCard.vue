@@ -38,7 +38,7 @@ const disabled = defineModel<boolean>();
 $effect-card-height: 25rem;
 $handle-bg-color: black;
 $handle-padding: 1rem;
-$disabled-color: gray;
+$disabled-color: $disabled-color-2;
 
 $handle-width: 4rem;
 
@@ -104,7 +104,7 @@ $handle-width: 4rem;
 				height: 100%;
 				width: 100%;
 				background-color: rgba($disabled-color, 0.1);
-				backdrop-filter: blur(1px);
+				backdrop-filter: blur(1.5px);
 			}
 		}
 	}

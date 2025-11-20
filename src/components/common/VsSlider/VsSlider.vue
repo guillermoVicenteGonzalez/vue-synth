@@ -10,7 +10,7 @@
 			class="slider__input"
 			@input="emit('change', model)"
 		/>
-		<div class="slider__label" v-if="$slots.label">
+		<div v-if="$slots.label" class="slider__label">
 			<slot name="label"> </slot>
 		</div>
 	</div>
