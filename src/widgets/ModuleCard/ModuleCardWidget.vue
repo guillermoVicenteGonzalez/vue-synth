@@ -97,7 +97,6 @@
 					:wave="audioModule.wave"
 					:paused="disabled"
 					:canvas-width="zoom"
-					:canvas-height="canvasHeight"
 					:line-color="primaryColor"
 				></WaveCanvas>
 				<VsSlider
@@ -189,14 +188,6 @@ const primaryColor = "#42d392";
 const audioModule = defineModel<AudioModule>();
 const disabled = ref<boolean>(false);
 const zoom = ref<number>(10000);
-
-const canvasHeight = computed(() => {
-	if (audioModule.value?.wave.form === "sawtooth") {
-		return 1000;
-	}
-
-	return 100;
-});
 
 const { browserWidth } = useMonitorSize();
 
