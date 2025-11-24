@@ -148,7 +148,11 @@ export class SynthSource {
 	 * @param release - The time it takes the note to reach a gain (volume) of 0
 	 */
 	release(release: number) {
-		this.gain.gain.cancelAndHoldAtTime(this.context.currentTime);
+		/**
+		 * Not supported in firefox??
+		 */
+		// this.gain.gain.cancelAndHoldAtTime(this.context.currentTime);
+		this.gain.gain.cancelScheduledValues(release + this.context.currentTime);
 		this.gain.gain.linearRampToValueAtTime(
 			0,
 			release + this.context.currentTime

@@ -2,12 +2,16 @@
 	<div class="CompressionAnalyser">
 		<WaveAnalyser
 			v-if="source"
+			:canvas-height="canvasHeight"
+			:canvas-width="canvasWidth"
 			:line-color="secondaryColor"
 			:source="source"
 			class="CompressionAnalyser__source-analyser"
 		></WaveAnalyser>
 		<WaveAnalyser
 			v-if="compressedSource"
+			:canvas-width="canvasWidth"
+			:canvas-height="canvasHeight"
 			:line-color="primaryColor"
 			:source="compressedSource"
 			class="CompressionAnalyser__compressed-source-analyser"
@@ -24,10 +28,16 @@ interface CompressionAnalyserProps {
 	compressedSource: AudioNode;
 	compressedSourceColor?: string;
 	lineSize?: number;
+	canvasWidth?: number;
+	canvasHeight?: number;
 }
 
-const { source, compressedSource = null } =
-	defineProps<CompressionAnalyserProps>();
+const {
+	source,
+	compressedSource = null,
+	canvasHeight = 200,
+	canvasWidth = 1000,
+} = defineProps<CompressionAnalyserProps>();
 
 const primaryColor = "#42d392";
 const secondaryColor = "#9242d3";
