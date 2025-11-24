@@ -24,12 +24,21 @@ interface DelayDisplayProps {
 	canvasWidth?: number;
 	canvasHeight?: number;
 	delayEffect: DelayEffect;
+	filled?: boolean;
+	sourceColor?: string;
+	delayedWaveColor?: string;
 }
+
+const primaryColor = "#42d392";
+const tertiaryColor = "#E681E2";
 
 const {
 	canvasWidth = 500,
 	canvasHeight = 200,
 	delayEffect,
+	filled = true,
+	delayedWaveColor = tertiaryColor,
+	sourceColor = primaryColor,
 } = defineProps<DelayDisplayProps>();
 
 const waveCanvas = ref<HTMLCanvasElement>();
@@ -56,7 +65,17 @@ function paintWave() {
 		ctx.lineTo(x, middle + points[x]);
 	}
 
-	ctx.strokeStyle = "red";
+	ctx.lineTo(firstPeriodTime, cHeight);
+	ctx.lineTo(0, cHeight);
+	ctx.strokeStyle = sourceColor;
+
+	if (filled) {
+		// ctx.closePath();
+		const fillStyleColor = ctx.strokeStyle + "40";
+		ctx.fillStyle = fillStyleColor;
+		ctx.fill();
+	}
+
 	ctx.stroke();
 }
 
@@ -75,6 +94,8 @@ function paintDelayedWave() {
 	const delayTime = delayEffect.rate * cWidth;
 	const period = cWidth / wave.value.frequency + delayTime;
 
+	ctx.lineTo(delayTime, cHeight);
+
 	const points = wave.value.calculatePoints(cWidth, delayTime);
 	for (let x = delayTime; x < cWidth; x++) {
 		let point = Math.floor(x);
@@ -89,7 +110,16 @@ function paintDelayedWave() {
 		ctx.lineTo(point, middle + points[point] * reduction);
 	}
 
-	ctx.strokeStyle = "blue";
+	ctx.strokeStyle = delayedWaveColor;
+	ctx.lineTo(cWidth, cHeight);
+	ctx.lineTo(delayTime, cHeight);
+
+	if (filled) {
+		// ctx.closePath();
+		const fillStyleColor = ctx.strokeStyle + "40";
+		ctx.fillStyle = fillStyleColor;
+		ctx.fill();
+	}
 	ctx.stroke();
 }
 
@@ -121,6 +151,10 @@ onMounted(() => {
 
 	&__delay-canvas {
 		z-index: 1;
+	}
+
+	&__wave-canvas {
+		z-index: 2;
 	}
 }
 </style>

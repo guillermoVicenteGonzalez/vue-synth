@@ -86,7 +86,6 @@ function playNote() {
 
 function stopNote() {
 	synthModule.stop();
-	console.log("stopping module");
 }
 
 function notePressed() {
