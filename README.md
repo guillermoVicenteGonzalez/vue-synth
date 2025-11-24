@@ -30,6 +30,8 @@
   - [x] LFO's
   - [x] Flanger?
   - [ ] Phaser
+  - [ ] Delay
+  - [ ] Reverb
   - [ ] Wha wha
 - [ ] Controls
   - [x] Writable module freqs

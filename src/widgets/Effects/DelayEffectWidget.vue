@@ -41,7 +41,9 @@
 					</div>
 				</div>
 
-				<div class="DelayEffect__body__visualization"></div>
+				<div class="DelayEffect__body__visualization">
+					<DelayDisplay :delay-effect="delayEffect"></DelayDisplay>
+				</div>
 			</div>
 		</template>
 	</EffectCard>
@@ -50,6 +52,7 @@
 <script setup lang="ts">
 import CircleSlider from "@/components/common/CircleSlider/CircleSlider.vue";
 import VsChip from "@/components/common/VsChip/VsChip.vue";
+import DelayDisplay from "@/components/waves/DelayDisplay/DelayDisplay.vue";
 import DelayEffect from "@/models/effects/DelayEffect";
 import EffectCard from "./EffectCard.vue";
 
@@ -82,7 +85,8 @@ const delayEffect = defineModel<DelayEffect>({ required: true });
 
 		&__visualization {
 			flex: 1 1 100%;
-			background-color: red;
+			background-color: $bg-color-1;
+			border-radius: 0.5rem;
 		}
 	}
 
