@@ -1,17 +1,17 @@
 <template>
 	<div class="CompressionAnalyser">
 		<WaveAnalyser
-			:canvas-height="canvasHeight"
-			:canvasWidth="canvasWidth"
 			v-if="source"
+			:canvas-height="canvasHeight"
+			:canvas-width="canvasWidth"
 			:line-color="secondaryColor"
 			:source="source"
 			class="CompressionAnalyser__source-analyser"
 		></WaveAnalyser>
 		<WaveAnalyser
-			:canvasWidth="canvasWidth"
-			:canvas-height="canvasHeight"
 			v-if="compressedSource"
+			:canvas-width="canvasWidth"
+			:canvas-height="canvasHeight"
 			:line-color="primaryColor"
 			:source="compressedSource"
 			class="CompressionAnalyser__compressed-source-analyser"

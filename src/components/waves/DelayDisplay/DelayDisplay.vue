@@ -1,14 +1,14 @@
 <template>
 	<div class="DelayDisplay">
 		<canvas
-			class="DelayDisplay__wave-canvas"
 			ref="waveCanvas"
+			class="DelayDisplay__wave-canvas"
 			:width="canvasWidth"
 			:height="canvasHeight"
 		></canvas>
 		<canvas
-			class="DelayDisplay__delay-canvas"
 			ref="delayCanvas"
+			class="DelayDisplay__delay-canvas"
 			:width="canvasWidth"
 			:height="canvasHeight"
 		></canvas>
@@ -44,13 +44,15 @@ const {
 const waveCanvas = ref<HTMLCanvasElement>();
 const delayCanvas = ref<HTMLCanvasElement>();
 
-const wave = ref(new Wave(100, 6, 0));
+const wave = ref(new Wave(canvasHeight / 2, 6, 0));
 wave.value.form = waveForms.sine;
 
 function paintWave() {
 	if (!waveCanvas.value || !wave.value) return;
 
-	const ctx: CanvasRenderingContext2D = waveCanvas.value.getContext("2d");
+	const ctx: CanvasRenderingContext2D = waveCanvas.value.getContext(
+		"2d"
+	) as CanvasRenderingContext2D;
 
 	const cWidth: number = ctx.canvas.width;
 	const cHeight: number = ctx.canvas.height;
@@ -82,30 +84,38 @@ function paintWave() {
 function paintDelayedWave() {
 	if (!delayCanvas.value || !wave.value) return;
 
-	const ctx: CanvasRenderingContext2D = delayCanvas.value.getContext("2d");
+	const ctx: CanvasRenderingContext2D = delayCanvas.value.getContext(
+		"2d"
+	) as CanvasRenderingContext2D;
 
 	const cWidth: number = ctx.canvas.width;
 	const cHeight: number = ctx.canvas.height;
 	const middle: number = cHeight / 2;
 
+	const delayedWave = new Wave(
+		cHeight / 2,
+		wave.value.frequency / delayEffect.rate
+	);
+	delayedWave.form = wave.value.form;
+
 	ctx.clearRect(0, 0, cWidth, cHeight);
 	ctx.beginPath();
 
 	const delayTime = delayEffect.rate * cWidth;
-	const period = cWidth / wave.value.frequency + delayTime;
+	const period = cWidth / delayedWave.frequency + delayTime;
 
 	ctx.lineTo(delayTime, cHeight);
 
-	const points = wave.value.calculatePoints(cWidth, delayTime);
+	const points = delayedWave.calculatePoints(cWidth, delayTime);
 	for (let x = delayTime; x < cWidth; x++) {
-		let point = Math.floor(x);
+		const point = Math.floor(x);
 
-		let currentPeriod = Math.floor(x / period) + 1;
-		let gainReduction = delayEffect.gain;
+		const currentPeriod = x / period + 1;
+		const gainReduction = delayEffect.gain;
 
-		let feedbackReduction =
+		const feedbackReduction =
 			delayEffect.feedback == 1 ? 1 : delayEffect.feedback / currentPeriod;
-		let reduction = feedbackReduction * gainReduction;
+		const reduction = feedbackReduction * gainReduction;
 
 		ctx.lineTo(point, middle + points[point] * reduction);
 	}
