@@ -2,7 +2,11 @@
 	<VsCard class="EffectCard" :class="dynamicClass">
 		<div class="EffectCard__handle">
 			<div class="EffectCard__handle__toggle-button">
-				<ToggleButton v-model="disabled" :color="primaryColor"></ToggleButton>
+				<ToggleButton
+					v-model="disabled"
+					:color="primaryColor"
+					:true-value="false"
+				></ToggleButton>
 			</div>
 
 			<div class="EffectCard__title">

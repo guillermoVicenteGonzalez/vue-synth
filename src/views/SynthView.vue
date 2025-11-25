@@ -85,6 +85,7 @@ import SynthLayout from "@/layouts/synth/SynthLayout.vue";
 import AudioCluster from "@/models/AudioCluster";
 import type { AudioEnvelope } from "@/models/AudioEnvelope";
 import AudioModule from "@/models/AudioModule";
+import ChorusEffect from "@/models/effects/ChorusEffect";
 import { CompressionEffect } from "@/models/effects/CompressionEffect";
 import DelayEffect from "@/models/effects/DelayEffect";
 import { FilterEffect } from "@/models/effects/FilterEffect";
@@ -207,12 +208,15 @@ function initializeEffects() {
 	const filter = new FilterEffect(MainAudioCluster.value.context);
 	const delay = new DelayEffect(MainAudioCluster.value.context);
 	const flanger = new FlangerEffect(MainAudioCluster.value.context);
+	const chorus = new ChorusEffect(MainAudioCluster.value.context);
 
 	flanger.disabled = true;
 	filter.disabled = true;
 	delay.disabled = true;
+	chorus.disabled = true;
 
 	MainAudioCluster.value.effects.append(filter);
+	MainAudioCluster.value.effects.append(chorus);
 	MainAudioCluster.value.effects.append(flanger);
 	MainAudioCluster.value.effects.append(delay);
 	MainAudioCluster.value.effects.append(compression);

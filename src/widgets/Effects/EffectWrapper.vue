@@ -22,16 +22,23 @@
 			v-model="effect as DelayEffect"
 		>
 		</DelayEffectWidget>
+
+		<ChorusEffectWidget
+			v-if="effectType == 'ChorusEffect'"
+			v-model="effect as ChorusEffect"
+		></ChorusEffectWidget>
 	</div>
 </template>
 
 <script setup lang="ts">
 import { AudioEffect } from "@/models/effects/AudioEffect";
+import ChorusEffect from "@/models/effects/ChorusEffect";
 import { CompressionEffect } from "@/models/effects/CompressionEffect";
 import DelayEffect from "@/models/effects/DelayEffect";
 import { FilterEffect } from "@/models/effects/FilterEffect";
 import { FlangerEffect } from "@/models/effects/FlangerEffect";
 import { computed } from "vue";
+import ChorusEffectWidget from "./ChorusEffectWidget.vue";
 import CompressionEffectWidget from "./CompressionEffectWidget.vue";
 import DelayEffectWidget from "./DelayEffectWidget.vue";
 import FilterEffectWidget from "./FilterEffectWidget.vue";
@@ -47,6 +54,8 @@ const effectType = computed(() => {
 	if (effect.value instanceof FlangerEffect) return "FlangerEffect";
 
 	if (effect.value instanceof DelayEffect) return "DelayEffect";
+
+	if (effect.value instanceof ChorusEffect) return "ChorusEffect";
 	return "unknown";
 });
 
