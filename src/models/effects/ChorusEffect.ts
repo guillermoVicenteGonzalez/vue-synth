@@ -21,6 +21,9 @@ export const MAX_SPREAD = 100;
 export const MIN_MIX = 0;
 export const MAX_MIX = 100;
 
+export const MIN_FEEDBACK = 0;
+export const MAX_FEEDBACK = 0.1;
+
 const DEFAULT_MIX = 50;
 
 export default class ChorusEffect extends AudioEffect {
@@ -57,14 +60,16 @@ export default class ChorusEffect extends AudioEffect {
 		this.filter.connect(this.wetGain);
 		this.wetGain.connect(this.exitNode);
 
-		// this.feedbackGain.connect(this.inputNode);
-		// this.feedbackGain.gain.value = 0.2;
+		this.feedbackGain.connect(this.inputNode);
+		this.feedbackGain.gain.value = 0.02;
 
 		this.filter.type = "allpass";
 
 		this.voices = MAX_VOICES;
-		this.rate = 1;
-		this.amount = 0.005;
+		this.rate = 0.05;
+		this.amount = 0.5;
+		this.delay1 = 0.0002;
+		this.delay2 = 0.002;
 	}
 
 	private addVoice() {
@@ -233,9 +238,26 @@ export default class ChorusEffect extends AudioEffect {
 		});
 	}
 
+	set feedback(f: number) {
+		if (f < MIN_FEEDBACK) {
+			this.feedback = MIN_FEEDBACK;
+		}
+
+		if (f > MAX_FEEDBACK) {
+			this.feedback = MAX_FEEDBACK;
+		}
+
+		this.feedbackGain.gain.value = f;
+	}
+
+	get feedback(): number {
+		return this.feedbackGain.gain.value;
+	}
+
 	protected onDisable(): void {
 		try {
 			this.wetGain.disconnect(this.exitNode);
+			this.feedbackGain.disconnect(this.inputNode);
 		} catch (err) {
 			console.error(err);
 		}
@@ -244,6 +266,7 @@ export default class ChorusEffect extends AudioEffect {
 	protected onEnable(): void {
 		try {
 			this.wetGain.connect(this.exitNode);
+			this.feedbackGain.connect(this.inputNode);
 		} catch (err) {
 			console.error(err);
 		}

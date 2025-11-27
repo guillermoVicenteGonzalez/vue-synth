@@ -56,6 +56,16 @@
 					:min="0"
 					:max="10000"
 				></CircleSlider>
+				<VsChip>Filter cutoff</VsChip>
+
+				<CircleSlider
+					v-model="chorus.feedback"
+					:min="MIN_FEEDBACK"
+					:max="MAX_FEEDBACK"
+					:step="0.01"
+				></CircleSlider>
+
+				<VsChip>Feedback</VsChip>
 			</div>
 		</template>
 	</EffectCard>
@@ -69,11 +79,13 @@ import type ChorusEffect from "@/models/effects/ChorusEffect";
 import {
 	MAX_AMOUNT,
 	MAX_DELAY,
+	MAX_FEEDBACK,
 	MAX_MIX,
 	MAX_RATE,
 	MAX_VOICES,
 	MIN_AMOUNT,
 	MIN_DELAY,
+	MIN_FEEDBACK,
 	MIN_MIX,
 	MIN_RATE,
 } from "@/models/effects/ChorusEffect";
