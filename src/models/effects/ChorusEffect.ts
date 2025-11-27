@@ -1,8 +1,8 @@
 import { LFO } from "../LFO";
 import { AudioEffect } from "./AudioEffect";
 
-export const MIN_DELAY = 0.015;
-export const MAX_DELAY = 0.05;
+export const MIN_DELAY = 0.0009;
+export const MAX_DELAY = 0.02;
 
 export const MAX_VOICES = 16;
 
@@ -18,15 +18,25 @@ export const MAX_GAIN = 1;
 export const MIN_SPREAD = 0;
 export const MAX_SPREAD = 100;
 
+export const MIN_MIX = 0;
+export const MAX_MIX = 100;
+
+const DEFAULT_MIX = 50;
+
 export default class ChorusEffect extends AudioEffect {
 	declare inputNode: AudioNode;
 	declare exitNode: AudioNode;
 	private voiceNodes: DelayNode[] = [];
 	private lfo: LFO;
 	private context: AudioContext;
-	private chorusGain: GainNode;
-	private _delay: number = MIN_DELAY;
-	private _spread: number = 0;
+	private dryGain: GainNode;
+	private wetGain: GainNode;
+	private filter: BiquadFilterNode;
+	private feedbackGain: GainNode;
+
+	private _delay1: number = MIN_DELAY;
+	private _delay2: number = MAX_DELAY;
+	private _mix: number = DEFAULT_MIX;
 
 	constructor(ctx: AudioContext) {
 		super();
@@ -35,13 +45,24 @@ export default class ChorusEffect extends AudioEffect {
 
 		this.inputNode = ctx.createGain();
 		this.exitNode = ctx.createGain();
-		this.inputNode.connect(this.exitNode);
+		this.dryGain = ctx.createGain();
+		this.wetGain = this.context.createGain();
+		this.filter = ctx.createBiquadFilter();
+		this.feedbackGain = ctx.createGain();
 
-		this.chorusGain = this.context.createGain();
-		this.chorusGain.connect(this.exitNode);
-		this.delay = MIN_DELAY;
+		this.inputNode.connect(this.dryGain);
+		this.dryGain.connect(this.exitNode);
 
-		this.voices = 5;
+		this.filter.connect(this.feedbackGain);
+		this.filter.connect(this.wetGain);
+		this.wetGain.connect(this.exitNode);
+
+		// this.feedbackGain.connect(this.inputNode);
+		// this.feedbackGain.gain.value = 0.2;
+
+		this.filter.type = "allpass";
+
+		this.voices = MAX_VOICES;
 		this.rate = 1;
 		this.amount = 0.005;
 	}
@@ -50,13 +71,14 @@ export default class ChorusEffect extends AudioEffect {
 		if (this.voiceNodes.length >= MAX_VOICES) return;
 
 		const delay = this.context.createDelay();
-		delay.delayTime.value = this.delay;
 
 		this.inputNode.connect(delay);
-		delay.connect(this.chorusGain);
+		delay.connect(this.filter);
 		this.lfo.connect(delay.delayTime);
 
 		this.voiceNodes.push(delay);
+
+		this.setupVoicesDelay();
 	}
 
 	private deleteVoice() {
@@ -66,8 +88,10 @@ export default class ChorusEffect extends AudioEffect {
 		if (!deletedDelay) return;
 
 		this.inputNode.disconnect(deletedDelay);
-		deletedDelay.disconnect(this.chorusGain);
+		deletedDelay.disconnect(this.filter);
 		this.lfo.disconnect(deletedDelay.delayTime);
+
+		this.setupVoicesDelay();
 	}
 
 	set voices(v: number) {
@@ -119,61 +143,99 @@ export default class ChorusEffect extends AudioEffect {
 		return this.lfo.amplitude;
 	}
 
-	set delay(d: number) {
-		this._delay = d;
-
-		this.voiceNodes.forEach((delayNode: DelayNode) => {
-			delayNode.delayTime.value = d;
-		});
-	}
-
-	get delay(): number {
-		return this._delay;
-	}
-
-	set feedback(f: number) {
-		this.chorusGain.gain.value = f;
-	}
-
-	get feedback(): number {
-		return this.chorusGain.gain.value;
-	}
-
-	/**
-	 * Determines differences in delay between voices
-	 */
-	set spread(d: number) {
-		if (d < MIN_SPREAD) {
-			this.spread = MIN_SPREAD;
-		}
-		if (d > MAX_SPREAD) {
-			this.spread = MAX_SPREAD;
-		}
-
-		this._spread = d;
-
-		if (this.voices == 1) {
-			this.voiceNodes.forEach((d: DelayNode) => {
-				d.delayTime.value = this.delay;
-			});
+	set delay1(d: number) {
+		if (d < MIN_DELAY) {
+			this.delay1 = MIN_DELAY;
 			return;
 		}
 
-		const totalDelay = (this.delay * this._spread) / 100;
-		const delayIncrement = totalDelay / this.voices;
+		if (d > MAX_DELAY) {
+			this.delay1 = MAX_DELAY;
+			return;
+		}
 
-		this.voiceNodes.forEach((d: DelayNode, index) => {
-			d.delayTime.value = delayIncrement * (index + 1);
-		});
+		if (d > this.delay2) {
+			this.delay1 = this.delay2;
+			return;
+		}
+
+		this._delay1 = d;
+		this.setupVoicesDelay();
 	}
 
-	get spread(): number {
-		return this._spread;
+	get delay1(): number {
+		return this._delay1;
+	}
+
+	set delay2(d: number) {
+		if (d < MIN_DELAY) {
+			this.delay2 = MIN_DELAY;
+			return;
+		}
+
+		if (d > MAX_DELAY) {
+			this.delay2 = MAX_DELAY;
+			return;
+		}
+
+		if (d < this.delay1) {
+			this.delay2 = this.delay1;
+			return;
+		}
+
+		this._delay2 = d;
+		this.setupVoicesDelay();
+	}
+
+	get delay2(): number {
+		return this._delay2;
+	}
+
+	set mix(m: number) {
+		if (m > MAX_MIX) {
+			this.mix = MAX_GAIN;
+		}
+
+		if (m < MIN_MIX) {
+			this.mix = MIN_GAIN;
+		}
+
+		this._mix = m;
+		this.wetGain.gain.value = this._mix / 100;
+		this.dryGain.gain.value = (MAX_MIX - this._mix) / 100;
+	}
+
+	get mix(): number {
+		return this._mix;
+	}
+
+	set filterType(t: BiquadFilterType) {
+		this.filter.type = t;
+	}
+
+	get filterType(): BiquadFilterType {
+		return this.filter.type;
+	}
+
+	set filterCuttof(c: number) {
+		this.filter.frequency.value = c;
+	}
+
+	get filterCuttof(): number {
+		return this.filter.frequency.value;
+	}
+
+	private setupVoicesDelay() {
+		const delayIncrement = (this.delay2 - this.delay1) / this.voices;
+
+		this.voiceNodes.forEach((d: DelayNode, index: number) => {
+			d.delayTime.value = this.delay1 + delayIncrement * index;
+		});
 	}
 
 	protected onDisable(): void {
 		try {
-			this.chorusGain.disconnect(this.exitNode);
+			this.wetGain.disconnect(this.exitNode);
 		} catch (err) {
 			console.error(err);
 		}
@@ -181,7 +243,7 @@ export default class ChorusEffect extends AudioEffect {
 
 	protected onEnable(): void {
 		try {
-			this.chorusGain.connect(this.exitNode);
+			this.wetGain.connect(this.exitNode);
 		} catch (err) {
 			console.error(err);
 		}
