@@ -66,6 +66,15 @@
 				></CircleSlider>
 
 				<VsChip>Feedback</VsChip>
+
+				<CircleSlider
+					v-model="chorus.feedbackDelay"
+					:min="0.1"
+					:max="0.5"
+					:step="0.001"
+				></CircleSlider>
+
+				<VsChip>Feedback delay</VsChip>
 			</div>
 		</template>
 	</EffectCard>

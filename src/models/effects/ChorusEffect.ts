@@ -2,15 +2,18 @@ import { LFO } from "../LFO";
 import { AudioEffect } from "./AudioEffect";
 
 export const MIN_DELAY = 0.0009;
-export const MAX_DELAY = 0.02;
+export const MAX_DELAY = 0.05;
 
 export const MAX_VOICES = 16;
+const DEFAULT_VOICES = 6;
 
 export const MIN_RATE = 0.01;
 export const MAX_RATE = 2;
+const DEFAULT_RATE = 0.014;
 
 export const MIN_AMOUNT = 0.0001;
 export const MAX_AMOUNT = 0.01;
+const DEFAULT_AMOUNT = 0.008;
 
 export const MIN_GAIN = 0;
 export const MAX_GAIN = 1;
@@ -23,7 +26,11 @@ export const MAX_MIX = 100;
 
 export const MIN_FEEDBACK = 0;
 export const MAX_FEEDBACK = 0.1;
+const DEFAULT_FEEDBACK = 0.05;
 
+export const DEFAULT_FEEDBACK_DELAY = 0.25;
+const DEFAULT_DELAY_1 = 0.003;
+const DEFAULT_DELAY_2 = 0.013;
 const DEFAULT_MIX = 50;
 
 export default class ChorusEffect extends AudioEffect {
@@ -36,6 +43,7 @@ export default class ChorusEffect extends AudioEffect {
 	private wetGain: GainNode;
 	private filter: BiquadFilterNode;
 	private feedbackGain: GainNode;
+	private feedbackDelayNode: DelayNode;
 
 	private _delay1: number = MIN_DELAY;
 	private _delay2: number = MAX_DELAY;
@@ -52,6 +60,7 @@ export default class ChorusEffect extends AudioEffect {
 		this.wetGain = this.context.createGain();
 		this.filter = ctx.createBiquadFilter();
 		this.feedbackGain = ctx.createGain();
+		this.feedbackDelayNode = ctx.createDelay();
 
 		this.inputNode.connect(this.dryGain);
 		this.dryGain.connect(this.exitNode);
@@ -60,16 +69,18 @@ export default class ChorusEffect extends AudioEffect {
 		this.filter.connect(this.wetGain);
 		this.wetGain.connect(this.exitNode);
 
-		this.feedbackGain.connect(this.inputNode);
-		this.feedbackGain.gain.value = 0.02;
+		this.feedbackGain.connect(this.feedbackDelayNode);
+		this.feedbackDelayNode.connect(this.inputNode);
 
 		this.filter.type = "allpass";
 
-		this.voices = MAX_VOICES;
-		this.rate = 0.05;
-		this.amount = 0.5;
-		this.delay1 = 0.0002;
-		this.delay2 = 0.002;
+		this.voices = DEFAULT_VOICES;
+		this.rate = DEFAULT_RATE;
+		this.amount = DEFAULT_AMOUNT;
+		this.delay1 = DEFAULT_DELAY_1;
+		this.delay2 = DEFAULT_DELAY_2;
+		this.feedback = DEFAULT_FEEDBACK;
+		this.feedbackDelay = DEFAULT_FEEDBACK_DELAY;
 	}
 
 	private addVoice() {
@@ -254,10 +265,18 @@ export default class ChorusEffect extends AudioEffect {
 		return this.feedbackGain.gain.value;
 	}
 
+	set feedbackDelay(d: number) {
+		this.feedbackDelayNode.delayTime.value = d;
+	}
+
+	get feedbackDelay(): number {
+		return this.feedbackDelayNode.delayTime.value;
+	}
+
 	protected onDisable(): void {
 		try {
 			this.wetGain.disconnect(this.exitNode);
-			this.feedbackGain.disconnect(this.inputNode);
+			this.feedbackDelayNode.disconnect(this.inputNode);
 		} catch (err) {
 			console.error(err);
 		}
@@ -266,7 +285,7 @@ export default class ChorusEffect extends AudioEffect {
 	protected onEnable(): void {
 		try {
 			this.wetGain.connect(this.exitNode);
-			this.feedbackGain.connect(this.inputNode);
+			this.feedbackDelayNode.connect(this.inputNode);
 		} catch (err) {
 			console.error(err);
 		}
