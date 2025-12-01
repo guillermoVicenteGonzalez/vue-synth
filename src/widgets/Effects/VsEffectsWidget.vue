@@ -24,7 +24,7 @@ const effectsArray = computed<AudioEffect[]>(() => {
 <style lang="scss" scoped>
 .VsEffectsWidget {
 	display: flex;
-	flex-direction: column-reverse;
+	flex-direction: column;
 	width: 100%;
 	height: 100%;
 

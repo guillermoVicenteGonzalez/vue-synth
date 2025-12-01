@@ -158,7 +158,7 @@ const modulableParameterName = ref<string>();
  * Handles the disconnection from the previous module and the connection of the new one attending to the type of node it is
  */
 function connectLFO() {
-	lfo.value.disconnect();
+	lfo.value.disconnectAll();
 
 	if (!modulableParameterName.value || !selectedModule.value) return;
 
@@ -232,7 +232,7 @@ const canvasDynamicDimensions = computed(() => {
 });
 
 function handleClear() {
-	lfo.value.disconnect();
+	lfo.value.disconnectAll();
 	selectedModuleName.value = "";
 	modulableParameterName.value = "";
 }

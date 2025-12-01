@@ -33,8 +33,8 @@ const primaryColor = "#42d392";
 const tertiaryColor = "#E681E2";
 
 const {
-	canvasWidth = 500,
-	canvasHeight = 200,
+	canvasWidth = 1000,
+	canvasHeight = 400,
 	delayEffect,
 	filled = true,
 	delayedWaveColor = tertiaryColor,

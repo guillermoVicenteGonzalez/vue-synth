@@ -6,7 +6,7 @@ export class LFO {
 	private gain: GainNode;
 
 	private _disabled: boolean = false;
-	destination: AudioParam | null = null;
+	destinations: AudioParam[] = [];
 
 	constructor(ctx: AudioContext) {
 		this.osc = ctx.createOscillator();
@@ -56,22 +56,37 @@ export class LFO {
 		// 	console.warn("Destination is not null");
 		// 	this.gain.disconnect();
 		// }
-		this.disconnect();
+		// this.disconnect();
 
-		this.destination = d;
-		this.gain.connect(this.destination);
+		// this.destination = d;
+		// this.gain.connect(this.destination);
+		try {
+			this.gain.connect(d);
+			this.destinations.push(d);
+		} catch (err) {
+			console.error(err);
+		}
 	}
 
-	disconnect() {
-		if (this.destination != null) {
-			try {
-				this.gain.disconnect(this.destination);
-			} catch (err) {
-				console.log(err);
-			}
-		}
+	disconnectAll() {
+		if (this.destinations.length == 0) return;
+		if (this.destinations.length == 1) this.disconnect(this.destinations[0]);
 
-		this.destination = null;
+		while (this.destinations.length > 0) {
+			this.disconnect(this.destinations[this.destinations.length - 1]);
+		}
+	}
+
+	disconnect(d: AudioParam) {
+		if (this.destinations.length == 0) return;
+
+		const paramIndex: number = this.destinations.indexOf(d);
+		this.destinations.splice(paramIndex, 1);
+		try {
+			this.gain.disconnect(d);
+		} catch (err) {
+			console.error(err);
+		}
 	}
 
 	set disabled(f: boolean) {
