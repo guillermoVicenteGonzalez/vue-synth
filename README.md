@@ -24,7 +24,7 @@
   - [x] Filters
   - [ ] Reset button for filters
   - [ ] Echo
-  - [ ] Chorus
+  - [x] Chorus
   - [x] Compression
   - [ ] Distortion
   - [x] LFO's

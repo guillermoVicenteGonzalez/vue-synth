@@ -28,6 +28,9 @@ export const MIN_FEEDBACK = 0;
 export const MAX_FEEDBACK = 0.1;
 const DEFAULT_FEEDBACK = 0.05;
 
+export const MIN_FEEDBACK_DELAY = 0.1;
+export const MAX_FEEDBACK_DELAY = 0.5;
+
 export const DEFAULT_FEEDBACK_DELAY = 0.25;
 const DEFAULT_DELAY_1 = 0.003;
 const DEFAULT_DELAY_2 = 0.013;
