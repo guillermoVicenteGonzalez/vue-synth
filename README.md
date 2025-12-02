@@ -23,14 +23,13 @@
     - [x] Decay
   - [x] Filters
   - [ ] Reset button for filters
-  - [ ] Echo
   - [x] Chorus
   - [x] Compression
   - [ ] Distortion
   - [x] LFO's
   - [x] Flanger?
   - [ ] Phaser
-  - [ ] Delay
+  - [x] Delay
   - [ ] Reverb
   - [ ] Wha wha
 - [ ] Controls
