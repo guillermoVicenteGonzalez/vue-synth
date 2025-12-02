@@ -1,5 +1,8 @@
 import { AudioEffect } from "./AudioEffect";
 
+const MAX_EFFECT_GAIN = 0.7;
+const DEFAULT_RESONANCE = 0.85;
+
 export class CombFilter extends AudioEffect {
 	declare inputNode: AudioNode;
 	declare exitNode: AudioNode;
@@ -20,11 +23,13 @@ export class CombFilter extends AudioEffect {
 		this.filterNode.connect(this.effectGain);
 
 		this.inputNode.connect(this.exitNode);
-		this.effectGain.connect(this.inputNode);
+		this.effectGain.connect(this.inputNode); //This is where the feedback is
+
+		this.resonance = DEFAULT_RESONANCE;
 	}
 
 	set resonance(r: number) {
-		this.effectGain.gain.value = r;
+		this.effectGain.gain.value = Math.min(r, MAX_EFFECT_GAIN);
 	}
 
 	get resonance(): number {

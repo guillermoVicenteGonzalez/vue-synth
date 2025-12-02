@@ -13,11 +13,16 @@ export abstract class AudioEffect {
 		return !this.enabled;
 	}
 
-	connect(node: AudioNode | AudioEffect) {
+	connect(
+		node: AudioNode | AudioEffect,
+		outputIndex?: number,
+		inputIndex?: number
+	) {
 		try {
-			if (node instanceof AudioNode) this.exitNode.connect(node);
+			if (node instanceof AudioNode)
+				this.exitNode.connect(node, outputIndex, inputIndex);
 			else {
-				this.exitNode.connect(node.inputNode);
+				this.exitNode.connect(node.inputNode, outputIndex, inputIndex);
 			}
 		} catch (err) {
 			console.error(err);
