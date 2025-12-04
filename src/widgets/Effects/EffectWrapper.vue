@@ -29,8 +29,8 @@
 		></ChorusEffectWidget>
 
 		<ReverbEffectWidget
-			v-model="effect as ReverbEffect"
 			v-if="effectType == 'ReverbEffect'"
+			v-model="effect as ReverbEffect"
 		></ReverbEffectWidget>
 	</div>
 </template>

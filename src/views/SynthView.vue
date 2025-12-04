@@ -220,8 +220,8 @@ function initializeEffects() {
 	MainAudioCluster.value.effects.append(filter);
 	MainAudioCluster.value.effects.append(chorus);
 	MainAudioCluster.value.effects.append(flanger);
-	MainAudioCluster.value.effects.append(reverb);
 	MainAudioCluster.value.effects.append(delay);
+	MainAudioCluster.value.effects.append(reverb);
 	MainAudioCluster.value.effects.append(compression);
 }
 

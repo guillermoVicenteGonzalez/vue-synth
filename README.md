@@ -29,6 +29,7 @@
   - [x] LFO's
   - [x] Flanger?
   - [ ] Phaser
+  - [ ] EQUALIZER !!!!
   - [x] Delay
   - [ ] Reverb
   - [ ] Wha wha

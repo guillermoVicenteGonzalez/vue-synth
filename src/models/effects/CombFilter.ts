@@ -1,7 +1,9 @@
 import { AudioEffect } from "./AudioEffect";
 
-const MAX_EFFECT_GAIN = 0.7;
-const DEFAULT_RESONANCE = 0.85;
+export const MAX_RESONANCE = 0.95;
+const DEFAULT_RESONANCE = 0.7;
+
+export const MAX_DAMPENING = 24000;
 
 export class CombFilter extends AudioEffect {
 	declare inputNode: AudioNode;
@@ -29,7 +31,7 @@ export class CombFilter extends AudioEffect {
 	}
 
 	set resonance(r: number) {
-		this.effectGain.gain.value = Math.min(r, MAX_EFFECT_GAIN);
+		this.effectGain.gain.value = Math.min(r, MAX_RESONANCE);
 	}
 
 	get resonance(): number {
@@ -37,6 +39,7 @@ export class CombFilter extends AudioEffect {
 	}
 
 	set dampening(d: number) {
+		if (d > MAX_DAMPENING) this.dampening = MAX_DAMPENING;
 		this.filterNode.frequency.value = d;
 	}
 

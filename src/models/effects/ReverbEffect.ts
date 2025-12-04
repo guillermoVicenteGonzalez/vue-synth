@@ -1,13 +1,18 @@
 // https://itnext.io/algorithmic-reverb-and-web-audio-api-e1ccec94621a
 
 import { AudioEffect } from "./AudioEffect";
-import { CombFilter } from "./CombFilter";
+import { CombFilter, MAX_DAMPENING } from "./CombFilter";
 
 const COMB_FILTER_N = 8;
 const ALLPAS_FILTER_N = 4;
-const ALLPASS_FREQUENCES = [225, 556, 441, 341];
+const FILTER_FREQUENCIES = [225, 556, 441, 341];
 const COMB_FILTER_TUNINGS = [1557, 1617, 1491, 1422, 1277, 1356, 1188, 1116];
 const SAMPLE_RATE = 44100;
+
+export const MAX_REVERB_DAMPENING = MAX_DAMPENING;
+export const MIN_DELAY = -100;
+export const MAX_DELAY = 100;
+export const DEFAULT_DELAY = 0;
 
 /**
  * This effect is based on Freeverb designed by Manfred Schroeder.
@@ -22,6 +27,7 @@ export class ReverbEffect extends AudioEffect {
 	private filters: BiquadFilterNode[] = [];
 	private splitter: ChannelSplitterNode;
 	private merger: ChannelMergerNode;
+	private _delay: number = DEFAULT_DELAY;
 
 	constructor(ctx: AudioContext) {
 		super();
@@ -42,6 +48,14 @@ export class ReverbEffect extends AudioEffect {
 		this.initializeAllpassFilters(ctx);
 	}
 
+	//mix
+
+	//pre delay
+
+	//pre low cut
+
+	//pre high cut
+
 	set roomSize(s: number) {
 		this.combFilters.forEach((filter: CombFilter) => {
 			filter.resonance = s;
@@ -49,7 +63,10 @@ export class ReverbEffect extends AudioEffect {
 	}
 
 	get roomSize(): number {
-		if (this.combFilters.length == 0) return 0;
+		if (this.combFilters.length == 0) {
+			return -1;
+		}
+
 		return this.combFilters[0].resonance;
 	}
 
@@ -60,8 +77,17 @@ export class ReverbEffect extends AudioEffect {
 	}
 
 	get dampening(): number {
-		if (this.combFilters.length == 0) return 0;
-		return this.combFilters[0].resonance;
+		if (this.combFilters.length == 0) return -1;
+		return this.combFilters[0].dampening;
+	}
+
+	set delay(d: number) {
+		this._delay = d;
+		this.setCombFiltersDelay();
+	}
+
+	get delay() {
+		return this._delay;
 	}
 
 	private initializeCombFilters(ctx: AudioContext) {
@@ -112,7 +138,7 @@ export class ReverbEffect extends AudioEffect {
 		for (let i = 0; i < ALLPAS_FILTER_N; i++) {
 			const filter = ctx.createBiquadFilter();
 			filter.type = "allpass";
-			filter.frequency.value = ALLPASS_FREQUENCES[i];
+			filter.frequency.value = FILTER_FREQUENCIES[i];
 			filters.push(filter);
 		}
 
@@ -141,6 +167,14 @@ export class ReverbEffect extends AudioEffect {
 		}
 
 		this.filters = filters;
+	}
+
+	private setCombFiltersDelay() {
+		if (!this.combFilters || this.combFilters.length == 0) return;
+
+		this.combFilters.forEach((filter, index) => {
+			filter.delay = COMB_FILTER_TUNINGS[index] + this.delay;
+		});
 	}
 
 	protected onDisable(): void {
