@@ -21,15 +21,25 @@
 					></CircleSlider>
 				</div>
 				<div class="ReverbEffect__control">
-					<VsChip>Delay</VsChip>
-					<CircleSlider v-model="reverb.delay" :min="0" :max="1"></CircleSlider>
+					<VsChip>Pre Delay</VsChip>
+					<CircleSlider
+						v-model="reverb.preDelay"
+						:min="0"
+						:max="MAX_REVERB_PRE_DELAY"
+					></CircleSlider>
 				</div>
 				<div class="ReverbEffect__control">
-					<VsChip></VsChip>
-					<CircleSlider></CircleSlider>
+					<VsChip>Pre High Cut</VsChip>
+					<CircleSlider v-model="reverb.preHighCut" :max="10000"></CircleSlider>
 				</div>
-				<div class="ReverbEffect__control"></div>
-				<div class="ReverbEffect__control"></div>
+				<div class="ReverbEffect__control">
+					<VsChip>Pre Low Cut</VsChip>
+					<CircleSlider v-model="reverb.preLowCut" :max="10000"></CircleSlider>
+				</div>
+				<div class="ReverbEffect__control">
+					<VsChip>Mix</VsChip>
+					<CircleSlider v-model="reverb.mix" :min="0" :max="100"></CircleSlider>
+				</div>
 			</div>
 		</template>
 	</EffectCard>
@@ -40,6 +50,7 @@ import CircleSlider from "@/components/common/CircleSlider/CircleSlider.vue";
 import VsChip from "@/components/common/VsChip/VsChip.vue";
 import {
 	MAX_REVERB_DAMPENING,
+	MAX_REVERB_PRE_DELAY,
 	ReverbEffect,
 } from "@/models/effects/ReverbEffect";
 import EffectCard from "./EffectCard.vue";

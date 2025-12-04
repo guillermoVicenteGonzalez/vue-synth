@@ -14,6 +14,12 @@ export const MIN_DELAY = -100;
 export const MAX_DELAY = 100;
 export const DEFAULT_DELAY = 0;
 
+export const MAX_REVERB_MIX = 100;
+export const MIN_REVERB_MIX = 0;
+const DEFAULT_MIX = 50;
+
+const DEFAULT_PRE_DELAY = 0;
+export const MAX_REVERB_PRE_DELAY = 0.3;
 /**
  * This effect is based on Freeverb designed by Manfred Schroeder.
  */
@@ -23,11 +29,14 @@ export class ReverbEffect extends AudioEffect {
 
 	private wetGainNode: GainNode;
 	private dryGainNode: GainNode;
+	private preDelayNode: DelayNode;
+	private preLowpassFilter: BiquadFilterNode;
+	private preHighpassFilter: BiquadFilterNode;
 	private combFilters: CombFilter[] = [];
 	private filters: BiquadFilterNode[] = [];
 	private splitter: ChannelSplitterNode;
 	private merger: ChannelMergerNode;
-	private _delay: number = DEFAULT_DELAY;
+	private _mix: number = DEFAULT_MIX;
 
 	constructor(ctx: AudioContext) {
 		super();
@@ -38,23 +47,70 @@ export class ReverbEffect extends AudioEffect {
 		this.dryGainNode = ctx.createGain();
 		this.splitter = ctx.createChannelSplitter(2);
 		this.merger = ctx.createChannelMerger(2);
+		this.preDelayNode = ctx.createDelay();
+		this.preLowpassFilter = ctx.createBiquadFilter();
+		this.preHighpassFilter = ctx.createBiquadFilter();
 
 		this.inputNode.connect(this.wetGainNode);
 		this.inputNode.connect(this.dryGainNode);
 		this.dryGainNode.connect(this.exitNode);
-		this.wetGainNode.connect(this.splitter);
+		this.wetGainNode.connect(this.preDelayNode);
+		this.preDelayNode.connect(this.preLowpassFilter);
+		this.preLowpassFilter.connect(this.preHighpassFilter);
+		this.preHighpassFilter.connect(this.splitter);
+
+		this.preHighpassFilter.type = "highpass";
+		this.preLowpassFilter.type = "lowpass";
 
 		this.initializeCombFilters(ctx);
 		this.initializeAllpassFilters(ctx);
+
+		this.mix = DEFAULT_MIX;
+		this.preDelay = DEFAULT_PRE_DELAY;
 	}
 
 	//mix
+	set mix(m: number) {
+		if (m > MAX_REVERB_MIX) this.mix = MAX_REVERB_MIX;
+		if (m < MIN_REVERB_MIX) this.mix = MIN_REVERB_MIX;
+
+		this._mix = m;
+
+		this.wetGainNode.gain.value = this._mix / 100;
+		this.dryGainNode.gain.value = (MAX_REVERB_MIX - this._mix) / 100;
+	}
+
+	get mix(): number {
+		return this._mix;
+	}
 
 	//pre delay
+	set preDelay(d: number) {
+		if (d > MAX_REVERB_PRE_DELAY) this.preDelay = MAX_REVERB_PRE_DELAY;
+
+		this.preDelayNode.delayTime.value = d;
+	}
+
+	get preDelay(): number {
+		return this.preDelayNode.delayTime.value;
+	}
 
 	//pre low cut
+	set preLowCut(l: number) {
+		this.preLowpassFilter.frequency.value = l;
+	}
 
-	//pre high cut
+	get preLowCut(): number {
+		return this.preLowpassFilter.frequency.value;
+	}
+
+	set preHighCut(h: number) {
+		this.preHighpassFilter.frequency.value = h;
+	}
+
+	get preHighCut(): number {
+		return this.preHighpassFilter.frequency.value;
+	}
 
 	set roomSize(s: number) {
 		this.combFilters.forEach((filter: CombFilter) => {
@@ -79,15 +135,6 @@ export class ReverbEffect extends AudioEffect {
 	get dampening(): number {
 		if (this.combFilters.length == 0) return -1;
 		return this.combFilters[0].dampening;
-	}
-
-	set delay(d: number) {
-		this._delay = d;
-		this.setCombFiltersDelay();
-	}
-
-	get delay() {
-		return this._delay;
 	}
 
 	private initializeCombFilters(ctx: AudioContext) {
@@ -167,14 +214,6 @@ export class ReverbEffect extends AudioEffect {
 		}
 
 		this.filters = filters;
-	}
-
-	private setCombFiltersDelay() {
-		if (!this.combFilters || this.combFilters.length == 0) return;
-
-		this.combFilters.forEach((filter, index) => {
-			filter.delay = COMB_FILTER_TUNINGS[index] + this.delay;
-		});
 	}
 
 	protected onDisable(): void {
