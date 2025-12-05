@@ -91,7 +91,7 @@ interface CircleSliderProps {
 }
 
 const {
-	fillColor = "#ff0000",
+	fillColor = "#42d392",
 	underColor = "#000",
 	min = 0,
 	max = 100,

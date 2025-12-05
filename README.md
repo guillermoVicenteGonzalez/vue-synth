@@ -23,15 +23,15 @@
     - [x] Decay
   - [x] Filters
   - [ ] Reset button for filters
-  - [ ] Echo
   - [x] Chorus
   - [x] Compression
   - [ ] Distortion
   - [x] LFO's
   - [x] Flanger?
   - [ ] Phaser
-  - [ ] Delay
-  - [ ] Reverb
+  - [ ] EQUALIZER !!!!
+  - [x] Delay
+  - [x] Reverb
   - [ ] Wha wha
 - [ ] Controls
   - [x] Writable module freqs

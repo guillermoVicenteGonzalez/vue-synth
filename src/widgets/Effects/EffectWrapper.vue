@@ -27,6 +27,11 @@
 			v-if="effectType == 'ChorusEffect'"
 			v-model="effect as ChorusEffect"
 		></ChorusEffectWidget>
+
+		<ReverbEffectWidget
+			v-if="effectType == 'ReverbEffect'"
+			v-model="effect as ReverbEffect"
+		></ReverbEffectWidget>
 	</div>
 </template>
 
@@ -37,12 +42,14 @@ import { CompressionEffect } from "@/models/effects/CompressionEffect";
 import DelayEffect from "@/models/effects/DelayEffect";
 import { FilterEffect } from "@/models/effects/FilterEffect";
 import { FlangerEffect } from "@/models/effects/FlangerEffect";
+import { ReverbEffect } from "@/models/effects/ReverbEffect";
 import { computed } from "vue";
 import ChorusEffectWidget from "./ChorusEffectWidget.vue";
 import CompressionEffectWidget from "./CompressionEffectWidget.vue";
 import DelayEffectWidget from "./DelayEffectWidget.vue";
 import FilterEffectWidget from "./FilterEffectWidget.vue";
 import FlangerEffectWidget from "./FlangerEffectWidget.vue";
+import ReverbEffectWidget from "./ReverbEffectWidget.vue";
 
 const effect = defineModel<AudioEffect>();
 
@@ -56,6 +63,8 @@ const effectType = computed(() => {
 	if (effect.value instanceof DelayEffect) return "DelayEffect";
 
 	if (effect.value instanceof ChorusEffect) return "ChorusEffect";
+
+	if (effect.value instanceof ReverbEffect) return "ReverbEffect";
 	return "unknown";
 });
 
