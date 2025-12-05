@@ -3,6 +3,8 @@
 		<template v-for="(source, index) in sources" :key="index">
 			<WaveAnalyser
 				v-if="!source.disabled"
+				:canvas-height="canvasHeight"
+				:canvas-width="canvasWidth"
 				:source="source.node"
 				:line-color="source.color"
 				class="MultiWaveAnalyser__analyser"
@@ -22,9 +24,15 @@ export interface analyserSource {
 
 interface MultiWaveAnalyserProps {
 	sources: analyserSource[];
+	canvasWidth?: number;
+	canvasHeight?: number;
 }
 
-const { sources = [] } = defineProps<MultiWaveAnalyserProps>();
+const {
+	sources = [],
+	canvasHeight,
+	canvasWidth,
+} = defineProps<MultiWaveAnalyserProps>();
 </script>
 
 <style scoped lang="scss">

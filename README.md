@@ -31,7 +31,7 @@
   - [ ] Phaser
   - [ ] EQUALIZER !!!!
   - [x] Delay
-  - [ ] Reverb
+  - [x] Reverb
   - [ ] Wha wha
 - [ ] Controls
   - [x] Writable module freqs

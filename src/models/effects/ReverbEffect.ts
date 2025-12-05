@@ -216,6 +216,16 @@ export class ReverbEffect extends AudioEffect {
 		this.filters = filters;
 	}
 
+	public getWetSignalNode(): AudioNode | null {
+		if (!this.filters || this.filters.length == 0) return null;
+
+		return this.filters[this.filters.length - 1];
+	}
+
+	public getDrySignalNode(): AudioNode {
+		return this.dryGainNode;
+	}
+
 	protected onDisable(): void {
 		this.inputNode.disconnect(this.wetGainNode);
 	}
