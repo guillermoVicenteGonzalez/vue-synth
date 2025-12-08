@@ -88,6 +88,7 @@ import AudioModule from "@/models/AudioModule";
 import ChorusEffect from "@/models/effects/ChorusEffect";
 import { CompressionEffect } from "@/models/effects/CompressionEffect";
 import DelayEffect from "@/models/effects/DelayEffect";
+import DistortionEffect from "@/models/effects/DistortionEffect";
 import { FilterEffect } from "@/models/effects/FilterEffect";
 import { FlangerEffect } from "@/models/effects/FlangerEffect";
 import { ReverbEffect } from "@/models/effects/ReverbEffect";
@@ -207,6 +208,7 @@ function deleteAll() {
 function initializeEffects() {
 	const compression = new CompressionEffect(MainAudioCluster.value.context);
 	const filter = new FilterEffect(MainAudioCluster.value.context);
+	const distortion = new DistortionEffect(MainAudioCluster.value.context);
 	const delay = new DelayEffect(MainAudioCluster.value.context);
 	const flanger = new FlangerEffect(MainAudioCluster.value.context);
 	const chorus = new ChorusEffect(MainAudioCluster.value.context);
@@ -216,12 +218,14 @@ function initializeEffects() {
 	filter.disabled = true;
 	delay.disabled = true;
 	chorus.disabled = true;
+	reverb.disabled = true;
 
-	MainAudioCluster.value.effects.append(filter);
-	MainAudioCluster.value.effects.append(chorus);
+	MainAudioCluster.value.effects.append(distortion);
 	MainAudioCluster.value.effects.append(flanger);
+	MainAudioCluster.value.effects.append(chorus);
 	MainAudioCluster.value.effects.append(delay);
 	MainAudioCluster.value.effects.append(reverb);
+	MainAudioCluster.value.effects.append(filter);
 	MainAudioCluster.value.effects.append(compression);
 }
 
