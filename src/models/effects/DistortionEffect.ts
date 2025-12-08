@@ -2,31 +2,34 @@ import { AudioEffect } from "./AudioEffect";
 /**
  * If filter option is pre => input => filter => distortion => wetGain
  * If filter option is none => input => distortion => wetGain
- * If filterOPtion is post => input => distortion => filter => wetGain
+ * If _filterPos is post => input => distortion => filter => wetGain
  */
 
-type DistortionType =
-	| "Soft Clip"
-	| "Hard Clip"
-	| "Linear Clip"
-	| "Sine Fold"
-	| "Bit Crush"
-	| "Down Sample";
+export enum DistortionTypes {
+	softClip = "Soft Clip",
+	hardClip = "Hard Clip",
+	bitcrush = "Bit Crush",
+}
 
-type DistortionFilterOptions = "pre" | "post" | "none";
+export enum DistortionFilterPositions {
+	pre = "Pre",
+	post = "Post",
+	none = "None",
+}
 
-const MAX_DISTORTION_MIX = 100;
-const MIN_DISTORTION_MIX = 0;
+export const MAX_DISTORTION_MIX = 100;
+export const MIN_DISTORTION_MIX = 0;
 
-const MAX_DISTORTION_CUTOFF = 24000;
-const MIN_DISTORTION_CUTOFF = 0;
+export const MAX_DISTORTION_CUTOFF = 24000;
+export const MIN_DISTORTION_CUTOFF = 0;
 
 export default class DistortionEffect extends AudioEffect {
 	declare inputNode: AudioNode;
 	declare exitNode: AudioNode;
-	private distortionType: DistortionType = "Soft Clip";
+	private _distortionType: DistortionTypes = DistortionTypes.softClip;
 	private distortionFilter: BiquadFilterNode;
-	private filterOption: DistortionFilterOptions = "none";
+	private _filterPos: DistortionFilterPositions =
+		DistortionFilterPositions.none;
 	private wetGain: GainNode;
 	private dryGain: GainNode;
 	private distortionNode: WaveShaperNode;
@@ -54,20 +57,125 @@ export default class DistortionEffect extends AudioEffect {
 		this.wetGain.connect(this.exitNode);
 		this.dryGain.connect(this.exitNode);
 
+		this.distortionFilter.type = "highpass";
 		this.mix = 50;
+		this.filterPosition = DistortionFilterPositions.none;
+		this._distortionType = DistortionTypes.softClip;
+	}
+
+	set mix(m: number) {
+		if (this.disabled) return;
+
+		if (m > MAX_DISTORTION_MIX) this.mix = MAX_DISTORTION_MIX;
+		if (m < MIN_DISTORTION_MIX) this.mix = MIN_DISTORTION_MIX;
+
+		this._mix = m;
+		this.wetGain.gain.value = this._mix / 100;
+		this.dryGain.gain.value = (MAX_DISTORTION_MIX - this._mix) / 100;
+	}
+
+	get mix(): number {
+		return this._mix;
+	}
+
+	set cutoff(f: number) {
+		if (this.disabled) return;
+
+		if (f < MIN_DISTORTION_CUTOFF) this.cutoff = MIN_DISTORTION_CUTOFF;
+		if (f > MAX_DISTORTION_CUTOFF) this.cutoff = MAX_DISTORTION_CUTOFF;
+
+		this.distortionFilter.frequency.value = f;
+	}
+
+	get cutoff() {
+		return this.distortionFilter.frequency.value;
+	}
+
+	set filterPosition(f: DistortionFilterPositions) {
+		if (this.disabled) return;
+		if (f == this._filterPos) return;
+
+		console.log("Setting filter position");
+
+		if (this._filterPos == DistortionFilterPositions.pre) {
+			this.inputNode.disconnect(this.distortionFilter);
+			this.inputNode.connect(this.distortionNode);
+
+			if (f == DistortionFilterPositions.post) {
+				this.distortionNode.disconnect(this.wetGain);
+				this.distortionNode.connect(this.distortionFilter);
+				this.distortionFilter.connect(this.wetGain);
+			}
+
+			if (f == DistortionFilterPositions.none) {
+				this.inputNode.connect(this.distortionNode);
+				this.distortionNode.connect(this.wetGain);
+			}
+		}
+
+		if (this._filterPos == DistortionFilterPositions.post) {
+			try {
+				this.distortionNode.disconnect(this.distortionFilter);
+
+				if (f == DistortionFilterPositions.pre) {
+					this.inputNode.disconnect(this.distortionNode);
+					this.inputNode.connect(this.distortionFilter);
+					this.distortionFilter.connect(this.distortionNode);
+					this.distortionNode.connect(this.wetGain);
+				}
+
+				if (f == DistortionFilterPositions.none) {
+					this.distortionNode.connect(this.wetGain);
+				}
+			} catch (err) {
+				console.error(err);
+			}
+		}
+
+		if (this._filterPos == DistortionFilterPositions.none) {
+			if (f == DistortionFilterPositions.pre) {
+				this.inputNode.disconnect(this.distortionNode);
+				this.inputNode.connect(this.distortionFilter);
+				this.distortionFilter.connect(this.distortionNode);
+			}
+
+			if (f == DistortionFilterPositions.post) {
+				this.distortionNode.disconnect(this.wetGain);
+				this.distortionNode.connect(this.distortionFilter);
+				this.distortionFilter.connect(this.wetGain);
+			}
+		}
+
+		this._filterPos = f;
+	}
+
+	get filterPosition() {
+		return this._filterPos;
+	}
+
+	set distortionType(t: DistortionTypes) {
+		this._distortionType = t;
+
+		if (this.distortionNode) this.makeDistortionCurve();
+	}
+
+	get distortionType(): DistortionTypes {
+		return this._distortionType;
 	}
 
 	private makeDistortionCurve() {
+		console.log("Making distortion curve");
+
 		switch (this.distortionType) {
-			case "Hard Clip":
-				this.distortionNode.curve = this.hardClipDistortionCurve(400);
+			case DistortionTypes.hardClip:
+				this.distortionNode.curve = this.hardClipDistortionCurve();
 				break;
 
-			case "Soft Clip":
+			case DistortionTypes.softClip:
 				this.distortionNode.curve = this.softClipDistortionCurve(400);
 				break;
 
-			case "Bit Crush":
+			case DistortionTypes.bitcrush:
 				this.distortionNode.curve = this.bitCrusherDistortionWave();
 		}
 	}
@@ -117,87 +225,13 @@ export default class DistortionEffect extends AudioEffect {
 		return curve;
 	}
 
-	set mix(m: number) {
-		if (this.disabled) return;
-
-		if (m > MAX_DISTORTION_MIX) this.mix = MAX_DISTORTION_MIX;
-		if (m < MIN_DISTORTION_MIX) this.mix = MIN_DISTORTION_MIX;
-
-		this._mix = m;
-		this.wetGain.gain.value = this._mix / 100;
-		this.dryGain.gain.value = (MAX_DISTORTION_MIX - this._mix) / 100;
+	protected onDisable(): void {
+		this.wetGain.disconnect(this.exitNode);
+		this.dryGain.gain.value = 1;
 	}
 
-	get mix(): number {
-		return this._mix;
+	protected onEnable(): void {
+		this.wetGain.connect(this.exitNode);
+		this.mix = this.mix;
 	}
-
-	set cutoff(f: number) {
-		if (this.disabled) return;
-
-		if (f < MIN_DISTORTION_CUTOFF) this.cutoff = MIN_DISTORTION_CUTOFF;
-		if (f > MAX_DISTORTION_CUTOFF) this.cutoff = MAX_DISTORTION_CUTOFF;
-
-		this.distortionFilter.frequency.value = f;
-	}
-
-	set filterType(f: DistortionFilterOptions) {
-		if (this.disabled) return;
-		if (f == this.filterOption) return;
-
-		if (this.filterOption == "pre") {
-			this.inputNode.disconnect(this.distortionFilter);
-			this.inputNode.connect(this.distortionNode);
-
-			if (f == "post") {
-				this.distortionNode.disconnect(this.wetGain);
-				this.distortionNode.connect(this.distortionFilter);
-				this.distortionFilter.connect(this.wetGain);
-			}
-
-			if (f == "none") {
-				this.inputNode.connect(this.distortionNode);
-				this.distortionNode.connect(this.wetGain);
-			}
-		}
-
-		if (this.filterOption == "post") {
-			try {
-				this.distortionNode.disconnect(this.distortionFilter);
-
-				if (f == "pre") {
-					this.inputNode.disconnect(this.distortionNode);
-					this.inputNode.connect(this.distortionFilter);
-					this.distortionFilter.connect(this.distortionNode);
-					this.distortionNode.connect(this.wetGain);
-				}
-
-				if (f == "none") {
-					this.distortionNode.connect(this.wetGain);
-				}
-			} catch (err) {
-				console.error(err);
-			}
-		}
-
-		if (this.filterOption == "none") {
-			if (f == "pre") {
-				this.inputNode.disconnect(this.distortionNode);
-				this.inputNode.connect(this.distortionFilter);
-				this.distortionFilter.connect(this.distortionNode);
-			}
-
-			if (f == "post") {
-				this.distortionNode.disconnect(this.wetGain);
-				this.distortionNode.connect(this.distortionFilter);
-				this.distortionFilter.connect(this.wetGain);
-			}
-		}
-
-		this.filterOption = f;
-	}
-
-	protected onDisable(): void {}
-
-	protected onEnable(): void {}
 }
