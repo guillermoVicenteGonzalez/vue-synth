@@ -14,9 +14,18 @@ export enum DistortionFilterPositions {
 
 export const MAX_DISTORTION_MIX = 100;
 export const MIN_DISTORTION_MIX = 0;
+const DEFAULT_DISTORTION_MIX = 50;
 
 export const MAX_DISTORTION_CUTOFF = 24000;
 export const MIN_DISTORTION_CUTOFF = 0;
+
+export const MIN_DISTORTION_NBITS = 0;
+export const MAX_DISTORTION_NBITS = 16;
+const DEFAULT_NBNITS = 16;
+
+export const MIN_DISTORTION_THRESHOLD = 0;
+export const MAX_DISTORTION_THRESHOLD = 1;
+const DEFAULT_DISTORTION_THRESHOLD = 1;
 
 /**
  * If filter option is pre => input => filter => distortion => wetGain
@@ -36,7 +45,9 @@ export default class DistortionEffect extends AudioEffect {
 	private distortionNode: WaveShaperNode;
 	private context: AudioContext;
 
-	private _mix: number = 0;
+	private _mix: number = 50;
+	private _threshold: number = DEFAULT_DISTORTION_THRESHOLD;
+	private _nBits: number = DEFAULT_NBNITS;
 
 	constructor(ctx: AudioContext) {
 		super();
@@ -59,7 +70,7 @@ export default class DistortionEffect extends AudioEffect {
 		this.dryGain.connect(this.exitNode);
 
 		this.distortionFilter.type = "highpass";
-		this.mix = 50;
+		this.mix = DEFAULT_DISTORTION_MIX;
 		this.filterPosition = DistortionFilterPositions.none;
 		this.distortionNode.oversample = "4x";
 	}
@@ -95,8 +106,6 @@ export default class DistortionEffect extends AudioEffect {
 	set filterPosition(f: DistortionFilterPositions) {
 		if (this.disabled) return;
 		if (f == this._filterPos) return;
-
-		console.log("Setting filter position");
 
 		if (this._filterPos == DistortionFilterPositions.pre) {
 			this.inputNode.disconnect(this.distortionFilter);
@@ -154,6 +163,38 @@ export default class DistortionEffect extends AudioEffect {
 		return this._filterPos;
 	}
 
+	//filter type
+
+	//drive
+
+	//threshold (when clipping)
+	set threshold(t: number) {
+		if (t > MAX_DISTORTION_THRESHOLD) this.threshold = MAX_DISTORTION_THRESHOLD;
+		if (t < MIN_DISTORTION_THRESHOLD) this.threshold = MIN_DISTORTION_THRESHOLD;
+
+		this._threshold = t;
+		if (this._distortionType != DistortionTypes.bitcrush)
+			this.makeDistortionCurve();
+	}
+
+	get threshold(): number {
+		return this._threshold;
+	}
+
+	//nBits
+	set nBits(b: number) {
+		if (b > MAX_DISTORTION_NBITS) this.nBits = MAX_DISTORTION_NBITS;
+		if (b < MIN_DISTORTION_NBITS) this.nBits = MIN_DISTORTION_NBITS;
+
+		this._nBits = b;
+		if (this._distortionType == DistortionTypes.bitcrush)
+			this.makeDistortionCurve();
+	}
+
+	get nBits(): number {
+		return this._nBits;
+	}
+
 	set distortionType(t: DistortionTypes) {
 		this._distortionType = t;
 
@@ -165,21 +206,16 @@ export default class DistortionEffect extends AudioEffect {
 	}
 
 	private makeDistortionCurve() {
-		console.log(`${this.distortionType == DistortionTypes.softClip}`);
-
 		switch (this.distortionType as DistortionTypes) {
 			case DistortionTypes.hardClip:
-				console.log("This is hard clip");
 				this.distortionNode.curve = this.hardClipDistortionCurve();
 				break;
 
 			case DistortionTypes.softClip:
-				console.log("Estoy aqui");
 				this.distortionNode.curve = this.softClipDistortionCurve(400);
 				break;
 
 			case DistortionTypes.bitcrush:
-				console.log("This is bitcrush");
 				this.distortionNode.curve = this.bitCrusherDistortionWave();
 				break;
 
@@ -231,12 +267,12 @@ export default class DistortionEffect extends AudioEffect {
 	//hardClip
 	private hardClipDistortionCurve() {
 		// const samplesNumber = 100;
-		const samplesNumber = this.context.sampleRate;
+		const samplesNumber = 100;
 		const curve = new Float32Array(samplesNumber);
 
 		for (let i = 0; i < samplesNumber; ++i) {
 			const x = (2 * i) / samplesNumber - 1;
-			if (Math.abs(x) > 1) curve[i] = 1 * Math.sign(x);
+			if (Math.abs(x) > 1) curve[i] = this.threshold * Math.sign(x);
 			else curve[i] = x;
 		}
 
@@ -246,7 +282,7 @@ export default class DistortionEffect extends AudioEffect {
 	//bitCrusher
 	private bitCrusherDistortionWave() {
 		const samplesNumber = 65536; //2¹⁶ ??
-		const levelsNumber = Math.pow(2, 16);
+		const levelsNumber = Math.pow(2, this.nBits);
 
 		const curve = new Float32Array(samplesNumber);
 
