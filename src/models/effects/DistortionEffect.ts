@@ -1,9 +1,4 @@
 import { AudioEffect } from "./AudioEffect";
-/**
- * If filter option is pre => input => filter => distortion => wetGain
- * If filter option is none => input => distortion => wetGain
- * If _filterPos is post => input => distortion => filter => wetGain
- */
 
 export enum DistortionTypes {
 	softClip = "Soft Clip",
@@ -23,10 +18,16 @@ export const MIN_DISTORTION_MIX = 0;
 export const MAX_DISTORTION_CUTOFF = 24000;
 export const MIN_DISTORTION_CUTOFF = 0;
 
+/**
+ * If filter option is pre => input => filter => distortion => wetGain
+ * If filter option is none => input => distortion => wetGain
+ * If _filterPos is post => input => distortion => filter => wetGain
+ */
+
 export default class DistortionEffect extends AudioEffect {
 	declare inputNode: AudioNode;
 	declare exitNode: AudioNode;
-	private _distortionType: DistortionTypes = DistortionTypes.softClip;
+	private _distortionType: DistortionTypes = DistortionTypes.hardClip;
 	private distortionFilter: BiquadFilterNode;
 	private _filterPos: DistortionFilterPositions =
 		DistortionFilterPositions.none;
@@ -60,7 +61,7 @@ export default class DistortionEffect extends AudioEffect {
 		this.distortionFilter.type = "highpass";
 		this.mix = 50;
 		this.filterPosition = DistortionFilterPositions.none;
-		this._distortionType = DistortionTypes.softClip;
+		this.distortionNode.oversample = "4x";
 	}
 
 	set mix(m: number) {
@@ -164,23 +165,54 @@ export default class DistortionEffect extends AudioEffect {
 	}
 
 	private makeDistortionCurve() {
-		console.log("Making distortion curve");
+		console.log(`${this.distortionType == DistortionTypes.softClip}`);
 
-		switch (this.distortionType) {
+		switch (this.distortionType as DistortionTypes) {
 			case DistortionTypes.hardClip:
+				console.log("This is hard clip");
 				this.distortionNode.curve = this.hardClipDistortionCurve();
 				break;
 
 			case DistortionTypes.softClip:
+				console.log("Estoy aqui");
 				this.distortionNode.curve = this.softClipDistortionCurve(400);
 				break;
 
 			case DistortionTypes.bitcrush:
+				console.log("This is bitcrush");
 				this.distortionNode.curve = this.bitCrusherDistortionWave();
+				break;
+
+			default:
+				console.log("No option matched???");
 		}
 	}
 
-	//softClip ??
+	private softClip() {
+		const samplesNumber = this.context.sampleRate;
+		const curve = new Float32Array(samplesNumber);
+
+		for (let i = 0; i < samplesNumber; ++i) {
+			const x = i - Math.pow(i, 3) / 3;
+			if (x > 1) curve[i] = (Math.sign(x) * 2) / 3;
+			else curve[i] = x;
+		}
+
+		return curve;
+	}
+
+	private hiperbolicSoftClip() {
+		const samplesNumber = this.context.sampleRate;
+		const curve = new Float32Array(samplesNumber);
+
+		for (let i = 0; i < samplesNumber; ++i) {
+			curve[i] = Math.tanh(i);
+		}
+
+		return curve;
+	}
+
+	//gudermanian
 	private softClipDistortionCurve(amount: number) {
 		const samplesNumber = this.context.sampleRate;
 
@@ -198,12 +230,13 @@ export default class DistortionEffect extends AudioEffect {
 
 	//hardClip
 	private hardClipDistortionCurve() {
-		const samplesNumber = 100;
+		// const samplesNumber = 100;
+		const samplesNumber = this.context.sampleRate;
 		const curve = new Float32Array(samplesNumber);
 
 		for (let i = 0; i < samplesNumber; ++i) {
 			const x = (2 * i) / samplesNumber - 1;
-			if (Math.abs(x) > 0.5) curve[i] = 0.5 * Math.sign(x);
+			if (Math.abs(x) > 1) curve[i] = 1 * Math.sign(x);
 			else curve[i] = x;
 		}
 

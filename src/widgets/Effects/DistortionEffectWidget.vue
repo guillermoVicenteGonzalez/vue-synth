@@ -7,12 +7,12 @@
 		<template #body>
 			<div class="DistortionEffect__body">
 				<VsSelector
-					:items="Object.keys(DistortionFilterPositions)"
 					v-model="distortion.filterPosition"
+					:items="Object.values(DistortionFilterPositions)"
 				></VsSelector>
 				<VsSelector
-					:items="Object.keys(DistortionTypes)"
-					v-model="distortion.distortionType"
+					v-model.number="distortion.distortionType"
+					:items="Object.values(DistortionTypes)"
 				></VsSelector>
 
 				<CircleSlider
