@@ -92,6 +92,7 @@ import DistortionEffect from "@/models/effects/DistortionEffect";
 import { FilterEffect } from "@/models/effects/FilterEffect";
 import { FlangerEffect } from "@/models/effects/FlangerEffect";
 import { ReverbEffect } from "@/models/effects/ReverbEffect";
+import WahEffect from "@/models/effects/WahEffect";
 import FilterHandler from "@/models/FilterHandler";
 import type { EffectChain } from "@/models/LinkedList";
 import ActionsWidget, {
@@ -213,6 +214,7 @@ function initializeEffects() {
 	const flanger = new FlangerEffect(MainAudioCluster.value.context);
 	const chorus = new ChorusEffect(MainAudioCluster.value.context);
 	const reverb = new ReverbEffect(MainAudioCluster.value.context);
+	const wah = new WahEffect(MainAudioCluster.value.context);
 
 	flanger.disabled = true;
 	filter.disabled = true;
@@ -221,6 +223,7 @@ function initializeEffects() {
 	reverb.disabled = true;
 	distortion.disabled = true;
 
+	MainAudioCluster.value.effects.append(wah);
 	MainAudioCluster.value.effects.append(distortion);
 	MainAudioCluster.value.effects.append(flanger);
 	MainAudioCluster.value.effects.append(chorus);
