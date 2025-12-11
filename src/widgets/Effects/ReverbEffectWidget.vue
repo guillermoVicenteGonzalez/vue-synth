@@ -6,8 +6,8 @@
 					<div class="ReverbEffect__control">
 						<VsChip class="ReverbEffect__chip">Room size</VsChip>
 						<CircleSlider
-							:disabled="reverb.disabled"
 							v-model="reverb.roomSize"
+							:disabled="reverb.disabled"
 							class="ReverbEffect__circle-slider"
 							:min="0"
 							:max="1"
@@ -17,8 +17,8 @@
 					<div class="ReverbEffect__control">
 						<VsChip class="ReverbEffect__chip">Dampening</VsChip>
 						<CircleSlider
-							:disabled="reverb.disabled"
 							v-model="reverb.dampening"
+							:disabled="reverb.disabled"
 							class="ReverbEffect__circle-slider"
 							:min="0"
 							:max="MAX_REVERB_DAMPENING"
@@ -51,8 +51,8 @@
 					<div class="ReverbEffect__control">
 						<VsChip class="ReverbEffect__chip">Pre Delay</VsChip>
 						<CircleSlider
-							:disabled="reverb.disabled"
 							v-model="reverb.preDelay"
+							:disabled="reverb.disabled"
 							class="ReverbEffect__circle-slider"
 							:min="0"
 							:step="0.01"
@@ -62,8 +62,8 @@
 					<div class="ReverbEffect__control">
 						<VsChip class="ReverbEffect__chip">Pre High Cut</VsChip>
 						<CircleSlider
-							:disabled="reverb.disabled"
 							v-model="reverb.preHighCut"
+							:disabled="reverb.disabled"
 							:max="10000"
 							class="ReverbEffect__circle-slider"
 						></CircleSlider>
@@ -71,8 +71,8 @@
 					<div class="ReverbEffect__control">
 						<VsChip class="ReverbEffect__chip">Pre Low Cut</VsChip>
 						<CircleSlider
-							:disabled="reverb.disabled"
 							v-model="reverb.preLowCut"
+							:disabled="reverb.disabled"
 							:max="10000"
 							class="ReverbEffect__circle-slider"
 						></CircleSlider>
@@ -80,8 +80,8 @@
 					<div class="ReverbEffect__control">
 						<VsChip class="ReverbEffect__chip">Mix</VsChip>
 						<CircleSlider
-							:disabled="reverb.disabled"
 							v-model="reverb.mix"
+							:disabled="reverb.disabled"
 							:min="0"
 							:max="100"
 							class="ReverbEffect__circle-slider"
