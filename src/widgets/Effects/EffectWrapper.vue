@@ -37,6 +37,11 @@
 			v-if="effectType == 'DistortionEffect'"
 			v-model="effect as DistortionEffect"
 		></DistortionEffectWidget>
+
+		<WahEffectWidget
+			v-if="effectType == 'WahEffect'"
+			v-model="effect as WahEffect"
+		></WahEffectWidget>
 	</div>
 </template>
 
@@ -49,6 +54,7 @@ import DistortionEffect from "@/models/effects/DistortionEffect";
 import { FilterEffect } from "@/models/effects/FilterEffect";
 import { FlangerEffect } from "@/models/effects/FlangerEffect";
 import { ReverbEffect } from "@/models/effects/ReverbEffect";
+import WahEffect from "@/models/effects/WahEffect";
 import { computed } from "vue";
 import ChorusEffectWidget from "./ChorusEffectWidget.vue";
 import CompressionEffectWidget from "./CompressionEffectWidget.vue";
@@ -57,6 +63,7 @@ import DistortionEffectWidget from "./DistortionEffect/DistortionEffectWidget.vu
 import FilterEffectWidget from "./FilterEffectWidget.vue";
 import FlangerEffectWidget from "./FlangerEffectWidget.vue";
 import ReverbEffectWidget from "./ReverbEffectWidget.vue";
+import WahEffectWidget from "./WahEffectWidget.vue";
 
 const effect = defineModel<AudioEffect>();
 
@@ -74,6 +81,8 @@ const effectType = computed(() => {
 	if (effect.value instanceof ReverbEffect) return "ReverbEffect";
 
 	if (effect.value instanceof DistortionEffect) return "DistortionEffect";
+
+	if (effect.value instanceof WahEffect) return "WahEffect";
 	return "unknown";
 });
 

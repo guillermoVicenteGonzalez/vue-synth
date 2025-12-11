@@ -3,6 +3,23 @@ import { AudioEffect } from "./AudioEffect";
 
 export const MIN_WAH_MIX = 0;
 export const MAX_WAH_MIX = 100;
+const DEFAULT_WAH_MIX = 50;
+
+export const MIN_WAH_DELAY = 0;
+export const MAX_WAH_DELAY = 1;
+const DEFAULT_WAH_DELAY = 0;
+
+export const MIN_WAH_CUTOFF = 0;
+export const MAX_WAH_CUTOFF = 24000;
+const DEFAULT_WAH_CUTOFF = 0;
+
+export const MIN_WAH_SPEED = 0;
+export const MAX_WAH_SPEED = 10;
+const DEFAULT_WAH_SPEED = 5;
+
+export const MIN_WAH_DEPTH = 0;
+export const MAX_WAH_DEPTH = 1000000;
+const DEFAULT_WAH_DEPTH = 1000000;
 
 export enum WahTypes {
 	tremolo = "tremolo",
@@ -20,7 +37,7 @@ export default class WahEffect extends AudioEffect {
 	private dryGain: GainNode;
 	private _type: WahTypes = WahTypes.tremolo;
 	private _delay: number = 0;
-	private _mix: number = 50;
+	private _mix: number = DEFAULT_WAH_MIX;
 
 	constructor(ctx: AudioContext) {
 		super();
@@ -42,7 +59,14 @@ export default class WahEffect extends AudioEffect {
 		this.filter.connect(this.wetGain);
 		this.wetGain.connect(this.exitNode);
 
+		this.mix = DEFAULT_WAH_MIX;
+		this.delay = DEFAULT_WAH_DELAY;
+		this.cutoff = DEFAULT_WAH_CUTOFF;
+		this.speed = DEFAULT_WAH_SPEED;
+		this.depth = DEFAULT_WAH_DEPTH;
+
 		this.lfo.connect(this.filter.frequency);
+		// this.lfo.connect(this.wetGain.gain);
 	}
 
 	set type(t: WahTypes) {
@@ -51,6 +75,8 @@ export default class WahEffect extends AudioEffect {
 
 		if (this._type == WahTypes.auto) this.lfo.disabled = false;
 		else this.lfo.disabled = true;
+
+		this._type = t;
 	}
 
 	get type(): WahTypes {
@@ -60,6 +86,9 @@ export default class WahEffect extends AudioEffect {
 	set cutoff(f: number) {
 		if (this.disabled) return;
 
+		if (f > MAX_WAH_CUTOFF) this.cutoff = MAX_WAH_CUTOFF;
+		if (f < MIN_WAH_CUTOFF) this.cutoff = MIN_WAH_CUTOFF;
+
 		this.filter.frequency.value = f;
 	}
 
@@ -68,8 +97,11 @@ export default class WahEffect extends AudioEffect {
 	}
 
 	set speed(s: number) {
-		if (this.disabled) return;
-		if (this.type == WahTypes.tremolo) return;
+		// if (this.disabled) return;
+		// if (this.type == WahTypes.tremolo) return;
+
+		// if (s > MAX_WAH_SPEED) this.cutoff = MAX_WAH_SPEED;
+		// if (s < MIN_WAH_SPEED) this.speed = MIN_WAH_SPEED;
 
 		this.lfo.frequency = s;
 	}
@@ -79,8 +111,11 @@ export default class WahEffect extends AudioEffect {
 	}
 
 	set depth(d: number) {
-		if (this.disabled) return;
-		if (this.type == WahTypes.tremolo) return;
+		// if (this.disabled) return;
+		// if (this.type == WahTypes.tremolo) return;
+
+		// if (d > MAX_WAH_DEPTH) this.cutoff = MAX_WAH_DEPTH;
+		// if (d < MIN_WAH_DEPTH) this.cutoff = MIN_WAH_DEPTH;
 
 		this.lfo.amplitude = d;
 	}
@@ -91,6 +126,9 @@ export default class WahEffect extends AudioEffect {
 
 	set delay(d: number) {
 		if (this.disabled) return;
+
+		if (d > MAX_WAH_DELAY) this.cutoff = MAX_WAH_DELAY;
+		if (d < MIN_WAH_DELAY) this.cutoff = MIN_WAH_DELAY;
 
 		this.delayNode.delayTime.value = d;
 		this._delay = d;
