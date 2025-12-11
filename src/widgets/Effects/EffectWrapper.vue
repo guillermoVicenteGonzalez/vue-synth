@@ -32,6 +32,11 @@
 			v-if="effectType == 'ReverbEffect'"
 			v-model="effect as ReverbEffect"
 		></ReverbEffectWidget>
+
+		<DistortionEffectWidget
+			v-if="effectType == 'DistortionEffect'"
+			v-model="effect as DistortionEffect"
+		></DistortionEffectWidget>
 	</div>
 </template>
 
@@ -40,6 +45,7 @@ import { AudioEffect } from "@/models/effects/AudioEffect";
 import ChorusEffect from "@/models/effects/ChorusEffect";
 import { CompressionEffect } from "@/models/effects/CompressionEffect";
 import DelayEffect from "@/models/effects/DelayEffect";
+import DistortionEffect from "@/models/effects/DistortionEffect";
 import { FilterEffect } from "@/models/effects/FilterEffect";
 import { FlangerEffect } from "@/models/effects/FlangerEffect";
 import { ReverbEffect } from "@/models/effects/ReverbEffect";
@@ -47,6 +53,7 @@ import { computed } from "vue";
 import ChorusEffectWidget from "./ChorusEffectWidget.vue";
 import CompressionEffectWidget from "./CompressionEffectWidget.vue";
 import DelayEffectWidget from "./DelayEffectWidget.vue";
+import DistortionEffectWidget from "./DistortionEffect/DistortionEffectWidget.vue";
 import FilterEffectWidget from "./FilterEffectWidget.vue";
 import FlangerEffectWidget from "./FlangerEffectWidget.vue";
 import ReverbEffectWidget from "./ReverbEffectWidget.vue";
@@ -65,6 +72,8 @@ const effectType = computed(() => {
 	if (effect.value instanceof ChorusEffect) return "ChorusEffect";
 
 	if (effect.value instanceof ReverbEffect) return "ReverbEffect";
+
+	if (effect.value instanceof DistortionEffect) return "DistortionEffect";
 	return "unknown";
 });
 

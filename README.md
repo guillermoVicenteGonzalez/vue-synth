@@ -5,13 +5,12 @@
 ### Features
 
 - [-] Piano widget
-  - [ ] Visuals
+  - [x] Visuals
   - [x] Key functionality
     - [x] Natural keys
     - [x] Altered keys
     - [x] Change central note
 - [ ] Audio module effects
-  - [ ] Wave distortion => wave shaper
   - [x] Voices => possibly wave shaper?? or just a number to clone oscs
     - [x] Voice detuning
 - [ ] Global effects
@@ -25,7 +24,7 @@
   - [ ] Reset button for filters
   - [x] Chorus
   - [x] Compression
-  - [ ] Distortion
+  - [x] Distortion
   - [x] LFO's
   - [x] Flanger?
   - [ ] Phaser
