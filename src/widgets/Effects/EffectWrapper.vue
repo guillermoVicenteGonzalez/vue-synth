@@ -53,7 +53,7 @@ import { computed } from "vue";
 import ChorusEffectWidget from "./ChorusEffectWidget.vue";
 import CompressionEffectWidget from "./CompressionEffectWidget.vue";
 import DelayEffectWidget from "./DelayEffectWidget.vue";
-import DistortionEffectWidget from "./DistortionEffectWidget.vue";
+import DistortionEffectWidget from "./DistortionEffect/DistortionEffectWidget.vue";
 import FilterEffectWidget from "./FilterEffectWidget.vue";
 import FlangerEffectWidget from "./FlangerEffectWidget.vue";
 import ReverbEffectWidget from "./ReverbEffectWidget.vue";

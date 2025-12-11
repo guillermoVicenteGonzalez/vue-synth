@@ -12,20 +12,27 @@ export enum DistortionFilterPositions {
 	none = "None",
 }
 
+export enum DistortionFilterTypes {
+	lowpass = "lowpass",
+	highpass = "highpass",
+	bandpass = "bandpass",
+	peaking = "peaking",
+}
+
 export const MAX_DISTORTION_MIX = 100;
 export const MIN_DISTORTION_MIX = 0;
 const DEFAULT_DISTORTION_MIX = 50;
 
-export const MAX_DISTORTION_CUTOFF = 24000;
+export const MAX_DISTORTION_CUTOFF = 1000;
 export const MIN_DISTORTION_CUTOFF = 0;
 
 export const MIN_DISTORTION_NBITS = 0;
 export const MAX_DISTORTION_NBITS = 16;
-const DEFAULT_NBNITS = 16;
+const DEFAULT_NBNITS = 8;
 
 export const MIN_DISTORTION_THRESHOLD = 0;
 export const MAX_DISTORTION_THRESHOLD = 1;
-const DEFAULT_DISTORTION_THRESHOLD = 1;
+const DEFAULT_DISTORTION_THRESHOLD = 0.1;
 
 /**
  * If filter option is pre => input => filter => distortion => wetGain
@@ -48,6 +55,8 @@ export default class DistortionEffect extends AudioEffect {
 	private _mix: number = 50;
 	private _threshold: number = DEFAULT_DISTORTION_THRESHOLD;
 	private _nBits: number = DEFAULT_NBNITS;
+	private _drive: number = 1;
+	private _samplesNumber: number = 0;
 
 	constructor(ctx: AudioContext) {
 		super();
@@ -101,6 +110,14 @@ export default class DistortionEffect extends AudioEffect {
 
 	get cutoff() {
 		return this.distortionFilter.frequency.value;
+	}
+
+	set filterType(t: DistortionFilterTypes) {
+		this.distortionFilter.type = t as BiquadFilterType;
+	}
+
+	get filterType(): BiquadFilterType {
+		return this.distortionFilter.type;
 	}
 
 	set filterPosition(f: DistortionFilterPositions) {
@@ -163,11 +180,6 @@ export default class DistortionEffect extends AudioEffect {
 		return this._filterPos;
 	}
 
-	//filter type
-
-	//drive
-
-	//threshold (when clipping)
 	set threshold(t: number) {
 		if (t > MAX_DISTORTION_THRESHOLD) this.threshold = MAX_DISTORTION_THRESHOLD;
 		if (t < MIN_DISTORTION_THRESHOLD) this.threshold = MIN_DISTORTION_THRESHOLD;
@@ -205,6 +217,23 @@ export default class DistortionEffect extends AudioEffect {
 		return this._distortionType;
 	}
 
+	set drive(d: number) {
+		this._drive = d;
+		this.makeDistortionCurve();
+	}
+
+	get drive() {
+		return this._drive;
+	}
+
+	get distortionCurve(): Float32Array | null {
+		return this.distortionNode.curve;
+	}
+
+	get samplesNumber() {
+		return this._samplesNumber;
+	}
+
 	private makeDistortionCurve() {
 		switch (this.distortionType as DistortionTypes) {
 			case DistortionTypes.hardClip:
@@ -212,7 +241,7 @@ export default class DistortionEffect extends AudioEffect {
 				break;
 
 			case DistortionTypes.softClip:
-				this.distortionNode.curve = this.softClipDistortionCurve(400);
+				this.distortionNode.curve = this.softClipDistortionCurve();
 				break;
 
 			case DistortionTypes.bitcrush:
@@ -224,33 +253,13 @@ export default class DistortionEffect extends AudioEffect {
 		}
 	}
 
-	private softClip() {
-		const samplesNumber = this.context.sampleRate;
-		const curve = new Float32Array(samplesNumber);
-
-		for (let i = 0; i < samplesNumber; ++i) {
-			const x = i - Math.pow(i, 3) / 3;
-			if (x > 1) curve[i] = (Math.sign(x) * 2) / 3;
-			else curve[i] = x;
-		}
-
-		return curve;
-	}
-
-	private hiperbolicSoftClip() {
-		const samplesNumber = this.context.sampleRate;
-		const curve = new Float32Array(samplesNumber);
-
-		for (let i = 0; i < samplesNumber; ++i) {
-			curve[i] = Math.tanh(i);
-		}
-
-		return curve;
-	}
-
 	//gudermanian
-	private softClipDistortionCurve(amount: number) {
+	private softClipDistortionCurve() {
 		const samplesNumber = this.context.sampleRate;
+		this._samplesNumber = samplesNumber;
+
+		const default_amount = 10;
+		const amount = default_amount * this.drive;
 
 		const curve = new Float32Array(samplesNumber);
 
@@ -267,12 +276,15 @@ export default class DistortionEffect extends AudioEffect {
 	//hardClip
 	private hardClipDistortionCurve() {
 		// const samplesNumber = 100;
-		const samplesNumber = 100;
+		const samplesNumber = this.context.sampleRate;
+		this._samplesNumber = samplesNumber;
+
 		const curve = new Float32Array(samplesNumber);
 
 		for (let i = 0; i < samplesNumber; ++i) {
 			const x = (2 * i) / samplesNumber - 1;
-			if (Math.abs(x) > 1) curve[i] = this.threshold * Math.sign(x);
+			if (Math.abs(x) > this.threshold)
+				curve[i] = this.threshold * Math.sign(x);
 			else curve[i] = x;
 		}
 
@@ -282,6 +294,7 @@ export default class DistortionEffect extends AudioEffect {
 	//bitCrusher
 	private bitCrusherDistortionWave() {
 		const samplesNumber = 65536; //2¹⁶ ??
+		this._samplesNumber = samplesNumber;
 		const levelsNumber = Math.pow(2, this.nBits);
 
 		const curve = new Float32Array(samplesNumber);
