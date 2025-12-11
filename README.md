@@ -24,7 +24,7 @@
   - [ ] Reset button for filters
   - [x] Chorus
   - [x] Compression
-  - [ ] Distortion
+  - [x] Distortion
   - [x] LFO's
   - [x] Flanger?
   - [ ] Phaser

@@ -15,7 +15,7 @@ interface DistortionPlotterProps {
 const {
 	curve,
 	lineWidth = 2,
-	lineColor = "red",
+	lineColor = "#B90C4E",
 	filled = true,
 } = defineProps<DistortionPlotterProps>();
 const canvasRef = ref<HTMLCanvasElement>();

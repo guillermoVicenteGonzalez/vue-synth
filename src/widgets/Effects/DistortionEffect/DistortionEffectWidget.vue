@@ -35,6 +35,7 @@
 
 							<CircleSlider
 								v-model="distortion.cutoff"
+								:disabled="distortion.disabled"
 								:max="MAX_DISTORTION_CUTOFF"
 								:min="MIN_DISTORTION_CUTOFF"
 							></CircleSlider>
@@ -74,7 +75,10 @@
 
 						<div class="DistortionEffect__control">
 							<VsChip class="DistortionEffect__chip">Mix</VsChip>
-							<CircleSlider v-model="distortion.mix"></CircleSlider>
+							<CircleSlider
+								v-model="distortion.mix"
+								:disabled="distortion.disabled"
+							></CircleSlider>
 						</div>
 					</div>
 				</div>

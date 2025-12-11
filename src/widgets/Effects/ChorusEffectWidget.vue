@@ -6,6 +6,7 @@
 					<div class="ChorusEffect__control">
 						<VsChip class="ChorusEffect__chip">amount</VsChip>
 						<CircleSlider
+							:disabled="chorus.disabled"
 							v-model="chorus.amount"
 							class="ChorusEffect__circle-slider"
 							:fill-color="primaryColor"
@@ -19,6 +20,7 @@
 						<VsChip class="ChorusEffect__chip">rate</VsChip>
 
 						<CircleSlider
+							:disabled="chorus.disabled"
 							v-model="chorus.rate"
 							class="ChorusEffect__circle-slider"
 							:fill-color="primaryColor"
@@ -32,6 +34,7 @@
 						<VsChip class="ChorusEffect__chip">Delay 1</VsChip>
 
 						<CircleSlider
+							:disabled="chorus.disabled"
 							v-model="chorus.delay1"
 							class="ChorusEffect__circle-slider"
 							:fill-color="primaryColor"
@@ -45,6 +48,7 @@
 						<VsChip class="ChorusEffect__chip">Delay 2</VsChip>
 
 						<CircleSlider
+							:disabled="chorus.disabled"
 							v-model="chorus.delay2"
 							class="ChorusEffect__circle-slider"
 							:fill-color="primaryColor"
@@ -58,6 +62,7 @@
 						<VsChip class="ChorusEffect__chip">MIX</VsChip>
 
 						<CircleSlider
+							:disabled="chorus.disabled"
 							v-model="chorus.mix"
 							class="ChorusEffect__circle-slider"
 							:fill-color="primaryColor"
@@ -70,6 +75,7 @@
 					<div class="ChorusEffect__control">
 						<VsChip class="ChorusEffect__chip">voices</VsChip>
 						<CircleSlider
+							:disabled="chorus.disabled"
 							v-model="chorus.voices"
 							class="ChorusEffect__circle-slider"
 							:fill-color="primaryColor"
@@ -82,6 +88,7 @@
 						<VsChip class="ChorusEffect__chip">Feedback delay</VsChip>
 
 						<CircleSlider
+							:disabled="chorus.disabled"
 							v-model="chorus.feedbackDelay"
 							class="ChorusEffect__circle-slider"
 							:fill-color="primaryColor"
@@ -95,6 +102,7 @@
 						<VsChip class="ChorusEffect__chip">Feedback</VsChip>
 
 						<CircleSlider
+							:disabled="chorus.disabled"
 							v-model="chorus.feedback"
 							class="ChorusEffect__circle-slider"
 							:fill-color="primaryColor"
@@ -113,6 +121,7 @@
 							:items="filterTypes"
 						></VsSelector>
 						<CircleSlider
+							:disabled="chorus.disabled"
 							v-model="chorus.filterCuttof"
 							class="ChorusEffect__circle-slider"
 							:fill-color="primaryColor"

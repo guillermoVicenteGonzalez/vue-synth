@@ -219,6 +219,7 @@ function initializeEffects() {
 	delay.disabled = true;
 	chorus.disabled = true;
 	reverb.disabled = true;
+	distortion.disabled = true;
 
 	MainAudioCluster.value.effects.append(distortion);
 	MainAudioCluster.value.effects.append(flanger);
