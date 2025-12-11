@@ -10,6 +10,7 @@
 					<div class="WahEffect__control">
 						<VsChip>Speed</VsChip>
 						<CircleSlider
+							:step="0.1"
 							v-model="wah.speed"
 							:min="MIN_WAH_SPEED"
 							:max="MAX_WAH_SPEED"

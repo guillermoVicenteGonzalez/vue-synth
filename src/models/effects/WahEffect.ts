@@ -1,12 +1,15 @@
 import { LFO } from "../LFO";
 import { AudioEffect } from "./AudioEffect";
 
+//Tremolo => actual auto
+// auto ==> attack con set target at time, release etc.
+
 export const MIN_WAH_MIX = 0;
 export const MAX_WAH_MIX = 100;
 const DEFAULT_WAH_MIX = 50;
 
 export const MIN_WAH_DELAY = 0;
-export const MAX_WAH_DELAY = 1;
+export const MAX_WAH_DELAY = 0.3;
 const DEFAULT_WAH_DELAY = 0;
 
 export const MIN_WAH_CUTOFF = 0;
@@ -18,8 +21,8 @@ export const MAX_WAH_SPEED = 10;
 const DEFAULT_WAH_SPEED = 5;
 
 export const MIN_WAH_DEPTH = 0;
-export const MAX_WAH_DEPTH = 1000000;
-const DEFAULT_WAH_DEPTH = 1000000;
+export const MAX_WAH_DEPTH = 10000;
+const DEFAULT_WAH_DEPTH = 500;
 
 export enum WahTypes {
 	tremolo = "tremolo",
@@ -48,6 +51,7 @@ export default class WahEffect extends AudioEffect {
 		this.inputNode = ctx.createGain();
 		this.exitNode = ctx.createGain();
 		this.lfo = new LFO(ctx);
+		this.lfo.disabled = true;
 
 		this.filter.type = "bandpass";
 
@@ -73,10 +77,10 @@ export default class WahEffect extends AudioEffect {
 		if (this.disabled) return;
 		if (t == this._type) return;
 
+		this._type = t;
+
 		if (this._type == WahTypes.auto) this.lfo.disabled = false;
 		else this.lfo.disabled = true;
-
-		this._type = t;
 	}
 
 	get type(): WahTypes {
@@ -155,13 +159,13 @@ export default class WahEffect extends AudioEffect {
 
 	protected onEnable(): void {
 		this.delayNode.delayTime.value = 0;
-		this.inputNode.disconnect(this.filter);
+		this.inputNode.connect(this.filter);
 		this.dryGain.gain.value = 1;
 	}
 
 	protected onDisable(): void {
 		this.delay = this.delay;
-		this.inputNode.connect(this.filter);
+		this.inputNode.disconnect(this.filter);
 		this.mix = this.mix;
 	}
 }
