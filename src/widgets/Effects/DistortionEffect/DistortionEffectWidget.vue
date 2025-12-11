@@ -121,7 +121,7 @@ const driveEnabled = computed<boolean>(
 );
 const thresholdEnabled = computed<boolean>(
 	() =>
-		distortion.value.distortionType != DistortionTypes.bitcrush &&
+		distortion.value.distortionType == DistortionTypes.hardClip &&
 		!distortion.value.disabled
 );
 </script>
