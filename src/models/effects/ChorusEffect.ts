@@ -280,6 +280,8 @@ export default class ChorusEffect extends AudioEffect {
 		try {
 			this.wetGain.disconnect(this.exitNode);
 			this.feedbackDelayNode.disconnect(this.inputNode);
+			this.wetGain.gain.value = 0;
+			this.dryGain.gain.value = 1;
 		} catch (err) {
 			console.error(err);
 		}
@@ -287,6 +289,7 @@ export default class ChorusEffect extends AudioEffect {
 
 	protected onEnable(): void {
 		try {
+			this.mix = this._mix;
 			this.wetGain.connect(this.exitNode);
 			this.feedbackDelayNode.connect(this.inputNode);
 		} catch (err) {

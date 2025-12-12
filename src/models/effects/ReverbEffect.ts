@@ -227,10 +227,21 @@ export class ReverbEffect extends AudioEffect {
 	}
 
 	protected onDisable(): void {
-		this.inputNode.disconnect(this.wetGainNode);
+		try {
+			this.dryGainNode.gain.value = 1;
+			this.wetGainNode.gain.value = 0;
+			this.inputNode.disconnect(this.wetGainNode);
+		} catch (err) {
+			console.error(err);
+		}
 	}
 
 	protected onEnable(): void {
-		this.inputNode.connect(this.wetGainNode);
+		try {
+			this.mix = this._mix;
+			this.inputNode.connect(this.wetGainNode);
+		} catch (err) {
+			console.error(err);
+		}
 	}
 }
