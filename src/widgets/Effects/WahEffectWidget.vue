@@ -4,14 +4,19 @@
 			<div class="WahEffect__body">
 				<div class="WahEffect__controls">
 					<VsSelector
-						:items="Object.values(WahTypes)"
 						v-model="wah.type"
+						:items="Object.values(WahTypes)"
+					></VsSelector>
+					<VsSelector
+						:items="Object.values(waveForms)"
+						v-model="wah.lfoForm"
 					></VsSelector>
 					<div class="WahEffect__control">
 						<VsChip>Speed</VsChip>
 						<CircleSlider
-							:step="0.1"
+							:disabled="isSpeedDisabled"
 							v-model="wah.speed"
+							:step="0.1"
 							:min="MIN_WAH_SPEED"
 							:max="MAX_WAH_SPEED"
 						></CircleSlider>
@@ -19,6 +24,7 @@
 					<div class="WahEffect__control">
 						<VsChip>Depth</VsChip>
 						<CircleSlider
+							:disabled="isDepthDisabled"
 							v-model="wah.depth"
 							:min="MIN_WAH_DEPTH"
 							:max="MAX_WAH_DEPTH"
@@ -50,6 +56,10 @@
 						></CircleSlider>
 					</div>
 				</div>
+
+				<div class="WahEffect__visualization">
+					<WaveCanvas></WaveCanvas>
+				</div>
 			</div>
 		</template>
 	</EffectCard>
@@ -73,9 +83,18 @@ import WahEffect, {
 } from "@/models/effects/WahEffect";
 
 import VsSelector from "@/components/common/VsSelector/VsSelector.vue";
+import WaveCanvas from "@/components/waves/WaveCanvas/WaveCanvas.vue";
+import { waveForms } from "@/models/wave";
+import { computed } from "vue";
 import EffectCard from "./EffectCard.vue";
 
 const wah = defineModel<WahEffect>({ required: true });
+const isDepthDisabled = computed(
+	() => wah.value.disabled || wah.value.type == WahTypes.tremolo
+);
+const isSpeedDisabled = computed(
+	() => wah.value.disabled || wah.value.type == WahTypes.tremolo
+);
 </script>
 
 <style lang="scss" scoped>
