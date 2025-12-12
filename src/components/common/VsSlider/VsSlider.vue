@@ -86,6 +86,9 @@ $slider-min-length: 5rem;
 		--thumb-color: #{$primary-color};
 		--trail-color: #{$primary-color};
 
+		display: block;
+		min-width: 0;
+
 		box-sizing: inherit;
 
 		// webkit overrides
@@ -152,19 +155,27 @@ $slider-min-length: 5rem;
 		// color: v-bind(labelColor);
 		color: $text-color;
 		text-align: center;
-		margin-left: $gap-df;
 	}
 
 	&--vertical {
 		flex-direction: column;
 		height: 100%;
-		width: $slider-width;
+		max-height: 100%;
+		width: fit-content;
+
+		justify-content: center;
+		align-items: center;
+		gap: $gap-df;
 
 		.slider__input {
-			max-height: 100%;
-			height: 100%;
+			// max-height: 100%;
+			// height: 100%;
 			writing-mode: vertical-lr;
 			direction: rtl;
+			flex: 1;
+			height: fit-content;
+			min-height: 0;
+			width: $slider-width;
 
 			&::-moz-range-track {
 				height: 100%;
@@ -183,6 +194,10 @@ $slider-min-length: 5rem;
 			&::-webkit-slider-thumb {
 				box-shadow: 0 407px 0 400px var(--trail-color);
 			}
+		}
+
+		.slider__label {
+			// background-color: blue;
 		}
 	}
 

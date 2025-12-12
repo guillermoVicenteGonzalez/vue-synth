@@ -42,6 +42,11 @@
 			v-if="effectType == 'WahEffect'"
 			v-model="effect as WahEffect"
 		></WahEffectWidget>
+
+		<EqualizerWidget
+			v-if="effectType == 'Equalizer'"
+			v-model="effect as Equalizer"
+		></EqualizerWidget>
 	</div>
 </template>
 
@@ -51,6 +56,7 @@ import ChorusEffect from "@/models/effects/ChorusEffect";
 import { CompressionEffect } from "@/models/effects/CompressionEffect";
 import DelayEffect from "@/models/effects/DelayEffect";
 import DistortionEffect from "@/models/effects/DistortionEffect";
+import Equalizer from "@/models/effects/EqualizerEffect";
 import { FilterEffect } from "@/models/effects/FilterEffect";
 import { FlangerEffect } from "@/models/effects/FlangerEffect";
 import { ReverbEffect } from "@/models/effects/ReverbEffect";
@@ -60,6 +66,7 @@ import ChorusEffectWidget from "./ChorusEffectWidget.vue";
 import CompressionEffectWidget from "./CompressionEffectWidget.vue";
 import DelayEffectWidget from "./DelayEffectWidget.vue";
 import DistortionEffectWidget from "./DistortionEffect/DistortionEffectWidget.vue";
+import EqualizerWidget from "./EqualizerWidget.vue";
 import FilterEffectWidget from "./FilterEffectWidget.vue";
 import FlangerEffectWidget from "./FlangerEffectWidget.vue";
 import ReverbEffectWidget from "./ReverbEffectWidget.vue";
@@ -83,6 +90,9 @@ const effectType = computed(() => {
 	if (effect.value instanceof DistortionEffect) return "DistortionEffect";
 
 	if (effect.value instanceof WahEffect) return "WahEffect";
+
+	if (effect.value instanceof Equalizer) return "Equalizer";
+
 	return "unknown";
 });
 
