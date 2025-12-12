@@ -1,4 +1,7 @@
+import type { AudioEnvelope } from "../AudioEnvelope";
 import { LFO } from "../LFO";
+import type Wave from "../wave";
+import type { waveForms } from "../wave";
 import { AudioEffect } from "./AudioEffect";
 
 //Tremolo => actual auto
@@ -9,20 +12,20 @@ export const MAX_WAH_MIX = 100;
 const DEFAULT_WAH_MIX = 50;
 
 export const MIN_WAH_DELAY = 0;
-export const MAX_WAH_DELAY = 0.3;
+export const MAX_WAH_DELAY = 0.2;
 const DEFAULT_WAH_DELAY = 0;
 
 export const MIN_WAH_CUTOFF = 0;
 export const MAX_WAH_CUTOFF = 24000;
-const DEFAULT_WAH_CUTOFF = 0;
+const DEFAULT_WAH_CUTOFF = 2000;
 
 export const MIN_WAH_SPEED = 0;
 export const MAX_WAH_SPEED = 10;
-const DEFAULT_WAH_SPEED = 5;
+const DEFAULT_WAH_SPEED = 1;
 
 export const MIN_WAH_DEPTH = 0;
 export const MAX_WAH_DEPTH = 10000;
-const DEFAULT_WAH_DEPTH = 500;
+const DEFAULT_WAH_DEPTH = 2000;
 
 export enum WahTypes {
 	tremolo = "tremolo",
@@ -41,6 +44,12 @@ export default class WahEffect extends AudioEffect {
 	private _type: WahTypes = WahTypes.tremolo;
 	private _delay: number = 0;
 	private _mix: number = DEFAULT_WAH_MIX;
+	public wahEnvelope: AudioEnvelope = {
+		attack: 1,
+		decay: 1,
+		release: 1,
+		sustain: 1,
+	};
 
 	constructor(ctx: AudioContext) {
 		super();
@@ -70,6 +79,7 @@ export default class WahEffect extends AudioEffect {
 		this.depth = DEFAULT_WAH_DEPTH;
 
 		this.lfo.connect(this.filter.frequency);
+		this.type = WahTypes.auto;
 		// this.lfo.connect(this.wetGain.gain);
 	}
 
@@ -101,11 +111,10 @@ export default class WahEffect extends AudioEffect {
 	}
 
 	set speed(s: number) {
-		// if (this.disabled) return;
-		// if (this.type == WahTypes.tremolo) return;
+		if (this.disabled) return;
 
-		// if (s > MAX_WAH_SPEED) this.cutoff = MAX_WAH_SPEED;
-		// if (s < MIN_WAH_SPEED) this.speed = MIN_WAH_SPEED;
+		if (s > MAX_WAH_SPEED) this.cutoff = MAX_WAH_SPEED;
+		if (s < MIN_WAH_SPEED) this.speed = MIN_WAH_SPEED;
 
 		this.lfo.frequency = s;
 	}
@@ -115,11 +124,10 @@ export default class WahEffect extends AudioEffect {
 	}
 
 	set depth(d: number) {
-		// if (this.disabled) return;
-		// if (this.type == WahTypes.tremolo) return;
+		if (this.disabled) return;
 
-		// if (d > MAX_WAH_DEPTH) this.cutoff = MAX_WAH_DEPTH;
-		// if (d < MIN_WAH_DEPTH) this.cutoff = MIN_WAH_DEPTH;
+		if (d > MAX_WAH_DEPTH) this.cutoff = MAX_WAH_DEPTH;
+		if (d < MIN_WAH_DEPTH) this.cutoff = MIN_WAH_DEPTH;
 
 		this.lfo.amplitude = d;
 	}
@@ -142,6 +150,14 @@ export default class WahEffect extends AudioEffect {
 		return this._delay;
 	}
 
+	set lfoForm(f: waveForms) {
+		this.lfo.wave.form = f;
+	}
+
+	get lfoForm() {
+		return this.lfo.wave.form;
+	}
+
 	set mix(m: number) {
 		if (this.disabled) return;
 
@@ -155,6 +171,10 @@ export default class WahEffect extends AudioEffect {
 
 	get mix(): number {
 		return this._mix;
+	}
+
+	get lfoWave(): Wave {
+		return this.lfo.wave;
 	}
 
 	protected onEnable(): void {

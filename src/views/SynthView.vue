@@ -222,6 +222,7 @@ function initializeEffects() {
 	chorus.disabled = true;
 	reverb.disabled = true;
 	distortion.disabled = true;
+	wah.disabled = true;
 
 	MainAudioCluster.value.effects.append(wah);
 	MainAudioCluster.value.effects.append(distortion);
