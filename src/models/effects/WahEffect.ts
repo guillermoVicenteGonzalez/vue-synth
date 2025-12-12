@@ -1,5 +1,6 @@
 import type { AudioEnvelope } from "../AudioEnvelope";
 import { LFO } from "../LFO";
+import type Wave from "../wave";
 import type { waveForms } from "../wave";
 import { AudioEffect } from "./AudioEffect";
 
@@ -11,7 +12,7 @@ export const MAX_WAH_MIX = 100;
 const DEFAULT_WAH_MIX = 50;
 
 export const MIN_WAH_DELAY = 0;
-export const MAX_WAH_DELAY = 0.3;
+export const MAX_WAH_DELAY = 0.2;
 const DEFAULT_WAH_DELAY = 0;
 
 export const MIN_WAH_CUTOFF = 0;
@@ -78,6 +79,7 @@ export default class WahEffect extends AudioEffect {
 		this.depth = DEFAULT_WAH_DEPTH;
 
 		this.lfo.connect(this.filter.frequency);
+		this.type = WahTypes.auto;
 		// this.lfo.connect(this.wetGain.gain);
 	}
 
@@ -169,6 +171,10 @@ export default class WahEffect extends AudioEffect {
 
 	get mix(): number {
 		return this._mix;
+	}
+
+	get lfoWave(): Wave {
+		return this.lfo.wave;
 	}
 
 	protected onEnable(): void {
