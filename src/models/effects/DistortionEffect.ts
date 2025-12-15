@@ -25,6 +25,7 @@ const DEFAULT_DISTORTION_MIX = 50;
 
 export const MAX_DISTORTION_CUTOFF = 1000;
 export const MIN_DISTORTION_CUTOFF = 0;
+const DEFAULT_DISTORTION_CUTOFF = 350;
 
 export const MIN_DISTORTION_NBITS = 0;
 export const MAX_DISTORTION_NBITS = 16;
@@ -33,6 +34,10 @@ const DEFAULT_NBNITS = 8;
 export const MIN_DISTORTION_THRESHOLD = 0;
 export const MAX_DISTORTION_THRESHOLD = 1;
 const DEFAULT_DISTORTION_THRESHOLD = 0.1;
+
+const DEFAULT_DISTORTION_DRIVE = 1;
+const DEFAULT_DISTORTION_TYPE = DistortionTypes.hardClip;
+const DEFAULT_DISTORTION_FILTER_POSITION = DistortionFilterPositions.none;
 
 /**
  * If filter option is pre => input => filter => distortion => wetGain
@@ -315,5 +320,15 @@ export default class DistortionEffect extends AudioEffect {
 	protected onEnable(): void {
 		this.wetGain.connect(this.exitNode);
 		this.mix = this.mix;
+	}
+
+	protected resetEffect(): void {
+		this._distortionType = DEFAULT_DISTORTION_TYPE;
+		this._filterPos = DEFAULT_DISTORTION_FILTER_POSITION;
+		this.drive = DEFAULT_DISTORTION_DRIVE;
+		this.cutoff = DEFAULT_DISTORTION_CUTOFF;
+		this.threshold = DEFAULT_DISTORTION_THRESHOLD;
+		this.mix = DEFAULT_DISTORTION_MIX;
+		this.nBits = DEFAULT_NBNITS;
 	}
 }

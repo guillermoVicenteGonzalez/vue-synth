@@ -139,4 +139,13 @@ export default class Equalizer extends AudioEffect {
 			console.error(err);
 		}
 	}
+
+	resetEffect() {
+		this.lowGain =
+			this.midLowGain =
+			this.midGain =
+			this.midHighGain =
+			this.highGain =
+				DEFAULT_EQUALIZER_GAIN;
+	}
 }

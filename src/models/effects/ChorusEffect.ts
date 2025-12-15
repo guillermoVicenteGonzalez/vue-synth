@@ -296,4 +296,14 @@ export default class ChorusEffect extends AudioEffect {
 			console.error(err);
 		}
 	}
+
+	protected resetEffect(): void {
+		this.voices = DEFAULT_VOICES;
+		this.rate = DEFAULT_RATE;
+		this.amount = DEFAULT_AMOUNT;
+		this.delay1 = DEFAULT_DELAY_1;
+		this.delay2 = DEFAULT_DELAY_2;
+		this.feedback = DEFAULT_FEEDBACK;
+		this.feedbackDelay = DEFAULT_FEEDBACK_DELAY;
+	}
 }

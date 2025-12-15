@@ -50,4 +50,8 @@ export class FilterEffect extends AudioEffect {
 		this.exitNode.type = this.internalType;
 		this.exitNode.frequency.value = this.internalFrequency;
 	}
+
+	protected resetEffect(): void {
+		this.frequency = 0;
+	}
 }

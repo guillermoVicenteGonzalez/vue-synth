@@ -28,10 +28,10 @@
   - [x] LFO's
   - [x] Flanger?
   - [ ] Phaser
-  - [ ] EQUALIZER !!!!
+  - [x] EQUALIZER !!!!
   - [x] Delay
   - [x] Reverb
-  - [ ] Wha wha
+  - [x] Wha wha
 - [ ] Controls
   - [x] Writable module freqs
   - [x] Module Freq reset to 440

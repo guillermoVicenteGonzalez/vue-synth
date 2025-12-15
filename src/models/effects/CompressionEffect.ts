@@ -5,6 +5,11 @@ const MAX_RATIO = 20;
 const MAX_KNEE = 40;
 const MAX_THRESHOLD = 0;
 
+const DEFAULT_COMPRESSION_ATTACK = 0.003;
+const DEFAULT_COMPRESSION_THRESHOLD = -24;
+const DEFAULT_COMPRESSION_KNEE = 30;
+const DEFAULT_COMPRESSION_RATIO = 12.0;
+
 export class CompressionEffect extends AudioEffect {
 	declare exitNode: DynamicsCompressorNode;
 	declare inputNude: DynamicsCompressorNode;
@@ -89,5 +94,12 @@ export class CompressionEffect extends AudioEffect {
 		this.knee = this.localKnee;
 		this.ratio = this.localRatio;
 		this.threshold = this.localThreshold;
+	}
+
+	protected resetEffect(): void {
+		this.threshold = DEFAULT_COMPRESSION_THRESHOLD;
+		this.attack = DEFAULT_COMPRESSION_ATTACK;
+		this.knee = DEFAULT_COMPRESSION_KNEE;
+		this.ratio = DEFAULT_COMPRESSION_RATIO;
 	}
 }
