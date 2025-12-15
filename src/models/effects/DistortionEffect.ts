@@ -322,7 +322,7 @@ export default class DistortionEffect extends AudioEffect {
 		this.mix = this.mix;
 	}
 
-	protected resetEffect(): void {
+	resetEffect(): void {
 		this._distortionType = DEFAULT_DISTORTION_TYPE;
 		this._filterPos = DEFAULT_DISTORTION_FILTER_POSITION;
 		this.drive = DEFAULT_DISTORTION_DRIVE;

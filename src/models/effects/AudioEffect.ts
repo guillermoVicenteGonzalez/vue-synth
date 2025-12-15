@@ -42,7 +42,7 @@ export abstract class AudioEffect {
 
 	protected abstract onEnable(): void;
 
-	protected abstract resetEffect(): void;
+	public abstract resetEffect(): void;
 }
 
 export class MonoNodeEffect<T extends AudioNode> extends AudioEffect {
@@ -57,5 +57,5 @@ export class MonoNodeEffect<T extends AudioNode> extends AudioEffect {
 
 	declare protected onEnable: () => void;
 	declare protected onDisable: () => void;
-	declare protected resetEffect: () => void;
+	declare public resetEffect: () => void;
 }

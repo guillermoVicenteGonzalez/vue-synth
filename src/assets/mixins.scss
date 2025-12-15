@@ -56,3 +56,21 @@
 	height: 100%;
 	margin: auto;
 }
+
+@mixin contextMenu {
+	padding: 1rem 0;
+	overflow: hidden;
+
+	ul {
+		list-style: none;
+
+		li {
+			font-size: 1.6rem;
+			padding: 0.5rem 2rem;
+			&:hover {
+				cursor: pointer;
+				background-color: $primary-color;
+			}
+		}
+	}
+}

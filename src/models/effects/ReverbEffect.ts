@@ -248,7 +248,7 @@ export class ReverbEffect extends AudioEffect {
 		}
 	}
 
-	protected resetEffect(): void {
+	resetEffect(): void {
 		this.roomSize = DEFAULT_ROOM_SIZE;
 		this.dampening = DEFAULT_DAMPENING;
 		this.preDelay = DEFAULT_DELAY;

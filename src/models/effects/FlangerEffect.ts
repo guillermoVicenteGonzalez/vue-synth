@@ -122,7 +122,7 @@ export class FlangerEffect extends AudioEffect {
 		return this.delayNode;
 	}
 
-	protected resetEffect(): void {
+	resetEffect(): void {
 		this.feedback = DEFAULT_FLANGER_FEEDBACK;
 		this.depth = DEFAULT_FLANGER_DEPTH;
 		this.speed = DEFAULT_FLANGER_SPEED;

@@ -72,6 +72,14 @@
 				</div>
 			</div>
 		</template>
+
+		<template #context-menu>
+			<div class="CompressionEffect__context-menu">
+				<ul>
+					<li @click="compression.resetEffect()">Reset effect</li>
+				</ul>
+			</div>
+		</template>
 	</EffectCard>
 </template>
 
@@ -158,6 +166,10 @@ $handle-width: 4rem;
 
 	&__circle-slider {
 		color: $text-color;
+	}
+
+	&__context-menu {
+		@include contextMenu;
 	}
 }
 </style>

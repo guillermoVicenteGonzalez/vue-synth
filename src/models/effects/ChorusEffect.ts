@@ -297,7 +297,7 @@ export default class ChorusEffect extends AudioEffect {
 		}
 	}
 
-	protected resetEffect(): void {
+	resetEffect(): void {
 		this.voices = DEFAULT_VOICES;
 		this.rate = DEFAULT_RATE;
 		this.amount = DEFAULT_AMOUNT;

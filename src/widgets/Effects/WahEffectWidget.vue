@@ -27,8 +27,8 @@
 					<div class="WahEffect__control">
 						<VsChip class="WahEffect__chip">Cutoff</VsChip>
 						<CircleSlider
-							:disabled="wah.disabled"
 							v-model="wah.cutoff"
+							:disabled="wah.disabled"
 							class="WahEffect__slider"
 							:min="MIN_WAH_CUTOFF"
 							:max="MAX_WAH_CUTOFF"
@@ -37,8 +37,8 @@
 					<div class="WahEffect__control">
 						<VsChip class="WahEffect__chip">Delay</VsChip>
 						<CircleSlider
-							:disabled="wah.disabled"
 							v-model="wah.delay"
+							:disabled="wah.disabled"
 							class="WahEffect__slider"
 							:min="MIN_WAH_DELAY"
 							:max="MAX_WAH_DELAY"
@@ -48,8 +48,8 @@
 					<div class="WahEffect__control">
 						<VsChip class="WahEffect__chip">Mix</VsChip>
 						<CircleSlider
-							:disabled="wah.disabled"
 							v-model="wah.mix"
+							:disabled="wah.disabled"
 							class="WahEffect__slider"
 							:min="MIN_WAH_MIX"
 							:max="MAX_WAH_MIX"
@@ -79,6 +79,14 @@
 						></WaveCanvas>
 					</div>
 				</div>
+			</div>
+		</template>
+
+		<template #context-menu>
+			<div class="WahEffect__context-menu">
+				<ul>
+					<li @click="wah.resetEffect()">Reset effect</li>
+				</ul>
 			</div>
 		</template>
 	</EffectCard>
@@ -176,6 +184,10 @@ const isSpeedDisabled = computed(
 
 	&__slider {
 		color: $text-color;
+	}
+
+	&__context-menu {
+		@include contextMenu;
 	}
 }
 </style>

@@ -80,6 +80,14 @@
 				</div>
 			</div>
 		</template>
+
+		<template #context-menu>
+			<div class="FlangerEffect__context-menu">
+				<ul>
+					<li @click="flanger.resetEffect()">Reset effect</li>
+				</ul>
+			</div>
+		</template>
 	</EffectCard>
 </template>
 
@@ -194,6 +202,10 @@ $max-wave-width: 10rem;
 		&__toggle-btn {
 			// flex: 1 1 100%;
 		}
+	}
+
+	&__context-menu {
+		@include contextMenu;
 	}
 }
 </style>

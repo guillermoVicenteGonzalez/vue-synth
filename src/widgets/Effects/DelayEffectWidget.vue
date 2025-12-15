@@ -46,6 +46,14 @@
 				</div>
 			</div>
 		</template>
+
+		<template #context-menu>
+			<div class="DelayEffect__context-menu">
+				<ul>
+					<li @click="delayEffect.resetEffect()">Reset effect</li>
+				</ul>
+			</div>
+		</template>
 	</EffectCard>
 </template>
 
@@ -108,6 +116,10 @@ const delayEffect = defineModel<DelayEffect>({ required: true });
 		width: 100%;
 		font-size: 1.6rem;
 		text-align: center;
+	}
+
+	&__context-menu {
+		@include contextMenu;
 	}
 }
 </style>

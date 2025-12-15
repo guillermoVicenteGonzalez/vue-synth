@@ -191,7 +191,7 @@ export default class WahEffect extends AudioEffect {
 		this.mix = this.mix;
 	}
 
-	protected resetEffect(): void {
+	resetEffect(): void {
 		this.speed = DEFAULT_WAH_SPEED;
 		this.depth = DEFAULT_WAH_SPEED;
 		this.mix = DEFAULT_WAH_MIX;

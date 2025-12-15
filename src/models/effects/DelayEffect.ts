@@ -79,7 +79,7 @@ export default class DelayEffect extends AudioEffect {
 		this.inputNode.connect(this.delayNode);
 	}
 
-	protected resetEffect(): void {
+	resetEffect(): void {
 		this.feedback = DEFAULT_FEEDBACK;
 		this.gain = DEFAULT_DELAY_GAIN;
 		this.rate = DEFAULT_DELAY;

@@ -79,7 +79,7 @@ export class CombFilter extends AudioEffect {
 		}
 	}
 
-	protected resetEffect(): void {
+	resetEffect(): void {
 		this.resonance = DEFAULT_RESONANCE;
 	}
 }

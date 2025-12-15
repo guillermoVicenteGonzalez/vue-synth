@@ -252,6 +252,7 @@ function valueToPercentage(value: number, min: number = 0, max: number = 1) {
 }
 
 function handleRightClick(e: MouseEvent) {
+	if (disabled) return;
 	e.preventDefault();
 	contextMenuVisible.value = true;
 	valueInputVisible.value = false;

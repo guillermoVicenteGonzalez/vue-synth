@@ -96,7 +96,7 @@ export class CompressionEffect extends AudioEffect {
 		this.threshold = this.localThreshold;
 	}
 
-	protected resetEffect(): void {
+	resetEffect(): void {
 		this.threshold = DEFAULT_COMPRESSION_THRESHOLD;
 		this.attack = DEFAULT_COMPRESSION_ATTACK;
 		this.knee = DEFAULT_COMPRESSION_KNEE;
