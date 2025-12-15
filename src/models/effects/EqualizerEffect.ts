@@ -6,6 +6,10 @@ const MID_KEY_FREQ = 400;
 const MID_HIGH_KEY_FREQ = 800;
 const HIGH_KEY_FREQ = 1600;
 
+export const EQUALIZER_MIN_GAIN = -40;
+export const EQUALIZER_MAX_GAIN = 0;
+const DEFAULT_EQUALIZER_GAIN = 0;
+
 export default class Equalizer extends AudioEffect {
 	declare inputNode: AudioNode;
 	declare exitNode: AudioNode;
@@ -51,9 +55,20 @@ export default class Equalizer extends AudioEffect {
 		this.midLowFilter.connect(this.midFilter);
 		this.midFilter.connect(this.midHighFilter);
 		this.midHighFilter.connect(this.highFilter);
+		this.highFilter.connect(this.exitNode);
+
+		this.lowGain =
+			this.midLowGain =
+			this.midGain =
+			this.midHighGain =
+			this.highGain =
+				DEFAULT_EQUALIZER_GAIN;
 	}
 
 	set lowGain(g: number) {
+		if (g < EQUALIZER_MIN_GAIN) this.lowGain = EQUALIZER_MIN_GAIN;
+		if (g > EQUALIZER_MAX_GAIN) this.lowGain = EQUALIZER_MAX_GAIN;
+
 		this.lowFilter.gain.value = g;
 	}
 
@@ -62,6 +77,9 @@ export default class Equalizer extends AudioEffect {
 	}
 
 	set midLowGain(g: number) {
+		if (g < EQUALIZER_MIN_GAIN) this.midLowGain = EQUALIZER_MIN_GAIN;
+		if (g > EQUALIZER_MAX_GAIN) this.midLowGain = EQUALIZER_MAX_GAIN;
+
 		this.midLowFilter.gain.value = g;
 	}
 
@@ -70,6 +88,9 @@ export default class Equalizer extends AudioEffect {
 	}
 
 	set midGain(g: number) {
+		if (g < EQUALIZER_MIN_GAIN) this.midGain = EQUALIZER_MIN_GAIN;
+		if (g > EQUALIZER_MAX_GAIN) this.midGain = EQUALIZER_MAX_GAIN;
+
 		this.midFilter.gain.value = g;
 	}
 
@@ -78,6 +99,9 @@ export default class Equalizer extends AudioEffect {
 	}
 
 	set midHighGain(g: number) {
+		if (g < EQUALIZER_MIN_GAIN) this.midHighGain = EQUALIZER_MIN_GAIN;
+		if (g > EQUALIZER_MAX_GAIN) this.midHighGain = EQUALIZER_MAX_GAIN;
+
 		this.midHighFilter.gain.value = g;
 	}
 
@@ -86,6 +110,9 @@ export default class Equalizer extends AudioEffect {
 	}
 
 	set highGain(g: number) {
+		if (g < EQUALIZER_MIN_GAIN) this.highGain = EQUALIZER_MIN_GAIN;
+		if (g > EQUALIZER_MAX_GAIN) this.highGain = EQUALIZER_MAX_GAIN;
+
 		this.highFilter.gain.value = g;
 	}
 
