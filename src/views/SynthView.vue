@@ -89,6 +89,7 @@ import ChorusEffect from "@/models/effects/ChorusEffect";
 import { CompressionEffect } from "@/models/effects/CompressionEffect";
 import DelayEffect from "@/models/effects/DelayEffect";
 import DistortionEffect from "@/models/effects/DistortionEffect";
+import Equalizer from "@/models/effects/EqualizerEffect";
 import { FilterEffect } from "@/models/effects/FilterEffect";
 import { FlangerEffect } from "@/models/effects/FlangerEffect";
 import { ReverbEffect } from "@/models/effects/ReverbEffect";
@@ -215,6 +216,7 @@ function initializeEffects() {
 	const chorus = new ChorusEffect(MainAudioCluster.value.context);
 	const reverb = new ReverbEffect(MainAudioCluster.value.context);
 	const wah = new WahEffect(MainAudioCluster.value.context);
+	const equalizer = new Equalizer(MainAudioCluster.value.context);
 
 	flanger.disabled = true;
 	filter.disabled = true;
@@ -231,6 +233,7 @@ function initializeEffects() {
 	MainAudioCluster.value.effects.append(delay);
 	MainAudioCluster.value.effects.append(reverb);
 	MainAudioCluster.value.effects.append(filter);
+	MainAudioCluster.value.effects.append(equalizer);
 	MainAudioCluster.value.effects.append(compression);
 }
 
