@@ -1,10 +1,10 @@
 import { AudioEffect } from "./AudioEffect";
 
-const LOW_KEY_FREQ = 100;
-const MID_LOW_KEY_FREQ = 200;
-const MID_KEY_FREQ = 400;
-const MID_HIGH_KEY_FREQ = 800;
-const HIGH_KEY_FREQ = 1600;
+export const LOW_KEY_FREQ = 100;
+export const MID_LOW_KEY_FREQ = 200;
+export const MID_KEY_FREQ = 400;
+export const MID_HIGH_KEY_FREQ = 800;
+export const HIGH_KEY_FREQ = 1600;
 
 export const EQUALIZER_MIN_GAIN = -40;
 export const EQUALIZER_MAX_GAIN = 0;

@@ -4,81 +4,79 @@
 			<div class="Equalizer__body">
 				<div class="Equalizer__body__controls">
 					<div class="Equalizer__control">
-						<span>{{ equalizer.lowGain }}</span>
+						<span class="Equalizer__control__freq-label"
+							>{{ LOW_KEY_FREQ }} Hz</span
+						>
 						<VsSlider
-							orientation="vertical"
 							v-model="equalizer.lowGain"
+							orientation="vertical"
 							:max="EQUALIZER_MAX_GAIN"
 							:min="EQUALIZER_MIN_GAIN"
 							:step="0.01"
 						>
-							<template #label>
-								<VsChip class="Equalizer__chip">Low</VsChip>
-							</template>
 						</VsSlider>
+						<VsChip class="Equalizer__chip">Low</VsChip>
 					</div>
 					<div class="Equalizer__control">
-						<span>{{ equalizer.midLowGain }}</span>
+						<span class="Equalizer__control__freq-label"
+							>{{ MID_LOW_KEY_FREQ }} Hz</span
+						>
 						<VsSlider
-							orientation="vertical"
 							v-model="equalizer.midLowGain"
+							orientation="vertical"
 							:max="EQUALIZER_MAX_GAIN"
 							:min="EQUALIZER_MIN_GAIN"
 							:step="0.01"
 						>
-							<template #label>
-								<VsChip class="Equalizer__chip">Mid low</VsChip>
-							</template>
 						</VsSlider>
+						<VsChip class="Equalizer__chip">Mid low</VsChip>
 					</div>
 
 					<div class="Equalizer__control">
-						<span>{{ equalizer.midGain }}</span>
+						<span class="Equalizer__control__freq-label"
+							>{{ MID_KEY_FREQ }} Hz</span
+						>
 						<VsSlider
-							orientation="vertical"
 							v-model="equalizer.midGain"
+							orientation="vertical"
 							:max="EQUALIZER_MAX_GAIN"
 							:min="EQUALIZER_MIN_GAIN"
 							:step="0.01"
 						>
-							<template #label>
-								<VsChip class="Equalizer__chip">Mid</VsChip>
-							</template>
 						</VsSlider>
+						<VsChip class="Equalizer__chip">Mid</VsChip>
 					</div>
 
 					<div class="Equalizer__control">
-						<span>{{ equalizer.midHighGain }}</span>
+						<span class="Equalizer__control__freq-label"
+							>{{ MID_HIGH_KEY_FREQ }} Hz</span
+						>
 						<VsSlider
-							orientation="vertical"
 							v-model="equalizer.midHighGain"
+							orientation="vertical"
 							:max="EQUALIZER_MAX_GAIN"
 							:min="EQUALIZER_MIN_GAIN"
 							:step="0.01"
 						>
-							<template #label>
-								<VsChip class="Equalizer__chip">Mid high</VsChip>
-							</template>
 						</VsSlider>
+						<VsChip class="Equalizer__chip">Mid high</VsChip>
 					</div>
 
 					<div class="Equalizer__control">
-						<span>{{ equalizer.highGain }}</span>
+						<span class="Equalizer__control__freq-label"
+							>{{ HIGH_KEY_FREQ }} Hz</span
+						>
 						<VsSlider
-							orientation="vertical"
 							v-model="equalizer.highGain"
+							orientation="vertical"
 							:max="EQUALIZER_MAX_GAIN"
 							:min="EQUALIZER_MIN_GAIN"
 							:step="0.01"
 						>
-							<template #label>
-								<VsChip class="Equalizer__chip">High</VsChip>
-							</template>
 						</VsSlider>
+						<VsChip class="Equalizer__chip">High</VsChip>
 					</div>
 				</div>
-
-				<div class="Equalizer__body__visualization"></div>
 			</div>
 		</template>
 	</EffectCard>
@@ -90,6 +88,11 @@ import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
 import Equalizer, {
 	EQUALIZER_MAX_GAIN,
 	EQUALIZER_MIN_GAIN,
+	HIGH_KEY_FREQ,
+	LOW_KEY_FREQ,
+	MID_HIGH_KEY_FREQ,
+	MID_KEY_FREQ,
+	MID_LOW_KEY_FREQ,
 } from "@/models/effects/EqualizerEffect";
 import EffectCard from "./EffectCard.vue";
 
@@ -105,18 +108,14 @@ const equalizer = defineModel<Equalizer>({ required: true });
 		display: flex;
 
 		&__controls {
-			flex: 1 0 60%;
+			flex: 1 1 100%;
 			height: 100%;
 			width: 100%;
 			display: grid;
 			gap: $gap-df;
 
-			grid-template-columns: repeat(5, 1fr);
+			grid-template-columns: repeat(5, minmax(10rem, 1fr));
 			justify-items: center;
-		}
-
-		&__visualization {
-			flex: 1 1 100%;
 		}
 	}
 
@@ -126,10 +125,22 @@ const equalizer = defineModel<Equalizer>({ required: true });
 		height: 100%;
 		width: 100%;
 		max-width: 100%;
+		gap: $gap-df;
+
+		align-items: center;
+
+		&__freq-label {
+			color: $text-color;
+			font-size: 1.6rem;
+			text-transform: uppercase;
+		}
 	}
 
 	&__chip {
-		width: 100%;
+		width: 90%;
+		flex: 1;
+		font-size: 1.6rem;
+		text-align: center;
 	}
 }
 </style>
