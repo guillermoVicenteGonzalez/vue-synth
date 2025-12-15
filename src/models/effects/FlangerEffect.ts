@@ -1,6 +1,11 @@
 import { LFO } from "../LFO";
 import { AudioEffect } from "./AudioEffect";
 
+const DEFAULT_FLANGER_DELAY = 0.005;
+const DEFAULT_FLANGER_FEEDBACK = 0.5;
+const DEFAULT_FLANGER_SPEED = 0.25;
+const DEFAULT_FLANGER_DEPTH = 0.002;
+
 export class FlangerEffect extends AudioEffect {
 	declare inputNode: AudioNode; //=> effectGain
 	declare exitNode: AudioNode; //=> wetGain
@@ -45,10 +50,7 @@ export class FlangerEffect extends AudioEffect {
 		//lfo that oscillates delay
 		this.lfo.connect(this.delayNode.delayTime);
 
-		this.feedback = 0.5;
-		this.depth = 0.002;
-		this.speed = 0.25;
-		this.delay = 0.005;
+		this.resetEffect();
 	}
 
 	//controla el delay del delayNode duh
@@ -118,5 +120,12 @@ export class FlangerEffect extends AudioEffect {
 
 	public getDelayNode(): DelayNode {
 		return this.delayNode;
+	}
+
+	resetEffect(): void {
+		this.feedback = DEFAULT_FLANGER_FEEDBACK;
+		this.depth = DEFAULT_FLANGER_DEPTH;
+		this.speed = DEFAULT_FLANGER_SPEED;
+		this.delay = DEFAULT_FLANGER_DELAY;
 	}
 }

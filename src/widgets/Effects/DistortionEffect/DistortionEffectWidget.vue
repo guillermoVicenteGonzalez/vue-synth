@@ -90,6 +90,14 @@
 				</div>
 			</div>
 		</template>
+
+		<template #context-menu>
+			<div class="DistortionEffect__context-menu">
+				<ul>
+					<li @click="distortion.resetEffect()">Reset effect</li>
+				</ul>
+			</div>
+		</template>
 	</EffectCard>
 </template>
 
@@ -187,6 +195,10 @@ const thresholdEnabled = computed<boolean>(
 	}
 
 	&__circle-slider {
+	}
+
+	&__context-menu {
+		@include contextMenu;
 	}
 }
 </style>

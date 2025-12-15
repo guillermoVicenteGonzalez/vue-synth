@@ -132,6 +132,14 @@
 				</div>
 			</div>
 		</template>
+
+		<template #context-menu>
+			<div class="ChorusEffect__context-menu">
+				<ul>
+					<li @click="chorus.resetEffect()">Reset effect</li>
+				</ul>
+			</div>
+		</template>
 	</EffectCard>
 </template>
 
@@ -217,6 +225,10 @@ const chorus = defineModel<ChorusEffect>({ required: true });
 
 	&__circle-slider {
 		color: $text-color;
+	}
+
+	&__context-menu {
+		@include contextMenu;
 	}
 }
 </style>

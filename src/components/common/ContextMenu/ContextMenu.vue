@@ -83,6 +83,8 @@ $animation-timing-function: ease-in;
 	&--top-animation {
 		animation-name: contextMenuAnimationTop;
 	}
+
+	@include contextMenu;
 }
 
 @keyframes contextMenuAnimationBot {

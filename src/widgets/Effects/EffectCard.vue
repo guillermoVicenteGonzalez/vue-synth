@@ -1,6 +1,6 @@
 <template>
 	<VsCard class="EffectCard" :class="dynamicClass">
-		<div class="EffectCard__handle">
+		<div class="EffectCard__handle" @contextmenu="handleRightClick">
 			<div class="EffectCard__handle__toggle-button">
 				<ToggleButton
 					v-model="disabled"
@@ -17,13 +17,24 @@
 		<div class="EffectCard__body">
 			<slot name="body"></slot>
 		</div>
+
+		<ContextMenu
+			class="EffectCard__context-menu"
+			:visible="contextMenuVisible"
+			@close="handleCloseContextMenu"
+			:pos-x="contextMenuPos.x"
+			:pos-y="contextMenuPos.y"
+		>
+			<slot name="context-menu"></slot>
+		</ContextMenu>
 	</VsCard>
 </template>
 
 <script setup lang="ts">
+import ContextMenu from "@/components/common/ContextMenu/ContextMenu.vue";
 import ToggleButton from "@/components/common/ToggleButton/ToggleButton.vue";
 import VsCard from "@/components/common/VsCard/VsCard.vue";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 
 interface EffectCardProps {
 	title?: string;
@@ -36,6 +47,20 @@ const dynamicClass = computed(() => ({
 
 const primaryColor = "#42d392";
 const disabled = defineModel<boolean>();
+
+const contextMenuVisible = ref(false);
+const contextMenuPos = ref<{ x: number; y: number }>({ x: 0, y: 0 });
+
+function handleCloseContextMenu() {
+	contextMenuVisible.value = false;
+}
+
+function handleRightClick(e: MouseEvent) {
+	e.preventDefault();
+	contextMenuVisible.value = true;
+	contextMenuPos.value.x = e.clientX;
+	contextMenuPos.value.y = e.clientY;
+}
 </script>
 
 <style scoped lang="scss">
@@ -52,6 +77,7 @@ $handle-width: 4rem;
 
 	background-color: $bg-color-2;
 	display: flex;
+	position: relative;
 
 	&__handle {
 		display: flex;
@@ -61,6 +87,7 @@ $handle-width: 4rem;
 		flex: 0 0 $handle-width;
 		background-color: $handle-bg-color;
 
+		cursor: pointer;
 		&__toggle-button {
 			flex: 0 0 15%;
 			// display: flex;
@@ -94,6 +121,14 @@ $handle-width: 4rem;
 		padding: $gap-df;
 		width: 100%;
 		height: 100%;
+	}
+
+	&__context-menu {
+		// @include contextMenu;
+
+		padding: 0.25rem 0;
+		overflow: hidden;
+		color: $text-color;
 	}
 
 	&--disabled {

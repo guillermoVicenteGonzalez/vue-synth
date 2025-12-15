@@ -90,6 +90,14 @@
 				</div>
 			</div>
 		</template>
+
+		<template #context-menu>
+			<div class="ReverbEffect__context-menu">
+				<ul>
+					<li @click="reverb.resetEffect()">Reset Effect</li>
+				</ul>
+			</div>
+		</template>
 	</EffectCard>
 </template>
 
@@ -195,6 +203,10 @@ const multiAnalyserSources = computed<ReverbEffectSource[]>(() => {
 		width: 100%;
 		font-size: 1.6rem;
 		text-align: center;
+	}
+
+	&__context-menu {
+		@include contextMenu;
 	}
 }
 

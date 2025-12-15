@@ -78,4 +78,8 @@ export class CombFilter extends AudioEffect {
 			console.error(err);
 		}
 	}
+
+	resetEffect(): void {
+		this.resonance = DEFAULT_RESONANCE;
+	}
 }

@@ -9,6 +9,7 @@
 						>
 						<VsSlider
 							v-model="equalizer.lowGain"
+							:disabled="equalizer.disabled"
 							orientation="vertical"
 							:max="EQUALIZER_MAX_GAIN"
 							:min="EQUALIZER_MIN_GAIN"
@@ -23,6 +24,7 @@
 						>
 						<VsSlider
 							v-model="equalizer.midLowGain"
+							:disabled="equalizer.disabled"
 							orientation="vertical"
 							:max="EQUALIZER_MAX_GAIN"
 							:min="EQUALIZER_MIN_GAIN"
@@ -38,6 +40,7 @@
 						>
 						<VsSlider
 							v-model="equalizer.midGain"
+							:disabled="equalizer.disabled"
 							orientation="vertical"
 							:max="EQUALIZER_MAX_GAIN"
 							:min="EQUALIZER_MIN_GAIN"
@@ -53,6 +56,7 @@
 						>
 						<VsSlider
 							v-model="equalizer.midHighGain"
+							:disabled="equalizer.disabled"
 							orientation="vertical"
 							:max="EQUALIZER_MAX_GAIN"
 							:min="EQUALIZER_MIN_GAIN"
@@ -68,6 +72,7 @@
 						>
 						<VsSlider
 							v-model="equalizer.highGain"
+							:disabled="equalizer.disabled"
 							orientation="vertical"
 							:max="EQUALIZER_MAX_GAIN"
 							:min="EQUALIZER_MIN_GAIN"
@@ -77,6 +82,14 @@
 						<VsChip class="Equalizer__chip">High</VsChip>
 					</div>
 				</div>
+			</div>
+		</template>
+
+		<template #context-menu>
+			<div class="Equalizer__context-menu">
+				<ul>
+					<li @click="equalizer.resetEffect()">Reset effect</li>
+				</ul>
 			</div>
 		</template>
 	</EffectCard>
@@ -141,6 +154,10 @@ const equalizer = defineModel<Equalizer>({ required: true });
 		flex: 1;
 		font-size: 1.6rem;
 		text-align: center;
+	}
+
+	&__context-menu {
+		@include contextMenu;
 	}
 }
 </style>

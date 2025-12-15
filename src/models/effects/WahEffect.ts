@@ -1,11 +1,15 @@
 import type { AudioEnvelope } from "../AudioEnvelope";
 import { LFO } from "../LFO";
 import type Wave from "../wave";
-import type { waveForms } from "../wave";
+import { waveForms } from "../wave";
 import { AudioEffect } from "./AudioEffect";
 
 //Tremolo => actual auto
 // auto ==> attack con set target at time, release etc.
+export enum WahTypes {
+	tremolo = "tremolo",
+	auto = "auto wah",
+}
 
 export const MIN_WAH_MIX = 0;
 export const MAX_WAH_MIX = 100;
@@ -27,10 +31,8 @@ export const MIN_WAH_DEPTH = 0;
 export const MAX_WAH_DEPTH = 10000;
 const DEFAULT_WAH_DEPTH = 2000;
 
-export enum WahTypes {
-	tremolo = "tremolo",
-	auto = "auto wah",
-}
+const DEFAULT_LFO_FORM = waveForms.sine;
+const DEFAULT_WAH_TYPE = WahTypes.auto;
 
 export default class WahEffect extends AudioEffect {
 	declare inputNode: AudioNode;
@@ -79,8 +81,8 @@ export default class WahEffect extends AudioEffect {
 		this.depth = DEFAULT_WAH_DEPTH;
 
 		this.lfo.connect(this.filter.frequency);
-		this.type = WahTypes.auto;
-		// this.lfo.connect(this.wetGain.gain);
+
+		this.resetEffect();
 	}
 
 	set type(t: WahTypes) {
@@ -187,5 +189,15 @@ export default class WahEffect extends AudioEffect {
 		this.delay = this.delay;
 		this.inputNode.disconnect(this.filter);
 		this.mix = this.mix;
+	}
+
+	resetEffect(): void {
+		this.speed = DEFAULT_WAH_SPEED;
+		this.depth = DEFAULT_WAH_SPEED;
+		this.mix = DEFAULT_WAH_MIX;
+		this._delay = DEFAULT_WAH_DELAY;
+		this.cutoff = DEFAULT_WAH_CUTOFF;
+		this._type = DEFAULT_WAH_TYPE;
+		this.lfoForm = DEFAULT_LFO_FORM;
 	}
 }

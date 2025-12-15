@@ -41,6 +41,14 @@
 				</div>
 			</div>
 		</template>
+
+		<template #context-menu>
+			<div class="Filter__context-menu">
+				<ul>
+					<li @click="filter.resetEffect()">Reset effect</li>
+				</ul>
+			</div>
+		</template>
 	</EffectCard>
 </template>
 
@@ -111,6 +119,10 @@ $disabled-color: gray;
 	&__analyser {
 		background-color: $bg-color-1;
 		border-radius: 0.5rem;
+	}
+
+	&__context-menu {
+		@include contextMenu;
 	}
 }
 </style>

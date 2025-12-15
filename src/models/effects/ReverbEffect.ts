@@ -18,8 +18,12 @@ export const MAX_REVERB_MIX = 100;
 export const MIN_REVERB_MIX = 0;
 const DEFAULT_MIX = 50;
 
-const DEFAULT_PRE_DELAY = 0;
 export const MAX_REVERB_PRE_DELAY = 0.3;
+
+const DEFAULT_ROOM_SIZE = 0.7;
+const DEFAULT_DAMPENING = 350;
+const DEFAULT_PRE_HIGH_CUT = 0;
+const DEFAULT_PRE_LOW_CUT = 10000;
 /**
  * This effect is based on Freeverb designed by Manfred Schroeder.
  */
@@ -65,8 +69,7 @@ export class ReverbEffect extends AudioEffect {
 		this.initializeCombFilters(ctx);
 		this.initializeAllpassFilters(ctx);
 
-		this.mix = DEFAULT_MIX;
-		this.preDelay = DEFAULT_PRE_DELAY;
+		this.resetEffect();
 	}
 
 	//mix
@@ -243,5 +246,14 @@ export class ReverbEffect extends AudioEffect {
 		} catch (err) {
 			console.error(err);
 		}
+	}
+
+	resetEffect(): void {
+		this.roomSize = DEFAULT_ROOM_SIZE;
+		this.dampening = DEFAULT_DAMPENING;
+		this.preDelay = DEFAULT_DELAY;
+		this._mix = DEFAULT_MIX;
+		this.preLowCut = DEFAULT_PRE_LOW_CUT;
+		this.preHighCut = DEFAULT_PRE_HIGH_CUT;
 	}
 }
