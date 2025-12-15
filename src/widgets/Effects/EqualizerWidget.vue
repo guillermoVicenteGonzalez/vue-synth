@@ -8,6 +8,7 @@
 							>{{ LOW_KEY_FREQ }} Hz</span
 						>
 						<VsSlider
+							:disabled="equalizer.disabled"
 							v-model="equalizer.lowGain"
 							orientation="vertical"
 							:max="EQUALIZER_MAX_GAIN"
@@ -22,6 +23,7 @@
 							>{{ MID_LOW_KEY_FREQ }} Hz</span
 						>
 						<VsSlider
+							:disabled="equalizer.disabled"
 							v-model="equalizer.midLowGain"
 							orientation="vertical"
 							:max="EQUALIZER_MAX_GAIN"
@@ -37,6 +39,7 @@
 							>{{ MID_KEY_FREQ }} Hz</span
 						>
 						<VsSlider
+							:disabled="equalizer.disabled"
 							v-model="equalizer.midGain"
 							orientation="vertical"
 							:max="EQUALIZER_MAX_GAIN"
@@ -52,6 +55,7 @@
 							>{{ MID_HIGH_KEY_FREQ }} Hz</span
 						>
 						<VsSlider
+							:disabled="equalizer.disabled"
 							v-model="equalizer.midHighGain"
 							orientation="vertical"
 							:max="EQUALIZER_MAX_GAIN"
@@ -67,6 +71,7 @@
 							>{{ HIGH_KEY_FREQ }} Hz</span
 						>
 						<VsSlider
+							:disabled="equalizer.disabled"
 							v-model="equalizer.highGain"
 							orientation="vertical"
 							:max="EQUALIZER_MAX_GAIN"

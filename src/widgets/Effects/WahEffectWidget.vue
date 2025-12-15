@@ -27,6 +27,7 @@
 					<div class="WahEffect__control">
 						<VsChip class="WahEffect__chip">Cutoff</VsChip>
 						<CircleSlider
+							:disabled="wah.disabled"
 							v-model="wah.cutoff"
 							class="WahEffect__slider"
 							:min="MIN_WAH_CUTOFF"
@@ -36,6 +37,7 @@
 					<div class="WahEffect__control">
 						<VsChip class="WahEffect__chip">Delay</VsChip>
 						<CircleSlider
+							:disabled="wah.disabled"
 							v-model="wah.delay"
 							class="WahEffect__slider"
 							:min="MIN_WAH_DELAY"
@@ -46,6 +48,7 @@
 					<div class="WahEffect__control">
 						<VsChip class="WahEffect__chip">Mix</VsChip>
 						<CircleSlider
+							:disabled="wah.disabled"
 							v-model="wah.mix"
 							class="WahEffect__slider"
 							:min="MIN_WAH_MIX"
