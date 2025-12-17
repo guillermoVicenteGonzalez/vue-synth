@@ -48,24 +48,17 @@ class Note {
 
 export default Note;
 
-//60 -> 72
-
-//60 - 72 = -12; -12 % 12 = -0. 12 -0 = 0
-//60 - 73 = -13; -13 % 12 = -1. 12 - -1 = 13
-//60- 59 = 1; 1 % 12  = 1; 12 -1 = 11 == si
-//60 - 61 = -1;
 export function getNoteFromMIDICode(noteId: number): Note {
 	const octaveDiff = Math.floor((noteId - C4ID) / 12);
-	// const noteDiff = (12 - ((C4ID - noteId) % 12));
 	const noteDiff = (C4ID - noteId) % 12;
 
-	const notes: string[] = Object.keys(noteDetunes);
-	// const noteName = (noteDiff == 12 ? notes[0] : notes[noteDiff]) as noteName;
-	const noteName = (
-		noteDiff < 0 ? notes[Math.abs(noteDiff)] : notes[12 - noteDiff]
-	) as noteName;
+	if (noteDiff == 0) return new Note("do", octaveDiff);
 
-	console.log(noteName, octaveDiff, noteDiff);
+	const notes: string[] =
+		noteDiff < 0
+			? Object.keys(noteDetunes)
+			: Object.keys(noteDetunes).reverse();
 
+	const noteName = notes[Math.abs(noteDiff)] as noteName;
 	return new Note(noteName, octaveDiff);
 }
