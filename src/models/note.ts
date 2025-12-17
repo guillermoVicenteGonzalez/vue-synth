@@ -54,11 +54,10 @@ export function getNoteFromMIDICode(noteId: number): Note {
 
 	if (noteDiff == 0) return new Note("do", octaveDiff);
 
-	const notes: string[] =
-		noteDiff < 0
-			? Object.keys(noteDetunes)
-			: Object.keys(noteDetunes).reverse();
+	const notes: string[] = Object.keys(noteDetunes);
 
-	const noteName = notes[Math.abs(noteDiff)] as noteName;
+	const noteName = (
+		noteDiff < 0 ? notes[Math.abs(noteDiff)] : notes[12 - noteDiff]
+	) as noteName;
 	return new Note(noteName, octaveDiff);
 }
