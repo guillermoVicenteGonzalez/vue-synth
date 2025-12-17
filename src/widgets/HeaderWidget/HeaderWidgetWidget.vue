@@ -3,6 +3,9 @@
 		<div class="vsynth-header__left">
 			<h2 class="vsynth-header__title">VSYNTH</h2>
 			<slot name="controls"></slot>
+			<div class="vsynth-header__midi">
+				<midi-selector></midi-selector>
+			</div>
 		</div>
 		<div class="vsynth-header__visualizer">
 			<slot name="visualizer"></slot>
@@ -11,6 +14,8 @@
 </template>
 
 <script setup lang="ts">
+import MidiSelector from "@/components/MIDI/MidiSelector.vue";
+
 // interface HeaderWidgetWidgetProps {}
 
 // const {...} = defineProps<HeaderWidgetWidgetProps>();
@@ -32,7 +37,7 @@
 
 	&__left {
 		display: grid;
-		grid-template-columns: repeat(2, 1fr);
+		grid-template-columns: 2fr 2fr 1fr;
 
 		@include respond(phone) {
 			display: block;
@@ -47,6 +52,10 @@
 		@include respond(phone) {
 			display: none;
 		}
+	}
+
+	&__midi {
+		padding: $gap-df;
 	}
 }
 </style>
