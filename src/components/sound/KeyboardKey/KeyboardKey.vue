@@ -51,6 +51,7 @@ const synthModule: SynthModule = new SynthModule(sourceCluster, envelope);
  * If the key is still pressed, watch returns instead of executing notePressed => creating osc
  */
 watch(isPressed, (newValue, oldValue) => {
+	console.log(note);
 	if (newValue == oldValue) return;
 
 	if (newValue) {
@@ -95,11 +96,32 @@ function notePressed() {
 function keySetup() {
 	document.addEventListener("keydown", handleKeyPress);
 	document.addEventListener("keyup", handleKeyRelease);
+	document.addEventListener("MIDINoteOn", handleMidiNoteOn);
+	document.addEventListener("MIDINoteOff", handleMidiNoteOff);
+}
+
+function handleMidiNoteOn(e: CustomEventInit) {
+	console.log(e.detail.note);
+
+	if (e.detail.note.name == note.name && e.detail.note.octave == note.octave) {
+		console.log(`this note ${e.detail.note}`);
+		isPressed.value = true;
+	} else if (note.name == e.detail.note) {
+		console.log(e.detail.note);
+		console.log(note);
+	}
+}
+
+function handleMidiNoteOff(e: CustomEventInit) {
+	if (e.detail.note.name == note.name && e.detail.note.octave == note.octave)
+		isPressed.value = false;
 }
 
 function eventCleanup() {
 	document.removeEventListener("keydown", handleKeyPress);
 	document.removeEventListener("keyup", handleKeyRelease);
+	document.removeEventListener("MIDINoteOn", handleMidiNoteOn);
+	document.removeEventListener("MIDINoteOff", handleMidiNoteOff);
 }
 
 onMounted(() => keySetup());

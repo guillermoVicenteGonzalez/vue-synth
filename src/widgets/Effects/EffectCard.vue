@@ -21,9 +21,9 @@
 		<ContextMenu
 			class="EffectCard__context-menu"
 			:visible="contextMenuVisible"
-			@close="handleCloseContextMenu"
 			:pos-x="contextMenuPos.x"
 			:pos-y="contextMenuPos.y"
+			@close="handleCloseContextMenu"
 		>
 			<slot name="context-menu"></slot>
 		</ContextMenu>

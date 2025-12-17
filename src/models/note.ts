@@ -14,6 +14,7 @@ export const noteDetunes = {
 	si: +200,
 };
 
+const C4ID = 60;
 export type noteName = keyof typeof noteDetunes;
 
 class Note {
@@ -46,3 +47,17 @@ class Note {
 }
 
 export default Note;
+
+export function getNoteFromMIDICode(noteId: number): Note {
+	const octaveDiff = Math.floor((noteId - C4ID) / 12);
+	const noteDiff = (C4ID - noteId) % 12;
+
+	if (noteDiff == 0) return new Note("do", octaveDiff);
+
+	const notes: string[] = Object.keys(noteDetunes);
+
+	const noteName = (
+		noteDiff < 0 ? notes[Math.abs(noteDiff)] : notes[12 - noteDiff]
+	) as noteName;
+	return new Note(noteName, octaveDiff);
+}
