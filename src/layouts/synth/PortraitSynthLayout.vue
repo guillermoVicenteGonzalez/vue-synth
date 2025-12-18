@@ -25,6 +25,9 @@
 		<div class="portrait-layout__components">
 			<slot name="waves"></slot>
 			<slot name="filters"></slot>
+			<div v-if="$slots.effects" class="portrait-layout__effects">
+				<slot name="effects" class="effects"> </slot>
+			</div>
 		</div>
 
 		<div class="portrait-layout__display">
@@ -40,10 +43,10 @@
 				<slot name="lfo"></slot>
 			</VsTab>
 		</div>
-
+		<!-- 
 		<div class="portrait-layout__footer">
 			<slot name="footer"></slot>
-		</div>
+		</div> -->
 	</div>
 </template>
 <script setup lang="ts">
@@ -134,6 +137,12 @@ $max-filters-w: 4fr;
 			);
 		// grid-template-rows: minmax($min-waves-w, 10fr) minmax(3.5rem, 1fr);
 		// gap: 0.5rem;
+	}
+
+	&__effects {
+		grid-column: 1 / -1;
+		height: 100%;
+		overflow: auto;
 	}
 
 	&__display {

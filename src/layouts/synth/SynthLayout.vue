@@ -256,8 +256,4 @@ $min-actions-h: 10rem;
 		}
 	}
 }
-
-.effects {
-	background-color: red;
-}
 </style>

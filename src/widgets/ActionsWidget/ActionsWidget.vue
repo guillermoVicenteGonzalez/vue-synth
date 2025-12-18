@@ -39,15 +39,15 @@
 		></VsSeparator>
 
 		<div class="ActionsWidget__recording">
-			<VsButton variant="round" class="ActionsWidget__button">
+			<VsButton disabled variant="round" class="ActionsWidget__button">
 				<Play class="ActionsWidget__button__icon"></Play>
 			</VsButton>
 
-			<VsButton variant="round" class="ActionsWidget__button">
+			<VsButton disabled variant="round" class="ActionsWidget__button">
 				<Pause class="ActionsWidget__button__icon"></Pause>
 			</VsButton>
 
-			<VsButton variant="round" class="ActionsWidget__button">
+			<VsButton disabled variant="round" class="ActionsWidget__button">
 				<Square class="ActionsWidget__button__icon"></Square>
 			</VsButton>
 		</div>
