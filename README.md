@@ -10,7 +10,7 @@
     - [x] Natural keys
     - [x] Altered keys
     - [x] Change central note
-- [ ] Audio module effects
+- [x] Audio module effects
   - [x] Voices => possibly wave shaper?? or just a number to clone oscs
     - [x] Voice detuning
 - [ ] Global effects
@@ -21,7 +21,7 @@
     - [x] Release
     - [x] Decay
   - [x] Filters
-  - [ ] Reset button for filters
+  - [x] Reset button for filters
   - [x] Chorus
   - [x] Compression
   - [x] Distortion
@@ -39,35 +39,47 @@
   - [x] Global clear
     - [x] Filters
     - [x] Modules
-  - [x] Global "detuning"
+  - [x] Global "detuning"a
   - [ ] Wheel
 - [x] Global volume controls
 - [x] Dynamic layouts / effects bar
 - [x] Responsive
-- [ ] MIDI interfacing
+- [x] MIDI interfacing
+
+## Extra Features
+
+- [ ] Recorder
+- [ ] Backing tracks
+- [ ] save audio
+- [ ] Metronome
+- [ ] As many MIDI mappings as possible
+- [ ] Request midi button + selector disable
+- [ ] Save presets
+
+## Polish
+
+- [ ] Responsive effects
+- [ ] Add resets
+- [ ] Add tooltips
+- [ ] Invert disable toggles
+- [ ] sawwaves representation
+- [ ] Disable canvases
+- [ ] Button effects
+- [ ] font
+
+## Bugs
+
+- [ ] Filters are not detached appropiately
+- [ ] Delete all does not work
+- [ ] adjust sliders (specially reverb)
+- [ ] add titles to envelope and LFO
+- [ ]
 
 ### What ifs
 
-- [ ] Recorder
-- [ ] Audio tracks / DAW
-- [ ] Sampler
-- [ ] Metronome
-- [ ] Base
+- [ ] Custom midi mappings
 - [ ] Audio imports
 - [ ] Audio envelope progress when key is pressed
+- [ ] Sampler
 
-### Bugs / fixes / refactors
-
-- [x] Refactor AudioModule into linked list
-- [ ] turn mutated props into v-models
-- [ ] Vanilla wave sum displays deactivated waves
-- [ ] Wave frequency is not dynamic => refactor with constant source?
-- [ ] V-model or at least reactive wave names in filters
-- [ ] Revise filter module selection by name (can be faulty)
-- [ ] Main wave effect chain
-- [x] change :class bidings to :class= {active:isActive}
-- [ ] Memory leaks in Wave analyser and filter widget (and possibly wave canvas)
-
-### Notes
-
-- FilterWidget: Each time it is mounted a different analyzer is created. This can be easily checked using the debugger. This shouldn't be happening
+## Release 2

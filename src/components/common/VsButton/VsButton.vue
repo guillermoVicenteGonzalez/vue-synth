@@ -62,6 +62,11 @@ const classObject = computed(() => {
 		color: black;
 	}
 
+	&--disabled {
+		background-color: $disabled-color-1;
+		cursor: not-allowed;
+	}
+
 	&:not(&--round) {
 		@include respond(tab-port) {
 			width: 8arem;
