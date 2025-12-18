@@ -6,6 +6,7 @@
 					<div class="WahEffect__control">
 						<VsChip class="WahEffect__chip">Speed</VsChip>
 						<CircleSlider
+							:size="CircleSliderSize"
 							v-model="wah.speed"
 							class="WahEffect__slider"
 							:disabled="isSpeedDisabled"
@@ -17,6 +18,7 @@
 					<div class="WahEffect__control">
 						<VsChip class="WahEffect__chip">Depth</VsChip>
 						<CircleSlider
+							:size="CircleSliderSize"
 							v-model="wah.depth"
 							class="WahEffect__slider"
 							:disabled="isDepthDisabled"
@@ -27,6 +29,7 @@
 					<div class="WahEffect__control">
 						<VsChip class="WahEffect__chip">Cutoff</VsChip>
 						<CircleSlider
+							:size="CircleSliderSize"
 							v-model="wah.cutoff"
 							:disabled="wah.disabled"
 							class="WahEffect__slider"
@@ -37,6 +40,7 @@
 					<div class="WahEffect__control">
 						<VsChip class="WahEffect__chip">Delay</VsChip>
 						<CircleSlider
+							:size="CircleSliderSize"
 							v-model="wah.delay"
 							:disabled="wah.disabled"
 							class="WahEffect__slider"
@@ -48,6 +52,7 @@
 					<div class="WahEffect__control">
 						<VsChip class="WahEffect__chip">Mix</VsChip>
 						<CircleSlider
+							:size="CircleSliderSize"
 							v-model="wah.mix"
 							:disabled="wah.disabled"
 							class="WahEffect__slider"
@@ -111,9 +116,11 @@ import WahEffect, {
 
 import VsSelector from "@/components/common/VsSelector/VsSelector.vue";
 import WaveCanvas from "@/components/waves/WaveCanvas/WaveCanvas.vue";
+import { useMonitorSize } from "@/composables/useMonitorSize";
 import { waveForms } from "@/models/wave";
 import { computed } from "vue";
 import EffectCard from "./EffectCard.vue";
+const { browserWidth } = useMonitorSize();
 
 const lineColor = "#F20BC6";
 
@@ -124,6 +131,14 @@ const isDepthDisabled = computed(
 const isSpeedDisabled = computed(
 	() => wah.value.disabled || wah.value.type == WahTypes.tremolo
 );
+
+const CircleSliderSize = computed<number>(() => {
+	if (browserWidth.value < 1000) {
+		return 70;
+	}
+
+	return 80;
+});
 </script>
 
 <style lang="scss" scoped>
@@ -146,7 +161,13 @@ const isSpeedDisabled = computed(
 		flex-direction: column;
 		flex-wrap: wrap;
 		height: 100%;
-		flex: 0 0 35rem;
+		flex: 0 0 40rem;
+
+		@include respond(tab-port) {
+			display: grid;
+			grid-template-columns: 1fr 1fr 1fr;
+			grid-template-rows: 1fr 1fr;
+		}
 	}
 
 	&__control {

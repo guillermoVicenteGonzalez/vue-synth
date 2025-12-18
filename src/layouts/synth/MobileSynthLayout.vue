@@ -13,6 +13,9 @@
 					<slot name="filters" :active="true"> </slot>
 				</VsTab>
 			</VsTabs>
+			<div v-if="$slots.effects" class="mobile-layout__effects">
+				<slot name="effects" class="effects"> </slot>
+			</div>
 		</div>
 
 		<div class="mobile-layout__actions">
@@ -159,6 +162,11 @@ $min-piano-h: 0;
 
 		background-color: green;
 		flex: 1 0 $max-piano-h;
+	}
+
+	&__effects {
+		height: 100%;
+		overflow: auto;
 	}
 }
 </style>
