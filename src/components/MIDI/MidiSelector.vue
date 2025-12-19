@@ -1,9 +1,9 @@
 <template>
 	<div class="MidiSelector">
 		<VsButton
+			v-if="!midiReady"
 			class="MidiSelector__request-btn"
 			variant="round"
-			v-if="!midiReady"
 			@click="requestMidi"
 		>
 			<PianoIcon class="MidiSelector__request-btn__icon"></PianoIcon
@@ -55,6 +55,7 @@ function onSelectedInputChange() {
 
 <style lang="scss" scoped>
 $request-btn-size: 4rem;
+$request-btn-size-sm: 3rem;
 
 .MidiSelector {
 	width: 100%;
@@ -76,20 +77,12 @@ $request-btn-size: 4rem;
 			color: $tertiary-color;
 			color: black;
 		}
-	}
-}
 
-.request-midi-btn {
-	background-color: $primary-color;
-	width: $request-btn-size;
-	height: $request-btn-size;
-	padding: $gap-df;
-	justify-self: center;
-
-	&__icon {
-		@include iconButton;
-		color: $tertiary-color;
-		color: black;
+		@include respond(tab-port) {
+			width: $request-btn-size-sm;
+			height: $request-btn-size-sm;
+			padding: 0.5rem;
+		}
 	}
 }
 </style>
