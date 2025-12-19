@@ -2,7 +2,9 @@
 	<header class="vsynth-header">
 		<div class="vsynth-header__left">
 			<h2 class="vsynth-header__title">VSYNTH</h2>
-			<slot name="controls"></slot>
+			<div class="vsynth-header__controls">
+				<slot name="controls"></slot>
+			</div>
 			<div class="vsynth-header__midi">
 				<midi-selector></midi-selector>
 			</div>
@@ -40,7 +42,7 @@ import MidiSelector from "@/components/MIDI/MidiSelector.vue";
 		grid-template-columns: 2fr 2fr 1fr;
 
 		@include respond(phone) {
-			display: block;
+			display: flex;
 		}
 	}
 
@@ -52,6 +54,10 @@ import MidiSelector from "@/components/MIDI/MidiSelector.vue";
 		@include respond(phone) {
 			display: none;
 		}
+	}
+
+	&__controls {
+		flex: 1 1 100%;
 	}
 
 	&__midi {

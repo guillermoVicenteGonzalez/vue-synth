@@ -46,6 +46,8 @@ $border-size: 0.3rem;
 		display: flex;
 		align-items: center;
 		justify-content: center;
+
+		flex: 1;
 	}
 }
 </style>
