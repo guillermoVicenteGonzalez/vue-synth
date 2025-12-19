@@ -19,12 +19,21 @@
 	font-size: 1.6rem;
 	text-align: center;
 
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
 	&__link {
 		color: $text-color;
+		text-decoration: none;
 
-		&:visited {
-			color: $text-color;
+		&:hover {
+			color: salmon;
 		}
+
+		// &:visited {
+		// 	color: $text-color;
+		// }
 
 		&:active {
 			color: salmon;

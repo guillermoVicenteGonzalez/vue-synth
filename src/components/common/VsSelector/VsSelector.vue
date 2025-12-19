@@ -20,12 +20,14 @@
 			class="VS-Selector__clear-btn"
 			@click="clearSelection"
 		>
-			X
+			<X class="VS-Selector__clear-btn__icon"></X>
 		</button>
 	</div>
 </template>
 
 <script setup lang="ts">
+import { X } from "lucide-vue-next";
+
 interface VsSelectorProps {
 	items: string[];
 	placeholder?: string;
@@ -80,6 +82,11 @@ function clearSelection() {
 
 	&__clear-btn {
 		justify-self: end;
+		display: flex;
+
+		&__icon {
+			@include iconButton;
+		}
 	}
 }
 </style>

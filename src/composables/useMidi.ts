@@ -1,5 +1,5 @@
 import { getNoteFromMIDICode } from "@/models/note";
-import { computed, onMounted, ref } from "vue";
+import { computed, ref } from "vue";
 
 const hasPermission = ref<boolean>(false);
 const midi = ref<MIDIAccess | null>();
@@ -13,44 +13,28 @@ const midiInput = ref<MIDIInput>();
 
 export function useMidi() {
 	//CUIDAO QUE NO TENGA YA INPUT
-	onMounted(() => {
-		navigator.permissions.query({ name: "midi" }).then(result => {
-			if (result.state === "granted") {
-				// Access granted.
-				hasPermission.value = true;
-			} else if (result.state === "prompt") {
-				// Using API will prompt for permission
-				hasPermission.value = true;
-			} else {
-				hasPermission.value = false;
-			}
-		});
-
-		requestMidi();
-	});
 
 	/******************************************************************
 	 * LIFECYCLE FUNCTIONS
 	 ******************************************************************/
 
-	function requestMidi() {
-		console.log("Requesting midi");
+	async function requestMidi() {
+		if (!hasPermission.value) {
+			const res = await navigator.permissions.query({ name: "midi" });
+			if (res.state === "granted") hasPermission.value = true;
+			else if (res.state === "prompt") hasPermission.value = true;
+			else hasPermission.value = false;
+		}
+
 		navigator.requestMIDIAccess().then(onMidiSuccess, onMIidiFailure);
 	}
-
-	//CUIDAO
-	// onUnmounted(() => {
-	// 	if (!midi.value) return;
-	// 	disconnectMidiInput();
-	// 	console.log("disconnecting midi input");
-	// });
 
 	return {
 		midiReady,
 		inputs,
-		midiInput,
 		selectMidiInput,
 		disconnectMidiInput,
+		requestMidi,
 		midi,
 	};
 }

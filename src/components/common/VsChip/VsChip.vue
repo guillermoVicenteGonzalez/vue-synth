@@ -16,5 +16,7 @@ $default-text-color: $text-color;
 	background-color: $default-bg-color;
 	color: $default-text-color;
 	border-radius: $border-radius-df;
+
+	text-align: center;
 }
 </style>

@@ -1,4 +1,5 @@
 @forward "./variables.scss";
 @forward "./mixins.scss";
+@use "./typography.scss";
 @use "./scrollbar.scss";
 @use "base.scss";

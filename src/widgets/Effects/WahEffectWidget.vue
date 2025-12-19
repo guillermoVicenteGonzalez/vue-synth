@@ -6,8 +6,8 @@
 					<div class="WahEffect__control">
 						<VsChip class="WahEffect__chip">Speed</VsChip>
 						<CircleSlider
-							:size="CircleSliderSize"
 							v-model="wah.speed"
+							:size="CircleSliderSize"
 							class="WahEffect__slider"
 							:disabled="isSpeedDisabled"
 							:step="0.1"
@@ -18,8 +18,8 @@
 					<div class="WahEffect__control">
 						<VsChip class="WahEffect__chip">Depth</VsChip>
 						<CircleSlider
-							:size="CircleSliderSize"
 							v-model="wah.depth"
+							:size="CircleSliderSize"
 							class="WahEffect__slider"
 							:disabled="isDepthDisabled"
 							:min="MIN_WAH_DEPTH"
@@ -29,8 +29,8 @@
 					<div class="WahEffect__control">
 						<VsChip class="WahEffect__chip">Cutoff</VsChip>
 						<CircleSlider
-							:size="CircleSliderSize"
 							v-model="wah.cutoff"
+							:size="CircleSliderSize"
 							:disabled="wah.disabled"
 							class="WahEffect__slider"
 							:min="MIN_WAH_CUTOFF"
@@ -40,8 +40,8 @@
 					<div class="WahEffect__control">
 						<VsChip class="WahEffect__chip">Delay</VsChip>
 						<CircleSlider
-							:size="CircleSliderSize"
 							v-model="wah.delay"
+							:size="CircleSliderSize"
 							:disabled="wah.disabled"
 							class="WahEffect__slider"
 							:min="MIN_WAH_DELAY"
@@ -52,8 +52,8 @@
 					<div class="WahEffect__control">
 						<VsChip class="WahEffect__chip">Mix</VsChip>
 						<CircleSlider
-							:size="CircleSliderSize"
 							v-model="wah.mix"
+							:size="CircleSliderSize"
 							:disabled="wah.disabled"
 							class="WahEffect__slider"
 							:min="MIN_WAH_MIX"
