@@ -62,6 +62,10 @@ import MidiSelector from "@/components/MIDI/MidiSelector.vue";
 
 	&__midi {
 		padding: $gap-df;
+
+		@include respond(tab-land) {
+			padding: 0 $gap-df;
+		}
 	}
 }
 </style>
