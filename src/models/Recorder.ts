@@ -13,6 +13,7 @@ export default class AudioRecorder {
 	constructor(audioSource: AudioNode, ctx: AudioContext) {
 		this.source = audioSource;
 		this.destination = ctx.createMediaStreamDestination();
+		this.source.connect(this.destination);
 		this.recorder = new MediaRecorder(this.destination.stream);
 
 		this.recorder.ondataavailable = e => {
@@ -48,6 +49,7 @@ export default class AudioRecorder {
 	private onRecorderDataAvailable(e: BlobEvent) {
 		console.log("on recorder data available recording...");
 		this.chunks.push(e.data);
+		console.log(this.chunks);
 	}
 
 	private onRecorderStop() {

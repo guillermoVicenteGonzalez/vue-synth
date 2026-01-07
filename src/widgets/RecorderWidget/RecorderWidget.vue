@@ -108,9 +108,7 @@ $btn-size: 5rem;
 	}
 
 	&__audio {
-		width: 10rem;
-		height: 10rem;
-		background-color: Red;
+		display: none;
 	}
 }
 </style>
