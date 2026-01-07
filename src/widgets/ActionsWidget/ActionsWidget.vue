@@ -39,17 +39,7 @@
 		></VsSeparator>
 
 		<div class="ActionsWidget__recording">
-			<VsButton disabled variant="round" class="ActionsWidget__button">
-				<Play class="ActionsWidget__button__icon"></Play>
-			</VsButton>
-
-			<VsButton disabled variant="round" class="ActionsWidget__button">
-				<Pause class="ActionsWidget__button__icon"></Pause>
-			</VsButton>
-
-			<VsButton disabled variant="round" class="ActionsWidget__button">
-				<Square class="ActionsWidget__button__icon"></Square>
-			</VsButton>
+			<RecorderWidget :source="source"></RecorderWidget>
 		</div>
 
 		<VsSeparator
@@ -86,15 +76,10 @@ import VsSeparator, {
 } from "@/components/common/VsSeparator/VsSeparator.vue";
 import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
 import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
-import {
-	AudioWaveform,
-	Pause,
-	Play,
-	Square,
-	SquareActivity,
-	Trash,
-} from "lucide-vue-next";
+import type AudioCluster from "@/models/AudioCluster";
+import { AudioWaveform, SquareActivity, Trash } from "lucide-vue-next";
 import { computed } from "vue";
+import RecorderWidget from "../RecorderWidget/RecorderWidget.vue";
 
 const MAX_TRANSPOSE = 24;
 const MIN_TRANSPOSE = -24;
@@ -105,10 +90,14 @@ export type ActionsWidgetOrientation = "vertical" | "horizontal";
 interface ActionsWidgetProps {
 	size?: ActionsWidgetSize;
 	orientation?: ActionsWidgetOrientation;
+	source: AudioCluster;
 }
 
-const { size = "minimal", orientation = "vertical" } =
-	defineProps<ActionsWidgetProps>();
+const {
+	size = "minimal",
+	orientation = "vertical",
+	source,
+} = defineProps<ActionsWidgetProps>();
 
 const transpose = defineModel<number>("transpose");
 const volume = defineModel<number>("volume");

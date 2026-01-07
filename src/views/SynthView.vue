@@ -44,6 +44,7 @@
 			<ActionsWidget
 				v-model:transpose="transposeAmount"
 				v-model:volume="MainAudioCluster.volume"
+				:source="MainAudioCluster as AudioCluster"
 				:orientation="ActionsWidgetOrientation"
 				@create-wave="createNewModule"
 				@create-filter="createFilter"
