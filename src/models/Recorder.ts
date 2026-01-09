@@ -22,8 +22,6 @@ export default class AudioRecorder {
 		this.recorder.onstop = () => {
 			this.onRecorderStop();
 		};
-
-		console.log(this.chunks);
 	}
 
 	get state() {

@@ -2,6 +2,10 @@
 
 ## Todo
 
+- Slots functionality
+- Wrap audio element inside MediaElementAudioSourceNode
+- Loop functionality
+
 ### Features
 
 - [-] Piano widget
@@ -49,8 +53,13 @@
 ## Extra Features
 
 - [-] Recorder
-- [ ] Backing tracks
-- [ ] save audio
+  - [ ] Slots functionality
+  - [ ] Wrap audio element inside MediaElementAudioSourceNode https://www.youtube.com/watch?v=idhb45lc2xo
+  - [ ] Loop functionality
+  - [ ] Recorder state bug
+  - [ ] Dynamic control styles
+  - [ ] Backing tracks
+  - [ ] save audio
 - [ ] Metronome
 - [ ] As many MIDI mappings as possible
 - [x] Request midi button + selector disable
@@ -72,7 +81,7 @@
 
 - [ ] Filters are not detached appropiately
 - [ ] Delete all does not work
-- [ ] adjust sliders (specially reverb)
+- [ ] adjust sliders (especially reverb)
 - [ ] add titles to envelope and LFO
 - [ ] Number inputs work really bad
 - [ ] Distortion widget breaks with high res screens (for some unknown reason)

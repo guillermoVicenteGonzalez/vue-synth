@@ -1,114 +1,82 @@
 <template>
 	<div class="RecorderWidget">
-		<VsButton
-			class="RecorderWidget__play-btn RecorderWidget__button"
-			variant="round"
-			@click="handleReplayButton"
+		<VsTab
+			v-for="index in RECORDER_SLOTS"
+			:key="index"
+			:active="index == activeRecorder"
 		>
-			<VsTooltip text="play">
-				<component
-					:is="playButtonIcon"
-					class="RecorderWidget__button__icon"
-				></component>
-			</VsTooltip>
-		</VsButton>
-		<VsButton
-			class="RecorderWidget__record-btn RecorderWidget__button"
-			variant="round"
-			@click="handleRecordingButton"
-		>
-			<VsTooltip>
-				<component
-					:is="recordButtonIcon"
-					class="RecorderWidget__button__icon"
-				></component>
-			</VsTooltip>
-		</VsButton>
-
-		<audio ref="audioRef" class="RecorderWidget__audio"></audio>
-
-		<span style="color: white">{{ recorder.state }}</span>
+			<RecorderSlot :source="source"></RecorderSlot>
+		</VsTab>
+		<ul class="RecorderWidget__tab-selector">
+			<li
+				v-for="index in RECORDER_SLOTS"
+				:key="index"
+				class="RecorderWidget__tab"
+				:class="index == activeRecorder ? 'RecorderWidget__tab--active' : ''"
+				@click="handleSelectSlot(index)"
+			></li>
+		</ul>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import VsButton from "@/components/common/VsButton/VsButton.vue";
-import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
+import VsTab from "@/components/common/VsTab/VsTab.vue";
 import type AudioCluster from "@/models/AudioCluster";
-import AudioRecorder from "@/models/Recorder";
-import { Mic, Pause, Play, Square } from "lucide-vue-next";
-import { computed, ref } from "vue";
+import { ref } from "vue";
+import RecorderSlot from "./RecorderSlot.vue";
 
 interface RecorderWidgetProps {
 	source: AudioCluster;
 }
 
 const { source } = defineProps<RecorderWidgetProps>();
-const audioRef = ref<HTMLAudioElement>();
-const recorder = ref<AudioRecorder>(
-	new AudioRecorder(source.exit, source.context)
-);
+const RECORDER_SLOTS = 4;
+const activeRecorder = ref<number>(1);
 
-const playButtonIcon = computed(() => {
-	return recorder.value.state == "recording" ? Pause : Play;
-});
-
-const recordButtonIcon = computed(() => {
-	return recorder.value.state == "recording" ? Square : Mic;
-});
-
-function handleReplayButton() {
-	if (audioRef.value) audioRef.value.play();
-	console.log("replay");
-}
-
-function handleRecordingButton() {
-	if (recorder.value.state == "recording") handleRecorderStop();
-	else handleRecorderStart();
-}
-
-function handleRecorderStart() {
-	recorder.value.start();
-	console.log(`recorder start. Recorder state: ${recorder.value.state}`);
-}
-
-async function handleRecorderStop() {
-	console.log(`recorder stop. Recorder state: ${recorder.value.state}`);
-
-	await recorder.value.stop();
-
-	if (!audioRef.value) {
-		console.error("no audioRef");
-		return;
-	}
-
-	const audioUrl = recorder.value.getRecordingUrl();
-	if (audioUrl) audioRef.value.src = audioUrl;
-	else console.log("no audioUrl");
+function handleSelectSlot(n: number) {
+	activeRecorder.value = n;
 }
 </script>
 <style lang="scss" scoped>
 $btn-size: 5rem;
 
+$tab-width: 3rem;
+$tab-height: 1.3rem;
+
 .RecorderWidget {
 	display: flex;
-	gap: $gap-df;
+	// gap: $gap-df;
+	height: 100%;
 
-	&__button {
-		width: $btn-size;
-		height: $btn-size;
+	align-items: center;
 
+	&__tab-selector {
+		margin-left: $gap-df;
+		list-style: none;
+		height: 100%;
+		// background-color: black;
 		display: flex;
-		justify-content: center;
-		align-items: center;
-
-		&__icon {
-			@include iconButton;
-		}
+		flex-direction: column;
+		gap: 0.5rem;
+		border-radius: 10px;
+		justify-content: space-between;
 	}
 
-	&__audio {
-		display: none;
+	&__tab {
+		display: block;
+		background-color: $bg-color-3;
+		width: 5rem;
+
+		height: 100%;
+		border-radius: 10px;
+		cursor: pointer;
+		// height: 100%;
+		min-height: $tab-height;
+		max-height: $tab-height;
+
+		&--active {
+			background-color: $primary-color;
+		}
 	}
 }
 </style>
