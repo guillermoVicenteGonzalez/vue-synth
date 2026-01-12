@@ -14,11 +14,19 @@
 import useClickOutside from "@/composables/useClickOutside";
 import { computed, ref } from "vue";
 
+type DropdownMenuOrientation = "top" | "bot" | "left" | "right";
+
+interface DropdownMenuProps {
+	orientation: DropdownMenuOrientation;
+}
+
+const { orientation = "bot" } = defineProps<DropdownMenuProps>();
 const active = ref<boolean>();
 const selfRef = ref();
 
 const dynamicContentClass = computed(() => ({
 	"DropdownMenu__content--hidden": !active.value,
+	[`DropdownMenu__content--${orientation}`]: orientation,
 }));
 
 useClickOutside(selfRef, () => {
@@ -33,6 +41,7 @@ function handleActivatorClick() {
 <style lang="scss" scoped>
 $animation-duration: 0.1s;
 $animation-timing-function: ease-in;
+$content-max-width: 50rem;
 
 .DropdownMenu {
 	&__activator {
@@ -46,20 +55,43 @@ $animation-timing-function: ease-in;
 		background-color: $bg-color-3;
 
 		interpolate-size: allow-keywords;
-		z-index: 100;
-		// position: fixed;
+		animation-duration: $animation-duration;
+		animation-timing-function: $animation-timing-function;
+
+		z-index: 10;
 		position: absolute;
-		top: 100%;
-		left: 0%;
 
 		padding: 2rem;
 		border-radius: 10px;
 		box-shadow: 0px 1px 3px 1px #00000026;
 
-		animation-duration: $animation-duration;
-		animation-timing-function: $animation-timing-function;
+		max-width: $content-max-width;
 
-		//animation
+		&--bot {
+			top: 100%;
+			left: 50%;
+			transform: translate(-50%, 0%);
+		}
+
+		&--top {
+			top: 0%;
+			left: 50%;
+			transform: translate(-50%, -100%);
+		}
+
+		&--left {
+			top: 50%;
+			left: 0%;
+			transform: translate(-100%, -50%);
+		}
+
+		&--right {
+			top: 50%;
+			left: 100%;
+			transform: translate(0%, -50%);
+		}
+
+		//animation !!
 		&--hidden {
 			visibility: hidden;
 		}
