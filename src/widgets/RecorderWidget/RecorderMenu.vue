@@ -1,7 +1,7 @@
 <template>
 	<ul class="RecorderMenu">
 		<li class="RecorderMenu__item">
-			<VsToggleButton></VsToggleButton>
+			<VsToggleButton>Loop</VsToggleButton>
 		</li>
 		<li class="RecorderMenu__item">clear</li>
 		<li class="RecorderMenu__item">Restart</li>

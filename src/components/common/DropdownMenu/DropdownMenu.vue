@@ -48,15 +48,17 @@ $content-max-width: 50rem;
 		width: fit-content;
 		height: fit-content;
 		position: relative;
-		overflow: visible;
+		// overflow: visible;
 	}
 
 	&__content {
 		background-color: $bg-color-2;
+		overflow: hidden;
 
 		interpolate-size: allow-keywords;
 		animation-duration: $animation-duration;
 		animation-timing-function: $animation-timing-function;
+		animation-name: DropdownMenuShowAnimation;
 
 		z-index: 10;
 		position: absolute;
@@ -66,6 +68,7 @@ $content-max-width: 50rem;
 		box-shadow: 0px 1px 3px 1px #00000026;
 
 		max-width: $content-max-width;
+		height: auto;
 
 		&--bot {
 			top: 100%;
@@ -93,6 +96,39 @@ $content-max-width: 50rem;
 
 		//animation !!
 		&--hidden {
+			animation-name: DropdownMenuHideAnimation;
+			visibility: hidden;
+		}
+	}
+
+	@keyframes DropdownMenuShowAnimation {
+		0% {
+			height: 10px;
+			opacity: 0;
+		}
+
+		50% {
+			opacity: 1;
+		}
+
+		100% {
+			height: auto;
+		}
+	}
+
+	@keyframes DropdownMenuHideAnimation {
+		0% {
+			height: auto;
+			visibility: visible;
+		}
+
+		50% {
+			opacity: 1;
+		}
+
+		100% {
+			height: 0;
+			opacity: 0;
 			visibility: hidden;
 		}
 	}
