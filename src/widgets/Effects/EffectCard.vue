@@ -32,8 +32,8 @@
 
 <script setup lang="ts">
 import ContextMenu from "@/components/common/ContextMenu/ContextMenu.vue";
-import ToggleButton from "@/components/common/ToggleButton/ToggleButton.vue";
 import VsCard from "@/components/common/VsCard/VsCard.vue";
+import ToggleButton from "@/components/common/VsRadioButton/VsRadioButton.vue";
 import { computed, ref } from "vue";
 
 interface EffectCardProps {

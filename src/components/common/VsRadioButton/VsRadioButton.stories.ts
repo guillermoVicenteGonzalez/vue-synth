@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/vue3";
-import ToggleButton from "./ToggleButton.vue";
+import ToggleButton from "./VsRadioButton.vue";
 
 const meta: Meta<typeof ToggleButton> = {
 	title: "ToggleButton",

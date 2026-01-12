@@ -77,10 +77,10 @@
 
 <script setup lang="ts">
 import CircleSlider from "@/components/common/CircleSlider/CircleSlider.vue";
-import ToggleButton from "@/components/common/ToggleButton/ToggleButton.vue";
 import VsButton from "@/components/common/VsButton/VsButton.vue";
 import VsCard from "@/components/common/VsCard/VsCard.vue";
 import VsChip from "@/components/common/VsChip/VsChip.vue";
+import ToggleButton from "@/components/common/VsRadioButton/VsRadioButton.vue";
 import VsSelector from "@/components/common/VsSelector/VsSelector.vue";
 import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
 import WaveCanvas from "@/components/waves/WaveCanvas/WaveCanvas.vue";

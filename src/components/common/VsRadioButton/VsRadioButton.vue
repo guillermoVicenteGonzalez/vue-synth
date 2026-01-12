@@ -1,6 +1,6 @@
 <template>
 	<button
-		class="toggleButton"
+		class="RadioButton"
 		:class="classObject"
 		@click="handleClick"
 	></button>
@@ -8,10 +8,10 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-type ToggleButtonVariants = "default" | "elevated";
+type RadioButtonVariants = "default" | "elevated";
 
-interface ToggleButtonProps {
-	variant?: ToggleButtonVariants;
+interface RadioButtonProps {
+	variant?: RadioButtonVariants;
 	color?: string;
 	size?: CSSNumericValue;
 	trueValue?: boolean;
@@ -24,7 +24,7 @@ const {
 	size = "1.5rem",
 	trueValue = true,
 	disabled = false,
-} = defineProps<ToggleButtonProps>();
+} = defineProps<RadioButtonProps>();
 
 const model = defineModel<boolean>({ default: false });
 const emit = defineEmits<{
@@ -37,14 +37,14 @@ function handleClick() {
 }
 
 const classObject = computed(() => ({
-	"toggleButton--selected": model.value == trueValue,
-	[`toggleButton--${variant}`]: variant != null,
-	"toggleButton--disabled": disabled,
+	"RadioButton--selected": model.value == trueValue,
+	[`RadioButton--${variant}`]: variant != null,
+	"RadioButton--disabled": disabled,
 }));
 </script>
 
 <style lang="scss" scoped>
-.toggleButton {
+.RadioButton {
 	cursor: pointer;
 	background-color: transparent;
 
@@ -71,7 +71,7 @@ const classObject = computed(() => ({
 	}
 }
 
-.toggleButton--selected::before {
+.RadioButton--selected::before {
 	display: block;
 	content: "";
 	background: v-bind(color);
@@ -81,7 +81,7 @@ const classObject = computed(() => ({
 	margin: auto;
 }
 
-.toggleButton--disabled.toggleButton--selected::before {
+.RadioButton--disabled.toggleButton--selected::before {
 	background: $disabled-color-2;
 }
 </style>

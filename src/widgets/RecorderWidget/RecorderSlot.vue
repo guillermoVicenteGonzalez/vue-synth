@@ -17,7 +17,7 @@
 			variant="round"
 			@click="handleRecordingButton"
 		>
-			<VsTooltip>
+			<VsTooltip text="Record">
 				<component
 					:is="recordButtonIcon"
 					class="Recorder-slot__button__icon"
@@ -38,9 +38,17 @@
 						></Settings> </VsTooltip
 				></VsButton>
 			</template>
+
+			<template #content>
+				<RecorderMenu></RecorderMenu>
+			</template>
 		</DropdownMenu>
 
-		<audio ref="audioRef" class="Recorder-slot__audio"></audio>
+		<audio
+			ref="audioRef"
+			class="Recorder-slot__audio"
+			:loop="isLooping"
+		></audio>
 	</div>
 </template>
 
@@ -52,6 +60,7 @@ import type AudioCluster from "@/models/AudioCluster";
 import AudioRecorder from "@/models/Recorder";
 import { Mic, Pause, Play, Settings, Square } from "lucide-vue-next";
 import { computed, ref } from "vue";
+import RecorderMenu from "./RecorderMenu.vue";
 
 interface RecorderSlotProps {
 	source: AudioCluster;
@@ -64,7 +73,7 @@ const contextMenuPos = ref<{ x: number; y: number }>({ x: 0, y: 0 });
 const recorder = ref<AudioRecorder>(
 	new AudioRecorder(source.exit, source.context)
 );
-
+const isLooping = ref<boolean>(true);
 const playButtonIcon = computed(() => {
 	return recorder.value.state == "recording" ? Pause : Play;
 });

@@ -17,7 +17,7 @@ import { computed, ref } from "vue";
 type DropdownMenuOrientation = "top" | "bot" | "left" | "right";
 
 interface DropdownMenuProps {
-	orientation: DropdownMenuOrientation;
+	orientation?: DropdownMenuOrientation;
 }
 
 const { orientation = "bot" } = defineProps<DropdownMenuProps>();
@@ -52,7 +52,7 @@ $content-max-width: 50rem;
 	}
 
 	&__content {
-		background-color: $bg-color-3;
+		background-color: $bg-color-2;
 
 		interpolate-size: allow-keywords;
 		animation-duration: $animation-duration;
