@@ -1,7 +1,7 @@
 <template>
-	<div class="SwitchButton" @click="handleClick" :class="dynamicClass">
+	<div class="SwitchButton" :class="dynamicClass" @click="handleClick">
 		<div class="SwitchButton__handle"></div>
-		<input type="checkbox" hidden v-model="active" />
+		<input v-model="active" type="checkbox" hidden />
 	</div>
 </template>
 
@@ -20,11 +20,14 @@ function handleClick() {
 </script>
 
 <style scoped lang="scss">
-$switch-button-width: 5rem;
-$switch-button-height: 2.5rem;
+$switch-button-width: 6rem;
+$switch-button-height: 3rem;
 
 $switch-handle-size: 2rem;
 $switch-button-border-radius: 100px;
+$switch-animation-time: 0.5s;
+
+$switch-margin: 0.5rem;
 
 .SwitchButton {
 	width: $switch-button-width;
@@ -43,15 +46,21 @@ $switch-button-border-radius: 100px;
 		border-radius: $switch-button-border-radius;
 		cursor: pointer;
 
-		transition: all 2s;
+		// transition: all 2s;
+		transition: transform $switch-animation-time;
 
 		position: absolute;
-		// left: 0%;
+		transform: translate($switch-margin, 0);
 	}
 
 	&--active {
 		.SwitchButton__handle {
-			right: 30px;
+			// right: 30px;
+			transform: translateX(
+				calc(
+					#{$switch-button-width} - #{$switch-handle-size} - #{$switch-margin}
+				)
+			);
 		}
 	}
 }
