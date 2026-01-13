@@ -2,10 +2,9 @@
 	<div ref="selfRef" class="DropdownMenu">
 		<div class="DropdownMenu__activator" @click="handleActivatorClick">
 			<slot name="activator"> </slot>
-
-			<div class="DropdownMenu__content" :class="dynamicContentClass">
-				<slot name="content"> </slot>
-			</div>
+		</div>
+		<div class="DropdownMenu__content" :class="dynamicContentClass">
+			<slot name="content"> </slot>
 		</div>
 	</div>
 </template>
@@ -44,10 +43,12 @@ $animation-timing-function: ease-in;
 $content-max-width: 50rem;
 
 .DropdownMenu {
+	position: relative;
+
 	&__activator {
 		width: fit-content;
 		height: fit-content;
-		position: relative;
+		// position: relative;
 		// overflow: visible;
 	}
 
@@ -58,7 +59,7 @@ $content-max-width: 50rem;
 		interpolate-size: allow-keywords;
 		animation-duration: $animation-duration;
 		animation-timing-function: $animation-timing-function;
-		animation-name: DropdownMenuShowAnimation;
+		// animation-name: DropdownMenuShowAnimation;
 
 		z-index: 10;
 		position: absolute;
@@ -96,7 +97,7 @@ $content-max-width: 50rem;
 
 		//animation !!
 		&--hidden {
-			animation-name: DropdownMenuHideAnimation;
+			// animation-name: DropdownMenuHideAnimation;
 			visibility: hidden;
 		}
 	}
