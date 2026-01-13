@@ -40,7 +40,7 @@ function handleActivatorClick() {
 <style lang="scss" scoped>
 $animation-duration: 0.1s;
 $animation-timing-function: ease-in;
-$content-max-width: 50rem;
+$content-max-width: 500rem;
 
 .DropdownMenu {
 	position: relative;
@@ -70,6 +70,7 @@ $content-max-width: 50rem;
 
 		max-width: $content-max-width;
 		height: auto;
+		width: auto;
 
 		&--bot {
 			top: 100%;

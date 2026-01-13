@@ -1,11 +1,15 @@
 <template>
 	<ul class="RecorderMenu">
-		<li class="RecorderMenu__item">
-			<VsTooltip>
-				<VsToggleButton class="RecorderMenu__button">Recordable</VsToggleButton>
+		<li class="RecorderMenu__item RecorderMenu__item--switch">
+			<VsTooltip :text="recordableTooltip">
+				<span>Recordable</span>
 			</VsTooltip>
+			<VsSwitchButton></VsSwitchButton>
 		</li>
-		<li class="RecorderMenu__item">
+		<li class="RecorderMenu__item RecorderMenu__item--switch">
+			<VsTooltip :text="loopTooltip">
+				<span>Loops</span>
+			</VsTooltip>
 			<VsSwitchButton></VsSwitchButton>
 		</li>
 
@@ -19,8 +23,11 @@
 <script setup lang="ts">
 import VsSeparator from "@/components/common/VsSeparator/VsSeparator.vue";
 import VsSwitchButton from "@/components/common/VsSwitchButton/VsSwitchButton.vue";
-import VsToggleButton from "@/components/common/VsToggleButton/VsToggleButton.vue";
 import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
+
+//Disabled for not because of tooltip overflow
+const recordableTooltip = "";
+const loopTooltip = "";
 </script>
 
 <style lang="scss" scoped>
@@ -39,12 +46,33 @@ $button-height: 3rem;
 	flex-direction: column;
 
 	gap: $gap-df;
+	padding: 0 $gap-df;
 
 	&__item {
+		padding: $gap-df;
 		font-size: 1.6rem;
 		color: $text-color;
 		width: 100%;
 		height: $button-height;
+
+		white-space: nowrap;
+
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: $gap-bg;
+
+		&:not(&--switch) {
+			cursor: pointer;
+		}
+
+		&:not(&--switch):hover {
+			background-color: $primary-color;
+		}
+
+		* {
+			white-space: nowrap;
+		}
 	}
 
 	&__button {

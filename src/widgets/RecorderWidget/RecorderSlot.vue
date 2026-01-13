@@ -25,7 +25,7 @@
 			</VsTooltip>
 		</VsButton>
 
-		<DropdownMenu>
+		<DropdownMenu orientation="top">
 			<template #activator>
 				<VsButton
 					class="Recorder-slot__button Recorder-slot__settings-btn"

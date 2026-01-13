@@ -29,10 +29,14 @@ $switch-animation-time: 0.5s;
 
 $switch-margin: 0.5rem;
 
+$handle-color: white;
+$switch-color: $bg-color-black;
+$switch-color-active: $primary-color;
+
 .SwitchButton {
 	width: $switch-button-width;
 	height: $switch-button-height;
-	background-color: black;
+	background-color: $switch-color;
 	border-radius: $switch-button-border-radius;
 
 	display: flex;
@@ -54,6 +58,8 @@ $switch-margin: 0.5rem;
 	}
 
 	&--active {
+		background-color: $switch-color-active;
+
 		.SwitchButton__handle {
 			// right: 30px;
 			transform: translateX(

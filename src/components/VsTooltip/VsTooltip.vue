@@ -43,6 +43,8 @@ $animation-time: 1s;
 
 .VsTooltip {
 	position: relative;
+	width: fit-content;
+	height: fit-content;
 
 	&__content {
 		visibility: hidden;
