@@ -63,7 +63,15 @@ import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
 import type AudioCluster from "@/models/AudioCluster";
 import AudioRecorder from "@/models/Recorder";
 import { Mic, Pause, Play, Settings, Square } from "lucide-vue-next";
-import { computed, ref, triggerRef, useTemplateRef, watchEffect } from "vue";
+import {
+	computed,
+	onMounted,
+	onUnmounted,
+	ref,
+	triggerRef,
+	useTemplateRef,
+	watchEffect,
+} from "vue";
 import RecorderMenu from "./RecorderMenu.vue";
 
 interface RecorderSlotProps {
@@ -94,6 +102,9 @@ watchEffect(() => {
 const isReplayBtnDisabled = computed(() => {
 	if (!audioRef.value) return true;
 	if (!audioRef.value.src) return true;
+	// if (!audioRef.value.readyState) return true;
+	if (audioRef.value.error != null) return true;
+
 	return false;
 });
 
@@ -115,6 +126,7 @@ function handleReplayButton() {
 	if (!audioRef.value) return;
 
 	if (audioRef.value.paused) {
+		if (audioRef.value.readyState) audioRef.value.play();
 	} else audioRef.value.pause();
 
 	triggerRef(audioRef);
@@ -140,9 +152,25 @@ async function handleRecorderStop() {
 	}
 
 	const audioUrl = recorder.value.getRecordingUrl();
-	if (audioUrl) audioRef.value.src = audioUrl;
+	if (audioUrl) {
+		try {
+			audioRef.value.src = audioUrl;
+		} catch (err) {
+			console.warn(err);
+		}
+	}
 	triggerRef(audioRef);
 }
+
+onMounted(() => {
+	if (!audioRef.value) return;
+
+	audioRef.value.onerror = () => {
+		triggerRef(audioRef);
+	};
+});
+
+onUnmounted(() => {});
 </script>
 <style lang="scss" scoped>
 $btn-size: 5rem;
