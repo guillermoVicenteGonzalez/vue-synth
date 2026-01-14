@@ -30,7 +30,6 @@ export default class AudioRecorder {
 
 	public start() {
 		this.recorder.start();
-		console.log("Starting recorder");
 	}
 
 	public async stop() {
@@ -38,20 +37,14 @@ export default class AudioRecorder {
 			this.resolveStopPromise = resolve;
 		});
 		this.recorder.stop();
-		console.log("Stopping recorder");
 		await p;
-		console.log("This should go after on recorder stop");
-		console.log(this.result);
 	}
 
 	private onRecorderDataAvailable(e: BlobEvent) {
-		console.log("on recorder data available recording...");
 		this.chunks.push(e.data);
-		console.log(this.chunks);
 	}
 
 	private onRecorderStop() {
-		console.warn("On recorder stop");
 		const blob = new Blob(this.chunks, { type: "audio/ogg; codecs=opus" });
 		this.chunks = [];
 		this.result = blob;
@@ -60,7 +53,6 @@ export default class AudioRecorder {
 
 	public getRecordingUrl() {
 		if (!this.result) {
-			console.error("No result");
 			return;
 		}
 		return window.URL.createObjectURL(this.result);

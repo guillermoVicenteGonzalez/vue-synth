@@ -2,6 +2,7 @@
 	<div class="Recorder-slot">
 		<VsButton
 			class="Recorder-slot__play-btn Recorder-slot__button"
+			:disabled="isReplayBtnDisabled"
 			variant="round"
 			@click="handleReplayButton"
 		>
@@ -31,7 +32,6 @@
 				<VsButton
 					class="Recorder-slot__button Recorder-slot__settings-btn"
 					variant="round"
-					@click="openContextMenu"
 				>
 					<VsTooltip>
 						<Settings
@@ -72,8 +72,7 @@ interface RecorderSlotProps {
 
 const { source } = defineProps<RecorderSlotProps>();
 const audioRef = useTemplateRef<HTMLAudioElement>("audioRef");
-const contextMenuVisible = ref<boolean>(false);
-const contextMenuPos = ref<{ x: number; y: number }>({ x: 0, y: 0 });
+
 const recorder = ref<AudioRecorder>(
 	new AudioRecorder(source.exit, source.context)
 );
@@ -90,6 +89,12 @@ watchEffect(() => {
 //This should be reactive by default but it is not working???
 watchEffect(() => {
 	isRecording.value = recorder.value.state;
+});
+
+const isReplayBtnDisabled = computed(() => {
+	if (!audioRef.value) return true;
+	if (!audioRef.value.src) return true;
+	return false;
 });
 
 const playButtonIcon = computed(() => {
@@ -109,8 +114,8 @@ const recordButtonDynamicClass = computed(() => {
 function handleReplayButton() {
 	if (!audioRef.value) return;
 
-	if (audioRef.value.paused) audioRef.value.play();
-	else audioRef.value.pause();
+	if (audioRef.value.paused) {
+	} else audioRef.value.pause();
 
 	triggerRef(audioRef);
 }
@@ -124,12 +129,9 @@ function handleRecordingButton() {
 
 function handleRecorderStart() {
 	recorder.value.start();
-	console.log(`recorder start. Recorder state: ${recorder.value.state}`);
 }
 
 async function handleRecorderStop() {
-	console.log(`recorder stop. Recorder state: ${recorder.value.state}`);
-
 	await recorder.value.stop();
 
 	if (!audioRef.value) {
@@ -139,14 +141,7 @@ async function handleRecorderStop() {
 
 	const audioUrl = recorder.value.getRecordingUrl();
 	if (audioUrl) audioRef.value.src = audioUrl;
-	else console.log("no audioUrl");
-}
-
-function openContextMenu(e: MouseEvent) {
-	e.preventDefault();
-	contextMenuVisible.value = true;
-	contextMenuPos.value.x = e.clientX;
-	contextMenuPos.value.y = e.clientY;
+	triggerRef(audioRef);
 }
 </script>
 <style lang="scss" scoped>
