@@ -53,9 +53,9 @@
 ## Extra Features
 
 - [-] Recorder
-  - [ ] Slots functionality
+  - [x] Slots functionality
   - [ ] Wrap audio element inside MediaElementAudioSourceNode https://www.youtube.com/watch?v=idhb45lc2xo
-  - [ ] Loop functionality
+  - [x] Loop functionality
   - [ ] Recorder state bug
   - [ ] Dynamic control styles
   - [ ] Backing tracks
@@ -74,8 +74,8 @@
 - [ ] Invert disable toggles
 - [ ] sawwaves representation
 - [ ] Disable canvases
-- [ ] Button effects
-- [ ] font
+- [x] Button effects
+- [x] font
 
 ## Bugs
 

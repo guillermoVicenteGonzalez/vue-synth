@@ -14,6 +14,7 @@
 		</VsButton>
 		<VsButton
 			class="Recorder-slot__record-btn Recorder-slot__button"
+			:class="recordButtonDynamicClass"
 			variant="round"
 			@click="handleRecordingButton"
 		>
@@ -62,7 +63,7 @@ import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
 import type AudioCluster from "@/models/AudioCluster";
 import AudioRecorder from "@/models/Recorder";
 import { Mic, Pause, Play, Settings, Square } from "lucide-vue-next";
-import { computed, ref } from "vue";
+import { computed, ref, triggerRef, useTemplateRef, watchEffect } from "vue";
 import RecorderMenu from "./RecorderMenu.vue";
 
 interface RecorderSlotProps {
@@ -70,7 +71,7 @@ interface RecorderSlotProps {
 }
 
 const { source } = defineProps<RecorderSlotProps>();
-const audioRef = ref<HTMLAudioElement>();
+const audioRef = useTemplateRef<HTMLAudioElement>("audioRef");
 const contextMenuVisible = ref<boolean>(false);
 const contextMenuPos = ref<{ x: number; y: number }>({ x: 0, y: 0 });
 const recorder = ref<AudioRecorder>(
@@ -78,22 +79,47 @@ const recorder = ref<AudioRecorder>(
 );
 const recordingLoops = ref<boolean>(true);
 const isRecordable = ref<boolean>(false);
+const isPlaying = ref<boolean>(false);
+const isRecording = ref<RecordingState>();
+
+watchEffect(() => {
+	if (!audioRef.value) return;
+	isPlaying.value = !audioRef.value.paused;
+});
+
+//This should be reactive by default but it is not working???
+watchEffect(() => {
+	isRecording.value = recorder.value.state;
+});
 
 const playButtonIcon = computed(() => {
-	return recorder.value.state == "recording" ? Pause : Play;
+	return isPlaying.value ? Pause : Play;
 });
 
 const recordButtonIcon = computed(() => {
 	return recorder.value.state == "recording" ? Square : Mic;
 });
 
+const recordButtonDynamicClass = computed(() => {
+	return {
+		"Recorder-slot__record-btn--recording": recorder.value.state == "recording",
+	};
+});
+
 function handleReplayButton() {
-	if (audioRef.value) audioRef.value.play();
+	if (!audioRef.value) return;
+
+	if (audioRef.value.paused) audioRef.value.play();
+	else audioRef.value.pause();
+
+	triggerRef(audioRef);
 }
 
 function handleRecordingButton() {
 	if (recorder.value.state == "recording") handleRecorderStop();
 	else handleRecorderStart();
+
+	triggerRef(recorder);
 }
 
 function handleRecorderStart() {
@@ -125,6 +151,7 @@ function openContextMenu(e: MouseEvent) {
 </script>
 <style lang="scss" scoped>
 $btn-size: 5rem;
+$recording-color: red;
 
 .Recorder-slot {
 	display: flex;
@@ -140,6 +167,12 @@ $btn-size: 5rem;
 
 		&__icon {
 			@include iconButton;
+		}
+	}
+
+	&__record-btn {
+		&--recording {
+			background-color: $recording-color;
 		}
 	}
 

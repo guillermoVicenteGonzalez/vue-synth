@@ -14,6 +14,7 @@
 		</li>
 
 		<li class="RecorderMenu__item">Download track</li>
+		<li>Volume</li>
 		<VsSeparator></VsSeparator>
 		<li class="RecorderMenu__item">clear all</li>
 		<li class="RecorderMenu__item">play all</li>
