@@ -4,13 +4,13 @@
 			<VsTooltip :text="recordableTooltip">
 				<span>Recordable</span>
 			</VsTooltip>
-			<VsSwitchButton></VsSwitchButton>
+			<VsSwitchButton v-model="recordable"></VsSwitchButton>
 		</li>
 		<li class="RecorderMenu__item RecorderMenu__item--switch">
 			<VsTooltip :text="loopTooltip">
 				<span>Loops</span>
 			</VsTooltip>
-			<VsSwitchButton></VsSwitchButton>
+			<VsSwitchButton v-model="recordingLoops"></VsSwitchButton>
 		</li>
 
 		<li class="RecorderMenu__item">Download track</li>
@@ -24,6 +24,9 @@
 import VsSeparator from "@/components/common/VsSeparator/VsSeparator.vue";
 import VsSwitchButton from "@/components/common/VsSwitchButton/VsSwitchButton.vue";
 import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
+
+const recordingLoops = defineModel<boolean>("loops");
+const recordable = defineModel<boolean>("recordable");
 
 //Disabled for not because of tooltip overflow
 const recordableTooltip = "";

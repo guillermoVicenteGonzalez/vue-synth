@@ -40,14 +40,17 @@
 			</template>
 
 			<template #content>
-				<RecorderMenu></RecorderMenu>
+				<RecorderMenu
+					v-model:loops="recordingLoops"
+					v-model:recordable="isRecordable"
+				></RecorderMenu>
 			</template>
 		</DropdownMenu>
 
 		<audio
 			ref="audioRef"
 			class="Recorder-slot__audio"
-			:loop="isLooping"
+			:loop="recordingLoops"
 		></audio>
 	</div>
 </template>
@@ -73,7 +76,9 @@ const contextMenuPos = ref<{ x: number; y: number }>({ x: 0, y: 0 });
 const recorder = ref<AudioRecorder>(
 	new AudioRecorder(source.exit, source.context)
 );
-const isLooping = ref<boolean>(true);
+const recordingLoops = ref<boolean>(true);
+const isRecordable = ref<boolean>(false);
+
 const playButtonIcon = computed(() => {
 	return recorder.value.state == "recording" ? Pause : Play;
 });
