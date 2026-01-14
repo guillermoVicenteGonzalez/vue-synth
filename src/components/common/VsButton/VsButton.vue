@@ -77,11 +77,11 @@ $active-scale: 0.98;
 		}
 	}
 
-	&:hover {
+	&:not(&--disabled):hover {
 		transform: scale($hover-scale);
 	}
 
-	&:active {
+	&:not(&--disabled):active {
 		transform: scale($active-scale);
 	}
 }
