@@ -1,12 +1,12 @@
 <template>
 	<ul class="RecorderMenu">
-		<li class="RecorderMenu__item RecorderMenu__item--switch">
+		<li class="RecorderMenu__item RecorderMenu__item--control">
 			<VsTooltip :text="recordableTooltip">
 				<span>Recordable</span>
 			</VsTooltip>
 			<VsSwitchButton v-model="recordable"></VsSwitchButton>
 		</li>
-		<li class="RecorderMenu__item RecorderMenu__item--switch">
+		<li class="RecorderMenu__item RecorderMenu__item--control">
 			<VsTooltip :text="loopTooltip">
 				<span>Loops</span>
 			</VsTooltip>
@@ -15,7 +15,9 @@
 
 		<li class="RecorderMenu__item">Load track</li>
 		<li class="RecorderMenu__item">Download track</li>
-		<li class="RecorderMenu__item">Volume</li>
+		<li class="RecorderMenu__item RecorderMenu__item--control">
+			<VsSlider v-model="volume" :min="0" :max="1"></VsSlider>
+		</li>
 
 		<VsSeparator></VsSeparator>
 		<li class="RecorderMenu__item">clear all</li>
@@ -26,9 +28,13 @@
 
 <script setup lang="ts">
 import VsSeparator from "@/components/common/VsSeparator/VsSeparator.vue";
+import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
 import VsSwitchButton from "@/components/common/VsSwitchButton/VsSwitchButton.vue";
 import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
 
+const volume = defineModel<number>("volume", {
+	default: 1,
+});
 const recordingLoops = defineModel<boolean>("loops");
 const recordable = defineModel<boolean>("recordable");
 
@@ -82,11 +88,11 @@ $button-height: 3rem;
 		justify-content: space-between;
 		gap: $gap-bg;
 
-		&:not(&--switch) {
+		&:not(&--control) {
 			cursor: pointer;
 		}
 
-		&:not(&--switch):hover {
+		&:not(&--control):hover {
 			background-color: $primary-color;
 		}
 

@@ -6,8 +6,8 @@
 			:active="index == activeRecorder"
 		>
 			<RecorderSlot
-				:source="source"
 				ref="recorderSlots"
+				:source="source"
 				@playall="playAll"
 				@pauseall="pauseAll"
 			></RecorderSlot>

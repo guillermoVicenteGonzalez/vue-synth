@@ -42,10 +42,11 @@
 
 			<template #content>
 				<RecorderMenu
-					@playall="emit('playall')"
-					@pauseall="emit('pauseall')"
 					v-model:loops="recordingLoops"
 					v-model:recordable="isRecordable"
+					v-model:volume="volume"
+					@playall="emit('playall')"
+					@pauseall="emit('pauseall')"
 				></RecorderMenu>
 			</template>
 		</DropdownMenu>
@@ -63,12 +64,12 @@ import DropdownMenu from "@/components/common/DropdownMenu/DropdownMenu.vue";
 import VsButton from "@/components/common/VsButton/VsButton.vue";
 import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
 import type AudioCluster from "@/models/AudioCluster";
-import AudioRecorder from "@/models/Recorder";
+import AudioRecorder from "@/models/effects/Recorder/Recorder";
+import Recording from "@/models/effects/Recorder/Recording";
 import { Mic, Pause, Play, Settings, Square } from "lucide-vue-next";
 import {
 	computed,
 	onMounted,
-	onUnmounted,
 	ref,
 	triggerRef,
 	useTemplateRef,
@@ -94,6 +95,11 @@ const recordingLoops = ref<boolean>(true);
 const isRecordable = ref<boolean>(false);
 const isPlaying = ref<boolean>(false);
 const isRecording = ref<RecordingState>();
+const recording = ref<Recording | null>();
+const volume = ref<number>(1);
+watchEffect(() => {
+	if (recording.value) recording.value.volume = volume.value;
+});
 
 watchEffect(() => {
 	if (!audioRef.value) return;
@@ -156,6 +162,7 @@ function pauseAudio() {
 	if (!audioRef.value) return;
 	audioRef.value.pause();
 	audioRef.value.currentTime = 0;
+	triggerRef(audioRef);
 }
 
 function handleRecordingButton() {
@@ -198,9 +205,9 @@ onMounted(() => {
 	audioRef.value.onerror = () => {
 		triggerRef(audioRef);
 	};
-});
 
-onUnmounted(() => {});
+	recording.value = new Recording(audioRef.value, source.context);
+});
 
 defineExpose({
 	replayAudio,
