@@ -42,6 +42,8 @@
 
 			<template #content>
 				<RecorderMenu
+					@playall="emit('playall')"
+					@pauseall="emit('pauseall')"
 					v-model:loops="recordingLoops"
 					v-model:recordable="isRecordable"
 				></RecorderMenu>
@@ -79,6 +81,10 @@ interface RecorderSlotProps {
 }
 
 const { source } = defineProps<RecorderSlotProps>();
+const emit = defineEmits<{
+	(e: "playall"): void;
+	(e: "pauseall"): void;
+}>();
 const audioRef = useTemplateRef<HTMLAudioElement>("audioRef");
 
 const recorder = ref<AudioRecorder>(
@@ -127,9 +133,29 @@ function handleReplayButton() {
 
 	if (audioRef.value.paused) {
 		if (audioRef.value.readyState) audioRef.value.play();
-	} else audioRef.value.pause();
+	} else pauseAudio();
 
 	triggerRef(audioRef);
+}
+
+/**
+ * Meant to be exposed
+ */
+function replayAudio() {
+	if (!audioRef.value) return;
+	if (!audioRef.value.src) return;
+
+	// audioRef.value.pause();
+	audioRef.value.currentTime = 0;
+
+	audioRef.value.play();
+	triggerRef(audioRef);
+}
+
+function pauseAudio() {
+	if (!audioRef.value) return;
+	audioRef.value.pause();
+	audioRef.value.currentTime = 0;
 }
 
 function handleRecordingButton() {
@@ -159,6 +185,10 @@ async function handleRecorderStop() {
 			console.warn(err);
 		}
 	}
+
+	const buffer = await recorder.value.getRecordingAudioBuffer();
+	console.log(buffer);
+
 	triggerRef(audioRef);
 }
 
@@ -171,6 +201,11 @@ onMounted(() => {
 });
 
 onUnmounted(() => {});
+
+defineExpose({
+	replayAudio,
+	pauseAudio,
+});
 </script>
 <style lang="scss" scoped>
 $btn-size: 5rem;

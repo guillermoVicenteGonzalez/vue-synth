@@ -2,9 +2,8 @@
 
 ## Todo
 
-- Slots functionality
-- Wrap audio element inside MediaElementAudioSourceNode
-- Loop functionality
+INVESTIGAR AUDIO BUFFER !!!!!
+Quizas es mejor usar MediaElementAudioSourceNode
 
 ### Features
 
@@ -56,10 +55,15 @@
   - [x] Slots functionality
   - [ ] Wrap audio element inside MediaElementAudioSourceNode https://www.youtube.com/watch?v=idhb45lc2xo
   - [x] Loop functionality
-  - [ ] Recorder state bug
-  - [ ] Dynamic control styles
+  - [x] Recorder state bug
+  - [x] Dynamic control styles
   - [ ] Backing tracks
   - [ ] save audio
+  - [ ] Trim audio?
+    - blob => audioBuffer.
+  - [ ] Load audio (url or file??)
+  - [ ] Mix audio (audio encoder)
+    - Recorder => blob => audioBuffer / MediaElement....
 - [ ] Metronome
 - [ ] As many MIDI mappings as possible
 - [x] Request midi button + selector disable
@@ -76,6 +80,7 @@
 - [ ] Disable canvases
 - [x] Button effects
 - [x] font
+- [ ] Lighthouse
 
 ## Bugs
 
@@ -85,6 +90,7 @@
 - [ ] add titles to envelope and LFO
 - [ ] Number inputs work really bad
 - [ ] Distortion widget breaks with high res screens (for some unknown reason)
+- [ ] Prevent suspension
 
 ### What ifs
 

@@ -13,11 +13,14 @@
 			<VsSwitchButton v-model="recordingLoops"></VsSwitchButton>
 		</li>
 
+		<li class="RecorderMenu__item">Load track</li>
 		<li class="RecorderMenu__item">Download track</li>
-		<li>Volume</li>
+		<li class="RecorderMenu__item">Volume</li>
+
 		<VsSeparator></VsSeparator>
 		<li class="RecorderMenu__item">clear all</li>
-		<li class="RecorderMenu__item">play all</li>
+		<li class="RecorderMenu__item" @click="handlePlayALl">play all</li>
+		<li class="RecorderMenu__item" @click="handlePauseAll">pause all</li>
 	</ul>
 </template>
 
@@ -32,6 +35,19 @@ const recordable = defineModel<boolean>("recordable");
 //Disabled for not because of tooltip overflow
 const recordableTooltip = "";
 const loopTooltip = "";
+
+const emit = defineEmits<{
+	(e: "playall"): void;
+	(e: "pauseall"): void;
+}>();
+
+function handlePlayALl() {
+	emit("playall");
+}
+
+function handlePauseAll() {
+	emit("pauseall");
+}
 </script>
 
 <style lang="scss" scoped>

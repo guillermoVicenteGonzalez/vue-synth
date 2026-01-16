@@ -5,7 +5,12 @@
 			:key="index"
 			:active="index == activeRecorder"
 		>
-			<RecorderSlot :source="source"></RecorderSlot>
+			<RecorderSlot
+				:source="source"
+				ref="recorderSlots"
+				@playall="playAll"
+				@pauseall="pauseAll"
+			></RecorderSlot>
 		</VsTab>
 		<ul class="RecorderWidget__tab-selector">
 			<li
@@ -22,7 +27,7 @@
 <script lang="ts" setup>
 import VsTab from "@/components/common/VsTab/VsTab.vue";
 import type AudioCluster from "@/models/AudioCluster";
-import { ref } from "vue";
+import { ref, useTemplateRef } from "vue";
 import RecorderSlot from "./RecorderSlot.vue";
 
 interface RecorderWidgetProps {
@@ -32,9 +37,26 @@ interface RecorderWidgetProps {
 const { source } = defineProps<RecorderWidgetProps>();
 const RECORDER_SLOTS = 4;
 const activeRecorder = ref<number>(1);
+const recorderSlots = useTemplateRef<(typeof RecorderSlot)[]>("recorderSlots");
 
 function handleSelectSlot(n: number) {
 	activeRecorder.value = n;
+}
+
+function playAll() {
+	if (!recorderSlots.value) return;
+
+	recorderSlots.value.forEach(recorder => {
+		recorder.replayAudio();
+	});
+}
+
+function pauseAll() {
+	if (!recorderSlots.value) return;
+
+	recorderSlots.value.forEach(recorder => {
+		recorder.pauseAudio();
+	});
 }
 </script>
 <style lang="scss" scoped>

@@ -3,6 +3,7 @@ export default class AudioRecorder {
 	private recorder: MediaRecorder;
 	private source: AudioNode | null;
 	private chunks: Array<BlobPart> = [];
+	private ctx: AudioContext;
 	private resolveStopPromise: () => void = () => {
 		console.warn(
 			"this method is empty and hasn't been overwritten by a Promise's resolve"
@@ -22,6 +23,8 @@ export default class AudioRecorder {
 		this.recorder.onstop = () => {
 			this.onRecorderStop();
 		};
+
+		this.ctx = ctx;
 	}
 
 	get state() {
@@ -45,7 +48,9 @@ export default class AudioRecorder {
 	}
 
 	private onRecorderStop() {
+		console.log(this.chunks);
 		const blob = new Blob(this.chunks, { type: "audio/ogg; codecs=opus" });
+		console.log(blob);
 		this.chunks = [];
 		this.result = blob;
 		this.resolveStopPromise();
@@ -56,5 +61,45 @@ export default class AudioRecorder {
 			return;
 		}
 		return window.URL.createObjectURL(this.result);
+	}
+
+	public async getRecordingAudioBuffer() {
+		if (!this.result) return null;
+
+		let audioBuffer = this.ctx.createBuffer(
+			2,
+			this.ctx.sampleRate * 3,
+			this.ctx.sampleRate
+		);
+
+		const fr = new FileReader();
+
+		const p = new Promise<void>(resolve => {
+			fr.onloadend = () => {
+				const arrayB = fr.result as ArrayBuffer;
+				this.ctx.decodeAudioData(arrayB, a => {
+					audioBuffer = a;
+				});
+				resolve();
+			};
+		});
+
+		fr.readAsArrayBuffer(this.result);
+		await p;
+		return audioBuffer;
+	}
+
+	public static mixAudio(tracks: AudioBuffer[], sampleRate: number) {
+		if (!tracks) return null;
+
+		const biggestLength = tracks.sort((a, b) => a.length - b.length)[0].length;
+
+		const offlineCtx = new OfflineAudioContext(
+			tracks.length,
+			biggestLength,
+			sampleRate
+		);
+
+		return offlineCtx;
 	}
 }
