@@ -102,6 +102,7 @@ $button-height: 3rem;
 
 		&:not(&--control):hover {
 			background-color: $primary-color;
+			border-radius: $border-radius-sm;
 		}
 
 		* {

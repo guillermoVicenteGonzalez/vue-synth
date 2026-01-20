@@ -78,8 +78,8 @@ export default class AudioRecorder {
 			if (this.result != null) fr.readAsArrayBuffer(this.result);
 		});
 
-		const source = new AudioBufferSourceNode(this.ctx);
-		source.buffer = audioBuffer;
+		// const source = new AudioBufferSourceNode(this.ctx);
+		// source.buffer = audioBuffer;
 
 		console.log("Returning audio buffer");
 		return audioBuffer;
@@ -88,15 +88,11 @@ export default class AudioRecorder {
 	public static async mixAudio(tracks: AudioBuffer[], sampleRate: number) {
 		if (!tracks) return null;
 
-		const biggestLength = tracks.sort((a, b) => a.length - b.length)[0].length;
-
-		//quitar loop???
-
-		console.log(biggestLength);
+		const biggestTrack = tracks.sort((a, b) => b.duration - a.duration)[0];
 
 		const offlineCtx = new OfflineAudioContext(
 			tracks.length,
-			biggestLength,
+			biggestTrack.length,
 			sampleRate
 		);
 
@@ -104,6 +100,7 @@ export default class AudioRecorder {
 		const sources: AudioBufferSourceNode[] = tracks.map(track => {
 			const source = new AudioBufferSourceNode(offlineCtx);
 			source.buffer = track;
+			source.loop = true;
 			source.connect(entryPoint);
 			entryPoint.connect(offlineCtx.destination);
 			source.start();

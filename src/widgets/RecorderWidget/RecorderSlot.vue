@@ -13,10 +13,12 @@
 				></component>
 			</VsTooltip>
 		</VsButton>
+
 		<VsButton
 			class="Recorder-slot__record-btn Recorder-slot__button"
 			:class="recordButtonDynamicClass"
 			variant="round"
+			@contextmenu="handleRecorderBtnContextMenu"
 			@click="handleRecordingButton"
 		>
 			<VsTooltip text="Record">
@@ -26,6 +28,18 @@
 				></component>
 			</VsTooltip>
 		</VsButton>
+
+		<ContextMenu
+			class="Recorder-slot__context-menu RecorderSlot__context-menu--recorder-btn"
+			:visible="recorderBtnContextMenuVisible"
+			:pos-x="recorderBtnContextMenuPos.x"
+			:pos-y="recorderBtnContextMenuPos.y"
+			@close="recorderBtnContextMenuVisible = false"
+		>
+			<ul>
+				<li>Record and play all</li>
+			</ul>
+		</ContextMenu>
 
 		<DropdownMenu orientation="top">
 			<template #activator>
@@ -48,7 +62,6 @@
 					@download-mix="emit('downloadMix')"
 					@playall="emit('playall')"
 					@pauseall="emit('pauseall')"
-					@test="handleTest"
 				></RecorderMenu>
 			</template>
 		</DropdownMenu>
@@ -62,6 +75,7 @@
 </template>
 
 <script lang="ts" setup>
+import ContextMenu from "@/components/common/ContextMenu/ContextMenu.vue";
 import DropdownMenu from "@/components/common/DropdownMenu/DropdownMenu.vue";
 import VsButton from "@/components/common/VsButton/VsButton.vue";
 import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
@@ -90,6 +104,8 @@ const emit = defineEmits<{
 	(e: "downloadMix"): void;
 }>();
 const audioRef = useTemplateRef<HTMLAudioElement>("audioRef");
+const recorderBtnContextMenuVisible = ref(false);
+const recorderBtnContextMenuPos = ref<{ x: number; y: number }>({ x: 0, y: 0 });
 
 const recorder = ref<AudioRecorder>(
 	new AudioRecorder(source.exit, source.context)
@@ -200,10 +216,12 @@ async function handleRecorderStop() {
 	triggerRef(audioRef);
 }
 
-function handleTest() {
-	if (!audioRef.value) return;
+function handleRecorderBtnContextMenu(e: MouseEvent) {
+	e.preventDefault();
 
-	console.warn(audioRef.value.duration);
+	recorderBtnContextMenuVisible.value = !recorderBtnContextMenuVisible.value;
+	recorderBtnContextMenuPos.value.x = e.clientX;
+	recorderBtnContextMenuPos.value.y = e.clientY;
 }
 
 onMounted(() => {
@@ -251,6 +269,29 @@ $recording-color: red;
 
 	&__audio {
 		display: none;
+	}
+
+	&__context-menu {
+		ul {
+			list-style: none;
+			display: flex;
+			flex-direction: column;
+
+			gap: $gap-df;
+			padding: 0 $gap-df;
+			color: $text-color;
+			font-size: 1.6rem;
+
+			li {
+				cursor: pointer;
+				border-radius: $border-radius-sm;
+				padding: 0 $gap-df;
+
+				&:hover {
+					background-color: $primary-color;
+				}
+			}
+		}
 	}
 }
 </style>
