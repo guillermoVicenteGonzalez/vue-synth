@@ -16,10 +16,12 @@
 		<li class="RecorderMenu__item">Load track</li>
 		<li class="RecorderMenu__item">Download track</li>
 		<li class="RecorderMenu__item RecorderMenu__item--control">
-			<VsSlider v-model="volume" :min="0" :max="1"></VsSlider>
+			<VsSlider v-model="volume" :min="0" :max="1" :step="0.01"></VsSlider>
 		</li>
 
 		<VsSeparator></VsSeparator>
+		<li class="RecorderMenu__item" @click="handleDownloadMix">Download mix</li>
+
 		<li class="RecorderMenu__item">clear all</li>
 		<li class="RecorderMenu__item" @click="handlePlayALl">play all</li>
 		<li class="RecorderMenu__item" @click="handlePauseAll">pause all</li>
@@ -45,6 +47,8 @@ const loopTooltip = "";
 const emit = defineEmits<{
 	(e: "playall"): void;
 	(e: "pauseall"): void;
+	(e: "downloadMix"): void;
+	(e: "test"): void;
 }>();
 
 function handlePlayALl() {
@@ -53,6 +57,10 @@ function handlePlayALl() {
 
 function handlePauseAll() {
 	emit("pauseall");
+}
+
+function handleDownloadMix() {
+	emit("downloadMix");
 }
 </script>
 

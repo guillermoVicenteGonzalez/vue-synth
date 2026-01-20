@@ -2,8 +2,7 @@
 
 ## Todo
 
-INVESTIGAR AUDIO BUFFER !!!!!
-Quizas es mejor usar MediaElementAudioSourceNode
+Probar AudioBufferSource con el contexto para ver si suena o el problema esta en el decode.
 
 ### Features
 
@@ -58,7 +57,7 @@ Quizas es mejor usar MediaElementAudioSourceNode
   - [x] Recorder state bug
   - [x] Dynamic control styles
   - [ ] Backing tracks
-  - [ ] save audio
+  - [ ] save audio / download audio
   - [ ] Trim audio?
     - blob => audioBuffer.
   - [ ] Load audio (url or file??)

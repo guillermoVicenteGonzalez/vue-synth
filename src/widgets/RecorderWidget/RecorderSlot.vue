@@ -45,8 +45,10 @@
 					v-model:loops="recordingLoops"
 					v-model:recordable="isRecordable"
 					v-model:volume="volume"
+					@download-mix="emit('downloadMix')"
 					@playall="emit('playall')"
 					@pauseall="emit('pauseall')"
+					@test="handleTest"
 				></RecorderMenu>
 			</template>
 		</DropdownMenu>
@@ -85,6 +87,7 @@ const { source } = defineProps<RecorderSlotProps>();
 const emit = defineEmits<{
 	(e: "playall"): void;
 	(e: "pauseall"): void;
+	(e: "downloadMix"): void;
 }>();
 const audioRef = useTemplateRef<HTMLAudioElement>("audioRef");
 
@@ -97,6 +100,7 @@ const isPlaying = ref<boolean>(false);
 const isRecording = ref<RecordingState>();
 const recording = ref<Recording | null>();
 const volume = ref<number>(1);
+
 watchEffect(() => {
 	if (recording.value) recording.value.volume = volume.value;
 });
@@ -193,10 +197,13 @@ async function handleRecorderStop() {
 		}
 	}
 
-	const buffer = await recorder.value.getRecordingAudioBuffer();
-	console.log(buffer);
-
 	triggerRef(audioRef);
+}
+
+function handleTest() {
+	if (!audioRef.value) return;
+
+	console.warn(audioRef.value.duration);
 }
 
 onMounted(() => {
@@ -212,6 +219,7 @@ onMounted(() => {
 defineExpose({
 	replayAudio,
 	pauseAudio,
+	recorder,
 });
 </script>
 <style lang="scss" scoped>

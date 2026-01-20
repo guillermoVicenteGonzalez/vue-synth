@@ -48,9 +48,7 @@ export default class AudioRecorder {
 	}
 
 	private onRecorderStop() {
-		console.log(this.chunks);
 		const blob = new Blob(this.chunks, { type: "audio/ogg; codecs=opus" });
-		console.log(blob);
 		this.chunks = [];
 		this.result = blob;
 		this.resolveStopPromise();
@@ -66,33 +64,35 @@ export default class AudioRecorder {
 	public async getRecordingAudioBuffer() {
 		if (!this.result) return null;
 
-		let audioBuffer = this.ctx.createBuffer(
-			2,
-			this.ctx.sampleRate * 3,
-			this.ctx.sampleRate
-		);
+		//CUIDADO CON DECODE AUDIO DATA
 
 		const fr = new FileReader();
 
-		const p = new Promise<void>(resolve => {
+		const audioBuffer = await new Promise<AudioBuffer>(resolve => {
 			fr.onloadend = () => {
 				const arrayB = fr.result as ArrayBuffer;
 				this.ctx.decodeAudioData(arrayB, a => {
-					audioBuffer = a;
+					resolve(a);
 				});
-				resolve();
 			};
+			if (this.result != null) fr.readAsArrayBuffer(this.result);
 		});
 
-		fr.readAsArrayBuffer(this.result);
-		await p;
+		const source = new AudioBufferSourceNode(this.ctx);
+		source.buffer = audioBuffer;
+
+		console.log("Returning audio buffer");
 		return audioBuffer;
 	}
 
-	public static mixAudio(tracks: AudioBuffer[], sampleRate: number) {
+	public static async mixAudio(tracks: AudioBuffer[], sampleRate: number) {
 		if (!tracks) return null;
 
 		const biggestLength = tracks.sort((a, b) => a.length - b.length)[0].length;
+
+		//quitar loop???
+
+		console.log(biggestLength);
 
 		const offlineCtx = new OfflineAudioContext(
 			tracks.length,
@@ -100,6 +100,42 @@ export default class AudioRecorder {
 			sampleRate
 		);
 
-		return offlineCtx;
+		const entryPoint = offlineCtx.createGain();
+		const sources: AudioBufferSourceNode[] = tracks.map(track => {
+			const source = new AudioBufferSourceNode(offlineCtx);
+			source.buffer = track;
+			source.connect(entryPoint);
+			entryPoint.connect(offlineCtx.destination);
+			source.start();
+			return source;
+		});
+
+		console.log("sources");
+		console.log(sources);
+
+		const renderedBuffer = await offlineCtx.startRendering();
+		console.log(renderedBuffer);
+
+		const tempCtx = new AudioContext();
+		const mixBuffer = tempCtx.createBufferSource();
+		mixBuffer.connect(tempCtx.destination);
+		mixBuffer.buffer = renderedBuffer;
+		const recorder = new AudioRecorder(mixBuffer, tempCtx);
+
+		const t = await new Promise<string>((resolve, reject) => {
+			recorder.start();
+			mixBuffer.start();
+			mixBuffer.onended = () => {
+				recorder.stop().then(() => {
+					const url = recorder.getRecordingUrl();
+					if (url) resolve(url);
+					else reject();
+				});
+			};
+		});
+
+		console.log(recorder.result);
+
+		return t;
 	}
 }
