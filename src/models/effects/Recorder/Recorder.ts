@@ -1,9 +1,13 @@
+import Recording from "./Recording";
+
 export default class AudioRecorder {
 	private destination: MediaStreamAudioDestinationNode;
 	private recorder: MediaRecorder;
 	private source: AudioNode | null;
 	private chunks: Array<BlobPart> = [];
 	private ctx: AudioContext;
+	public recording: Recording | null = null;
+
 	private resolveStopPromise: () => void = () => {
 		console.warn(
 			"this method is empty and hasn't been overwritten by a Promise's resolve"
@@ -51,6 +55,7 @@ export default class AudioRecorder {
 		const blob = new Blob(this.chunks, { type: "audio/ogg; codecs=opus" });
 		this.chunks = [];
 		this.result = blob;
+		this.recording = new Recording(blob, this.ctx);
 		this.resolveStopPromise();
 	}
 
@@ -83,6 +88,19 @@ export default class AudioRecorder {
 
 		console.log("Returning audio buffer");
 		return audioBuffer;
+	}
+
+	public test() {
+		if (!this.result) {
+			console.error("A recording is needed");
+			return;
+		}
+
+		console.warn("Testing");
+
+		const a = new Audio();
+		a.src = this.getRecordingUrl() || "";
+		a.play();
 	}
 
 	public static async mixAudio(tracks: AudioBuffer[], sampleRate: number) {

@@ -231,7 +231,7 @@ onMounted(() => {
 		triggerRef(audioRef);
 	};
 
-	recording.value = new Recording(audioRef.value, source.context);
+	// recording.value = new Recording()
 });
 
 defineExpose({
