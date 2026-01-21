@@ -41,6 +41,9 @@ export default class AudioRecorder {
 		this.recorder.start();
 	}
 
+	/**
+	 * Stops the recording and waits for the result asynchronously by creating a promise that is resolved by `onRecorderStop`
+	 */
 	public async stop() {
 		const p = new Promise<void>(resolve => {
 			this.resolveStopPromise = resolve;
@@ -62,6 +65,10 @@ export default class AudioRecorder {
 
 	private onRecorderStop() {
 		const blob = new Blob(this.chunks, { type: "audio/ogg; codecs=opus" });
+		console.log(blob);
+		if (blob.size == 0) {
+			throw new Error("No audio was recorded");
+		}
 		this.chunks = [];
 		this.recording = new Recording(blob, this.ctx);
 		this.resolveStopPromise();

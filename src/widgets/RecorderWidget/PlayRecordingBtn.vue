@@ -2,7 +2,6 @@
 	<VsButton
 		class="PlayRecordingButton"
 		variant="round"
-		:disabled="isReplayBtnDisabled"
 		@click="handleButtonClick"
 	>
 		<VsTooltip>
@@ -25,12 +24,12 @@ interface PlayRecordingBtnProps {
 
 const { recorder } = defineProps<PlayRecordingBtnProps>();
 
-const isReplayBtnDisabled = computed(() => {
-	if (!recorder) return true;
-	if (!recorder.recording) return true;
+// const isReplayBtnDisabled = computed(() => {
+// 	if (!recorder) return true;
+// 	if (!recorder.recording) return true;
 
-	return false;
-});
+// 	return false;
+// });
 
 const playButtonIcon = computed(() => {
 	if (!recorder.recording) return Pause;

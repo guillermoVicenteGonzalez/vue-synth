@@ -14,6 +14,7 @@
 <script setup lang="ts">
 import VsButton from "@/components/common/VsButton/VsButton.vue";
 import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
+import useRecorder from "@/composables/useRecorder";
 import type Recorder from "@/models/effects/Recorder/Recorder";
 import { Mic, Square } from "lucide-vue-next";
 import { computed } from "vue";
@@ -23,22 +24,24 @@ interface RecordBtnProps {
 }
 
 const { recorder } = defineProps<RecordBtnProps>();
+const { startRecording, stopRecording, recorderState } = useRecorder(recorder);
 
 const recordButtonIcon = computed(() => {
 	if (!recorder) return Mic;
-	return recorder.state == "recording" ? Square : Mic;
+	return recorderState.value == "recording" ? Square : Mic;
 });
 
 const recordButtonDynamicClass = computed(() => {
-	if (!recorder) return "";
 	return {
-		"RecorderBtn--recording": recorder.state == "recording",
+		"RecordBtn--recording": recorderState.value == "recording",
 	};
 });
 
 function handleRecordBtnClick() {
-	if (recorder.state == "recording") recorder.stop();
-	else recorder.start();
+	console.log(`recorder state: ${recorderState.value}`);
+
+	if (recorder.state == "recording") stopRecording();
+	else startRecording();
 }
 </script>
 
