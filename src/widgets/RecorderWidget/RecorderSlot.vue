@@ -1,85 +1,87 @@
 <template>
 	<div class="Recorder-slot">
-		<PlayRecordingBtn :recorder="recorder"></PlayRecordingBtn>
-		<RecordBtn :recorder="recorder"></RecordBtn>
-
-		<ContextMenu
-			class="Recorder-slot__context-menu RecorderSlot__context-menu--recorder-btn"
-			:visible="recorderBtnContextMenuVisible"
-			:pos-x="recorderBtnContextMenuPos.x"
-			:pos-y="recorderBtnContextMenuPos.y"
-			@close="recorderBtnContextMenuVisible = false"
+		<VsButton
+			class="Recorder-slot__play-btn Recorder-slot__button"
+			variant="round"
+			:disabled="isPlayButtonDisabled"
+			@click="handlePlayButtonClick"
 		>
-			<ul>
-				<li>Record and play all</li>
-			</ul>
-		</ContextMenu>
+			<VsTooltip>
+				<component
+					:is="playButtonIcon"
+					class="Recorder-slot__button__icon"
+				></component>
+			</VsTooltip>
+		</VsButton>
 
-		<DropdownMenu orientation="top">
-			<template #activator>
-				<VsButton
-					class="Recorder-slot__button Recorder-slot__settings-btn"
-					variant="round"
-				>
-					<VsTooltip>
-						<Settings
-							class="Recorder-slot__button__icon"
-						></Settings> </VsTooltip
-				></VsButton>
-			</template>
-
-			<template #content>
-				<RecorderMenu
-					v-model:loops="recordingLoops"
-					v-model:recordable="isRecordable"
-					v-model:volume="volume"
-					@download-mix="emit('downloadMix')"
-					@playall="emit('playall')"
-					@pauseall="emit('pauseall')"
-				></RecorderMenu>
-			</template>
-		</DropdownMenu>
-
-		<audio
-			ref="audioRef"
-			class="Recorder-slot__audio"
-			:loop="recordingLoops"
-		></audio>
+		<VsButton
+			class="Recorder-slot__record-btn Recorder-slot__button"
+			:class="recordButtonDynamicClass"
+			variant="round"
+			@click="handleRecordButtonClick"
+		>
+			<VsTooltip text="Record">
+				<component
+					:is="recordButtonIcon"
+					class="Recorder-slot__button__icon"
+				></component>
+			</VsTooltip>
+		</VsButton>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import ContextMenu from "@/components/common/ContextMenu/ContextMenu.vue";
-import DropdownMenu from "@/components/common/DropdownMenu/DropdownMenu.vue";
 import VsButton from "@/components/common/VsButton/VsButton.vue";
 import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
+import useRecorder from "@/composables/useRecorder";
 import type Recorder from "@/models/effects/Recorder/Recorder";
-import { Settings } from "lucide-vue-next";
-import { ref } from "vue";
-import PlayRecordingBtn from "./PlayRecordingBtn.vue";
-import RecordBtn from "./RecordBtn.vue";
-import RecorderMenu from "./RecorderMenu.vue";
+import { Mic, Pause, Play, Square } from "lucide-vue-next";
+import { computed } from "vue";
 
 interface RecorderSlotProps {
 	recorder: Recorder;
 }
 
 const { recorder } = defineProps<RecorderSlotProps>();
-const emit = defineEmits<{
-	(e: "playall"): void;
-	(e: "pauseall"): void;
-	(e: "downloadMix"): void;
-}>();
-const recorderBtnContextMenuVisible = ref(false);
-const recorderBtnContextMenuPos = ref<{ x: number; y: number }>({ x: 0, y: 0 });
+const {
+	recorderRef,
+	recorderState,
+	recordingRef,
+	startRecording,
+	stopRecording,
+} = useRecorder(recorder);
 
-// const recorder = ref<AudioRecorder>(
-// 	new AudioRecorder(source.exit, source.context)
-// );
-const recordingLoops = ref<boolean>(true);
-const isRecordable = ref<boolean>(false);
+const playButtonIcon = computed(() => {
+	if (!recordingRef.value) return Play;
 
-const volume = ref<number>(1);
+	return recordingRef.value.state == "Paused" ? Play : Pause;
+});
+
+const isPlayButtonDisabled = computed(() => {
+	return recordingRef.value == null;
+});
+
+const recordButtonDynamicClass = computed(() => ({
+	"Recorder-slot__record-btn--recording":
+		recorderRef.value.state == "recording",
+}));
+
+const recordButtonIcon = computed(() => {
+	return recorderState.value == "recording" ? Square : Mic;
+});
+
+function handleRecordButtonClick() {
+	if (recorderState.value == "recording") stopRecording();
+	else startRecording();
+}
+
+async function handlePlayButtonClick() {
+	if (!recordingRef.value) return;
+
+	if (recordingRef.value.state == "Paused") {
+		await recordingRef.value.playAudio();
+	} else recordingRef.value.pauseAudio();
+}
 </script>
 <style lang="scss" scoped>
 $btn-size: 5rem;

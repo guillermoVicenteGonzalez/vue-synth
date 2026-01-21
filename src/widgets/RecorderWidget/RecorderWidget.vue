@@ -1,17 +1,16 @@
 <template>
 	<div class="RecorderWidget">
-		<!-- <VsTab
-			v-for="(_recorder, index) in recorderCluster.slots"
+		<VsTab
+			v-for="(recorder, index) in recorderCluster.slots"
 			:key="index"
 			:active="index == activeRecorderIndex"
 		>
 			<RecorderSlot
 				ref="recorderSlots"
 				:source="source"
-				:recorder="activeRecorder"
+				:recorder="recorder"
 			></RecorderSlot>
-		</VsTab> -->
-		<RecorderSlot :source="source" :recorder="activeRecorder"></RecorderSlot>
+		</VsTab>
 		<ul class="RecorderWidget__tab-selector">
 			<li
 				v-for="(_recorder, index) in recorderCluster.slots"
@@ -29,10 +28,10 @@
 </template>
 
 <script lang="ts" setup>
+import VsTab from "@/components/common/VsTab/VsTab.vue";
 import type AudioCluster from "@/models/AudioCluster";
-import type Recorder from "@/models/effects/Recorder/Recorder";
 import RecorderCluster from "@/models/effects/Recorder/RecorderCluster";
-import { computed, ref } from "vue";
+import { ref, type Ref } from "vue";
 import RecorderSlot from "./RecorderSlot.vue";
 
 interface RecorderWidgetProps {
@@ -40,14 +39,12 @@ interface RecorderWidgetProps {
 }
 
 const { source } = defineProps<RecorderWidgetProps>();
-const recorderCluster = ref<RecorderCluster>(
-	new RecorderCluster(source.exit, source.context)
-);
+const recorderCluster: Ref<RecorderCluster, RecorderCluster> =
+	ref<RecorderCluster>(new RecorderCluster(source.exit, source.context)) as Ref<
+		RecorderCluster,
+		RecorderCluster
+	>;
 const activeRecorderIndex = ref<number>(1);
-const activeRecorder = computed<Recorder>(() => {
-	const recorders: Recorder[] = recorderCluster.value.slots as Recorder[];
-	return recorders[activeRecorderIndex.value];
-});
 
 function handleSelectSlot(n: number) {
 	activeRecorderIndex.value = n;

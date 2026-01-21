@@ -19,9 +19,7 @@
 		</template>
 
 		<template v-if="currentTab === 'Voice'" #waves>
-			<ModuleCardListWidget
-				v-model="MainAudioCluster as AudioCluster"
-			></ModuleCardListWidget>
+			<ModuleCardListWidget v-model="MainAudioCluster"></ModuleCardListWidget>
 		</template>
 		<template v-if="currentTab === 'Voice'" #filters>
 			<EffectListWidget
@@ -35,7 +33,7 @@
 		<template v-if="currentTab === 'Effects'" #effects>
 			<VsEffectsWidget
 				v-if="currentTab === 'Effects'"
-				v-model="MainAudioCluster.effects as EffectChain"
+				v-model="MainAudioCluster.effects"
 				class="effects"
 			></VsEffectsWidget>
 		</template>
@@ -44,7 +42,7 @@
 			<ActionsWidget
 				v-model:transpose="transposeAmount"
 				v-model:volume="MainAudioCluster.volume"
-				:source="MainAudioCluster as AudioCluster"
+				:source="MainAudioCluster"
 				:orientation="ActionsWidgetOrientation"
 				@create-wave="createNewModule"
 				@create-filter="createFilter"
@@ -67,7 +65,7 @@
 				v-model="transposeAmount"
 				:envelope="envelope"
 				:context="mainContext"
-				:source-cluster="MainAudioCluster as AudioCluster"
+				:source-cluster="MainAudioCluster"
 			></KeyboardWidget>
 		</template>
 
@@ -96,7 +94,6 @@ import { FlangerEffect } from "@/models/effects/FlangerEffect";
 import { ReverbEffect } from "@/models/effects/ReverbEffect";
 import WahEffect from "@/models/effects/WahEffect";
 import FilterHandler from "@/models/FilterHandler";
-import type { EffectChain } from "@/models/LinkedList";
 import ActionsWidget, {
 	type ActionsWidgetOrientation,
 } from "@/widgets/ActionsWidget/ActionsWidget.vue";
@@ -115,14 +112,7 @@ import {
 } from "@/widgets/LfoWdidget/LfoWdidgetWidget.vue";
 import LfoWidgetListWidget from "@/widgets/LfoWidgetList/LfoWidgetListWidget.vue";
 import ModuleCardListWidget from "@/widgets/ModuleCardList/ModuleCardListWidget.vue";
-import {
-	computed,
-	onMounted,
-	provide,
-	ref,
-	type Ref,
-	type UnwrapRef,
-} from "vue";
+import { computed, onMounted, provide, ref, type Ref } from "vue";
 
 const { browserHeight, browserWidth } = useMonitorSize();
 const primaryColor = "#42d392";
@@ -161,9 +151,9 @@ const MAX_FILTERS = 5;
 // const audioModules = ref<AudioModule[]>([]);
 const mainContext = ref<AudioContext>(new AudioContext());
 const merger = ref<ChannelMergerNode>(mainContext.value.createChannelMerger(1));
-const MainAudioCluster: Ref<UnwrapRef<AudioCluster>> = ref<AudioCluster>(
+const MainAudioCluster: Ref<AudioCluster, AudioCluster> = ref<AudioCluster>(
 	new AudioCluster(mainContext.value, merger.value)
-);
+) as Ref<AudioCluster, AudioCluster>;
 provide("mainCluster", MainAudioCluster);
 const envelope = ref<AudioEnvelope>({
 	attack: 0.2,

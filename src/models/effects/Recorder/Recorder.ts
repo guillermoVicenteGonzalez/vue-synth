@@ -65,7 +65,6 @@ export default class AudioRecorder {
 
 	private onRecorderStop() {
 		const blob = new Blob(this.chunks, { type: "audio/ogg; codecs=opus" });
-		console.log(blob);
 		if (blob.size == 0) {
 			throw new Error("No audio was recorded");
 		}

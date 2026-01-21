@@ -1,4 +1,4 @@
-export type RecordingState = "Playing" | "Paused";
+export type RecorderRecordingState = "Playing" | "Paused";
 
 export default class Recording {
 	private volumeNode: GainNode;
@@ -36,7 +36,7 @@ export default class Recording {
 		return this.volumeNode.gain.value;
 	}
 
-	get state(): RecordingState {
+	get state(): RecorderRecordingState {
 		if (this.audioNode.paused) return "Paused";
 		return "Playing";
 	}
