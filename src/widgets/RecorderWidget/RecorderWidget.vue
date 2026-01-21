@@ -1,24 +1,25 @@
 <template>
 	<div class="RecorderWidget">
-		<VsTab
-			v-for="index in RECORDER_SLOTS"
+		<!-- <VsTab
+			v-for="(_recorder, index) in recorderCluster.slots"
 			:key="index"
-			:active="index == activeRecorder"
+			:active="index == activeRecorderIndex"
 		>
 			<RecorderSlot
 				ref="recorderSlots"
 				:source="source"
-				@download-mix="downloadMix"
-				@playall="playAll"
-				@pauseall="pauseAll"
+				:recorder="activeRecorder"
 			></RecorderSlot>
-		</VsTab>
+		</VsTab> -->
+		<RecorderSlot :source="source" :recorder="activeRecorder"></RecorderSlot>
 		<ul class="RecorderWidget__tab-selector">
 			<li
-				v-for="index in RECORDER_SLOTS"
+				v-for="(_recorder, index) in recorderCluster.slots"
 				:key="index"
 				class="RecorderWidget__tab"
-				:class="index == activeRecorder ? 'RecorderWidget__tab--active' : ''"
+				:class="
+					index == activeRecorderIndex ? 'RecorderWidget__tab--active' : ''
+				"
 				@click="handleSelectSlot(index)"
 			></li>
 		</ul>
@@ -28,10 +29,10 @@
 </template>
 
 <script lang="ts" setup>
-import VsTab from "@/components/common/VsTab/VsTab.vue";
 import type AudioCluster from "@/models/AudioCluster";
-import Recorder from "@/models/effects/Recorder/Recorder";
-import { ref, useTemplateRef } from "vue";
+import type Recorder from "@/models/effects/Recorder/Recorder";
+import RecorderCluster from "@/models/effects/Recorder/RecorderCluster";
+import { computed, ref } from "vue";
 import RecorderSlot from "./RecorderSlot.vue";
 
 interface RecorderWidgetProps {
@@ -39,45 +40,17 @@ interface RecorderWidgetProps {
 }
 
 const { source } = defineProps<RecorderWidgetProps>();
-const RECORDER_SLOTS = 4;
-const activeRecorder = ref<number>(1);
-const recorderSlots = useTemplateRef<(typeof RecorderSlot)[]>("recorderSlots");
-const tempPlayer = useTemplateRef<HTMLAudioElement>("tempPlayer");
+const recorderCluster = ref<RecorderCluster>(
+	new RecorderCluster(source.exit, source.context)
+);
+const activeRecorderIndex = ref<number>(1);
+const activeRecorder = computed<Recorder>(() => {
+	const recorders: Recorder[] = recorderCluster.value.slots as Recorder[];
+	return recorders[activeRecorderIndex.value];
+});
 
 function handleSelectSlot(n: number) {
-	activeRecorder.value = n;
-}
-
-function playAll() {
-	if (!recorderSlots.value) return;
-
-	recorderSlots.value.forEach(recorder => {
-		recorder.replayAudio();
-	});
-}
-
-function pauseAll() {
-	if (!recorderSlots.value) return;
-
-	recorderSlots.value.forEach(recorder => {
-		recorder.pauseAudio();
-	});
-}
-
-async function downloadMix() {
-	if (!recorderSlots.value) return;
-
-	const buffers: AudioBuffer[] = [];
-	const recorders: Recorder[] = recorderSlots.value.map(rs => rs.recorder);
-	const promises = recorders.map(r => r.getRecordingAudioBuffer());
-	await Promise.all(promises).then(values => {
-		buffers.push(...values.filter(b => b != null));
-	});
-	if (!buffers || buffers.length == 0) return;
-
-	const mix = await Recorder.mixAudio(buffers, 40000);
-	console.log(mix);
-	if (mix && tempPlayer.value) tempPlayer.value.src = mix;
+	activeRecorderIndex.value = n;
 }
 </script>
 <style lang="scss" scoped>

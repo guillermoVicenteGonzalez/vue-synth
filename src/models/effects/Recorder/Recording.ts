@@ -1,3 +1,5 @@
+export type RecordingState = "Playing" | "Paused";
+
 export default class Recording {
 	private volumeNode: GainNode;
 	private mediaNode: MediaElementAudioSourceNode;
@@ -34,12 +36,17 @@ export default class Recording {
 		return this.volumeNode.gain.value;
 	}
 
+	get state(): RecordingState {
+		if (this.audioNode.paused) return "Paused";
+		return "Playing";
+	}
+
 	public getRecordingUrl() {
 		return window.URL.createObjectURL(this.encodedAudio);
 	}
 
-	public playAudio() {
-		if (this.audioNode.readyState) this.audioNode.play();
+	public async playAudio() {
+		if (this.audioNode.readyState) await this.audioNode.play();
 	}
 
 	public pauseAudio() {
