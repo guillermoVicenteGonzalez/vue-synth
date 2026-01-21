@@ -27,15 +27,34 @@
 				></component>
 			</VsTooltip>
 		</VsButton>
+
+		<DropdownMenu orientation="top">
+			<template #activator>
+				<VsButton
+					class="Recorder-slot__button Recorder-slot__settings-btn"
+					variant="round"
+				>
+					<VsTooltip>
+						<Settings
+							class="Recorder-slot__button__icon"
+						></Settings> </VsTooltip
+				></VsButton>
+			</template>
+
+			<template #content>
+				<slot name="slot-menu"></slot>
+			</template>
+		</DropdownMenu>
 	</div>
 </template>
 
 <script lang="ts" setup>
+import DropdownMenu from "@/components/common/DropdownMenu/DropdownMenu.vue";
 import VsButton from "@/components/common/VsButton/VsButton.vue";
 import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
 import useRecorder from "@/composables/useRecorder";
 import type Recorder from "@/models/effects/Recorder/Recorder";
-import { Mic, Pause, Play, Square } from "lucide-vue-next";
+import { Mic, Pause, Play, Settings, Square } from "lucide-vue-next";
 import { computed } from "vue";
 
 interface RecorderSlotProps {

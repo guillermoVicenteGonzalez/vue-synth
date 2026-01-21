@@ -5,11 +5,11 @@
 			:key="index"
 			:active="index == activeRecorderIndex"
 		>
-			<RecorderSlot
-				ref="recorderSlots"
-				:source="source"
-				:recorder="recorder"
-			></RecorderSlot>
+			<RecorderSlot ref="recorderSlots" :source="source" :recorder="recorder">
+				<template #slot-menu>
+					<RecorderMenu></RecorderMenu>
+				</template>
+			</RecorderSlot>
 		</VsTab>
 		<ul class="RecorderWidget__tab-selector">
 			<li
@@ -32,6 +32,7 @@ import VsTab from "@/components/common/VsTab/VsTab.vue";
 import type AudioCluster from "@/models/AudioCluster";
 import RecorderCluster from "@/models/effects/Recorder/RecorderCluster";
 import { ref, type Ref } from "vue";
+import RecorderMenu from "./RecorderMenu.vue";
 import RecorderSlot from "./RecorderSlot.vue";
 
 interface RecorderWidgetProps {
