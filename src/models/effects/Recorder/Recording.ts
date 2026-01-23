@@ -6,6 +6,8 @@ export default class Recording {
 	private encodedAudio: Blob;
 	private audioNode: HTMLAudioElement;
 	private ctx: AudioContext;
+	//USING A GETTER BREAKS REACTIVITY :(
+	public state: RecorderRecordingState;
 
 	constructor(encodedAudio: Blob, context: AudioContext) {
 		this.volumeNode = context.createGain();
@@ -18,6 +20,8 @@ export default class Recording {
 		this.mediaNode.connect(this.volumeNode);
 		this.volumeNode.connect(context.destination);
 		this.ctx = context;
+
+		this.state = "Paused";
 	}
 
 	set loops(l: boolean) {
@@ -36,25 +40,25 @@ export default class Recording {
 		return this.volumeNode.gain.value;
 	}
 
-	get state(): RecorderRecordingState {
-		if (this.audioNode.paused) return "Paused";
-		return "Playing";
-	}
-
 	public getRecordingUrl() {
 		return window.URL.createObjectURL(this.encodedAudio);
 	}
 
 	public async playAudio() {
-		if (this.audioNode.readyState) await this.audioNode.play();
+		if (this.audioNode.readyState) {
+			await this.audioNode.play();
+			this.state = this.audioNode.paused ? "Paused" : "Playing";
+		}
 	}
 
 	public pauseAudio() {
 		this.audioNode.pause();
+		this.state = this.audioNode.paused ? "Paused" : "Playing";
 	}
 
 	public restartAudio() {
 		this.audioNode.pause();
+		this.state = this.audioNode.paused ? "Paused" : "Playing";
 	}
 
 	public async getAudioBuffer(): Promise<AudioBuffer> {

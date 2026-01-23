@@ -71,9 +71,11 @@ const {
 } = useRecorder(recorder);
 
 const playButtonIcon = computed(() => {
-	if (!recordingRef.value) return Play;
+	// if (!recordingRef.value) return Play;
+	if (!recorderRef.value) return Play;
+	if (!recorderRef.value.recording) return Play;
 
-	return recordingRef.value.state == "Paused" ? Play : Pause;
+	return recorderRef.value.recording.state == "Paused" ? Play : Pause;
 });
 
 const isPlayButtonDisabled = computed(() => {

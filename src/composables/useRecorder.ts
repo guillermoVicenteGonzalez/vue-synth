@@ -3,6 +3,7 @@ import { computed, ref, triggerRef } from "vue";
 
 export default function useRecorder(recorder: Recorder) {
 	const recorderRef = ref<Recorder>(recorder);
+
 	const recordingRef = computed(() => {
 		return recorderRef.value.recording;
 	});
@@ -17,16 +18,15 @@ export default function useRecorder(recorder: Recorder) {
 	}
 
 	async function stopRecording() {
-		console.log(recorderRef.value.recording);
-
 		await recorderRef.value.stop();
-		console.log(recorderRef.value.recording);
 		triggerRef(recorderRef);
+		triggerRef(recordingRef);
 	}
 
 	return {
 		startRecording,
 		stopRecording,
+
 		recorderState,
 		recorderRef,
 		recordingRef,
