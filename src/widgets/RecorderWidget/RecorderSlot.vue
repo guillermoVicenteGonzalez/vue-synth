@@ -68,14 +68,14 @@ const {
 	recordingRef,
 	startRecording,
 	stopRecording,
+	playAudio,
+	pauseAudio,
 } = useRecorder(recorder);
 
 const playButtonIcon = computed(() => {
-	// if (!recordingRef.value) return Play;
-	if (!recorderRef.value) return Play;
-	if (!recorderRef.value.recording) return Play;
+	if (!recordingRef.value) return Play;
 
-	return recorderRef.value.recording.state == "Paused" ? Play : Pause;
+	return recordingRef.value.paused ? Play : Pause;
 });
 
 const isPlayButtonDisabled = computed(() => {
@@ -99,9 +99,9 @@ function handleRecordButtonClick() {
 async function handlePlayButtonClick() {
 	if (!recordingRef.value) return;
 
-	if (recordingRef.value.state == "Paused") {
-		await recordingRef.value.playAudio();
-	} else recordingRef.value.pauseAudio();
+	if (recordingRef.value.paused) {
+		await playAudio();
+	} else pauseAudio();
 }
 </script>
 <style lang="scss" scoped>

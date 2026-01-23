@@ -45,7 +45,7 @@ const recorderCluster: Ref<RecorderCluster, RecorderCluster> =
 		RecorderCluster,
 		RecorderCluster
 	>;
-const activeRecorderIndex = ref<number>(1);
+const activeRecorderIndex = ref<number>(0);
 
 function handleSelectSlot(n: number) {
 	activeRecorderIndex.value = n;

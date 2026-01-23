@@ -1,11 +1,27 @@
 import type Recorder from "@/models/effects/Recorder/Recorder";
-import { computed, ref, triggerRef } from "vue";
+import { computed, ref, triggerRef, watch } from "vue";
 
 export default function useRecorder(recorder: Recorder) {
 	const recorderRef = ref<Recorder>(recorder);
 
 	const recordingRef = computed(() => {
 		return recorderRef.value.recording;
+	});
+
+	const audioRef = computed(() => {
+		if (!recordingRef.value) return;
+
+		return recordingRef.value.audioNode;
+	});
+
+	//Necessary in order to trigger a render when the audio finishes BY ITSELF
+	watch(audioRef, newAudio => {
+		if (newAudio instanceof HTMLAudioElement) {
+			newAudio.onpause = () => {
+				console.log("triggering");
+				triggerRef(recordingRef);
+			};
+		}
 	});
 
 	const recorderState = computed<RecordingState>(() => {
@@ -23,10 +39,34 @@ export default function useRecorder(recorder: Recorder) {
 		triggerRef(recordingRef);
 	}
 
+	async function playAudio() {
+		if (!recordingRef.value) return;
+
+		await recordingRef.value.playAudio();
+		triggerRef(recordingRef);
+	}
+
+	function pauseAudio() {
+		if (!recordingRef.value) return;
+
+		recordingRef.value.pauseAudio();
+		triggerRef(recordingRef);
+	}
+
+	async function restartAudio() {
+		if (!recordingRef.value) return;
+
+		await recordingRef.value.restartAudio();
+		triggerRef(recordingRef);
+	}
+
 	return {
 		startRecording,
 		stopRecording,
-
+		playAudio,
+		restartAudio,
+		pauseAudio,
+		audioRef,
 		recorderState,
 		recorderRef,
 		recordingRef,
