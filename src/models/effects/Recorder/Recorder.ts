@@ -27,7 +27,12 @@ export default class AudioRecorder {
 			this.onRecorderDataAvailable(e);
 		};
 		this.recorder.onstop = () => {
-			this.onRecorderStop();
+			try {
+				this.onRecorderStop();
+			} catch (err) {
+				console.error(err);
+				this.onRecorderFailed();
+			}
 		};
 
 		this.ctx = ctx;
@@ -70,6 +75,11 @@ export default class AudioRecorder {
 		}
 		this.chunks = [];
 		this.recording = new Recording(blob, this.ctx);
+		this.resolveStopPromise();
+	}
+
+	private onRecorderFailed() {
+		this.chunks = [];
 		this.resolveStopPromise();
 	}
 

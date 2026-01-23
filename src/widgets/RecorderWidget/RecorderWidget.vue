@@ -7,7 +7,9 @@
 		>
 			<RecorderSlot ref="recorderSlots" :source="source" :recorder="recorder">
 				<template #slot-menu>
-					<RecorderMenu></RecorderMenu>
+					<RecorderMenu
+						@download-track="handleDownloadTrack(index)"
+					></RecorderMenu>
 				</template>
 			</RecorderSlot>
 		</VsTab>
@@ -49,6 +51,21 @@ const activeRecorderIndex = ref<number>(0);
 
 function handleSelectSlot(n: number) {
 	activeRecorderIndex.value = n;
+}
+
+function handleDownloadTrack(slotIndex: number) {
+	console.log("AQUI");
+
+	if (slotIndex < 0 && slotIndex >= recorderCluster.value.slots.length) return;
+	const recording = recorderCluster.value.slots[slotIndex].recording;
+	if (!recording) return;
+
+	console.warn("AQUI");
+
+	const a = document.createElement("a");
+	a.href = recording.getRecordingUrl();
+	a.download = `track ${slotIndex}`;
+	a.click();
 }
 </script>
 <style lang="scss" scoped>

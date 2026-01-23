@@ -14,7 +14,9 @@
 		</li>
 
 		<li class="RecorderMenu__item">Load track</li>
-		<li class="RecorderMenu__item">Download track</li>
+		<li class="RecorderMenu__item" @click="handleDownloadTrack">
+			Download track
+		</li>
 		<li class="RecorderMenu__item RecorderMenu__item--control">
 			<VsSlider v-model="volume" :min="0" :max="1" :step="0.01"></VsSlider>
 		</li>
@@ -49,6 +51,7 @@ const emit = defineEmits<{
 	(e: "pauseall"): void;
 	(e: "downloadMix"): void;
 	(e: "test"): void;
+	(e: "downloadTrack"): void;
 }>();
 
 function handlePlayALl() {
@@ -61,6 +64,10 @@ function handlePauseAll() {
 
 function handleDownloadMix() {
 	emit("downloadMix");
+}
+
+function handleDownloadTrack() {
+	emit("downloadTrack");
 }
 </script>
 

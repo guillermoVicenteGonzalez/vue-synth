@@ -60,12 +60,22 @@ export default function useRecorder(recorder: Recorder) {
 		triggerRef(recordingRef);
 	}
 
+	function downloadTrack(name: string = "") {
+		if (!recordingRef.value) return;
+
+		const a = document.createElement("a");
+		a.href = recordingRef.value.getRecordingUrl();
+		a.download = name;
+		a.click();
+	}
+
 	return {
 		startRecording,
 		stopRecording,
 		playAudio,
 		restartAudio,
 		pauseAudio,
+		downloadTrack,
 		audioRef,
 		recorderState,
 		recorderRef,
