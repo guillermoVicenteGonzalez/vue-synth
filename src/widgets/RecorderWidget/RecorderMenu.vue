@@ -24,7 +24,7 @@
 		<VsSeparator></VsSeparator>
 		<li class="RecorderMenu__item" @click="handleDownloadMix">Download mix</li>
 
-		<li class="RecorderMenu__item">clear all</li>
+		<li class="RecorderMenu__item" @click="handleClearAll">clear all</li>
 		<li class="RecorderMenu__item" @click="handlePlayALl">play all</li>
 		<li class="RecorderMenu__item" @click="handlePauseAll">pause all</li>
 	</ul>
@@ -36,32 +36,61 @@ import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
 import VsSwitchButton from "@/components/common/VsSwitchButton/VsSwitchButton.vue";
 import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
 import type Recording from "@/models/effects/Recorder/Recording";
-import { watch } from "vue";
+import { computed } from "vue";
 
 const recording = defineModel<Recording | null>();
-
-const volume = defineModel<number>("volume", {
-	default: 1,
-});
-const recordingLoops = defineModel<boolean>("loops", { default: false });
-const recordable = defineModel<boolean>("recordable", { default: true });
 
 //Disabled for not because of tooltip overflow
 const recordableTooltip = "";
 const loopTooltip = "";
 
-watch([recordingLoops, recordable, recording], () => {
-	console.warn("Efecto");
-	if (!recording.value) {
-		return;
-	}
+//Is this better than a ref + watcher to update the recording?????
+const recordingSettings = {
+	loops: false,
+	recordable: true,
+	volume: 1,
+};
 
-	recording.value.loops = recordingLoops.value;
+const volume = computed({
+	get: () => {
+		if (recording.value) return recording.value.volume;
+		else return recordingSettings.volume;
+	},
+
+	set: (v: number) => {
+		recordingSettings.volume = v;
+		if (recording.value) recording.value.volume = recordingSettings.volume;
+	},
 });
+
+const recordingLoops = computed({
+	get: () => {
+		if (recording.value) return recording.value.loops;
+		else return recordingSettings.loops;
+	},
+
+	set: (l: boolean) => {
+		recordingSettings.loops = l;
+		if (recording.value) recording.value.loops = recordingSettings.loops;
+	},
+});
+
+const recordable = defineModel<boolean>("recordable", { default: true });
+
+// watch([recordingLoops, recordable, recording, volume], () => {
+// 	console.warn("Efecto");
+// 	if (!recording.value) {
+// 		return;
+// 	}
+
+// 	recording.value.loops = recordingLoops.value;
+// 	recording.value.volume = volume.value;
+// });
 
 const emit = defineEmits<{
 	(e: "playall"): void;
 	(e: "pauseall"): void;
+	(e: "clearall"): void;
 	(e: "downloadMix"): void;
 	(e: "downloadTrack"): void;
 }>();
@@ -80,6 +109,10 @@ function handleDownloadMix() {
 
 function handleDownloadTrack() {
 	emit("downloadTrack");
+}
+
+function handleClearAll() {
+	emit("clearall");
 }
 </script>
 
