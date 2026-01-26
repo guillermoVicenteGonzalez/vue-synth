@@ -88,19 +88,19 @@ const recordable = defineModel<boolean>("recordable", { default: true });
 // });
 
 const emit = defineEmits<{
-	(e: "playall"): void;
-	(e: "pauseall"): void;
-	(e: "clearall"): void;
+	(e: "playAll"): void;
+	(e: "pauseAll"): void;
+	(e: "clearAll"): void;
 	(e: "downloadMix"): void;
 	(e: "downloadTrack"): void;
 }>();
 
 function handlePlayALl() {
-	emit("playall");
+	emit("playAll");
 }
 
 function handlePauseAll() {
-	emit("pauseall");
+	emit("pauseAll");
 }
 
 function handleDownloadMix() {
@@ -112,7 +112,7 @@ function handleDownloadTrack() {
 }
 
 function handleClearAll() {
-	emit("clearall");
+	emit("clearAll");
 }
 </script>
 

@@ -23,8 +23,14 @@ export default class RecorderCluster {
 		await Promise.all(this.recordings.map(recording => recording.playAudio()));
 	}
 
-	public async stopAll() {
+	async pauseAll() {
 		this.recordings.forEach(recording => recording.pauseAudio());
+	}
+
+	public clearRecording() {
+		this.slots.forEach(recording => {
+			recording.clearRecording();
+		});
 	}
 
 	public mixRecordings() {

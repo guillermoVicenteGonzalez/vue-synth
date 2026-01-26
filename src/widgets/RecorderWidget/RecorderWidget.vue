@@ -10,8 +10,9 @@
 					<RecorderMenu
 						v-model="recorderCluster.slots[index].recording"
 						@download-track="handleDownloadTrack(index)"
-						@playall="handlePlayAll"
-						@clearall="handleClearAll"
+						@play-all="handlePlayAll"
+						@clear-all="handleClearAll"
+						@pause-all="handlePauseAll"
 					></RecorderMenu>
 				</template>
 			</RecorderSlot>
@@ -28,7 +29,8 @@
 			></li>
 		</ul>
 
-		<audio ref="tempPlayer" controls></audio>
+		<!-- <audio ref="tempPlayer" controls></audio>
+		  -->
 	</div>
 </template>
 
@@ -71,8 +73,8 @@ function handleDownloadTrack(slotIndex: number) {
 	a.click();
 }
 
-function handlePlayAll() {
-	recorderCluster.value.playAll();
+async function handlePlayAll() {
+	await recorderCluster.value.playAll();
 }
 
 function handleClearAll() {
@@ -82,6 +84,10 @@ function handleClearAll() {
 	});
 
 	console.log("Clearing???");
+}
+
+function handlePauseAll() {
+	recorderCluster.value.pauseAll();
 }
 </script>
 <style lang="scss" scoped>

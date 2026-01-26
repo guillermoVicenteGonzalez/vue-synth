@@ -18,7 +18,11 @@ export default function useRecorder(recorder: Recorder) {
 	watch(audioRef, newAudio => {
 		if (newAudio instanceof HTMLAudioElement) {
 			newAudio.onpause = () => {
-				console.log("triggering");
+				triggerRef(recordingRef);
+				console.log(recordingRef.value?.paused);
+			};
+
+			newAudio.onplay = () => {
 				triggerRef(recordingRef);
 			};
 		}
