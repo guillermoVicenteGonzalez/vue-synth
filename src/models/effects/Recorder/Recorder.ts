@@ -1,4 +1,5 @@
 import Recording from "./Recording";
+const MIME_TYPE = "audio/mpeg";
 
 export default class AudioRecorder {
 	private destination: MediaStreamAudioDestinationNode;
@@ -69,7 +70,9 @@ export default class AudioRecorder {
 	}
 
 	private onRecorderStop() {
-		const blob = new Blob(this.chunks, { type: "audio/ogg; codecs=opus" });
+		// const blob = new Blob(this.chunks, { type: "audio/ogg; codecs=opus" });
+		const blob = new Blob(this.chunks, { type: MIME_TYPE });
+
 		if (blob.size == 0) {
 			throw new Error("No audio was recorded");
 		}

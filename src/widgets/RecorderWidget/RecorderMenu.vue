@@ -35,22 +35,34 @@ import VsSeparator from "@/components/common/VsSeparator/VsSeparator.vue";
 import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
 import VsSwitchButton from "@/components/common/VsSwitchButton/VsSwitchButton.vue";
 import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
+import type Recording from "@/models/effects/Recorder/Recording";
+import { watch } from "vue";
+
+const recording = defineModel<Recording | null>();
 
 const volume = defineModel<number>("volume", {
 	default: 1,
 });
-const recordingLoops = defineModel<boolean>("loops");
-const recordable = defineModel<boolean>("recordable");
+const recordingLoops = defineModel<boolean>("loops", { default: false });
+const recordable = defineModel<boolean>("recordable", { default: true });
 
 //Disabled for not because of tooltip overflow
 const recordableTooltip = "";
 const loopTooltip = "";
 
+watch([recordingLoops, recordable, recording], () => {
+	console.warn("Efecto");
+	if (!recording.value) {
+		return;
+	}
+
+	recording.value.loops = recordingLoops.value;
+});
+
 const emit = defineEmits<{
 	(e: "playall"): void;
 	(e: "pauseall"): void;
 	(e: "downloadMix"): void;
-	(e: "test"): void;
 	(e: "downloadTrack"): void;
 }>();
 

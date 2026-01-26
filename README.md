@@ -2,7 +2,13 @@
 
 ## Todo
 
-Probar AudioBufferSource con el contexto para ver si suena o el problema esta en el decode.
+Loops
+mp3
+mix audio
+load tracks
+trim
+tooltips
+sawwaves
 
 ### Features
 

@@ -8,6 +8,7 @@
 			<RecorderSlot ref="recorderSlots" :source="source" :recorder="recorder">
 				<template #slot-menu>
 					<RecorderMenu
+						v-model="recorderCluster.slots[index].recording"
 						@download-track="handleDownloadTrack(index)"
 					></RecorderMenu>
 				</template>
