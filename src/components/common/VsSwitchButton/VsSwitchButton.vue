@@ -8,13 +8,21 @@
 <script lang="ts" setup>
 import { computed } from "vue";
 
+interface VsSwitchButtonProps {
+	disabled?: boolean;
+}
+
+const { disabled } = defineProps<VsSwitchButtonProps>();
+
 const active = defineModel<boolean>({ default: false });
 
 const dynamicClass = computed(() => ({
 	"SwitchButton--active": active.value,
+	"SwitchButton--disabled": disabled,
 }));
 
 function handleClick() {
+	if (disabled) return;
 	active.value = !active.value;
 }
 </script>
@@ -67,6 +75,17 @@ $switch-color-active: $primary-color;
 					#{$switch-button-width} - #{$switch-handle-size} - #{$switch-margin}
 				)
 			);
+		}
+	}
+
+	&--disabled {
+		background-color: $disabled-color-1;
+		cursor: not-allowed;
+
+		.SwitchButton {
+			&__handle {
+				background-color: $disabled-color-2;
+			}
 		}
 	}
 }

@@ -2,11 +2,13 @@
 
 ## Todo
 
-Loops
-mp3
-mix audio
-load tracks
-trim
+- [x]Loops
+- [x]mp3
+- [ ] mix audio
+- [ ]load tracks
+- [ ]trim
+- [ ] Accesibility
+
 tooltips
 sawwaves
 

@@ -95,8 +95,6 @@
 			</div>
 		</template>
 	</EffectCard>
-
-	<div style="color: white">{{ wah }}</div>
 </template>
 
 <script lang="ts" setup>

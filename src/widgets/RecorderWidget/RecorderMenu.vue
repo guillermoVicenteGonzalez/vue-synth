@@ -4,17 +4,27 @@
 			<VsTooltip :text="recordableTooltip">
 				<span>Recordable</span>
 			</VsTooltip>
-			<VsSwitchButton v-model="recordable"></VsSwitchButton>
+			<VsSwitchButton
+				v-model="recordable"
+				:disabled="noRecording"
+			></VsSwitchButton>
 		</li>
 		<li class="RecorderMenu__item RecorderMenu__item--control">
 			<VsTooltip :text="loopTooltip">
 				<span>Loops</span>
 			</VsTooltip>
-			<VsSwitchButton v-model="recordingLoops"></VsSwitchButton>
+			<VsSwitchButton
+				v-model="recordingLoops"
+				:disabled="noRecording"
+			></VsSwitchButton>
 		</li>
 
 		<li class="RecorderMenu__item">Load track</li>
-		<li class="RecorderMenu__item" @click="handleDownloadTrack">
+		<li
+			class="RecorderMenu__item"
+			:class="dynamicItemsClass"
+			@click="handleDownloadTrack"
+		>
 			Download track
 		</li>
 		<li class="RecorderMenu__item RecorderMenu__item--control">
@@ -36,20 +46,21 @@ import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
 import VsSwitchButton from "@/components/common/VsSwitchButton/VsSwitchButton.vue";
 import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
 import type Recording from "@/models/effects/Recorder/Recording";
-import { computed } from "vue";
+import { computed, reactive, ref } from "vue";
 
 const recording = defineModel<Recording | null>();
+const recordable = ref();
 
 //Disabled for not because of tooltip overflow
 const recordableTooltip = "";
 const loopTooltip = "";
 
 //Is this better than a ref + watcher to update the recording?????
-const recordingSettings = {
+const recordingSettings = reactive({
 	loops: false,
 	recordable: true,
 	volume: 1,
-};
+});
 
 const volume = computed({
 	get: () => {
@@ -75,8 +86,6 @@ const recordingLoops = computed({
 	},
 });
 
-const recordable = defineModel<boolean>("recordable", { default: true });
-
 // watch([recordingLoops, recordable, recording, volume], () => {
 // 	console.warn("Efecto");
 // 	if (!recording.value) {
@@ -86,6 +95,14 @@ const recordable = defineModel<boolean>("recordable", { default: true });
 // 	recording.value.loops = recordingLoops.value;
 // 	recording.value.volume = volume.value;
 // });
+
+const noRecording = computed(() => {
+	return recording.value == null;
+});
+
+const dynamicItemsClass = computed(() => ({
+	"RecorderMenu__item--disabled": noRecording,
+}));
 
 const emit = defineEmits<{
 	(e: "playAll"): void;
@@ -108,6 +125,7 @@ function handleDownloadMix() {
 }
 
 function handleDownloadTrack() {
+	if (!noRecording) return;
 	emit("downloadTrack");
 }
 
@@ -159,6 +177,15 @@ $button-height: 3rem;
 
 		* {
 			white-space: nowrap;
+		}
+
+		&--disabled {
+			cursor: not-allowed;
+			color: $disabled-color-1;
+
+			&:not(&--control):hover {
+				background-color: $disabled-color-2;
+			}
 		}
 	}
 
