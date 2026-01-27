@@ -8,12 +8,9 @@
 			<RecorderSlot ref="recorderSlots" :source="source" :recorder="recorder">
 				<template #slot-menu>
 					<RecorderMenu
+						:cluster="recorderCluster"
 						v-model="recorderCluster.slots[index].recording"
 						@download-track="handleDownloadTrack(index)"
-						@play-all="handlePlayAll"
-						@clear-all="handleClearAll"
-						@pause-all="handlePauseAll"
-						@download-mix="handleDownloadMix"
 					></RecorderMenu>
 				</template>
 			</RecorderSlot>
@@ -66,43 +63,6 @@ function handleDownloadTrack(slotIndex: number) {
 	const a = document.createElement("a");
 	a.href = recording.getRecordingUrl();
 	a.download = `track ${slotIndex}`;
-	a.click();
-}
-
-async function handlePlayAll() {
-	await recorderCluster.value.playAll();
-}
-
-function handleClearAll() {
-	recorderCluster.value.slots.forEach(recorder => {
-		recorder.clearRecording();
-		console.log(recorder.recording);
-	});
-
-	console.log("Clearing???");
-}
-
-function handlePauseAll() {
-	recorderCluster.value.pauseAll();
-}
-
-async function handleDownloadMix() {
-	const availableRecordingTracks = recorderCluster.value.slots
-		.map(recorder => {
-			return recorder.recording;
-		})
-		.filter(recording => {
-			return recording != null;
-		});
-
-	if (availableRecordingTracks.length == 0) return;
-
-	const url = await recorderCluster.value.mixRecordings();
-	if (!url) return;
-
-	const a = document.createElement("a");
-	a.href = url;
-	a.download = `Mix`;
 	a.click();
 }
 </script>

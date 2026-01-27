@@ -4,7 +4,8 @@
 
 - [x]Loops
 - [x]mp3
-- [ ] mix audio
+- [x] mix audio
+- [ ] mixins for toggled, hover etc
 - [ ] Restart + context menus
 - [ ]load tracks
 - [ ]trim
@@ -90,6 +91,8 @@ sawwaves
 - [x] Button effects
 - [x] font
 - [ ] Lighthouse
+- [ ] Dialog
+  - [ ] Dialog for naming downloads
 
 ## Bugs
 

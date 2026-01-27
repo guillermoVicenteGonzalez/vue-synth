@@ -6,7 +6,7 @@
 			</VsTooltip>
 			<VsSwitchButton
 				v-model="recordable"
-				:disabled="noRecording"
+				:disabled="recording == null"
 			></VsSwitchButton>
 		</li>
 		<li class="RecorderMenu__item RecorderMenu__item--control">
@@ -15,7 +15,7 @@
 			</VsTooltip>
 			<VsSwitchButton
 				v-model="recordingLoops"
-				:disabled="noRecording"
+				:disabled="recording == null"
 			></VsSwitchButton>
 		</li>
 
@@ -32,10 +32,17 @@
 		</li>
 
 		<VsSeparator></VsSeparator>
-		<li class="RecorderMenu__item" @click="handleDownloadMix">Download mix</li>
+		<li
+			class="RecorderMenu__item"
+			@click="handleDownloadMix"
+			:class="downloadMixButtonDynamicClass"
+		>
+			Download mix
+			<VsSpinner size="sm" v-if="isDownloadingMix"></VsSpinner>
+		</li>
 
 		<li class="RecorderMenu__item" @click="handleClearAll">clear all</li>
-		<li class="RecorderMenu__item" @click="handlePlayALl">play all</li>
+		<li class="RecorderMenu__item" @click="handlePlayAll">play all</li>
 		<li class="RecorderMenu__item" @click="handlePauseAll">pause all</li>
 	</ul>
 </template>
@@ -43,10 +50,18 @@
 <script setup lang="ts">
 import VsSeparator from "@/components/common/VsSeparator/VsSeparator.vue";
 import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
+import VsSpinner from "@/components/common/VsSpinner/VsSpinner.vue";
 import VsSwitchButton from "@/components/common/VsSwitchButton/VsSwitchButton.vue";
 import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
+import type RecorderCluster from "@/models/effects/Recorder/RecorderCluster";
 import type Recording from "@/models/effects/Recorder/Recording";
 import { computed, reactive, ref } from "vue";
+
+interface RecorderMenuProps {
+	cluster: RecorderCluster;
+}
+
+const { cluster } = defineProps<RecorderMenuProps>();
 
 const recording = defineModel<Recording | null>();
 const recordable = ref();
@@ -54,6 +69,8 @@ const recordable = ref();
 //Disabled for not because of tooltip overflow
 const recordableTooltip = "";
 const loopTooltip = "";
+
+const isDownloadingMix = ref<boolean>(false);
 
 //Is this better than a ref + watcher to update the recording?????
 const recordingSettings = reactive({
@@ -86,51 +103,65 @@ const recordingLoops = computed({
 	},
 });
 
-// watch([recordingLoops, recordable, recording, volume], () => {
-// 	console.warn("Efecto");
-// 	if (!recording.value) {
-// 		return;
-// 	}
-
-// 	recording.value.loops = recordingLoops.value;
-// 	recording.value.volume = volume.value;
-// });
-
-const noRecording = computed(() => {
-	return recording.value == null;
-});
-
 const dynamicItemsClass = computed(() => ({
-	"RecorderMenu__item--disabled": noRecording,
+	"RecorderMenu__item--disabled": recording.value == null,
 }));
 
-const emit = defineEmits<{
-	(e: "playAll"): void;
-	(e: "pauseAll"): void;
-	(e: "clearAll"): void;
-	(e: "downloadMix"): void;
-	(e: "downloadTrack"): void;
-}>();
+const downloadMixButtonDynamicClass = computed(() => ({
+	"RecorderMenu__item--toggled": isDownloadingMix.value,
+}));
 
-function handlePlayALl() {
-	emit("playAll");
-}
-
-function handlePauseAll() {
-	emit("pauseAll");
-}
-
-function handleDownloadMix() {
-	emit("downloadMix");
-}
-
-function handleDownloadTrack() {
-	if (!noRecording.value) return;
-	emit("downloadTrack");
+async function handlePlayAll() {
+	await cluster.playAll();
 }
 
 function handleClearAll() {
-	emit("clearAll");
+	cluster.slots.forEach(recorder => {
+		recorder.clearRecording();
+		console.log(recorder.recording);
+	});
+
+	console.log("Clearing???");
+}
+
+function handlePauseAll() {
+	cluster.pauseAll();
+}
+
+async function handleDownloadMix() {
+	if (isDownloadingMix.value) return;
+
+	const availableRecordingTracks = cluster.slots
+		.map(recorder => {
+			return recorder.recording;
+		})
+		.filter(recording => {
+			return recording != null;
+		});
+
+	if (availableRecordingTracks.length == 0) return;
+
+	isDownloadingMix.value = true;
+
+	const url = await cluster.mixRecordings();
+	isDownloadingMix.value = false;
+
+	if (!url) return;
+
+	const a = document.createElement("a");
+	a.href = url;
+	a.download = `Mix`;
+	a.click();
+}
+
+function handleDownloadTrack() {
+	if (!recording.value) return;
+
+	const a = document.createElement("a");
+	a.href = recording.value.getRecordingUrl();
+	// a.download = `track ${slotIndex}`;
+	a.download = "track";
+	a.click();
 }
 </script>
 
@@ -138,6 +169,17 @@ function handleClearAll() {
 $recorder-menu-min-width: 15rem;
 $recorder-menu-max-height: 15rem;
 $button-height: 3rem;
+$item-active-scale: 0.95;
+
+@mixin active {
+	background-color: $primary-color;
+	border-radius: $border-radius-sm;
+}
+
+@mixin toggled {
+	@include active;
+	transform: scale($item-active-scale);
+}
 
 .RecorderMenu {
 	list-style: none;
@@ -166,13 +208,17 @@ $button-height: 3rem;
 		justify-content: space-between;
 		gap: $gap-bg;
 
-		&:not(&--control) {
+		&:not(&--control):not(&--toggled) {
 			cursor: pointer;
-		}
 
-		&:not(&--control):hover {
-			background-color: $primary-color;
-			border-radius: $border-radius-sm;
+			&:hover {
+				background-color: $primary-color;
+				border-radius: $border-radius-sm;
+			}
+
+			&:active {
+				transform: scale($item-active-scale);
+			}
 		}
 
 		* {
@@ -184,8 +230,13 @@ $button-height: 3rem;
 			color: $disabled-color-1;
 
 			&:not(&--control):hover {
-				background-color: $disabled-color-2;
+				background-color: transparent;
 			}
+		}
+
+		&--toggled {
+			@include toggled();
+			cursor: not-allowed;
 		}
 	}
 
