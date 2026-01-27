@@ -42,7 +42,6 @@ export default class RecorderCluster {
 		)[0];
 
 		const biggestLength = (await biggestTrack.getAudioBuffer()).length;
-		console.warn(`biggest length ${biggestLength}`);
 
 		const offlineCtx = new OfflineAudioContext(
 			this.recordings.length,
@@ -66,7 +65,6 @@ export default class RecorderCluster {
 
 		const tempCtx = new AudioContext();
 		const mixBuffer = tempCtx.createBufferSource();
-		mixBuffer.connect(tempCtx.destination);
 		mixBuffer.buffer = renderedBuffer;
 		const recorder = new AudioRecorder(mixBuffer, tempCtx);
 

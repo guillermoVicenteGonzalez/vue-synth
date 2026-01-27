@@ -29,8 +29,6 @@
 				@click="handleSelectSlot(index)"
 			></li>
 		</ul>
-
-		<audio ref="tempPlayer" controls></audio>
 	</div>
 </template>
 
@@ -38,7 +36,7 @@
 import VsTab from "@/components/common/VsTab/VsTab.vue";
 import type AudioCluster from "@/models/AudioCluster";
 import RecorderCluster from "@/models/effects/Recorder/RecorderCluster";
-import { ref, useTemplateRef, type Ref } from "vue";
+import { ref, type Ref } from "vue";
 import RecorderMenu from "./RecorderMenu.vue";
 import RecorderSlot from "./RecorderSlot.vue";
 
@@ -53,15 +51,12 @@ const recorderCluster: Ref<RecorderCluster, RecorderCluster> =
 		RecorderCluster
 	>;
 const activeRecorderIndex = ref<number>(0);
-const audioRef = useTemplateRef("tempPlayer");
 
 function handleSelectSlot(n: number) {
 	activeRecorderIndex.value = n;
 }
 
 function handleDownloadTrack(slotIndex: number) {
-	console.log("AQUI");
-
 	if (slotIndex < 0 && slotIndex >= recorderCluster.value.slots.length) return;
 	const recording = recorderCluster.value.slots[slotIndex].recording;
 	if (!recording) return;
@@ -92,10 +87,23 @@ function handlePauseAll() {
 }
 
 async function handleDownloadMix() {
-	const url = await recorderCluster.value.mixRecordings();
-	if (!audioRef.value || !url) return;
+	const availableRecordingTracks = recorderCluster.value.slots
+		.map(recorder => {
+			return recorder.recording;
+		})
+		.filter(recording => {
+			return recording != null;
+		});
 
-	audioRef.value.src = url;
+	if (availableRecordingTracks.length == 0) return;
+
+	const url = await recorderCluster.value.mixRecordings();
+	if (!url) return;
+
+	const a = document.createElement("a");
+	a.href = url;
+	a.download = `Mix`;
+	a.click();
 }
 </script>
 <style lang="scss" scoped>
