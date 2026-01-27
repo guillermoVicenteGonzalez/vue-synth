@@ -5,9 +5,11 @@
 - [x]Loops
 - [x]mp3
 - [ ] mix audio
+- [ ] Restart + context menus
 - [ ]load tracks
 - [ ]trim
 - [ ] Accesibility
+- [ ] Options => Presets, clear all, other settings, settings menu
 
 tooltips
 sawwaves

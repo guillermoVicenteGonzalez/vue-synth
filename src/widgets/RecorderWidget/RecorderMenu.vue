@@ -125,7 +125,7 @@ function handleDownloadMix() {
 }
 
 function handleDownloadTrack() {
-	if (!noRecording) return;
+	if (!noRecording.value) return;
 	emit("downloadTrack");
 }
 

@@ -42,6 +42,10 @@ export default class Recording {
 		return this.audioNode.paused;
 	}
 
+	get duration() {
+		return this.audioNode.duration;
+	}
+
 	public getRecordingUrl() {
 		return window.URL.createObjectURL(this.encodedAudio);
 	}
@@ -78,6 +82,12 @@ export default class Recording {
 		return audioBuffer;
 	}
 
+	/**
+	 * Uses this.getAudioBuffer() to create a new AudioBufferSourceNode based on
+	 * said buffer and the provided context. Also assigns the loops property
+	 * @param context The base audio context that all the Audio nodes will be created from
+	 * @returns a new AudioBuffer source node (asynchronously)
+	 */
 	public async getAudioBufferSourceNode(context: BaseAudioContext) {
 		const buffer = await this.getAudioBuffer();
 		const source = new AudioBufferSourceNode(context);

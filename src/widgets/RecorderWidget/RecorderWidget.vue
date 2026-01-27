@@ -13,6 +13,7 @@
 						@play-all="handlePlayAll"
 						@clear-all="handleClearAll"
 						@pause-all="handlePauseAll"
+						@download-mix="handleDownloadMix"
 					></RecorderMenu>
 				</template>
 			</RecorderSlot>
@@ -29,8 +30,7 @@
 			></li>
 		</ul>
 
-		<!-- <audio ref="tempPlayer" controls></audio>
-		  -->
+		<audio ref="tempPlayer" controls></audio>
 	</div>
 </template>
 
@@ -38,7 +38,7 @@
 import VsTab from "@/components/common/VsTab/VsTab.vue";
 import type AudioCluster from "@/models/AudioCluster";
 import RecorderCluster from "@/models/effects/Recorder/RecorderCluster";
-import { ref, type Ref } from "vue";
+import { ref, useTemplateRef, type Ref } from "vue";
 import RecorderMenu from "./RecorderMenu.vue";
 import RecorderSlot from "./RecorderSlot.vue";
 
@@ -53,6 +53,7 @@ const recorderCluster: Ref<RecorderCluster, RecorderCluster> =
 		RecorderCluster
 	>;
 const activeRecorderIndex = ref<number>(0);
+const audioRef = useTemplateRef("tempPlayer");
 
 function handleSelectSlot(n: number) {
 	activeRecorderIndex.value = n;
@@ -88,6 +89,13 @@ function handleClearAll() {
 
 function handlePauseAll() {
 	recorderCluster.value.pauseAll();
+}
+
+async function handleDownloadMix() {
+	const url = await recorderCluster.value.mixRecordings();
+	if (!audioRef.value || !url) return;
+
+	audioRef.value.src = url;
 }
 </script>
 <style lang="scss" scoped>

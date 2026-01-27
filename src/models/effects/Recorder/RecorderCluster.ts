@@ -1,4 +1,4 @@
-import Recorder from "./Recorder";
+import { default as AudioRecorder, default as Recorder } from "./Recorder";
 import type Recording from "./Recording";
 
 const MAX_RECORDER_SLOTS = 4;
@@ -33,7 +33,58 @@ export default class RecorderCluster {
 		});
 	}
 
-	public mixRecordings() {
+	public async mixRecordings() {
+		const sampleRate = 44000;
 		if (this.recordings.length == 0) return;
+
+		const biggestTrack = this.recordings.sort(
+			(a, b) => b.duration - a.duration
+		)[0];
+
+		const biggestLength = (await biggestTrack.getAudioBuffer()).length;
+		console.warn(`biggest length ${biggestLength}`);
+
+		const offlineCtx = new OfflineAudioContext(
+			this.recordings.length,
+			biggestLength,
+			sampleRate
+		);
+
+		await Promise.all(
+			this.recordings.map(async recording => {
+				const t = await recording.getAudioBufferSourceNode(offlineCtx);
+				const gainNode = offlineCtx.createGain();
+				gainNode.gain.value = recording.volume;
+				t.connect(gainNode);
+				gainNode.connect(offlineCtx.destination);
+				t.start();
+				return t;
+			})
+		);
+
+		const renderedBuffer = await offlineCtx.startRendering();
+
+		const tempCtx = new AudioContext();
+		const mixBuffer = tempCtx.createBufferSource();
+		mixBuffer.connect(tempCtx.destination);
+		mixBuffer.buffer = renderedBuffer;
+		const recorder = new AudioRecorder(mixBuffer, tempCtx);
+
+		const recordingUrl = await new Promise<string>((resolve, reject) => {
+			recorder.start();
+			mixBuffer.start();
+			mixBuffer.onended = () => {
+				recorder.stop().then(() => {
+					if (recorder.recording) {
+						const url = recorder.recording.getRecordingUrl();
+						resolve(url);
+					} else reject();
+				});
+			};
+		});
+
+		return recordingUrl;
+
+		// const renderedBuffer = await offlineC;
 	}
 }
