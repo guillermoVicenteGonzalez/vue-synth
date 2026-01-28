@@ -20,6 +20,8 @@
 		</li>
 
 		<li class="RecorderMenu__item">Load track</li>
+		<li class="RecorderMenu__item">Clear recording</li>
+
 		<li
 			class="RecorderMenu__item"
 			:class="dynamicItemsClass"
@@ -34,11 +36,11 @@
 		<VsSeparator></VsSeparator>
 		<li
 			class="RecorderMenu__item"
-			@click="handleDownloadMix"
 			:class="downloadMixButtonDynamicClass"
+			@click="handleDownloadMix"
 		>
 			Download mix
-			<VsSpinner size="sm" v-if="isDownloadingMix"></VsSpinner>
+			<VsSpinner v-if="isDownloadingMix" size="sm"></VsSpinner>
 		</li>
 
 		<li class="RecorderMenu__item" @click="handleClearAll">clear all</li>
@@ -109,6 +111,7 @@ const dynamicItemsClass = computed(() => ({
 
 const downloadMixButtonDynamicClass = computed(() => ({
 	"RecorderMenu__item--toggled": isDownloadingMix.value,
+	"RecorderMenu__item--disabled": !cluster.recordings.some(r => r != null),
 }));
 
 async function handlePlayAll() {
@@ -167,7 +170,7 @@ function handleDownloadTrack() {
 
 <style lang="scss" scoped>
 $recorder-menu-min-width: 15rem;
-$recorder-menu-max-height: 15rem;
+$recorder-menu-max-height: 20rem;
 $button-height: 3rem;
 $item-active-scale: 0.95;
 
@@ -228,9 +231,12 @@ $item-active-scale: 0.95;
 		&--disabled {
 			cursor: not-allowed;
 			color: $disabled-color-1;
+			background-color: transparent;
 
-			&:not(&--control):hover {
+			// Cheap way to increase specificity
+			&:hover:hover:hover {
 				background-color: transparent;
+				cursor: not-allowed;
 			}
 		}
 

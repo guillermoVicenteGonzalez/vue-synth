@@ -2,18 +2,18 @@
 
 ## Todo
 
-- [x]Loops
-- [x]mp3
+- [x] Loops
+- [x] mp3
 - [x] mix audio
 - [ ] mixins for toggled, hover etc
 - [ ] Restart + context menus
-- [ ]load tracks
+- [ ] load tracks
 - [ ]trim
 - [ ] Accesibility
-- [ ] Options => Presets, clear all, other settings, settings menu
 
-tooltips
-sawwaves
+- [ ] Options => Presets, clear all, other settings, settings menu
+      tooltips
+      sawwaves
 
 ### Features
 
@@ -63,16 +63,16 @@ sawwaves
 
 - [-] Recorder
   - [x] Slots functionality
-  - [ ] Wrap audio element inside MediaElementAudioSourceNode https://www.youtube.com/watch?v=idhb45lc2xo
+  - [x] Wrap audio element inside MediaElementAudioSourceNode https://www.youtube.com/watch?v=idhb45lc2xo
   - [x] Loop functionality
   - [x] Recorder state bug
   - [x] Dynamic control styles
-  - [ ] Backing tracks
-  - [ ] save audio / download audio
+  - [x] Backing tracks
+  - [x] save audio / download audio
   - [ ] Trim audio?
     - blob => audioBuffer.
   - [ ] Load audio (url or file??)
-  - [ ] Mix audio (audio encoder)
+  - [x] Mix audio (audio encoder)
     - Recorder => blob => audioBuffer / MediaElement....
 - [ ] Metronome
 - [ ] As many MIDI mappings as possible
