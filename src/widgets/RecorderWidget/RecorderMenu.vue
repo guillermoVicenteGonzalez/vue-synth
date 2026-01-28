@@ -19,8 +19,15 @@
 			></VsSwitchButton>
 		</li>
 
-		<li class="RecorderMenu__item">Load track</li>
-		<li class="RecorderMenu__item">Clear recording</li>
+		<!-- <li class="RecorderMenu__item">Load track</li> -->
+
+		<li
+			class="RecorderMenu__item"
+			:class="dynamicItemsClass"
+			@click="handleClearRecording"
+		>
+			Clear recording
+		</li>
 
 		<li
 			class="RecorderMenu__item"
@@ -34,18 +41,44 @@
 		</li>
 
 		<VsSeparator></VsSeparator>
+
 		<li
 			class="RecorderMenu__item"
-			:class="downloadMixButtonDynamicClass"
+			:class="dynamicClusterItemClass()"
 			@click="handleDownloadMix"
 		>
 			Download mix
-			<VsSpinner v-if="isDownloadingMix" size="sm"></VsSpinner>
+			<VsSpinner v-if="cluster.isDownloadingMix" size="sm"></VsSpinner>
 		</li>
 
-		<li class="RecorderMenu__item" @click="handleClearAll">clear all</li>
-		<li class="RecorderMenu__item" @click="handlePlayAll">play all</li>
-		<li class="RecorderMenu__item" @click="handlePauseAll">pause all</li>
+		<li
+			class="RecorderMenu__item"
+			:class="dynamicClusterItemClass"
+			@click="handleClearAll"
+		>
+			clear all
+		</li>
+		<li
+			class="RecorderMenu__item"
+			:class="dynamicClusterItemClass()"
+			@click="handlePlayAll"
+		>
+			play all
+		</li>
+		<li
+			class="RecorderMenu__item"
+			:class="dynamicClusterItemClass()"
+			@click="handlePauseAll"
+		>
+			pause all
+		</li>
+		<li
+			class="RecorderMenu__item"
+			:class="dynamicClusterItemClass()"
+			@click="handlePauseAll"
+		>
+			{{ hasRecordings }}
+		</li>
 	</ul>
 </template>
 
@@ -61,9 +94,15 @@ import { computed, reactive, ref } from "vue";
 
 interface RecorderMenuProps {
 	cluster: RecorderCluster;
+	hasRecordings?: boolean;
 }
 
-const { cluster } = defineProps<RecorderMenuProps>();
+/**
+ * HasRecordings is a caveat. the recordings prop on cluster is a getter => not reactive.
+ * I was not able to deeply track the slots prop on the cluster. changes to cluster.recorder.recording where not tracked.
+ * Instead, I try to track them from inside the parent
+ */
+const { cluster, hasRecordings } = defineProps<RecorderMenuProps>();
 
 const recording = defineModel<Recording | null>();
 const recordable = ref();
@@ -72,14 +111,21 @@ const recordable = ref();
 const recordableTooltip = "";
 const loopTooltip = "";
 
-const isDownloadingMix = ref<boolean>(false);
-
 //Is this better than a ref + watcher to update the recording?????
 const recordingSettings = reactive({
 	loops: false,
 	recordable: true,
 	volume: 1,
 });
+
+const emit = defineEmits<{
+	(e: "downloadMix"): void;
+	(e: "downloadTrack"): void;
+	(e: "playAll"): void;
+	(e: "pauseAll"): void;
+	(e: "clearAll"): void;
+	(e: "clearRecording"): void;
+}>();
 
 const volume = computed({
 	get: () => {
@@ -105,66 +151,46 @@ const recordingLoops = computed({
 	},
 });
 
+//For "single recording" type items
 const dynamicItemsClass = computed(() => ({
 	"RecorderMenu__item--disabled": recording.value == null,
 }));
 
-const downloadMixButtonDynamicClass = computed(() => ({
-	"RecorderMenu__item--toggled": isDownloadingMix.value,
-	"RecorderMenu__item--disabled": !cluster.recordings.some(r => r != null),
-}));
-
-async function handlePlayAll() {
-	await cluster.playAll();
-}
-
-function handleClearAll() {
-	cluster.slots.forEach(recorder => {
-		recorder.clearRecording();
-		console.log(recorder.recording);
-	});
-
-	console.log("Clearing???");
-}
-
-function handlePauseAll() {
-	cluster.pauseAll();
-}
-
-async function handleDownloadMix() {
-	if (isDownloadingMix.value) return;
-
-	const availableRecordingTracks = cluster.slots
-		.map(recorder => {
-			return recorder.recording;
-		})
-		.filter(recording => {
-			return recording != null;
-		});
-
-	if (availableRecordingTracks.length == 0) return;
-
-	isDownloadingMix.value = true;
-
-	const url = await cluster.mixRecordings();
-	isDownloadingMix.value = false;
-
-	if (!url) return;
-
-	const a = document.createElement("a");
-	a.href = url;
-	a.download = `Mix`;
-	a.click();
+/**
+ * For "multi recording" type items.
+ * I'm unable to use a computed properly. This is highly inneficient
+ */
+function dynamicClusterItemClass() {
+	return {
+		"RecorderMenu__item--toggled": cluster.isDownloadingMix,
+		"RecorderMenu__item--disabled": !cluster.slots.some(
+			recorder => recorder.recording != null
+		),
+	};
 }
 
 function handleDownloadTrack() {
-	if (!recording.value) return;
+	emit("downloadTrack");
+}
 
-	const a = document.createElement("a");
-	a.href = recording.value.getRecordingUrl();
-	// a.download = `track ${slotIndex}`;
-	a.download = "track";
-	a.click();
+function handleDownloadMix() {
+	emit("downloadMix");
+}
+
+function handlePlayAll() {
+	emit("playAll");
+}
+
+function handleClearAll() {
+	emit("clearAll");
+}
+
+function handlePauseAll() {
+	emit("pauseAll");
+}
+
+function handleClearRecording() {
+	emit("clearRecording");
 }
 </script>
 
@@ -229,9 +255,10 @@ $item-active-scale: 0.95;
 		}
 
 		&--disabled {
-			cursor: not-allowed;
+			// cursor: not-allowed;
 			color: $disabled-color-1;
 			background-color: transparent;
+			pointer-events: none;
 
 			// Cheap way to increase specificity
 			&:hover:hover:hover {

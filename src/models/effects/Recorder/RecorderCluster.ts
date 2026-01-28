@@ -5,6 +5,7 @@ const MAX_RECORDER_SLOTS = 4;
 
 export default class RecorderCluster {
 	public slots: Recorder[] = [];
+	public isDownloadingMix: boolean = false;
 
 	constructor(source: AudioNode, context: AudioContext) {
 		for (let i = 0; i < MAX_RECORDER_SLOTS; i++) {
@@ -36,6 +37,8 @@ export default class RecorderCluster {
 	public async mixRecordings() {
 		const sampleRate = 44000;
 		if (this.recordings.length == 0) return;
+
+		this.isDownloadingMix = true;
 
 		const biggestTrack = this.recordings.sort(
 			(a, b) => b.duration - a.duration
@@ -73,6 +76,8 @@ export default class RecorderCluster {
 			mixBuffer.start();
 			mixBuffer.onended = () => {
 				recorder.stop().then(() => {
+					this.isDownloadingMix = false;
+
 					if (recorder.recording) {
 						const url = recorder.recording.getRecordingUrl();
 						resolve(url);

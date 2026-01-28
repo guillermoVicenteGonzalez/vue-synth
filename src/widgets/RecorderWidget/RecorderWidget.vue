@@ -10,7 +10,13 @@
 					<RecorderMenu
 						v-model="recorderCluster.slots[index].recording"
 						:cluster="recorderCluster"
+						:has-recordings="hasRecordings"
 						@download-track="handleDownloadTrack(index)"
+						@download-mix="handleDownloadMix"
+						@play-all="handlePlayAll"
+						@pause-all="handlePauseAll"
+						@clear-recording="handleClearTrack(index)"
+						@clear-all="handleClearAll"
 					></RecorderMenu>
 				</template>
 			</RecorderSlot>
@@ -33,7 +39,7 @@
 import VsTab from "@/components/common/VsTab/VsTab.vue";
 import type AudioCluster from "@/models/AudioCluster";
 import RecorderCluster from "@/models/effects/Recorder/RecorderCluster";
-import { ref, type Ref } from "vue";
+import { ref, watch, type Ref } from "vue";
 import RecorderMenu from "./RecorderMenu.vue";
 import RecorderSlot from "./RecorderSlot.vue";
 
@@ -47,6 +53,7 @@ const recorderCluster: Ref<RecorderCluster, RecorderCluster> =
 		RecorderCluster,
 		RecorderCluster
 	>;
+
 const activeRecorderIndex = ref<number>(0);
 
 function handleSelectSlot(n: number) {
@@ -65,6 +72,57 @@ function handleDownloadTrack(slotIndex: number) {
 	a.download = `track ${slotIndex}`;
 	a.click();
 }
+
+async function handlePlayAll() {
+	await recorderCluster.value.playAll();
+}
+
+function handleClearAll() {
+	recorderCluster.value.slots.forEach(recorder => {
+		recorder.clearRecording();
+		console.log(recorder.recording);
+	});
+}
+
+function handlePauseAll() {
+	recorderCluster.value.pauseAll();
+}
+
+async function handleDownloadMix() {
+	if (recorderCluster.value.isDownloadingMix) return;
+
+	const url = await recorderCluster.value.mixRecordings();
+
+	if (!url) return;
+
+	const a = document.createElement("a");
+	a.href = url;
+	a.download = `Mix`;
+	a.click();
+}
+
+function handleClearTrack(slotIndex: number) {
+	recorderCluster.value.slots[slotIndex].clearRecording();
+}
+
+watch(
+	recorderCluster,
+	newVal => {
+		const recorders = { ...newVal }.slots;
+		console.log(recorders);
+		recorders.forEach(recorder => {
+			console.log(recorder.recording);
+		});
+		const recordings = { ...newVal }.slots.map(recorder => recorder.recording);
+
+		console.error(recordings);
+		if (recordings.length != 0) hasRecordings.value = true;
+		else hasRecordings.value = false;
+	},
+	{ deep: true }
+);
+
+const hasRecordings = ref<boolean>(false);
 </script>
 <style lang="scss" scoped>
 $btn-size: 5rem;
