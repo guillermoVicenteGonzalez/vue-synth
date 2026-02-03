@@ -5,10 +5,10 @@
 - [x] Loops
 - [x] mp3
 - [x] mix audio
-- [ ] mixins for toggled, hover etc
+- [x] mixins for toggled, hover etc
 - [ ] Restart + context menus
 - [ ] load tracks
-- [ ]trim
+- [ ] trim
 - [ ] Accesibility
 
 - [ ] Options => Presets, clear all, other settings, settings menu

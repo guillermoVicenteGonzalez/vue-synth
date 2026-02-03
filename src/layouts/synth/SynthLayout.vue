@@ -135,7 +135,7 @@ $min-actions-h: 10rem;
 		// 	[second-row end] minmax($min-lfo-h, $max-lfo-h);
 
 		gap: $gap-bg;
-		padding: $gap-bg;
+		padding: $gap-df;
 	}
 
 	&__piano {

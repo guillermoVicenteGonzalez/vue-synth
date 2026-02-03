@@ -10,13 +10,13 @@
 					<RecorderMenu
 						v-model="recorderCluster.slots[index].recording"
 						:cluster="recorderCluster"
-						:has-recordings="hasRecordings"
 						@download-track="handleDownloadTrack(index)"
 						@download-mix="handleDownloadMix"
 						@play-all="handlePlayAll"
 						@pause-all="handlePauseAll"
 						@clear-recording="handleClearTrack(index)"
 						@clear-all="handleClearAll"
+						@restart-recording="handleRestartRecording(index)"
 					></RecorderMenu>
 				</template>
 			</RecorderSlot>
@@ -39,7 +39,7 @@
 import VsTab from "@/components/common/VsTab/VsTab.vue";
 import type AudioCluster from "@/models/AudioCluster";
 import RecorderCluster from "@/models/effects/Recorder/RecorderCluster";
-import { ref, watch, type Ref } from "vue";
+import { ref, type Ref } from "vue";
 import RecorderMenu from "./RecorderMenu.vue";
 import RecorderSlot from "./RecorderSlot.vue";
 
@@ -64,8 +64,6 @@ function handleDownloadTrack(slotIndex: number) {
 	if (slotIndex < 0 && slotIndex >= recorderCluster.value.slots.length) return;
 	const recording = recorderCluster.value.slots[slotIndex].recording;
 	if (!recording) return;
-
-	console.warn("AQUI");
 
 	const a = document.createElement("a");
 	a.href = recording.getRecordingUrl();
@@ -105,24 +103,14 @@ function handleClearTrack(slotIndex: number) {
 	recorderCluster.value.slots[slotIndex].clearRecording();
 }
 
-watch(
-	recorderCluster,
-	newVal => {
-		const recorders = { ...newVal }.slots;
-		console.log(recorders);
-		recorders.forEach(recorder => {
-			console.log(recorder.recording);
-		});
-		const recordings = { ...newVal }.slots.map(recorder => recorder.recording);
+function handleRestartRecording(index: number) {
+	if (index < 0 && index >= recorderCluster.value.slots.length) return;
 
-		console.error(recordings);
-		if (recordings.length != 0) hasRecordings.value = true;
-		else hasRecordings.value = false;
-	},
-	{ deep: true }
-);
+	const recording = recorderCluster.value.slots[index].recording;
+	if (!recording) return;
 
-const hasRecordings = ref<boolean>(false);
+	recording.restartAudio();
+}
 </script>
 <style lang="scss" scoped>
 $btn-size: 5rem;

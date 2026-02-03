@@ -135,27 +135,9 @@ $recording-color: red;
 		display: none;
 	}
 
-	&__context-menu {
-		ul {
-			list-style: none;
-			display: flex;
-			flex-direction: column;
-
-			gap: $gap-df;
-			padding: 0 $gap-df;
-			color: $text-color;
-			font-size: 1.6rem;
-
-			li {
-				cursor: pointer;
-				border-radius: $border-radius-sm;
-				padding: 0 $gap-df;
-
-				&:hover {
-					background-color: $primary-color;
-				}
-			}
-		}
+	&__play-context-menu {
+		@include contextMenu();
+		color: $text-color;
 	}
 }
 </style>

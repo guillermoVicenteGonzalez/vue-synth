@@ -19,6 +19,14 @@
 			></VsSwitchButton>
 		</li>
 
+		<li
+			class="RecorderMenu__item"
+			:class="dynamicItemsClass"
+			@click="handleRestartRecording"
+		>
+			Restart recording
+		</li>
+
 		<!-- <li class="RecorderMenu__item">Load track</li> -->
 
 		<li
@@ -36,6 +44,15 @@
 		>
 			Download track
 		</li>
+
+		<li
+			class="RecorderMenu__item"
+			:class="dynamicItemsClass"
+			@click="handleDownloadTrack"
+		>
+			Load track
+		</li>
+
 		<li class="RecorderMenu__item RecorderMenu__item--control">
 			<VsSlider v-model="volume" :min="0" :max="1" :step="0.01"></VsSlider>
 		</li>
@@ -53,7 +70,7 @@
 
 		<li
 			class="RecorderMenu__item"
-			:class="dynamicClusterItemClass"
+			:class="dynamicClusterItemClass()"
 			@click="handleClearAll"
 		>
 			clear all
@@ -72,13 +89,6 @@
 		>
 			pause all
 		</li>
-		<li
-			class="RecorderMenu__item"
-			:class="dynamicClusterItemClass()"
-			@click="handlePauseAll"
-		>
-			{{ hasRecordings }}
-		</li>
 	</ul>
 </template>
 
@@ -94,7 +104,6 @@ import { computed, reactive, ref } from "vue";
 
 interface RecorderMenuProps {
 	cluster: RecorderCluster;
-	hasRecordings?: boolean;
 }
 
 /**
@@ -102,7 +111,7 @@ interface RecorderMenuProps {
  * I was not able to deeply track the slots prop on the cluster. changes to cluster.recorder.recording where not tracked.
  * Instead, I try to track them from inside the parent
  */
-const { cluster, hasRecordings } = defineProps<RecorderMenuProps>();
+const { cluster } = defineProps<RecorderMenuProps>();
 
 const recording = defineModel<Recording | null>();
 const recordable = ref();
@@ -125,6 +134,7 @@ const emit = defineEmits<{
 	(e: "pauseAll"): void;
 	(e: "clearAll"): void;
 	(e: "clearRecording"): void;
+	(e: "restartRecording"): void;
 }>();
 
 const volume = computed({
@@ -191,6 +201,10 @@ function handlePauseAll() {
 
 function handleClearRecording() {
 	emit("clearRecording");
+}
+
+function handleRestartRecording() {
+	emit("restartRecording");
 }
 </script>
 

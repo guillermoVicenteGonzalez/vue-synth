@@ -352,18 +352,7 @@ function toFixedFromStep(n: number): number {
 			}
 		}
 
-		ul {
-			list-style: none;
-
-			li {
-				font-size: 1.6rem;
-				padding: 0.5rem 2rem;
-				&:hover {
-					cursor: pointer;
-					background-color: $primary-color;
-				}
-			}
-		}
+		@include contextMenu();
 	}
 
 	&--disabled {
