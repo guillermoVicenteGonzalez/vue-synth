@@ -31,6 +31,9 @@ const classObject = computed(() => {
 </script>
 
 <style lang="scss" scoped>
+$hover-scale: 1.05;
+$active-scale: 0.98;
+
 .vs-button {
 	// min-width: 100px;
 	// min-height: 50px;
@@ -72,6 +75,14 @@ const classObject = computed(() => {
 			width: 8arem;
 			height: 3rem;
 		}
+	}
+
+	&:not(&--disabled):hover {
+		transform: scale($hover-scale);
+	}
+
+	&:not(&--disabled):active {
+		transform: scale($active-scale);
 	}
 }
 </style>

@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import VsTabButton from "@/components/common/VsToggleButton/VsTabButton.vue";
+import VsTabButton from "@/components/common/VsTabButton/VsTabButton.vue";
 
 const tabItems = <const>["Voice", "Effects"];
 export type TabItem = (typeof tabItems)[number];

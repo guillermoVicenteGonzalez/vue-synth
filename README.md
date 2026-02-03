@@ -2,6 +2,19 @@
 
 ## Todo
 
+- [x] Loops
+- [x] mp3
+- [x] mix audio
+- [x] mixins for toggled, hover etc
+- [x] Restart + context menus
+- [x] load tracks
+- [ ] trim
+- [ ] Accesibility
+
+- [ ] Options => Presets, clear all, other settings, settings menu
+      tooltips
+      sawwaves
+
 ### Features
 
 - [-] Piano widget
@@ -48,32 +61,48 @@
 
 ## Extra Features
 
-- [ ] Recorder
-- [ ] Backing tracks
-- [ ] save audio
+- [-] Recorder
+  - [x] Slots functionality
+  - [x] Wrap audio element inside MediaElementAudioSourceNode https://www.youtube.com/watch?v=idhb45lc2xo
+  - [x] Loop functionality
+  - [x] Recorder state bug
+  - [x] Dynamic control styles
+  - [x] Backing tracks
+  - [x] save audio / download audio
+  - [ ] Trim audio?
+    - blob => audioBuffer.
+  - [x] Load audio (url or file??)
+  - [x] Mix audio (audio encoder)
+    - Recorder => blob => audioBuffer / MediaElement....
 - [ ] Metronome
 - [ ] As many MIDI mappings as possible
-- [ ] Request midi button + selector disable
+- [x] Request midi button + selector disable
+- [ ] Panic button for keyboard + disable midi triggers note off
 - [ ] Save presets
 
 ## Polish
 
-- [ ] Responsive effects
+- [ ] Responsive effects (responsive in general)
 - [ ] Add resets
 - [ ] Add tooltips
 - [ ] Invert disable toggles
 - [ ] sawwaves representation
 - [ ] Disable canvases
-- [ ] Button effects
-- [ ] font
+- [x] Button effects
+- [x] font
+- [ ] Lighthouse
+- [ ] Dialog
+  - [ ] Dialog for naming downloads
 
 ## Bugs
 
 - [ ] Filters are not detached appropiately
 - [ ] Delete all does not work
-- [ ] adjust sliders (specially reverb)
+- [ ] adjust sliders (especially reverb)
 - [ ] add titles to envelope and LFO
-- [ ]
+- [ ] Number inputs work really bad
+- [ ] Distortion widget breaks with high res screens (for some unknown reason)
+- [ ] Prevent suspension
 
 ### What ifs
 
@@ -82,4 +111,9 @@
 - [ ] Audio envelope progress when key is pressed
 - [ ] Sampler
 
-## Release 2
+## Release 2 (order is important)
+
+- [ ] White label theming that works with scss
+- [ ] Rework basic widgets
+- [ ] Rethink architecture.
+- [ ] Trim audio

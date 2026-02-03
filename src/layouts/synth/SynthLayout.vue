@@ -73,7 +73,7 @@ $min-actions-h: 10rem;
 	max-width: 100vw;
 	max-height: 100vh;
 
-	overflow: hidden;
+	// overflow: hidden;
 
 	display: grid;
 	grid-template-columns:
@@ -103,7 +103,7 @@ $min-actions-h: 10rem;
 	&__components {
 		grid-row: body-start / body-end;
 		grid-column: cards-start / cards-end;
-		overflow: hidden;
+		// overflow: hidden;
 
 		height: 100%;
 		width: 100%;
@@ -135,7 +135,7 @@ $min-actions-h: 10rem;
 		// 	[second-row end] minmax($min-lfo-h, $max-lfo-h);
 
 		gap: $gap-bg;
-		padding: $gap-bg;
+		padding: $gap-df;
 	}
 
 	&__piano {

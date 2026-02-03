@@ -107,9 +107,7 @@ export class SynthSource {
 
 		this.oscillators.forEach(o => {
 			o.detune.value = o.detune.value + appliedDetune;
-			// console.log(
-			// 	`oscillator detune ${o.detune.value}. Increment ${appliedDetune}`
-			// );
+
 			appliedDetune += increment;
 		});
 	}

@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import VsTabButton from "../VsToggleButton/VsTabButton.vue";
+import VsTabButton from "../VsTabButton/VsTabButton.vue";
 
 export type VsTabsVariant = "default";
 export type VsTabsOrientation = "horizontal" | "vertical";

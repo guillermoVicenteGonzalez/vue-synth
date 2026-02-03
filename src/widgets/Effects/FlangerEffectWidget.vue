@@ -93,8 +93,8 @@
 
 <script setup lang="ts">
 import CircleSlider from "@/components/common/CircleSlider/CircleSlider.vue";
-import ToggleButton from "@/components/common/ToggleButton/ToggleButton.vue";
 import VsChip from "@/components/common/VsChip/VsChip.vue";
+import ToggleButton from "@/components/common/VsRadioButton/VsRadioButton.vue";
 import MultiWaveAnalyser, {
 	type analyserSource,
 } from "@/components/waves/MultiWaveAnnalyser/MultiWaveAnalyser.vue";

@@ -70,10 +70,10 @@
 </template>
 
 <script setup lang="ts">
-import ToggleButton from "@/components/common/ToggleButton/ToggleButton.vue";
 import VsButton from "@/components/common/VsButton/VsButton.vue";
 import VsCard from "@/components/common/VsCard/VsCard.vue";
 import VsChip from "@/components/common/VsChip/VsChip.vue";
+import ToggleButton from "@/components/common/VsRadioButton/VsRadioButton.vue";
 import VsSelector from "@/components/common/VsSelector/VsSelector.vue";
 import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
 import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
