@@ -12,7 +12,6 @@ export default function useRecorderCluster(
 		>;
 
 	const recorderComposables = computed(() => {
-		console.log("ME EJECUTO");
 		return recorderCluster.value.slots.map(recorder => {
 			return ref(recorder);
 		});

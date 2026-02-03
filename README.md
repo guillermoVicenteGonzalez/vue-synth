@@ -6,8 +6,8 @@
 - [x] mp3
 - [x] mix audio
 - [x] mixins for toggled, hover etc
-- [ ] Restart + context menus
-- [ ] load tracks
+- [x] Restart + context menus
+- [x] load tracks
 - [ ] trim
 - [ ] Accesibility
 
@@ -71,7 +71,7 @@
   - [x] save audio / download audio
   - [ ] Trim audio?
     - blob => audioBuffer.
-  - [ ] Load audio (url or file??)
+  - [x] Load audio (url or file??)
   - [x] Mix audio (audio encoder)
     - Recorder => blob => audioBuffer / MediaElement....
 - [ ] Metronome
@@ -116,3 +116,4 @@
 - [ ] White label theming that works with scss
 - [ ] Rework basic widgets
 - [ ] Rethink architecture.
+- [ ] Trim audio

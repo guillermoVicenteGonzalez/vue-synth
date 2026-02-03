@@ -79,7 +79,6 @@ async function handlePlayAll() {
 function handleClearAll() {
 	recorderCluster.value.slots.forEach(recorder => {
 		recorder.clearRecording();
-		console.log(recorder.recording);
 	});
 }
 

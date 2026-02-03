@@ -19,7 +19,6 @@ export default function useRecorder(recorder: Recorder) {
 		if (newAudio instanceof HTMLAudioElement) {
 			newAudio.onpause = () => {
 				triggerRef(recordingRef);
-				console.log(recordingRef.value?.paused);
 			};
 
 			newAudio.onplay = () => {
