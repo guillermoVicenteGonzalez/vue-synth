@@ -27,7 +27,7 @@
 			Restart recording
 		</li>
 
-		<!-- <li class="RecorderMenu__item">Load track</li> -->
+		<li class="RecorderMenu__item" @click="handleLoadFile">Load track</li>
 
 		<li
 			class="RecorderMenu__item"
@@ -45,13 +45,9 @@
 			Download track
 		</li>
 
-		<li
-			class="RecorderMenu__item"
-			:class="dynamicItemsClass"
-			@click="handleDownloadTrack"
-		>
-			Load track
-		</li>
+		<!-- <li class="RecorderMenu__item" @click="handleDownloadTrack">
+			<input type="file" />
+		</li> -->
 
 		<li class="RecorderMenu__item RecorderMenu__item--control">
 			<VsSlider v-model="volume" :min="0" :max="1" :step="0.01"></VsSlider>
@@ -99,7 +95,7 @@ import VsSpinner from "@/components/common/VsSpinner/VsSpinner.vue";
 import VsSwitchButton from "@/components/common/VsSwitchButton/VsSwitchButton.vue";
 import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
 import type RecorderCluster from "@/models/effects/Recorder/RecorderCluster";
-import type Recording from "@/models/effects/Recorder/Recording";
+import Recording from "@/models/effects/Recorder/Recording";
 import { computed, reactive, ref } from "vue";
 
 interface RecorderMenuProps {
@@ -135,6 +131,7 @@ const emit = defineEmits<{
 	(e: "clearAll"): void;
 	(e: "clearRecording"): void;
 	(e: "restartRecording"): void;
+	(e: "loadFile", file: Blob): void;
 }>();
 
 const volume = computed({
@@ -205,6 +202,17 @@ function handleClearRecording() {
 
 function handleRestartRecording() {
 	emit("restartRecording");
+}
+
+function handleLoadFile() {
+	const i = document.createElement("input");
+	i.type = "file";
+	i.click();
+	i.onchange = () => {
+		if (!i.files) return;
+		const f = i.files[0];
+		emit("loadFile", f);
+	};
 }
 </script>
 

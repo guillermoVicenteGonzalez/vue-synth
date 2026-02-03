@@ -17,6 +17,7 @@
 						@clear-recording="handleClearTrack(index)"
 						@clear-all="handleClearAll"
 						@restart-recording="handleRestartRecording(index)"
+						@load-file="(f: Blob) => handleLoadFile(f, index)"
 					></RecorderMenu>
 				</template>
 			</RecorderSlot>
@@ -110,6 +111,10 @@ function handleRestartRecording(index: number) {
 	if (!recording) return;
 
 	recording.restartAudio();
+}
+
+function handleLoadFile(file: Blob, slotIndex: number) {
+	recorderCluster.value.slots[slotIndex].loadRecording(file);
 }
 </script>
 <style lang="scss" scoped>

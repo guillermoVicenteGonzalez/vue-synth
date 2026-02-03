@@ -86,54 +86,8 @@ export default class AudioRecorder {
 		this.resolveStopPromise();
 	}
 
-	// public static async mixAudio(tracks: AudioBuffer[], sampleRate: number) {
-	// 	if (!tracks) return null;
-
-	// 	const biggestTrack = tracks.sort((a, b) => b.duration - a.duration)[0];
-
-	// 	const offlineCtx = new OfflineAudioContext(
-	// 		tracks.length,
-	// 		biggestTrack.length,
-	// 		sampleRate
-	// 	);
-
-	// 	const entryPoint = offlineCtx.createGain();
-	// 	const sources: AudioBufferSourceNode[] = tracks.map(track => {
-	// 		const source = new AudioBufferSourceNode(offlineCtx);
-	// 		source.buffer = track;
-	// 		source.loop = true;
-	// 		source.connect(entryPoint);
-	// 		entryPoint.connect(offlineCtx.destination);
-	// 		source.start();
-	// 		return source;
-	// 	});
-
-	// 	console.log("sources");
-	// 	console.log(sources);
-
-	// 	const renderedBuffer = await offlineCtx.startRendering();
-	// 	console.log(renderedBuffer);
-
-	// 	const tempCtx = new AudioContext();
-	// 	const mixBuffer = tempCtx.createBufferSource();
-	// 	mixBuffer.connect(tempCtx.destination);
-	// 	mixBuffer.buffer = renderedBuffer;
-	// 	const recorder = new AudioRecorder(mixBuffer, tempCtx);
-
-	// 	const t = await new Promise<string>((resolve, reject) => {
-	// 		recorder.start();
-	// 		mixBuffer.start();
-	// 		mixBuffer.onended = () => {
-	// 			recorder.stop().then(() => {
-	// 				const url = recorder.getRecordingUrl();
-	// 				if (url) resolve(url);
-	// 				else reject();
-	// 			});
-	// 		};
-	// 	});
-
-	// 	console.log(recorder.result);
-
-	// 	return t;
-	// }
+	public loadRecording(file: Blob) {
+		const r = new Recording(file, this.ctx);
+		this.recording = r;
+	}
 }
