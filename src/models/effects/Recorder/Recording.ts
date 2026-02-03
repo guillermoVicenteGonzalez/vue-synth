@@ -6,6 +6,7 @@ export default class Recording {
 	private encodedAudio: Blob;
 	public audioNode: HTMLAudioElement;
 	private ctx: AudioContext;
+	public recordable: boolean = true;
 	//USING A GETTER BREAKS REACTIVITY :(
 	testProp: boolean = false;
 

@@ -54,6 +54,8 @@ export default class RecorderCluster {
 
 		await Promise.all(
 			this.recordings.map(async recording => {
+				if (!recording.recordable) return;
+
 				const t = await recording.getAudioBufferSourceNode(offlineCtx);
 				const gainNode = offlineCtx.createGain();
 				gainNode.gain.value = recording.volume;

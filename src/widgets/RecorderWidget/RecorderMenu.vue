@@ -96,7 +96,7 @@ import VsSwitchButton from "@/components/common/VsSwitchButton/VsSwitchButton.vu
 import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
 import type RecorderCluster from "@/models/effects/Recorder/RecorderCluster";
 import Recording from "@/models/effects/Recorder/Recording";
-import { computed, reactive, ref } from "vue";
+import { computed, reactive } from "vue";
 
 interface RecorderMenuProps {
 	cluster: RecorderCluster;
@@ -110,7 +110,6 @@ interface RecorderMenuProps {
 const { cluster } = defineProps<RecorderMenuProps>();
 
 const recording = defineModel<Recording | null>();
-const recordable = ref();
 
 //Disabled for not because of tooltip overflow
 const recordableTooltip = "";
@@ -155,6 +154,18 @@ const recordingLoops = computed({
 	set: (l: boolean) => {
 		recordingSettings.loops = l;
 		if (recording.value) recording.value.loops = recordingSettings.loops;
+	},
+});
+
+const recordable = computed({
+	get: () => {
+		if (recording.value) return recording.value.recordable;
+		else return recordingSettings.recordable;
+	},
+
+	set: (r: boolean) => {
+		recordingSettings.recordable = r;
+		if (recording.value) recording.value.recordable = r;
 	},
 });
 
