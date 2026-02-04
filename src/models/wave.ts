@@ -82,9 +82,9 @@ export default class Wave {
 
 		for (let x = 0; x < length; x++) {
 			y =
-				this.amplitude *
-				(0.5 - 1 / Math.PI) *
-				(Math.pow(-1, x) * (Math.sin(angFrec * x + step) / x));
+				((2 * this.amplitude) / Math.PI) *
+				Math.atan(Math.tan((angFrec * x + step) / 2));
+
 			points.push(y);
 		}
 
