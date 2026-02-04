@@ -57,7 +57,7 @@
 
 		<li
 			class="RecorderMenu__item"
-			:class="dynamicClusterItemClass()"
+			:class="dynamicMixBtnClass()"
 			@click="handleDownloadMix"
 		>
 			Download mix
@@ -174,13 +174,20 @@ const dynamicItemsClass = computed(() => ({
 	"RecorderMenu__item--disabled": recording.value == null,
 }));
 
+function dynamicMixBtnClass() {
+	return {
+		"RecorderMenu__item--toggled": cluster.isDownloadingMix,
+		"RecorderMenu__item--disabled": !cluster.slots.some(
+			recorder => recorder.recording != null
+		),
+	};
+}
 /**
  * For "multi recording" type items.
  * I'm unable to use a computed properly. This is highly inneficient
  */
 function dynamicClusterItemClass() {
 	return {
-		"RecorderMenu__item--toggled": cluster.isDownloadingMix,
 		"RecorderMenu__item--disabled": !cluster.slots.some(
 			recorder => recorder.recording != null
 		),
