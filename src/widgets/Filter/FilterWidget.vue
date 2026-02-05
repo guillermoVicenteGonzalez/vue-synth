@@ -5,7 +5,10 @@
 		:class="filterCardStyles"
 	>
 		<div class="filterCard__handle">
-			<ToggleButton v-model="disabled" :color="primaryColor"></ToggleButton>
+			<ToggleButton
+				v-model="filter.disabled"
+				:color="primaryColor"
+			></ToggleButton>
 
 			<VsButton variant="round" class="delete-btn" @click="deleteFilter">
 				<VsTooltip
@@ -27,7 +30,7 @@
 					orientation="vertical"
 					:min="0"
 					:max="10000"
-					:disabled="disabled"
+					:disabled="filter.disabled"
 				>
 					<template #label>
 						<VsChip class="filterCard__controls__chip">Cutoff</VsChip>
@@ -43,7 +46,7 @@
 						:items="Object.keys(FilterTypes)"
 					></VsSelector>
 					<VsSelector
-						v-model="selectedModule"
+						v-model="selectedModuleName"
 						clearable
 						:items="sources.modules.map(m => m.name)"
 					></VsSelector>
@@ -59,7 +62,7 @@
 				<VsSlider
 					v-if="filter"
 					v-model="zoom"
-					:disabled="disabled"
+					:disabled="filter.disabled"
 					:min="400"
 					:max="1000"
 					:label="zoom"
@@ -98,14 +101,13 @@ const MIN_CARD_HEIGHT = "17rem";
  */
 
 const filterCardStyles = computed(() => {
-	return `filterCard ${disabled.value ? "filterCard--disabled" : null}`;
+	return `filterCard ${filter.value.disabled ? "filterCard--disabled" : null}`;
 });
 
 const zoom = ref<number>(400);
-const disabled = ref<boolean>(false);
 
 const filter = defineModel<FilterHandler>({ required: true });
-const selectedModule = computed({
+const selectedModuleName = computed({
 	get() {
 		return filter.value.module == null ? "no value" : filter.value.module.name;
 	},
@@ -117,6 +119,7 @@ const selectedModule = computed({
 
 function handleSelectModule(moduleName: string | undefined) {
 	if (!moduleName || moduleName == "") {
+		console.error(`invalid module name ${moduleName}`);
 		filter.value.detachModule();
 		return;
 	}
@@ -125,8 +128,12 @@ function handleSelectModule(moduleName: string | undefined) {
 		return module.name == moduleName;
 	});
 
-	if (!newModule) return;
+	if (!newModule) {
+		console.error("Unable to find new module with name" + moduleName);
+		return;
+	}
 
+	console.warn(newModule);
 	filter.value.attachModule(newModule);
 }
 
