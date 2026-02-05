@@ -45,11 +45,15 @@
 						v-model="filter.type"
 						:items="Object.keys(FilterTypes)"
 					></VsSelector>
-					<VsSelector
-						v-model="selectedModuleName"
-						clearable
-						:items="sources.modules.map(m => m.name)"
-					></VsSelector>
+					<VsSelector v-model="module" clearable>
+						<option
+							v-for="(item, index) in sources.modules"
+							:value="item"
+							:key="index + item.name"
+						>
+							{{ item.name }}
+						</option>
+					</VsSelector>
 				</div>
 				<WaveAnalyser
 					v-if="filter"
@@ -82,9 +86,10 @@ import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
 import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
 import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
 import type AudioCluster from "@/models/AudioCluster";
+import type AudioModule from "@/models/AudioModule";
 import FilterHandler, { FilterTypes } from "@/models/FilterHandler";
 import { X } from "lucide-vue-next";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 
 interface FilterWidgetProps {
 	/**All the waves we can apply filters to*/
@@ -105,37 +110,19 @@ const filterCardStyles = computed(() => {
 });
 
 const zoom = ref<number>(400);
-
 const filter = defineModel<FilterHandler>({ required: true });
-const selectedModuleName = computed({
-	get() {
-		return filter.value.module == null ? "no value" : filter.value.module.name;
-	},
+const module = ref<AudioModule>();
 
-	set(name: string) {
-		handleSelectModule(name);
-	},
-});
-
-function handleSelectModule(moduleName: string | undefined) {
-	if (!moduleName || moduleName == "") {
-		console.error(`invalid module name ${moduleName}`);
+watch(module, () => {
+	if (!module.value) {
 		filter.value.detachModule();
 		return;
 	}
 
-	const newModule = sources.modules.find(module => {
-		return module.name == moduleName;
-	});
+	if (module.value === filter.value.module) return;
 
-	if (!newModule) {
-		console.error("Unable to find new module with name" + moduleName);
-		return;
-	}
-
-	console.warn(newModule);
-	filter.value.attachModule(newModule);
-}
+	filter.value.attachModule(module.value);
+});
 
 function deleteFilter() {
 	filter.value.detachModule();

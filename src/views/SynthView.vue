@@ -231,6 +231,8 @@ function initializeEffects() {
 onMounted(() => {
 	merger.value.connect(mainContext.value.destination);
 	initializeEffects();
+	createNewModule();
+	createFilter();
 });
 </script>
 

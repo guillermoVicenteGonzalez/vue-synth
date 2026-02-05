@@ -13,6 +13,8 @@
 			<option v-for="(item, index) in items" :key="item + index" :value="item">
 				{{ item }}
 			</option>
+
+			<slot></slot>
 		</select>
 
 		<button
@@ -29,7 +31,7 @@
 import { X } from "lucide-vue-next";
 
 interface VsSelectorProps {
-	items: string[];
+	items?: string[];
 	placeholder?: string;
 	clearable?: boolean;
 	name?: string;
@@ -42,16 +44,16 @@ const {
 	name,
 } = defineProps<VsSelectorProps>();
 
-const model = defineModel<string>();
+const model = defineModel();
 const emit = defineEmits<{
-	(e: "change", value: string | undefined): void;
+	(e: "change", value: unknown): void;
 	(e: "clear"): void;
 }>();
 
 function clearSelection() {
 	model.value = "";
 	emit("clear");
-	emit("change", undefined);
+	// emit("change", undefined);
 }
 </script>
 
