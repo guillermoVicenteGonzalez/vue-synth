@@ -1,49 +1,7 @@
 import type AudioModule from "./AudioModule";
 
-// class FilterHandler {
-// 	private interalType: BiquadFilterType;
-// 	private internalFrequency: number;
-// 	node?: BiquadFilterNode;
-// 	module: AudioModule | null = null;
-
-// 	constructor(type: BiquadFilterType, cutFreq: number) {
-// 		this.cutoffFrequency = cutFreq;
-// 		this.interalType = type;
-// 		this.internalFrequency = cutFreq;
-// 	}
-
-// 	getNode() {
-// 		return this.node;
-// 	}
-
-// 	setNode(n_node: BiquadFilterNode) {
-// 		this.node = n_node;
-// 	}
-
-// 	set cutoffFrequency(freq: number) {
-// 		this.internalFrequency = freq;
-// 		if (this.node == null) return;
-// 		this.node.frequency.setTargetAtTime(
-// 			this.cutoffFrequency,
-// 			this.node.context.currentTime,
-// 			0
-// 		);
-// 	}
-
-// 	get cutoffFrequency() {
-// 		return this.internalFrequency;
-// 	}
-
-// 	set type(n_type: BiquadFilterType) {
-// 		this.interalType = n_type;
-// 		if (this.node == null) return;
-// 		this.node.type = this.interalType;
-// 	}
-
-// 	get type() {
-// 		return this.interalType;
-// 	}
-// }
+const DISABLED_TYPE: BiquadFilterType = "highpass";
+const DISABLED_FREQ = 0;
 
 export enum FilterTypes {
 	lowpass = "lowpass",
@@ -59,33 +17,55 @@ export enum FilterTypes {
 class FilterHandler {
 	filter: BiquadFilterNode;
 	module: AudioModule | null = null;
+	private _disabled: boolean = false;
+
+	//This 2 fields exist to be used alongside disabled
+	private _frequency: number;
+	private _type: BiquadFilterType;
 
 	constructor(ctx: AudioContext) {
 		this.filter = ctx.createBiquadFilter();
-		this.type = "lowpass";
-		this.cuttofFrequency = 200;
+		this.type = this._type = "lowpass";
+		this.cuttofFrequency = this._frequency = 200;
 	}
 
 	set cuttofFrequency(f: number) {
+		if (this.disabled) return;
+
+		this._frequency = f;
 		this.filter.frequency.value = f;
 	}
 
 	get cuttofFrequency(): number {
-		return this.filter.frequency.value;
+		return this._frequency;
 	}
 
 	set type(t: BiquadFilterType) {
+		if (this.disabled) return;
+
+		this._type = t;
 		this.filter.type = t;
 	}
 
 	get type(): BiquadFilterType {
-		return this.filter.type;
+		return this._type;
+	}
+
+	get disabled() {
+		return this._disabled;
+	}
+
+	set disabled(d: boolean) {
+		this._disabled = d;
+		if (this._disabled) this.disableModule();
+		else this.enableModule();
 	}
 
 	attachModule(m: AudioModule) {
 		this.detachModule();
 		this.module = m;
 		this.module.attachEffect(this.filter);
+		this._disabled = false;
 	}
 
 	detachModule() {
@@ -93,6 +73,16 @@ class FilterHandler {
 
 		this.module.detachEffect(this.filter);
 		this.module = null;
+	}
+
+	private disableModule() {
+		this.filter.type = DISABLED_TYPE;
+		this.filter.frequency.value = DISABLED_FREQ;
+	}
+
+	private enableModule() {
+		this.filter.type = this._type;
+		this.filter.frequency.value = this._frequency;
 	}
 }
 

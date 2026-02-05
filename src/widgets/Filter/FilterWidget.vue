@@ -5,7 +5,10 @@
 		:class="filterCardStyles"
 	>
 		<div class="filterCard__handle">
-			<ToggleButton v-model="disabled" :color="primaryColor"></ToggleButton>
+			<ToggleButton
+				v-model="filter.disabled"
+				:color="primaryColor"
+			></ToggleButton>
 
 			<VsButton variant="round" class="delete-btn" @click="deleteFilter">
 				<VsTooltip
@@ -27,7 +30,7 @@
 					orientation="vertical"
 					:min="0"
 					:max="10000"
-					:disabled="disabled"
+					:disabled="filter.disabled"
 				>
 					<template #label>
 						<VsChip class="filterCard__controls__chip">Cutoff</VsChip>
@@ -42,11 +45,15 @@
 						v-model="filter.type"
 						:items="Object.keys(FilterTypes)"
 					></VsSelector>
-					<VsSelector
-						v-model="selectedModule"
-						clearable
-						:items="sources.modules.map(m => m.name)"
-					></VsSelector>
+					<VsSelector v-model="module" clearable>
+						<option
+							v-for="(item, index) in sources.modules"
+							:value="item"
+							:key="index + item.name"
+						>
+							{{ item.name }}
+						</option>
+					</VsSelector>
 				</div>
 				<WaveAnalyser
 					v-if="filter"
@@ -59,7 +66,7 @@
 				<VsSlider
 					v-if="filter"
 					v-model="zoom"
-					:disabled="disabled"
+					:disabled="filter.disabled"
 					:min="400"
 					:max="1000"
 					:label="zoom"
@@ -79,9 +86,10 @@ import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
 import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
 import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
 import type AudioCluster from "@/models/AudioCluster";
+import type AudioModule from "@/models/AudioModule";
 import FilterHandler, { FilterTypes } from "@/models/FilterHandler";
 import { X } from "lucide-vue-next";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 
 interface FilterWidgetProps {
 	/**All the waves we can apply filters to*/
@@ -98,37 +106,23 @@ const MIN_CARD_HEIGHT = "17rem";
  */
 
 const filterCardStyles = computed(() => {
-	return `filterCard ${disabled.value ? "filterCard--disabled" : null}`;
+	return `filterCard ${filter.value.disabled ? "filterCard--disabled" : null}`;
 });
 
 const zoom = ref<number>(400);
-const disabled = ref<boolean>(false);
-
 const filter = defineModel<FilterHandler>({ required: true });
-const selectedModule = computed({
-	get() {
-		return filter.value.module == null ? "no value" : filter.value.module.name;
-	},
+const module = ref<AudioModule>();
 
-	set(name: string) {
-		handleSelectModule(name);
-	},
-});
-
-function handleSelectModule(moduleName: string | undefined) {
-	if (!moduleName || moduleName == "") {
+watch(module, () => {
+	if (!module.value) {
 		filter.value.detachModule();
 		return;
 	}
 
-	const newModule = sources.modules.find(module => {
-		return module.name == moduleName;
-	});
+	if (module.value === filter.value.module) return;
 
-	if (!newModule) return;
-
-	filter.value.attachModule(newModule);
-}
+	filter.value.attachModule(module.value);
+});
 
 function deleteFilter() {
 	filter.value.detachModule();
