@@ -85,8 +85,8 @@
 - [ ] Responsive effects (responsive in general)
 - [x] Add resets
 - [ ] Add tooltips
-- [ ] Invert disable toggles
-- [ ] sawwaves representation
+- [x] Invert disable toggles
+- [x] sawwaves representation
 - [ ] Disable canvases
 - [x] Button effects
 - [x] font
@@ -96,8 +96,8 @@
 
 ## Bugs
 
-- [ ] Filters are not detached appropiately
-- [ ] Delete all does not work
+- [x] Filters are not detached appropiately
+- [x] Delete all does not work
 - [ ] adjust sliders (especially reverb)
 - [ ] add titles to envelope and LFO
 - [ ] Number inputs work really bad
