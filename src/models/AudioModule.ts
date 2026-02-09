@@ -20,7 +20,7 @@ export default class AudioModule {
 	filters: FilterChain;
 	input: AudioNode;
 	exit: AudioNode; // Should be the merger or the ctx destination
-	disabled: boolean;
+	private disabled: boolean;
 	private _voices: number = 1;
 	private _voicesDetune: number = 0;
 	private max_voices: number = 20;
@@ -151,7 +151,11 @@ export default class AudioModule {
 	 */
 	unplugOscillator() {
 		// this.input.disconnect(this.end);
-		this.gainNode.disconnect(this.exit);
+		try {
+			this.gainNode.disconnect(this.exit);
+		} catch (err) {
+			console.error(err);
+		}
 	}
 
 	/**
@@ -160,7 +164,11 @@ export default class AudioModule {
 	 */
 	plugOscillator() {
 		// this.input.connect(this.end);
-		this.gainNode.connect(this.exit);
+		try {
+			this.gainNode.connect(this.exit);
+		} catch (err) {
+			console.error(err);
+		}
 	}
 
 	/**
@@ -178,6 +186,8 @@ export default class AudioModule {
 	 * Handles the destruction of the module so no trash remains afterwards
 	 */
 	destroyModule() {
+		//First we make sure everything is connected as its supposed
+		this.toggleModule(true);
 		this.gainNode.disconnect(this.exit);
 		this.filters.clean();
 	}
@@ -188,6 +198,8 @@ export default class AudioModule {
 	 * "Disables" the module by disconnecting its source (input), so no audio related to this module is emitted
 	 */
 	toggleModule(flag: boolean) {
+		if (this.disabled == flag) return;
+
 		this.disabled = !flag;
 		if (this.disabled) this.unplugOscillator();
 		else this.plugOscillator();
