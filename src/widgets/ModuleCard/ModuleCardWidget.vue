@@ -6,7 +6,11 @@
 		:class="ModuleCardStyles"
 	>
 		<div class="ModuleCard__handle">
-			<ToggleButton v-model="disabled" :color="primaryColor"></ToggleButton>
+			<ToggleButton
+				v-model="disabled"
+				:color="primaryColor"
+				:true-value="false"
+			></ToggleButton>
 			<VsButton
 				variant="round"
 				class="ModuleCard__delete-btn"

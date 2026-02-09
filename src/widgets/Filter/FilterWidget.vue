@@ -8,6 +8,7 @@
 			<ToggleButton
 				v-model="filter.disabled"
 				:color="primaryColor"
+				:true-value="false"
 			></ToggleButton>
 
 			<VsButton variant="round" class="delete-btn" @click="deleteFilter">

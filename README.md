@@ -83,7 +83,7 @@
 ## Polish
 
 - [ ] Responsive effects (responsive in general)
-- [ ] Add resets
+- [x] Add resets
 - [ ] Add tooltips
 - [ ] Invert disable toggles
 - [ ] sawwaves representation
