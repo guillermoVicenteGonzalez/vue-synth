@@ -2,11 +2,9 @@
 	<button
 		:class="classObject"
 		class="keyboard-key"
-		@mouseleave="isPressed = false"
-		@mouseup="isPressed = false"
-		@mousedown="isPressed = true"
-		@touchstart="isPressed = true"
-		@touchend="isPressed = false"
+		@pointerleave="isPressed = false"
+		@pointerdown="isPressed = true"
+		@pointerup="isPressed = false"
 	>
 		<!-- {{ note.name }}<br />{{ note.black }} -->
 	</button>
@@ -120,6 +118,8 @@ function eventCleanup() {
 
 onMounted(() => keySetup());
 onUnmounted(() => eventCleanup());
+
+//delete
 </script>
 
 <style lang="scss" scoped>
@@ -140,6 +140,8 @@ $key-color: #fff;
 	border-top-left-radius: 0;
 	border-top-right-radius: 0;
 	transform-origin: 50% 0%;
+	user-select: none;
+	touch-action: cross-slide-x;
 
 	cursor: pointer;
 
