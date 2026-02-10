@@ -106,6 +106,11 @@ const {
 
 const progress = defineModel<number>({
 	default: 0,
+	set(v: number) {
+		if (step === null) return v;
+		const digits = toFixedFromStep(step);
+		return Number(v.toFixed(digits));
+	},
 });
 
 const emit = defineEmits<(e: "change", value: typeof progress.value) => void>();

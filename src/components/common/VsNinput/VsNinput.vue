@@ -1,8 +1,8 @@
 <template>
 	<input
 		ref="inputRef"
-		v-focus="autoFocus"
 		v-model.number="model"
+		v-focus="autoFocus"
 		type="number"
 		class="VSNinput"
 		:max="max"
