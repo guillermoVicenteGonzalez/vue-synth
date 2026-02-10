@@ -1,5 +1,7 @@
 <template>
 	<input
+		ref="inputRef"
+		v-focus="autoFocus"
 		v-model.number="model"
 		type="number"
 		class="VSNinput"
@@ -20,6 +22,7 @@ interface VSNinputProps {
 	min?: number;
 	step?: number;
 	variant?: VSNinputVariants;
+	autoFocus?: boolean;
 }
 
 const {
@@ -27,15 +30,30 @@ const {
 	min = 0,
 	step = 0.1,
 	variant = "default",
+	autoFocus = false,
 } = defineProps<VSNinputProps>();
 
 const model = defineModel<number>({
 	default: 0,
+	set(v: number) {
+		if (v > max) return max;
+		if (v < min) return min;
+		return v;
+	},
 });
 
 const VSNinputDynamicClass = computed(() => ({
 	[`VSNinput--${variant}`]: variant,
 }));
+
+const vFocus = {
+	mounted: (el: HTMLInputElement) => {
+		el.focus();
+		setTimeout(() => {
+			el.select();
+		}, 1);
+	},
+};
 </script>
 
 <style lang="scss" scoped>

@@ -99,7 +99,7 @@
 - [x] Filters are not detached appropiately
 - [x] Delete all does not work
 - [ ] adjust sliders (especially reverb)
-- [ ] add titles to envelope and LFO
+- [x] add titles to envelope and LFO
 - [ ] Number inputs work really bad
 - [ ] Distortion widget breaks with high res screens (for some unknown reason)
 - [ ] Prevent suspension

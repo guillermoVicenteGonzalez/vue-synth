@@ -54,7 +54,8 @@
 				"
 			>
 				<VsNinput
-					v-model.number="progress"
+					auto-focus
+					v-model.number.="progress"
 					:min="min"
 					:max="max"
 					:step="1"
