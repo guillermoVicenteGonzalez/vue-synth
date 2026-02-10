@@ -10,8 +10,8 @@
 			<option v-if="items.length == 0" value="">
 				{{ placeholder || "select a value" }}
 			</option>
-			<option v-for="(item, index) in items" :key="item + index" :value="item">
-				{{ item }}
+			<option v-for="(item, index) in items" :key="index" :value="item">
+				{{ parseItemName(item) }}
 			</option>
 
 			<slot></slot>
@@ -31,7 +31,8 @@
 import { X } from "lucide-vue-next";
 
 interface VsSelectorProps {
-	items?: string[];
+	items?: unknown[];
+	itemTitle?: string;
 	placeholder?: string;
 	clearable?: boolean;
 	name?: string;
@@ -39,19 +40,28 @@ interface VsSelectorProps {
 
 const {
 	items = [],
+	itemTitle,
 	placeholder,
 	clearable = false,
 	name,
 } = defineProps<VsSelectorProps>();
 
-const model = defineModel();
+const model = defineModel<unknown>();
 const emit = defineEmits<{
 	(e: "change", value: unknown): void;
 	(e: "clear"): void;
 }>();
 
+function parseItemName(item: unknown) {
+	if (!itemTitle) return item;
+	if (typeof item !== "object") return item;
+	if (item === null) return null;
+
+	return itemTitle in item ? item[itemTitle as keyof typeof item] : item;
+}
+
 function clearSelection() {
-	model.value = "";
+	model.value = null;
 	emit("clear");
 	// emit("change", undefined);
 }

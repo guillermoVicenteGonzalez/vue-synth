@@ -2,6 +2,7 @@
 	<VsCard v-if="context" class="lfo-widget-card" :class="dynamicClass">
 		<div class="lfo-widget-card__handle">
 			<ToggleButton v-model="disabled" :color="primaryColor"></ToggleButton>
+			<h3 class="lfo-widget-card__handle__title">LFO</h3>
 		</div>
 		<div class="lfo-widget" :class="dynamicClass">
 			<div class="lfo-widget__selectors">
@@ -271,6 +272,19 @@ $disabled-color: gray;
 		justify-content: start;
 		padding: $handle-padding 0 $handle-padding 0;
 		z-index: 2;
+
+		&__title {
+			display: block;
+
+			top: 0%;
+
+			writing-mode: vertical-rl;
+			margin: auto;
+
+			color: $text-color;
+			font-size: 1.6rem;
+			text-transform: uppercase;
+		}
 	}
 
 	&--disabled {

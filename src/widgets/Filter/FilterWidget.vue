@@ -8,6 +8,7 @@
 			<ToggleButton
 				v-model="filter.disabled"
 				:color="primaryColor"
+				:true-value="false"
 			></ToggleButton>
 
 			<VsButton variant="round" class="delete-btn" @click="deleteFilter">
@@ -45,14 +46,12 @@
 						v-model="filter.type"
 						:items="Object.keys(FilterTypes)"
 					></VsSelector>
-					<VsSelector v-model="module" clearable>
-						<option
-							v-for="(item, index) in sources.modules"
-							:value="item"
-							:key="index + item.name"
-						>
-							{{ item.name }}
-						</option>
+					<VsSelector
+						v-model="module"
+						clearable
+						:items="modules"
+						item-title="name"
+					>
 					</VsSelector>
 				</div>
 				<WaveAnalyser
@@ -112,6 +111,10 @@ const filterCardStyles = computed(() => {
 const zoom = ref<number>(400);
 const filter = defineModel<FilterHandler>({ required: true });
 const module = ref<AudioModule>();
+
+const modules = computed(() => {
+	return sources.modules;
+});
 
 watch(module, () => {
 	if (!module.value) {
