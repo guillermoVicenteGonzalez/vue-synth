@@ -1,13 +1,14 @@
 <template>
 	<button
+		type="button"
 		:class="classObject"
 		class="keyboard-key"
 		@pointerleave="isPressed = false"
 		@pointerdown="isPressed = true"
 		@pointerup="isPressed = false"
-	>
-		<!-- {{ note.name }}<br />{{ note.black }} -->
-	</button>
+		@contextmenu.prevent
+		@select="handleTest"
+	></button>
 </template>
 
 <script setup lang="ts">
@@ -120,6 +121,9 @@ onMounted(() => keySetup());
 onUnmounted(() => eventCleanup());
 
 //delete
+function handleTest() {
+	console.warn("Event");
+}
 </script>
 
 <style lang="scss" scoped>
@@ -143,7 +147,7 @@ $key-color: #fff;
 	user-select: none;
 	touch-action: cross-slide-x;
 
-	cursor: pointer;
+	cursor: default;
 
 	&--black {
 		background-color: black;

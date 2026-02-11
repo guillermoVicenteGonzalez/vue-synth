@@ -65,9 +65,9 @@
 					:size="CircleSliderSize"
 					:fill-color="primaryColor"
 					:default-value="100"
-					:max="minMaxLFOStrengh.max"
-					:min="minMaxLFOStrengh.min"
-					:step="minMaxLFOStrengh.step"
+					:max="minMaxLFOStrength.max"
+					:min="minMaxLFOStrength.min"
+					:step="minMaxLFOStrength.step"
 					:disabled="disabled"
 				></CircleSlider>
 				<VsChip class="lfo-widget__chip">Amplitude</VsChip>
@@ -186,12 +186,12 @@ function connectLFO() {
  * minimum and maximum strength of the lfo depending on the type of module attached
  * The modulated parameter should also be taken into account
  */
-const minMaxLFOStrengh = computed(() => {
+const minMaxLFOStrength = computed(() => {
 	if (selectedModule.value instanceof AudioCluster) {
 		return {
 			min: -1,
 			max: 1,
-			step: 2,
+			step: 0.01,
 		};
 	}
 
@@ -199,7 +199,7 @@ const minMaxLFOStrengh = computed(() => {
 		return {
 			min: 0,
 			max: 1000,
-			step: 0,
+			step: 1,
 		};
 	}
 
@@ -207,7 +207,7 @@ const minMaxLFOStrengh = computed(() => {
 		return {
 			min: 0,
 			max: 100,
-			step: 0,
+			step: 1,
 		};
 	}
 
@@ -219,7 +219,7 @@ const minMaxLFOStrengh = computed(() => {
 });
 
 const canvasDynamicDimensions = computed(() => {
-	if (minMaxLFOStrengh.value.max <= 1) {
+	if (minMaxLFOStrength.value.max <= 1) {
 		return {
 			width: 500,
 			height: 70,
