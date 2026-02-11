@@ -159,6 +159,7 @@ const modulableParameterName = ref<string>();
  * Handles the disconnection from the previous module and the connection of the new one attending to the type of node it is
  */
 function connectLFO() {
+	console.warn("Handling connection");
 	lfo.value.disconnectAll();
 
 	if (!modulableParameterName.value || !selectedModule.value) return;
