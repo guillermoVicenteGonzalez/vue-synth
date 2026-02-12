@@ -249,6 +249,13 @@ watch(disabled, handleDisable);
 watch(selectedModule, () => {
 	if (selectedModule.value == null) handleClear();
 });
+
+//If the node we are tracking changes, the old one should be disconnected
+watch(selectedModuleName, (nextVal, oldVal) => {
+	if (nextVal != oldVal) {
+		lfo.value.disconnectAll();
+	}
+});
 </script>
 
 <style lang="scss" scoped>
