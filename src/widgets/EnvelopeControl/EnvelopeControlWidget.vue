@@ -190,7 +190,7 @@ const model = defineModel<AudioEnvelope>({
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
 		grid-template-rows: repeat(2, 1fr);
-		gap: 0 5rem;
+		gap: 0 $gap-bg;
 
 		@include respond(tab-port) {
 			gap: $gap-bg;

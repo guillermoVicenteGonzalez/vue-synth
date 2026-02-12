@@ -263,6 +263,10 @@ $handle-bg-color: black;
 $handle-padding: 1rem;
 $disabled-color: gray;
 
+$selectors-height: 3rem;
+$display-height: 100%;
+$controls-width: 10rem;
+
 .lfo-widget-card {
 	width: 100%;
 	height: 100%;
@@ -317,15 +321,19 @@ $disabled-color: gray;
 }
 
 .lfo-widget {
-	padding: 1rem;
-
 	width: 100%;
 	height: 100%;
-	display: flex;
-	flex-wrap: wrap;
-	gap: 1rem;
+
+	padding: $gap-df;
+	gap: $gap-df;
+
+	display: grid;
+	grid-template-columns: [display-start] 1fr [display-end controls-start] $controls-width;
+	grid-template-rows: [selectors-start] $selectors-height [selectors-end display-start] 1fr;
 
 	&__selectors {
+		grid-row: selectors-start;
+		grid-column: 1 / -1;
 		height: 3rem;
 		flex: 1 1 100%;
 
