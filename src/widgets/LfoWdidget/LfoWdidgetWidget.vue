@@ -47,7 +47,7 @@
 					class="lfo-widget__canvas"
 					:canvas-width="canvasDynamicDimensions.width"
 					:canvas-height="canvasDynamicDimensions.height"
-					:wave="lfo.wave"
+					:wave="dynamicWave"
 					:paused="disabled"
 				></WaveCanvas>
 			</div>
@@ -89,7 +89,7 @@ import { useMonitorSize } from "@/composables/useMonitorSize";
 import AudioCluster from "@/models/AudioCluster";
 import AudioModule from "@/models/AudioModule";
 import { LFO } from "@/models/LFO";
-import { waveForms } from "@/models/wave";
+import Wave, { waveForms } from "@/models/wave";
 import { X } from "lucide-vue-next";
 import { computed, ref, watch } from "vue";
 
@@ -159,6 +159,7 @@ const modulableParameterName = ref<string>();
  * Handles the disconnection from the previous module and the connection of the new one attending to the type of node it is
  */
 function connectLFO() {
+	console.warn("Handling connection");
 	lfo.value.disconnectAll();
 
 	if (!modulableParameterName.value || !selectedModule.value) return;
@@ -232,6 +233,14 @@ const canvasDynamicDimensions = computed(() => {
 	};
 });
 
+const dynamicWave = computed<Wave>(() => {
+	if (selectedModule.value instanceof BiquadFilterNode) {
+		return new Wave(lfo.value.wave.amplitude / 10, lfo.value.wave.frequency);
+	}
+
+	return lfo.value.wave;
+});
+
 function handleClear() {
 	lfo.value.disconnectAll();
 	selectedModuleName.value = "";
@@ -248,12 +257,23 @@ watch(disabled, handleDisable);
 watch(selectedModule, () => {
 	if (selectedModule.value == null) handleClear();
 });
+
+//If the node we are tracking changes, the old one should be disconnected
+watch(selectedModuleName, (nextVal, oldVal) => {
+	if (nextVal != oldVal) {
+		lfo.value.disconnectAll();
+	}
+});
 </script>
 
 <style lang="scss" scoped>
 $handle-bg-color: black;
 $handle-padding: 1rem;
 $disabled-color: gray;
+
+$selectors-height: 3rem;
+$display-height: 100%;
+$controls-width: 10rem;
 
 .lfo-widget-card {
 	width: 100%;
@@ -309,15 +329,19 @@ $disabled-color: gray;
 }
 
 .lfo-widget {
-	padding: 1rem;
-
 	width: 100%;
 	height: 100%;
-	display: flex;
-	flex-wrap: wrap;
-	gap: 1rem;
+
+	padding: $gap-df;
+	gap: $gap-df;
+
+	display: grid;
+	grid-template-columns: [display-start] 1fr [display-end controls-start] $controls-width;
+	grid-template-rows: [selectors-start] $selectors-height [selectors-end display-start] 1fr;
 
 	&__selectors {
+		grid-row: selectors-start;
+		grid-column: 1 / -1;
 		height: 3rem;
 		flex: 1 1 100%;
 

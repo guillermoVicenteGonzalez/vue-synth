@@ -4,11 +4,14 @@
 		v-model.number="model"
 		v-focus="autoFocus"
 		type="number"
+		inputmode="decimal"
+		pattern="[0-9]*"
 		class="VSNinput"
 		:max="max"
 		:min="min"
 		:step="step"
 		:class="VSNinputDynamicClass"
+		@keypress="preventNonDigits"
 	/>
 </template>
 
@@ -38,6 +41,7 @@ const model = defineModel<number>({
 	set(v: number) {
 		if (v > max) return max;
 		if (v < min) return min;
+		console.log(v);
 		return v;
 	},
 });
@@ -54,6 +58,12 @@ const vFocus = {
 		}, 1);
 	},
 };
+
+function preventNonDigits(event: KeyboardEvent) {
+	if (!/[0-9]|./.test(event.key)) {
+		event.preventDefault();
+	}
+}
 </script>
 
 <style lang="scss" scoped>

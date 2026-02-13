@@ -190,7 +190,7 @@ const model = defineModel<AudioEnvelope>({
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
 		grid-template-rows: repeat(2, 1fr);
-		gap: 0 5rem;
+		gap: $gap-df $gap-bg;
 
 		@include respond(tab-port) {
 			gap: $gap-bg;
@@ -225,13 +225,13 @@ const model = defineModel<AudioEnvelope>({
 
 		&__slider {
 			// max-width: 30rem;
-			flex-basis: 50%;
+			flex-basis: 30%;
 			flex-grow: 1;
 			flex-shrink: 1;
 		}
 
 		&__input {
-			flex-basis: 20%;
+			flex-basis: 5rem;
 			flex-grow: 1;
 			flex-shrink: 1;
 

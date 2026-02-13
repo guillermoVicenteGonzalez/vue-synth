@@ -1,5 +1,5 @@
 import { FilterChain } from "./LinkedList";
-import type Wave from "./wave";
+import Wave from "./wave";
 
 //for future scalability
 
@@ -219,6 +219,11 @@ export default class AudioModule {
 		nOsc.connect(this.input);
 		nOsc.start();
 		return nOsc;
+	}
+
+	resetModule() {
+		this.wave = new Wave();
+		this.updateModule();
 	}
 
 	createSound() {}

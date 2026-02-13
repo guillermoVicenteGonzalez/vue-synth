@@ -2,6 +2,8 @@ import type AudioModule from "./AudioModule";
 
 const DISABLED_TYPE: BiquadFilterType = "highpass";
 const DISABLED_FREQ = 0;
+const DEFAULT_FILTER_TYPE: BiquadFilterType = "lowpass";
+const DEFAULT_FILTER_FREQ = 0;
 
 export enum FilterTypes {
 	lowpass = "lowpass",
@@ -83,6 +85,12 @@ class FilterHandler {
 	private enableModule() {
 		this.filter.type = this._type;
 		this.filter.frequency.value = this._frequency;
+	}
+
+	resetFilter() {
+		this.type = DEFAULT_FILTER_TYPE;
+		this.cuttofFrequency = DEFAULT_FILTER_FREQ;
+		this.detachModule();
 	}
 }
 
