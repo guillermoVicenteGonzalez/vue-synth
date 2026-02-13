@@ -47,7 +47,7 @@
 					class="lfo-widget__canvas"
 					:canvas-width="canvasDynamicDimensions.width"
 					:canvas-height="canvasDynamicDimensions.height"
-					:wave="lfo.wave"
+					:wave="dynamicWave"
 					:paused="disabled"
 				></WaveCanvas>
 			</div>
@@ -89,7 +89,7 @@ import { useMonitorSize } from "@/composables/useMonitorSize";
 import AudioCluster from "@/models/AudioCluster";
 import AudioModule from "@/models/AudioModule";
 import { LFO } from "@/models/LFO";
-import { waveForms } from "@/models/wave";
+import Wave, { waveForms } from "@/models/wave";
 import { X } from "lucide-vue-next";
 import { computed, ref, watch } from "vue";
 
@@ -231,6 +231,14 @@ const canvasDynamicDimensions = computed(() => {
 		width: 2000,
 		height: 400,
 	};
+});
+
+const dynamicWave = computed<Wave>(() => {
+	if (selectedModule.value instanceof BiquadFilterNode) {
+		return new Wave(lfo.value.wave.amplitude / 10, lfo.value.wave.frequency);
+	}
+
+	return lfo.value.wave;
 });
 
 function handleClear() {
