@@ -57,7 +57,7 @@ $min-footer-h: 0.1rem;
 $max-footer-h: 0.3fr;
 
 $min-enveloppe-h: 20rem;
-$max-enveloppe-h: 3fr;
+$max-enveloppe-h: 2.5fr;
 
 $min-lfo-h: 30rem;
 $max-lfo-h: 2fr;

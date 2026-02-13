@@ -4,6 +4,7 @@
 			class="circle-slider"
 			:class="cssClasses"
 			@contextmenu="handleRightClick"
+			@dblclick="resetDefault"
 		>
 			<div
 				ref="knob"

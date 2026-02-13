@@ -1,3 +1,6 @@
+export const WAVE_DEFAULT_AMPLITUDE = 10;
+export const WAVE_DEFAULT_FREQUENCY = 440;
+
 export enum waveForms {
 	sine = "sine",
 	square = "square",
@@ -11,11 +14,15 @@ export default class Wave {
 	phase: number;
 	form: waveForms;
 
-	constructor(amp: number, frec: number, phase: number = 0) {
+	constructor(
+		amp: number = WAVE_DEFAULT_AMPLITUDE,
+		frec: number = WAVE_DEFAULT_FREQUENCY,
+		phase: number = 0
+	) {
 		this.amplitude = amp;
 		this.frequency = frec;
 		this.phase = phase;
-		this.form = waveForms.square;
+		this.form = waveForms.sine;
 	}
 
 	calculatePoints(length: number, step: number): number[] {

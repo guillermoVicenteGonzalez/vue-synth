@@ -4,7 +4,7 @@
 		:min-height="MIN_CARD_HEIGHT"
 		:class="filterCardStyles"
 	>
-		<div class="filterCard__handle">
+		<div class="filterCard__handle" @contextmenu="handleContextMenu">
 			<ToggleButton
 				v-model="filter.disabled"
 				:color="primaryColor"
@@ -69,13 +69,27 @@
 					:min="400"
 					:max="1000"
 					:label="zoom"
-				></VsSlider>
+				>
+				</VsSlider>
 			</div>
 		</div>
+
+		<ContextMenu
+			class="filterCard__context-menu"
+			:visible="isCtxMenuVisible"
+			:pos-x="contextMenuPos.x"
+			:pos-y="contextMenuPos.y"
+			@close="handleCloseContextMenu"
+		>
+			<ul>
+				<li @click="resetFilter">Reset module</li>
+			</ul>
+		</ContextMenu>
 	</VsCard>
 </template>
 
 <script setup lang="ts">
+import ContextMenu from "@/components/common/ContextMenu/ContextMenu.vue";
 import VsButton from "@/components/common/VsButton/VsButton.vue";
 import VsCard from "@/components/common/VsCard/VsCard.vue";
 import VsChip from "@/components/common/VsChip/VsChip.vue";
@@ -111,6 +125,8 @@ const filterCardStyles = computed(() => {
 const zoom = ref<number>(400);
 const filter = defineModel<FilterHandler>({ required: true });
 const module = ref<AudioModule>();
+const isCtxMenuVisible = ref<boolean>(false);
+const contextMenuPos = ref<{ x: number; y: number }>({ x: 0, y: 0 });
 
 const modules = computed(() => {
 	return sources.modules;
@@ -135,6 +151,23 @@ function deleteFilter() {
 const emit = defineEmits<{
 	(e: "delete", value: FilterHandler | undefined): void;
 }>();
+
+function resetFilter() {
+	isCtxMenuVisible.value = false;
+	filter.value.resetFilter();
+	module.value = undefined;
+}
+
+function handleContextMenu(e: MouseEvent) {
+	e.preventDefault();
+	isCtxMenuVisible.value = true;
+	contextMenuPos.value.x = e.clientX;
+	contextMenuPos.value.y = e.clientY;
+}
+
+function handleCloseContextMenu() {
+	isCtxMenuVisible.value = false;
+}
 </script>
 
 <style lang="scss" scoped>
@@ -236,6 +269,11 @@ $disabled-color: gray;
 		height: 100%;
 		display: flex;
 		flex-direction: column;
+	}
+
+	&__context-menu {
+		@include contextMenu;
+		color: $text-color;
 	}
 
 	&--disabled {

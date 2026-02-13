@@ -5,7 +5,7 @@
 		:min-height="MIN_CARD_HEIGHT"
 		:class="ModuleCardStyles"
 	>
-		<div class="ModuleCard__handle">
+		<div class="ModuleCard__handle" @contextmenu="handleContextMenu">
 			<ToggleButton
 				v-model="disabled"
 				:color="primaryColor"
@@ -46,7 +46,7 @@
 						v-model="audioModule.wave.amplitude"
 						:size="CircleSliderSize"
 						class="ModuleCard__circle-slider"
-						:default-value="10"
+						:default-value="WAVE_DEFAULT_AMPLITUDE"
 						:disabled="disabled"
 						:fill-color="primaryColor"
 						:min="0.01"
@@ -70,7 +70,7 @@
 						v-model="audioModule.wave.frequency"
 						:size="CircleSliderSize"
 						class="ModuleCard__circle-slider"
-						:default-value="440"
+						:default-value="WAVE_DEFAULT_FREQUENCY"
 						:fill-color="primaryColor"
 						:disabled="disabled"
 						:min="0.01"
@@ -165,11 +165,24 @@
 				</VsTooltip>
 			</div>
 		</div>
+
+		<ContextMenu
+			class="ModuleCard__context-menu"
+			:visible="isCtxMenuVisible"
+			:pos-x="contextMenuPos.x"
+			:pos-y="contextMenuPos.y"
+			@close="handleCloseContextMenu"
+		>
+			<ul>
+				<li @click="resetModule">Reset module</li>
+			</ul>
+		</ContextMenu>
 	</VsCard>
 </template>
 
 <script setup lang="ts">
 import CircleSlider from "@/components/common/CircleSlider/CircleSlider.vue";
+import ContextMenu from "@/components/common/ContextMenu/ContextMenu.vue";
 import VsButton from "@/components/common/VsButton/VsButton.vue";
 import VsCard from "@/components/common/VsCard/VsCard.vue";
 import ToggleButton from "@/components/common/VsRadioButton/VsRadioButton.vue";
@@ -180,7 +193,11 @@ import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
 import WaveCanvas from "@/components/waves/WaveCanvas/WaveCanvas.vue";
 import { useMonitorSize } from "@/composables/useMonitorSize";
 import AudioModule from "@/models/AudioModule";
-import { waveForms } from "@/models/wave";
+import {
+	WAVE_DEFAULT_AMPLITUDE,
+	WAVE_DEFAULT_FREQUENCY,
+	waveForms,
+} from "@/models/wave";
 import { X } from "lucide-vue-next";
 import { computed, ref, watch } from "vue";
 
@@ -189,9 +206,11 @@ const MAX_CARD_HEIGHT = "17rem";
 const MIN_CARD_HEIGHT = "17rem";
 
 const primaryColor = "#42d392";
-const audioModule = defineModel<AudioModule>();
+const audioModule = defineModel<AudioModule>({ required: true });
 const disabled = ref<boolean>(false);
 const zoom = ref<number>(10000);
+const isCtxMenuVisible = ref<boolean>(false);
+const contextMenuPos = ref<{ x: number; y: number }>({ x: 0, y: 0 });
 
 const { browserWidth } = useMonitorSize();
 
@@ -226,6 +245,22 @@ function onWaveChangeCB() {
 
 function deleteModule() {
 	emit("delete", audioModule.value);
+}
+
+function resetModule() {
+	audioModule.value.resetModule();
+	isCtxMenuVisible.value = false;
+}
+
+function handleContextMenu(e: MouseEvent) {
+	e.preventDefault();
+	isCtxMenuVisible.value = true;
+	contextMenuPos.value.x = e.clientX;
+	contextMenuPos.value.y = e.clientY;
+}
+
+function handleCloseContextMenu() {
+	isCtxMenuVisible.value = false;
 }
 </script>
 
@@ -382,6 +417,10 @@ $disabled-color: gray;
 			background-color: rgba($disabled-color, 0.1);
 			backdrop-filter: blur(1px);
 		}
+	}
+
+	&__context-menu {
+		@include contextMenu;
 	}
 
 	@include respond(phone) {
