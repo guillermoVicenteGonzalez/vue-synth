@@ -1,11 +1,11 @@
 <template>
 	<div class="VS-Selector">
 		<select
-			@keypress.prevent
 			id=""
 			v-model="model"
 			:name="name"
 			class="VS-Selector__select"
+			@keypress.prevent
 			@change="emit('change', model)"
 		>
 			<option v-if="items.length == 0" value="">
