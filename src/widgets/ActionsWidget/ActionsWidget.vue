@@ -7,7 +7,7 @@
 				@click="emit('createWave')"
 			>
 				<span v-if="size != 'minimal'"> New Wave </span>
-				<VsTooltip orientation="right" delay="2s" text="New Wave">
+				<VsTooltip orientation="right" delay="1s" text="New Wave">
 					<AudioWaveform class="ActionsWidget__button__icon"></AudioWaveform>
 				</VsTooltip>
 			</VsButton>
@@ -17,7 +17,7 @@
 				@click="emit('createFilter')"
 			>
 				<span v-if="size != 'minimal'"> New Filter </span>
-				<VsTooltip orientation="right" delay="2s" text="New Filter">
+				<VsTooltip orientation="right" delay="1s" text="New Filter">
 					<SquareActivity class="ActionsWidget__button__icon"></SquareActivity>
 				</VsTooltip>
 			</VsButton>
@@ -27,7 +27,7 @@
 				@click="emit('deleteAll')"
 			>
 				<span v-if="size != 'minimal'"> New Filter </span>
-				<VsTooltip orientation="right" delay="2s" text="Delete All">
+				<VsTooltip orientation="right" delay="1s" text="Delete All">
 					<Trash class="ActionsWidget__button__icon"></Trash>
 				</VsTooltip>
 			</VsButton>
@@ -173,6 +173,7 @@ $action-size: 5rem;
 
 		&__icon {
 			@include iconButton;
+			z-index: 1;
 		}
 
 		&--round {
