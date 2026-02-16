@@ -49,6 +49,7 @@
 					:canvas-height="canvasDynamicDimensions.height"
 					:wave="dynamicWave"
 					:paused="disabled"
+					:line-width="7"
 				></WaveCanvas>
 			</div>
 			<!-- <WaveCanvas :wave="lfo.wave"></WaveCanvas> -->
@@ -58,6 +59,7 @@
 					:size="CircleSliderSize"
 					:fill-color="primaryColor"
 					:disabled="disabled"
+					:step="0.1"
 				></CircleSlider>
 				<VsChip class="lfo-widget__chip">Frequency</VsChip>
 				<CircleSlider
@@ -221,9 +223,14 @@ const minMaxLFOStrength = computed(() => {
 
 const canvasDynamicDimensions = computed(() => {
 	if (minMaxLFOStrength.value.max <= 1) {
+		// return {
+		// 	width: 500,
+		// 	height: 70,
+		// };
+
 		return {
-			width: 500,
-			height: 70,
+			width: 2000,
+			height: 280,
 		};
 	}
 
@@ -235,7 +242,18 @@ const canvasDynamicDimensions = computed(() => {
 
 const dynamicWave = computed<Wave>(() => {
 	if (selectedModule.value instanceof BiquadFilterNode) {
-		return new Wave(lfo.value.wave.amplitude / 10, lfo.value.wave.frequency);
+		const w = new Wave(lfo.value.wave.amplitude / 10, lfo.value.wave.frequency);
+		w.form = lfo.value.wave.form;
+		return w;
+	}
+
+	if (minMaxLFOStrength.value.max <= 1) {
+		const w = new Wave(
+			lfo.value.wave.amplitude * 100,
+			lfo.value.wave.frequency
+		);
+		w.form = lfo.value.wave.form;
+		return w;
 	}
 
 	return lfo.value.wave;

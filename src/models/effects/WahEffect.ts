@@ -29,7 +29,7 @@ const DEFAULT_WAH_SPEED = 1;
 
 export const MIN_WAH_DEPTH = 0;
 export const MAX_WAH_DEPTH = 10000;
-const DEFAULT_WAH_DEPTH = 2000;
+const DEFAULT_WAH_DEPTH = 2500;
 
 const DEFAULT_LFO_FORM = waveForms.sine;
 const DEFAULT_WAH_TYPE = WahTypes.auto;
@@ -62,7 +62,7 @@ export default class WahEffect extends AudioEffect {
 		this.inputNode = ctx.createGain();
 		this.exitNode = ctx.createGain();
 		this.lfo = new LFO(ctx);
-		this.lfo.disabled = true;
+		// this.lfo.disabled = true;
 
 		this.filter.type = "bandpass";
 
@@ -73,12 +73,6 @@ export default class WahEffect extends AudioEffect {
 		this.inputNode.connect(this.filter);
 		this.filter.connect(this.wetGain);
 		this.wetGain.connect(this.exitNode);
-
-		this.mix = DEFAULT_WAH_MIX;
-		this.delay = DEFAULT_WAH_DELAY;
-		this.cutoff = DEFAULT_WAH_CUTOFF;
-		this.speed = DEFAULT_WAH_SPEED;
-		this.depth = DEFAULT_WAH_DEPTH;
 
 		this.lfo.connect(this.filter.frequency);
 
@@ -115,7 +109,7 @@ export default class WahEffect extends AudioEffect {
 	set speed(s: number) {
 		if (this.disabled) return;
 
-		if (s > MAX_WAH_SPEED) this.cutoff = MAX_WAH_SPEED;
+		if (s > MAX_WAH_SPEED) this.speed = MAX_WAH_SPEED;
 		if (s < MIN_WAH_SPEED) this.speed = MIN_WAH_SPEED;
 
 		this.lfo.frequency = s;
@@ -128,8 +122,8 @@ export default class WahEffect extends AudioEffect {
 	set depth(d: number) {
 		if (this.disabled) return;
 
-		if (d > MAX_WAH_DEPTH) this.cutoff = MAX_WAH_DEPTH;
-		if (d < MIN_WAH_DEPTH) this.cutoff = MIN_WAH_DEPTH;
+		if (d > MAX_WAH_DEPTH) this.depth = MAX_WAH_DEPTH;
+		if (d < MIN_WAH_DEPTH) this.depth = MIN_WAH_DEPTH;
 
 		this.lfo.amplitude = d;
 	}
@@ -193,11 +187,11 @@ export default class WahEffect extends AudioEffect {
 
 	resetEffect(): void {
 		this.speed = DEFAULT_WAH_SPEED;
-		this.depth = DEFAULT_WAH_SPEED;
+		this.depth = DEFAULT_WAH_DEPTH;
 		this.mix = DEFAULT_WAH_MIX;
 		this._delay = DEFAULT_WAH_DELAY;
 		this.cutoff = DEFAULT_WAH_CUTOFF;
-		this._type = DEFAULT_WAH_TYPE;
+		this.type = DEFAULT_WAH_TYPE;
 		this.lfoForm = DEFAULT_LFO_FORM;
 	}
 }

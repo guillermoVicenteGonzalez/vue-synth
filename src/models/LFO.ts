@@ -90,6 +90,7 @@ export class LFO {
 	}
 
 	set disabled(f: boolean) {
+		if (f === this._disabled) return;
 		this._disabled = f;
 
 		if (this._disabled) {

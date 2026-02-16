@@ -24,7 +24,7 @@ const {
 	text = "",
 	variant = "default",
 	orientation = "bottom",
-	delay = "3s",
+	delay = "2s",
 } = defineProps<VsTooltipProps>();
 
 const VsTooltipDynamicClasses = computed(() => ({
@@ -45,6 +45,7 @@ $animation-time: 1s;
 	position: relative;
 	width: fit-content;
 	height: fit-content;
+	z-index: 10;
 
 	&__content {
 		visibility: hidden;
@@ -52,7 +53,7 @@ $animation-time: 1s;
 
 		display: block;
 		position: absolute;
-		z-index: 1;
+		z-index: 10;
 
 		// height: max-content;
 		min-width: 5rem;
