@@ -1,6 +1,7 @@
 <template>
 	<div class="VS-Selector">
 		<select
+			@keypress.prevent
 			id=""
 			v-model="model"
 			:name="name"
