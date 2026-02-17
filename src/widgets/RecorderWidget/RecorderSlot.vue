@@ -1,44 +1,43 @@
 <template>
 	<div class="Recorder-slot">
-		<VsButton
-			class="Recorder-slot__play-btn Recorder-slot__button"
-			variant="round"
-			:disabled="isPlayButtonDisabled"
-			@click="handlePlayButtonClick"
-		>
-			<VsTooltip>
+		<VsTooltip orientation="right" delay="1s" text="Play">
+			<VsButton
+				class="Recorder-slot__play-btn Recorder-slot__button"
+				variant="round"
+				:disabled="isPlayButtonDisabled"
+				@click="handlePlayButtonClick"
+			>
 				<component
 					:is="playButtonIcon"
 					class="Recorder-slot__button__icon"
 				></component>
-			</VsTooltip>
-		</VsButton>
+			</VsButton>
+		</VsTooltip>
 
-		<VsButton
-			class="Recorder-slot__record-btn Recorder-slot__button"
-			:class="recordButtonDynamicClass"
-			variant="round"
-			@click="handleRecordButtonClick"
-		>
-			<VsTooltip text="Record">
+		<VsTooltip orientation="right" text="Record">
+			<VsButton
+				class="Recorder-slot__record-btn Recorder-slot__button"
+				:class="recordButtonDynamicClass"
+				variant="round"
+				@click="handleRecordButtonClick"
+			>
 				<component
 					:is="recordButtonIcon"
 					class="Recorder-slot__button__icon"
 				></component>
-			</VsTooltip>
-		</VsButton>
+			</VsButton>
+		</VsTooltip>
 
 		<DropdownMenu orientation="top">
 			<template #activator>
-				<VsButton
-					class="Recorder-slot__button Recorder-slot__settings-btn"
-					variant="round"
-				>
-					<VsTooltip>
-						<Settings
-							class="Recorder-slot__button__icon"
-						></Settings> </VsTooltip
-				></VsButton>
+				<VsTooltip orientation="right" delay="1s" text="Settings">
+					<VsButton
+						class="Recorder-slot__button Recorder-slot__settings-btn"
+						variant="round"
+					>
+						<Settings class="Recorder-slot__button__icon"></Settings>
+					</VsButton>
+				</VsTooltip>
 			</template>
 
 			<template #content>
@@ -119,6 +118,8 @@ $recording-color: red;
 		display: flex;
 		justify-content: center;
 		align-items: center;
+
+		padding: $gap-df;
 
 		&__icon {
 			@include iconButton;
