@@ -24,7 +24,7 @@ const {
 	text = "",
 	variant = "default",
 	orientation = "bottom",
-	delay = "2s",
+	delay = "1s",
 } = defineProps<VsTooltipProps>();
 
 const VsTooltipDynamicClasses = computed(() => ({
@@ -39,13 +39,12 @@ const VsTooltipContentClasses = computed(() => ({
 <style lang="scss" scoped>
 $default-bg-color: $bg-color-3;
 $default-text-color: $text-color;
-$animation-time: 1s;
+$animation-time: 0.5s;
 
 .VsTooltip {
 	position: relative;
 	width: fit-content;
 	height: fit-content;
-	z-index: 10;
 
 	&__content {
 		visibility: hidden;
@@ -57,7 +56,7 @@ $animation-time: 1s;
 
 		// height: max-content;
 		min-width: 5rem;
-		width: fit-content;
+		width: max-content;
 
 		padding: 0.2rem $gap-df;
 		background-color: $default-bg-color;
@@ -69,7 +68,7 @@ $animation-time: 1s;
 
 		transition: $animation-time;
 		transition-delay: v-bind(delay);
-		transition-property: opacity;
+		transition-property: all;
 		// transform: translate(50%, 50%);
 		&--top {
 			bottom: 100%;

@@ -1,36 +1,38 @@
 <template>
 	<div class="ActionsWidget" :class="ActionsWidgetDynamicClass">
 		<div class="ActionsWidget__voices">
-			<VsButton
-				:variant="buttonsVariant"
-				class="ActionsWidget__button"
-				@click="emit('createWave')"
-			>
-				<span v-if="size != 'minimal'"> New Wave </span>
-				<VsTooltip orientation="right" delay="1s" text="New Wave">
+			<VsTooltip orientation="right" delay="1s" text="New Wave">
+				<VsButton
+					:variant="buttonsVariant"
+					class="ActionsWidget__button"
+					@click="emit('createWave')"
+				>
+					<span v-if="size != 'minimal'"> New Wave </span>
 					<AudioWaveform class="ActionsWidget__button__icon"></AudioWaveform>
-				</VsTooltip>
-			</VsButton>
-			<VsButton
-				:variant="buttonsVariant"
-				class="ActionsWidget__button"
-				@click="emit('createFilter')"
-			>
-				<span v-if="size != 'minimal'"> New Filter </span>
-				<VsTooltip orientation="right" delay="1s" text="New Filter">
+				</VsButton>
+			</VsTooltip>
+
+			<VsTooltip orientation="right" delay="1s" text="New Filter">
+				<VsButton
+					:variant="buttonsVariant"
+					class="ActionsWidget__button"
+					@click="emit('createFilter')"
+				>
+					<span v-if="size != 'minimal'"> New Filter </span>
 					<SquareActivity class="ActionsWidget__button__icon"></SquareActivity>
-				</VsTooltip>
-			</VsButton>
-			<VsButton
-				:variant="buttonsVariant"
-				class="ActionsWidget__button"
-				@click="emit('deleteAll')"
-			>
-				<span v-if="size != 'minimal'"> New Filter </span>
-				<VsTooltip orientation="right" delay="1s" text="Delete All">
+				</VsButton>
+			</VsTooltip>
+
+			<VsTooltip orientation="right" delay="1s" text="Delete All">
+				<VsButton
+					:variant="buttonsVariant"
+					class="ActionsWidget__button"
+					@click="emit('deleteAll')"
+				>
+					<span v-if="size != 'minimal'"> New Filter </span>
 					<Trash class="ActionsWidget__button__icon"></Trash>
-				</VsTooltip>
-			</VsButton>
+				</VsButton>
+			</VsTooltip>
 		</div>
 
 		<VsSeparator

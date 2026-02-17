@@ -6,7 +6,9 @@
 				<slot name="controls"></slot>
 			</div>
 			<div class="vsynth-header__midi">
-				<midi-selector></midi-selector>
+				<vs-tooltip text="MIDI" orientation="right">
+					<midi-selector></midi-selector>
+				</vs-tooltip>
 			</div>
 		</div>
 		<div class="vsynth-header__visualizer">
@@ -17,6 +19,7 @@
 
 <script setup lang="ts">
 import MidiSelector from "@/components/MIDI/MidiSelector.vue";
+import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
 
 // interface HeaderWidgetWidgetProps {}
 
