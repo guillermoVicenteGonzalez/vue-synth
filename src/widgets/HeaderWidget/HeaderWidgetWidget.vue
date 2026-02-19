@@ -5,10 +5,13 @@
 			<div class="vsynth-header__controls">
 				<slot name="controls"></slot>
 			</div>
-			<div class="vsynth-header__midi">
-				<vs-tooltip text="MIDI" orientation="right">
-					<midi-selector></midi-selector>
-				</vs-tooltip>
+			<div class="vsynth-header__actions">
+				<metronome-widget></metronome-widget>
+				<div class="vsynth-header__midi">
+					<vs-tooltip text="MIDI" orientation="right">
+						<midi-selector></midi-selector>
+					</vs-tooltip>
+				</div>
 			</div>
 		</div>
 		<div class="vsynth-header__visualizer">
@@ -20,6 +23,7 @@
 <script setup lang="ts">
 import MidiSelector from "@/components/MIDI/MidiSelector.vue";
 import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
+import MetronomeWidget from "../MetronomeWidget/MetronomeWidget.vue";
 
 // interface HeaderWidgetWidgetProps {}
 
@@ -61,6 +65,12 @@ import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
 
 	&__controls {
 		flex: 1 1 100%;
+	}
+
+	&__actions {
+		display: flex;
+		align-items: center;
+		height: 100%;
 	}
 
 	&__midi {

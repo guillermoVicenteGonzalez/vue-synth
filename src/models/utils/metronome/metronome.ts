@@ -7,18 +7,20 @@ type MetronomeWorkerAction = "start" | "stop";
 
 interface MetronomeWorkerMessage {
 	type: MetronomeWorkerAction;
-	interval: number;
+	interval?: number;
 }
 
 const METRONOME_MAX_VOLUME = 100;
 const SOUND_DURATION = 0.1;
 const MAIN_SOUND_FREQ = 440;
-const SUB_SOUND_FREQ = 400;
+const SUB_SOUND_FREQ = 220;
 
 const workerFunction = () => {
 	let timerId: number | null;
+	let intervalTime: number = 1000;
 
 	function setupInterval(interval: number) {
+		postMessage("tick");
 		timerId = setInterval(() => {
 			postMessage("tick");
 		}, interval);
@@ -33,7 +35,8 @@ const workerFunction = () => {
 					clearInterval(timerId);
 					timerId = null;
 				}
-				setupInterval(event.data.interval);
+				if (event.data.interval) intervalTime = event.data.interval;
+				setupInterval(intervalTime);
 				break;
 
 			case "stop":
@@ -62,8 +65,8 @@ export default class Metronome {
 	private _bpm: number = 60;
 	private _volume: number = 1;
 	private sub_beats: number = 4;
-	public playing: boolean = false;
 	private worker: Worker;
+	private _isPlaying: boolean = false;
 
 	// TODO!: options?: MetronomeOptions
 	constructor(context?: AudioContext) {
@@ -76,10 +79,10 @@ export default class Metronome {
 
 		const workerScript = createWorkerUrl();
 		this.worker = new Worker(workerScript);
-		this.sendMessageToWorker({ type: "start", interval: 1000 });
+		// this.sendMessageToWorker({ type: "start", interval: 1000 });
 		this.worker.onmessage = e => {
 			console.log(e.data);
-			this.playBeat(this.ctx.currentTime, MAIN_SOUND_FREQ);
+			this.playMetronomeTick(this.ctx.currentTime);
 		};
 	}
 
@@ -107,39 +110,41 @@ export default class Metronome {
 		return 60 / this.bpm;
 	}
 
-	playBeat(time: number, frequency: number = 440) {
+	get isPlaying() {
+		return this._isPlaying;
+	}
+
+	private playBeat(time: number, frequency: number = 440) {
 		const osc = this.ctx.createOscillator();
-		osc.frequency.setValueAtTime(time, frequency);
+		// osc.frequency.setValueAtTime(time, frequency);
+		osc.frequency.value = frequency;
+		console.warn(osc.frequency.value);
 		osc.connect(this.gainNode);
 
 		osc.start(time);
 		osc.stop(time + SOUND_DURATION);
 	}
 
-	metronomeLoop(currentTime: number) {
-		if (!this.playing) return;
-
-		console.log("Entro");
+	playMetronomeTick(time: number) {
 		const subBeatInc = this.period / this.sub_beats;
-		this.playBeat(currentTime, MAIN_SOUND_FREQ);
+		this.playBeat(time, MAIN_SOUND_FREQ);
 
-		for (let i = 1; i <= this.sub_beats; i++) {
-			this.playBeat(currentTime + i * subBeatInc, SUB_SOUND_FREQ);
+		for (let i = 1; i < this.sub_beats; i++) {
+			this.playBeat(time + i * subBeatInc, SUB_SOUND_FREQ);
 		}
-
-		this.metronomeLoop(currentTime + this.period);
-		console.log("Salgo");
 	}
 
 	start() {
-		if (this.playing) return;
+		if (this._isPlaying) return;
 
-		this.playing = false;
-		this.playing = true;
-		this.metronomeLoop(this.ctx.currentTime);
+		this.sendMessageToWorker({ type: "start", interval: this.period * 1000 });
+		this._isPlaying = true;
 	}
 
-	stop() {}
+	stop() {
+		this.sendMessageToWorker({ type: "stop" });
+		this._isPlaying = false;
+	}
 
 	private initWorker() {}
 
