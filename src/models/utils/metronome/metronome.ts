@@ -14,6 +14,7 @@ const METRONOME_MAX_VOLUME = 100;
 const SOUND_DURATION = 0.1;
 const MAIN_SOUND_FREQ = 440;
 const SUB_SOUND_FREQ = 220;
+const METRONOME_DEFAULT_VOLUME = 50;
 
 const workerFunction = () => {
 	let timerId: number | null;
@@ -27,8 +28,6 @@ const workerFunction = () => {
 	}
 
 	self.onmessage = (event: MessageEvent<MetronomeWorkerMessage>) => {
-		console.log(event.data);
-
 		switch (event.data.type) {
 			case "start":
 				if (timerId) {
@@ -67,6 +66,8 @@ export default class Metronome {
 	private sub_beats: number = 4;
 	private worker: Worker;
 	private _isPlaying: boolean = false;
+	public waveForm: OscillatorNode["type"] = "square";
+	private beatQueue: OscillatorNode[] = [];
 
 	// TODO!: options?: MetronomeOptions
 	constructor(context?: AudioContext) {
@@ -84,12 +85,14 @@ export default class Metronome {
 			console.log(e.data);
 			this.playMetronomeTick(this.ctx.currentTime);
 		};
+		this.volume = METRONOME_DEFAULT_VOLUME;
 	}
 
 	set volume(v: number) {
 		if (v > METRONOME_MAX_VOLUME) this.volume = METRONOME_MAX_VOLUME;
 
 		this._volume = v / METRONOME_MAX_VOLUME;
+		this.gainNode.gain.value = this._volume;
 	}
 
 	get volume() {
@@ -118,14 +121,21 @@ export default class Metronome {
 		const osc = this.ctx.createOscillator();
 		// osc.frequency.setValueAtTime(time, frequency);
 		osc.frequency.value = frequency;
-		console.warn(osc.frequency.value);
+		osc.type = this.waveForm;
 		osc.connect(this.gainNode);
 
 		osc.start(time);
+		this.beatQueue.push(osc);
+		osc.onended = () => {
+			console.warn("onended");
+			this.beatQueue.splice(this.beatQueue.indexOf(osc), 1);
+		};
 		osc.stop(time + SOUND_DURATION);
 	}
 
 	playMetronomeTick(time: number) {
+		if (!this._isPlaying) return;
+
 		const subBeatInc = this.period / this.sub_beats;
 		this.playBeat(time, MAIN_SOUND_FREQ);
 
@@ -144,9 +154,12 @@ export default class Metronome {
 	stop() {
 		this.sendMessageToWorker({ type: "stop" });
 		this._isPlaying = false;
-	}
 
-	private initWorker() {}
+		console.warn("Stop");
+		this.beatQueue.forEach(osc => {
+			osc.stop();
+		});
+	}
 
 	private sendMessageToWorker(message: MetronomeWorkerMessage) {
 		if (!this.worker) return;

@@ -5,8 +5,8 @@
 			:class="dynamicMetronomeClass"
 			variant="round"
 			@click="toggleMetronome"
-			>a</VsButton
-		>
+			><Timer class="MetronomeWidget__icon"></Timer
+		></VsButton>
 	</VsTooltip>
 </template>
 
@@ -14,7 +14,8 @@
 import VsButton from "@/components/common/VsButton/VsButton.vue";
 import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
 import Metronome from "@/models/utils/metronome/metronome";
-import { computed, ref } from "vue";
+import { Timer } from "lucide-vue-next";
+import { computed, onUnmounted, ref } from "vue";
 
 const metronome = ref<Metronome>(new Metronome());
 
@@ -26,6 +27,10 @@ function toggleMetronome() {
 	if (metronome.value.isPlaying) metronome.value.stop();
 	else metronome.value.start();
 }
+
+onUnmounted(() => {
+	metronome.value.stop();
+});
 </script>
 
 <style lang="scss" scoped>
@@ -39,8 +44,15 @@ $btn-size-sm: 3rem;
 	padding: $gap-df;
 	justify-self: center;
 
+	&__icon {
+		@include iconButton;
+		color: $tertiary-color;
+		color: black;
+	}
+
 	&--active {
 		color: white !important;
+		background-color: red;
 	}
 }
 </style>
