@@ -1,8 +1,3 @@
-// interface MetronomeOptions {
-// 	volume: number;
-// 	tone: number;
-// }
-
 type MetronomeWorkerAction = "start" | "stop";
 
 interface MetronomeWorkerMessage {
@@ -84,7 +79,6 @@ export default class Metronome {
 	private beatQueue: OscillatorNode[] = [];
 	private _metronome_pitch: number = DEFAULT_METRONOME_PITCH;
 
-	// TODO!: options?: MetronomeOptions
 	constructor(context?: AudioContext) {
 		this.ctx = context != null ? context : new AudioContext();
 		this.gainNode = this.ctx.createGain();

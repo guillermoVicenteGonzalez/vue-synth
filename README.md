@@ -1,4 +1,24 @@
-# Vue synth
+# VSynth
+
+Vsynth (temporary name) is a web digital audio synthesizer that runs using the web audio api.
+
+It is still in alpha version (although really close to the initial beta release). However, it is already functional an supports the following features
+
+- Up to 5 wave forms.
+  - Up to 16 voices per wave form
+  - Sypports Wave form voice detuning
+- Up to 5 filters to apply to wave forms
+- 4 LFO's to apply to a **SINGLE** input.
+- A transpose slider
+- A basic envelope control featuring attack, decay, sustain and release
+- MIDI playback
+- Recorder with up to 4 tracks.
+  - Supports downloads in mp3 format
+  - Supports track upload (also in mp3 format)
+- A transpose slider
+- A metronome
+
+The progress of the project as well as upcoming features can be seen below
 
 ## Todo
 
@@ -26,7 +46,7 @@
 - [x] Audio module effects
   - [x] Voices => possibly wave shaper?? or just a number to clone oscs
     - [x] Voice detuning
-- [ ] Global effects
+- [x] Global effects
   - [x] widget
   - [x] Envelope?
     - [x] Attack
@@ -52,8 +72,8 @@
   - [x] Global clear
     - [x] Filters
     - [x] Modules
-  - [x] Global "detuning"a
-  - [ ] Wheel
+  - [x] Global "detuning"
+  - [ ] Pitch bend wheel
 - [x] Global volume controls
 - [x] Dynamic layouts / effects bar
 - [x] Responsive
@@ -61,7 +81,7 @@
 
 ## Extra Features
 
-- [-] Recorder
+- [x] Recorder
   - [x] Slots functionality
   - [x] Wrap audio element inside MediaElementAudioSourceNode https://www.youtube.com/watch?v=idhb45lc2xo
   - [x] Loop functionality
@@ -70,11 +90,9 @@
   - [x] Backing tracks
   - [x] save audio / download audio
   - [ ] Trim audio?
-    - blob => audioBuffer.
   - [x] Load audio (url or file??)
   - [x] Mix audio (audio encoder)
-    - Recorder => blob => audioBuffer / MediaElement....
-- [ ] Metronome
+- [x] Metronome
 - [ ] As many MIDI mappings as possible
 - [x] Request midi button + selector disable
 - [ ] Panic button for keyboard + disable midi triggers note off
@@ -84,7 +102,7 @@
 
 - [ ] Responsive effects (responsive in general)
 - [x] Add resets
-- [ ] Add tooltips
+- [x] Add tooltips
 - [x] Invert disable toggles
 - [x] sawwaves representation
 - [ ] Disable canvases
@@ -110,10 +128,14 @@
 - [ ] Audio imports
 - [ ] Audio envelope progress when key is pressed
 - [ ] Sampler
+- [ ] Low resources mode
 
 ## Release 2 (order is important)
 
 - [ ] White label theming that works with scss
 - [ ] Rework basic widgets
 - [ ] Rethink architecture.
+  - [ ] Audio library
+  - [ ] Frontend library
+  - [ ] General program (PWA)
 - [ ] Trim audio

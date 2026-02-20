@@ -32,8 +32,8 @@
 				<li class="MetronomeWidget__menu__item">
 					<span>Form</span>
 					<VsSelector
-						:items="Object.keys(waveForms)"
 						v-model="metronome.waveForm"
+						:items="Object.keys(waveForms)"
 					></VsSelector>
 				</li>
 				<li class="MetronomeWidget__menu__item">
