@@ -13,6 +13,9 @@ interface VsSwitchButtonProps {
 }
 
 const { disabled } = defineProps<VsSwitchButtonProps>();
+const emit = defineEmits<{
+	(e: "change", value: boolean): void;
+}>();
 
 const active = defineModel<boolean>({ default: false });
 
@@ -24,6 +27,7 @@ const dynamicClass = computed(() => ({
 function handleClick() {
 	if (disabled) return;
 	active.value = !active.value;
+	emit("change", active.value);
 }
 </script>
 
@@ -50,6 +54,7 @@ $switch-color-active: $primary-color;
 	display: flex;
 	align-items: center;
 	position: relative;
+	cursor: pointer;
 
 	&__handle {
 		background-color: white;

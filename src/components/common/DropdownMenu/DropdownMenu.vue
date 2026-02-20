@@ -1,6 +1,10 @@
 <template>
 	<div ref="selfRef" class="DropdownMenu">
-		<div class="DropdownMenu__activator" @click="handleActivatorClick">
+		<div
+			class="DropdownMenu__activator"
+			@click="handleLeftClick"
+			@contextmenu="handleRightClick"
+		>
 			<slot name="activator"> </slot>
 		</div>
 		<div class="DropdownMenu__content" :class="dynamicContentClass">
@@ -14,12 +18,15 @@ import useClickOutside from "@/composables/useClickOutside";
 import { computed, ref } from "vue";
 
 type DropdownMenuOrientation = "top" | "bot" | "left" | "right";
+type DropDownMenuActivation = "leftClick" | "dbClick" | "rightCLick";
 
 interface DropdownMenuProps {
 	orientation?: DropdownMenuOrientation;
+	activation?: DropDownMenuActivation;
 }
 
-const { orientation = "bot" } = defineProps<DropdownMenuProps>();
+const { orientation = "bot", activation = "leftClick" } =
+	defineProps<DropdownMenuProps>();
 const active = ref<boolean>();
 const selfRef = ref();
 
@@ -32,7 +39,18 @@ useClickOutside(selfRef, () => {
 	active.value = false;
 });
 
-function handleActivatorClick() {
+function handleLeftClick() {
+	if (activation != "leftClick") return;
+	toggleDropdown();
+}
+
+function handleRightClick(e: MouseEvent) {
+	if (activation != "rightCLick") return;
+	e.preventDefault();
+	toggleDropdown();
+}
+
+function toggleDropdown() {
 	active.value = !active.value;
 }
 </script>
