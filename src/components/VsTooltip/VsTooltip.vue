@@ -24,7 +24,7 @@ const {
 	text = "",
 	variant = "default",
 	orientation = "bottom",
-	delay = "1s",
+	delay = ".5s",
 } = defineProps<VsTooltipProps>();
 
 const VsTooltipDynamicClasses = computed(() => ({

@@ -29,7 +29,7 @@ interface VSNinputProps {
 }
 
 const {
-	max = 1,
+	max = 100,
 	min = 0,
 	step = 0.1,
 	variant = "default",
@@ -41,7 +41,6 @@ const model = defineModel<number>({
 	set(v: number) {
 		if (v > max) return max;
 		if (v < min) return min;
-		console.log(v);
 		return v;
 	},
 });

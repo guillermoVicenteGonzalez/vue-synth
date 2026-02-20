@@ -10,17 +10,28 @@ interface MetronomeWorkerMessage {
 	interval?: number;
 }
 
-const METRONOME_MAX_VOLUME = 100;
+export const METRONOME_MAX_VOLUME = 100;
+const METRONOME_DEFAULT_VOLUME = 20;
+
 const SOUND_DURATION = 0.1;
-const MAIN_SOUND_FREQ = 440;
-const SUB_SOUND_FREQ = 220;
-const METRONOME_DEFAULT_VOLUME = 50;
+
+const DEFAULT_METRONOME_PITCH = 440;
+const SUB_BEAT_PITCH_DIVIDER = 2; //1 octave
+export const MIN_METRONOME_PITCH = 200;
+export const MAX_METRONOME_PITCH = 800;
+
+export const MIN_METRONOME_BPM = 0;
+export const MAX_METRONOME_BPM = 220;
+
+export const MIN_METRONOME_BEATS = 1;
+export const MAX_METRONOME_BEATS = 12;
 
 const workerFunction = () => {
 	let timerId: number | null;
 	let intervalTime: number = 1000;
 
 	function setupInterval(interval: number) {
+		console.warn(`interval ${interval}`);
 		postMessage("tick");
 		timerId = setInterval(() => {
 			postMessage("tick");
@@ -28,13 +39,16 @@ const workerFunction = () => {
 	}
 
 	self.onmessage = (event: MessageEvent<MetronomeWorkerMessage>) => {
+		console.error("MESSAGE RECEIVED???");
 		switch (event.data.type) {
 			case "start":
 				if (timerId) {
+					console.error("Clearing timer");
 					clearInterval(timerId);
 					timerId = null;
 				}
 				if (event.data.interval) intervalTime = event.data.interval;
+				console.error(`interval time ${intervalTime}`);
 				setupInterval(intervalTime);
 				break;
 
@@ -63,11 +77,12 @@ export default class Metronome {
 	private ctx: AudioContext;
 	private _bpm: number = 60;
 	private _volume: number = 1;
-	private sub_beats: number = 4;
+	private _sub_beats: number = 4;
 	private worker: Worker;
 	private _isPlaying: boolean = false;
 	public waveForm: OscillatorNode["type"] = "square";
 	private beatQueue: OscillatorNode[] = [];
+	private _metronome_pitch: number = DEFAULT_METRONOME_PITCH;
 
 	// TODO!: options?: MetronomeOptions
 	constructor(context?: AudioContext) {
@@ -80,11 +95,11 @@ export default class Metronome {
 
 		const workerScript = createWorkerUrl();
 		this.worker = new Worker(workerScript);
-		// this.sendMessageToWorker({ type: "start", interval: 1000 });
-		this.worker.onmessage = e => {
-			console.log(e.data);
+
+		this.worker.onmessage = () => {
 			this.playMetronomeTick(this.ctx.currentTime);
 		};
+
 		this.volume = METRONOME_DEFAULT_VOLUME;
 	}
 
@@ -100,9 +115,9 @@ export default class Metronome {
 	}
 
 	set bpm(b: number) {
-		//cancelScheduledValues
-		// this.gainNode.gain.
 		this._bpm = b;
+		this.sendMessageToWorker({ type: "start", interval: this.period * 1000 });
+		console.warn("MEssage sent");
 	}
 
 	get bpm() {
@@ -117,9 +132,30 @@ export default class Metronome {
 		return this._isPlaying;
 	}
 
+	set beats(b: number) {
+		if (b > MAX_METRONOME_BEATS) this.beats = MAX_METRONOME_BEATS;
+		if (b < MIN_METRONOME_BEATS) this.beats = MIN_METRONOME_BEATS;
+
+		this._sub_beats = b;
+	}
+
+	get beats() {
+		return this._sub_beats;
+	}
+
+	set pitch(p: number) {
+		if (p > MAX_METRONOME_PITCH) this.pitch = MAX_METRONOME_PITCH;
+		if (p < MIN_METRONOME_PITCH) this.pitch = MIN_METRONOME_PITCH;
+
+		this._metronome_pitch = p;
+	}
+
+	get pitch() {
+		return this._metronome_pitch;
+	}
+
 	private playBeat(time: number, frequency: number = 440) {
 		const osc = this.ctx.createOscillator();
-		// osc.frequency.setValueAtTime(time, frequency);
 		osc.frequency.value = frequency;
 		osc.type = this.waveForm;
 		osc.connect(this.gainNode);
@@ -127,7 +163,6 @@ export default class Metronome {
 		osc.start(time);
 		this.beatQueue.push(osc);
 		osc.onended = () => {
-			console.warn("onended");
 			this.beatQueue.splice(this.beatQueue.indexOf(osc), 1);
 		};
 		osc.stop(time + SOUND_DURATION);
@@ -136,11 +171,11 @@ export default class Metronome {
 	playMetronomeTick(time: number) {
 		if (!this._isPlaying) return;
 
-		const subBeatInc = this.period / this.sub_beats;
-		this.playBeat(time, MAIN_SOUND_FREQ);
+		const subBeatInc = this.period / this._sub_beats;
+		this.playBeat(time, this.pitch);
 
-		for (let i = 1; i < this.sub_beats; i++) {
-			this.playBeat(time + i * subBeatInc, SUB_SOUND_FREQ);
+		for (let i = 1; i < this._sub_beats; i++) {
+			this.playBeat(time + i * subBeatInc, this.pitch / SUB_BEAT_PITCH_DIVIDER);
 		}
 	}
 
@@ -155,7 +190,6 @@ export default class Metronome {
 		this.sendMessageToWorker({ type: "stop" });
 		this._isPlaying = false;
 
-		console.warn("Stop");
 		this.beatQueue.forEach(osc => {
 			osc.stop();
 		});
