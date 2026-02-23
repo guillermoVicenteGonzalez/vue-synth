@@ -20,6 +20,8 @@
 
 		<template v-if="currentTab === 'Voice'" #waves>
 			<ModuleCardListWidget v-model="MainAudioCluster"></ModuleCardListWidget>
+			<button @click="test">Test</button>
+			<button @click="test2">Test2</button>
 		</template>
 		<template v-if="currentTab === 'Voice'" #filters>
 			<EffectListWidget
@@ -78,6 +80,7 @@
 <script setup lang="ts">
 import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
 import { useMonitorSize } from "@/composables/useMonitorSize";
+import { loadSynthPreset, saveSynthPreset } from "@/composables/usePresets";
 import MobileSynthLayout from "@/layouts/synth/MobileSynthLayout.vue";
 import PortraitSynthLayout from "@/layouts/synth/PortraitSynthLayout.vue";
 import SynthLayout from "@/layouts/synth/SynthLayout.vue";
@@ -226,6 +229,20 @@ function initializeEffects() {
 	MainAudioCluster.value.effects.append(filter);
 	MainAudioCluster.value.effects.append(equalizer);
 	MainAudioCluster.value.effects.append(compression);
+}
+
+function test() {
+	saveSynthPreset("test", {
+		cluster: MainAudioCluster.value,
+		envelope: envelope.value,
+		filters: filters.value as FilterHandler[],
+	});
+}
+
+function test2() {
+	const result = loadSynthPreset("test", mainContext.value, merger.value);
+	console.warn(result);
+	// MainAudioCluster.value = result?.cluster;
 }
 
 onMounted(() => {

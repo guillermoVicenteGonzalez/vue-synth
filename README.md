@@ -20,6 +20,12 @@ It is still in alpha version (although really close to the initial beta release)
 
 The progress of the project as well as upcoming features can be seen below
 
+## Current feature (Presets)
+
+- [ ] Refactor LFO widget to use v-model instead of internal model
+- [ ] Refactor wave module disabled to use internal property instead of component ref
+- [ ] Duplicate names in cluster modules
+
 ## Todo
 
 - [x] Loops
