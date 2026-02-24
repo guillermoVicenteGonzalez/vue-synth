@@ -42,7 +42,14 @@ const classObject = computed(() => ({
 	"keyboard-key--black": note.black,
 }));
 
-const synthModule: SynthModule = new SynthModule(sourceCluster, envelope);
+//TODO: This is not ideal at all
+let synthModule: SynthModule = new SynthModule(sourceCluster, envelope);
+watch(
+	() => [sourceCluster, envelope],
+	() => {
+		synthModule = new SynthModule(sourceCluster, envelope);
+	}
+);
 
 /**
  * Events (keyboard and click) just turn isPressed on or off

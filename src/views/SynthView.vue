@@ -239,6 +239,7 @@ function initializeEffects() {
 
 function test() {
 	saveSynthPreset("test", {
+		lfos: lfos.value,
 		cluster: MainAudioCluster.value,
 		envelope: envelope.value,
 		filters: filters.value as FilterHandler[],
@@ -246,9 +247,13 @@ function test() {
 }
 
 function test2() {
-	const result = loadSynthPreset("test", mainContext.value, merger.value);
-	console.warn(result);
-	// MainAudioCluster.value = result?.cluster;
+	const preset = loadSynthPreset("test", mainContext.value, merger.value);
+
+	// MainAudioCluster.value = null;
+
+	MainAudioCluster.value = preset.cluster;
+	envelope.value = preset.envelope;
+	filters.value = preset.filters;
 }
 
 onMounted(() => {

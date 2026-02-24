@@ -132,8 +132,6 @@ export default class AudioModule {
 	 * Meant to work just like plugging or unplugging the source from the amp/speaker
 	 */
 	unplugModule() {
-		// this.input.disconnect(this.end);
-		console.error("unpluging");
 		try {
 			this.gainNode.disconnect(this.exit);
 		} catch (err) {
@@ -146,9 +144,6 @@ export default class AudioModule {
 	 * Meant to work just like plugging or unplugging the source from the amp/speaker
 	 */
 	plugModule() {
-		// this.input.connect(this.end);
-		console.error("pluging");
-
 		try {
 			this.gainNode.connect(this.exit);
 		} catch (err) {

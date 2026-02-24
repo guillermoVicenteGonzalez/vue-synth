@@ -102,7 +102,7 @@ import type AudioCluster from "@/models/AudioCluster";
 import type AudioModule from "@/models/AudioModule";
 import FilterHandler, { FilterTypes } from "@/models/FilterHandler";
 import { X } from "lucide-vue-next";
-import { computed, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 
 interface FilterWidgetProps {
 	/**All the waves we can apply filters to*/
@@ -168,6 +168,10 @@ function handleContextMenu(e: MouseEvent) {
 function handleCloseContextMenu() {
 	isCtxMenuVisible.value = false;
 }
+
+onMounted(() => {
+	//checkear si tiene module el filterHandler
+});
 </script>
 
 <style lang="scss" scoped>
