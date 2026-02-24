@@ -132,11 +132,6 @@ const modules = computed(() => {
 	return sources.modules;
 });
 
-// watch(filter, () => {
-// 	console.error("Executing");
-// 	preloadFilterModule();
-// });
-
 watch(module, () => {
 	if (!module.value) {
 		filter.value.detachModule();
@@ -176,12 +171,18 @@ function handleCloseContextMenu() {
 
 function preloadFilterModule() {
 	if (filter.value.module === null) return;
+
 	module.value = filter.value.module;
 }
 
-onMounted(() => {
-	console.error("mounted");
+//!TODO: When i delete this part, everything breaks
+watch(filter, () => {
+	console.error("Executing");
 	preloadFilterModule();
+});
+
+onMounted(() => {
+	module.value = filter.value.module as AudioModule | undefined;
 });
 </script>
 
