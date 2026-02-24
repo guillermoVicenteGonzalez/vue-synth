@@ -56,6 +56,7 @@
 		</template>
 		<template #lfo>
 			<LfoWidgetListWidget
+				v-model="lfos"
 				:widget-variant="LFOlWidgetVariant"
 				:variant="lfoListVariant"
 				:context="mainContext"
@@ -97,6 +98,7 @@ import { FlangerEffect } from "@/models/effects/FlangerEffect";
 import { ReverbEffect } from "@/models/effects/ReverbEffect";
 import WahEffect from "@/models/effects/WahEffect";
 import FilterHandler from "@/models/FilterHandler";
+import { LFO } from "@/models/LFO";
 import ActionsWidget, {
 	type ActionsWidgetOrientation,
 } from "@/widgets/ActionsWidget/ActionsWidget.vue";
@@ -119,6 +121,7 @@ import { computed, onMounted, provide, ref, type Ref } from "vue";
 
 const { browserHeight, browserWidth } = useMonitorSize();
 const primaryColor = "#42d392";
+const LFO_COUNT = 4;
 
 const transposeAmount = ref<number>(0);
 const currentTab = ref<TabItem>("Voice");
@@ -166,6 +169,9 @@ const envelope = ref<AudioEnvelope>({
 });
 
 const filters = ref<FilterHandler[]>([]);
+const lfos = ref<LFO[]>(
+	new Array(LFO_COUNT).fill(new LFO(mainContext.value))
+) as Ref<LFO[]>;
 
 // const lfoSources = computed<AudioModule[]>(() => new AudioCluster(mainContext.value, merger.value).modules);
 const lfoSources = computed<LfoSource[]>(() => {

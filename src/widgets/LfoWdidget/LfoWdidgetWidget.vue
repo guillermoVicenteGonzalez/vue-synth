@@ -113,7 +113,8 @@ const {
 	variant = "default",
 } = defineProps<LfoWdidgetWidgetProps>();
 const disabled = ref<boolean>(false);
-const lfo = ref<LFO>(new LFO(context));
+// const lfo = ref<LFO>(new LFO(context));
+const lfo = defineModel<LFO>({ required: true });
 
 const dynamicClass = computed(() => ({
 	"lfo-widget-card--disabled": disabled.value,
@@ -161,7 +162,6 @@ const modulableParameterName = ref<string>();
  * Handles the disconnection from the previous module and the connection of the new one attending to the type of node it is
  */
 function connectLFO() {
-	console.warn("Handling connection");
 	lfo.value.disconnectAll();
 
 	if (!modulableParameterName.value || !selectedModule.value) return;
