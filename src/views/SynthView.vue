@@ -250,6 +250,10 @@ function test2() {
 	const preset = loadSynthPreset("test", mainContext.value, merger.value);
 
 	// MainAudioCluster.value = null;
+	if (preset.cluster == MainAudioCluster.value) {
+		console.error("IGUALES");
+		return;
+	}
 
 	MainAudioCluster.value = preset.cluster;
 	envelope.value = preset.envelope;

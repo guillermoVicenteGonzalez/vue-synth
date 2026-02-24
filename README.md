@@ -25,6 +25,7 @@ The progress of the project as well as upcoming features can be seen below
 - [x] Refactor LFO widget to use v-model instead of internal model
 - [x] Refactor wave module disabled to use internal property instead of component ref
 - [ ] Duplicate names in cluster modules
+- [ ] Check for memory leaks or unused lingering modules when loading a preset
 
 ## Todo
 

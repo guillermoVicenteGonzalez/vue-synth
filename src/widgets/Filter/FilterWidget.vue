@@ -132,6 +132,11 @@ const modules = computed(() => {
 	return sources.modules;
 });
 
+// watch(filter, () => {
+// 	console.error("Executing");
+// 	preloadFilterModule();
+// });
+
 watch(module, () => {
 	if (!module.value) {
 		filter.value.detachModule();
@@ -169,8 +174,14 @@ function handleCloseContextMenu() {
 	isCtxMenuVisible.value = false;
 }
 
+function preloadFilterModule() {
+	if (filter.value.module === null) return;
+	module.value = filter.value.module;
+}
+
 onMounted(() => {
-	//checkear si tiene module el filterHandler
+	console.error("mounted");
+	preloadFilterModule();
 });
 </script>
 
