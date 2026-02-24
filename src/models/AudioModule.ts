@@ -20,10 +20,10 @@ export default class AudioModule {
 	filters: FilterChain;
 	input: AudioNode;
 	exit: AudioNode; // Should be the merger or the ctx destination
-	private disabled: boolean;
 	private _voices: number = 1;
 	private _voicesDetune: number = 0;
 	private max_voices: number = 20;
+	private _disabled: boolean = false;
 
 	/**
 	 *
@@ -42,8 +42,6 @@ export default class AudioModule {
 		this.name = name;
 		this.wave = w;
 		this.context = ctx;
-
-		this.disabled = false;
 
 		if (exit != null) this.exit = exit;
 		else this.exit = this.context.destination;
@@ -86,6 +84,18 @@ export default class AudioModule {
 		return this._voicesDetune;
 	}
 
+	set disabled(d: boolean) {
+		if (d === this.disabled) return;
+		this._disabled = d;
+
+		if (this.disabled) this.unplugModule();
+		else this.plugModule();
+	}
+
+	get disabled() {
+		return this._disabled;
+	}
+
 	/**
 	takes the changes present in the wave model and updates the audio nodes accordingly
 	*/
@@ -118,39 +128,12 @@ export default class AudioModule {
 	}
 
 	/**
-	 *
-	 * @param nExit - Audio node to become the new exit
-	 * Sets a new exit node
-	 */
-	connectExit(nExit: AudioNode) {
-		this.gainNode.disconnect(this.exit);
-		this.gainNode.connect(nExit);
-		this.exit = nExit;
-	}
-
-	/**
-	 * disconnects the end node from the exit node
-	 * Meant to work just like plugging or unplugging a cable from a speaker
-	 */
-	unplugExit() {
-		this.gainNode.disconnect(this.exit);
-	}
-
-	/**
-	 * Connects again the end node of the module to the exit
-	 * Meant to work just like plugging or unplugging a cable from a speaker
-	 */
-	//error handling?: If it is alredy connected????
-	plugExit() {
-		this.gainNode.connect(this.exit);
-	}
-
-	/**
 	 * Connects again the input(start) node of the module to the exit
 	 * Meant to work just like plugging or unplugging the source from the amp/speaker
 	 */
-	unplugOscillator() {
+	unplugModule() {
 		// this.input.disconnect(this.end);
+		console.error("unpluging");
 		try {
 			this.gainNode.disconnect(this.exit);
 		} catch (err) {
@@ -162,8 +145,10 @@ export default class AudioModule {
 	 * Connects again the input(start) node of the module to the exit
 	 * Meant to work just like plugging or unplugging the source from the amp/speaker
 	 */
-	plugOscillator() {
+	plugModule() {
 		// this.input.connect(this.end);
+		console.error("pluging");
+
 		try {
 			this.gainNode.connect(this.exit);
 		} catch (err) {
@@ -172,7 +157,7 @@ export default class AudioModule {
 	}
 
 	/**
-	 *
+	 * @deprecated
 	 * @param flag - defines wether the module is muted or unmuted
 	 * Mutes the module by setting the gain to 0.
 	 * When unmuting the module, the volume (gain) will just be set to half its max value
@@ -187,13 +172,12 @@ export default class AudioModule {
 	 */
 	destroyModule() {
 		//First we make sure everything is connected as its supposed
-		this.toggleModule(true);
-		this.gainNode.disconnect(this.exit);
+		if (!this.disabled) this.unplugModule();
 		this.filters.clean();
 	}
 
 	/**
-	 *
+	 * @deprecated
 	 * @param flag - decides if the module is activated or deactivated.
 	 * "Disables" the module by disconnecting its source (input), so no audio related to this module is emitted
 	 */
@@ -201,8 +185,8 @@ export default class AudioModule {
 		if (this.disabled == flag) return;
 
 		this.disabled = !flag;
-		if (this.disabled) this.unplugOscillator();
-		else this.plugOscillator();
+		if (this.disabled) this.unplugModule();
+		else this.plugModule();
 	}
 
 	/**
@@ -225,6 +209,4 @@ export default class AudioModule {
 		this.wave = new Wave();
 		this.updateModule();
 	}
-
-	createSound() {}
 }

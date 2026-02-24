@@ -7,7 +7,7 @@
 	>
 		<div class="ModuleCard__handle" @contextmenu="handleContextMenu">
 			<ToggleButton
-				v-model="disabled"
+				v-model="audioModule.disabled"
 				:color="primaryColor"
 				:true-value="false"
 			></ToggleButton>
@@ -32,7 +32,7 @@
 				<VsSlider
 					v-model="audioModule.wave.amplitude"
 					class="ModuleCard__slider"
-					:disabled="disabled"
+					:disabled="audioModule.disabled"
 					label="amp"
 					:max="50"
 					:step="0.01"
@@ -47,7 +47,7 @@
 						:size="CircleSliderSize"
 						class="ModuleCard__circle-slider"
 						:default-value="WAVE_DEFAULT_AMPLITUDE"
-						:disabled="disabled"
+						:disabled="audioModule.disabled"
 						:fill-color="primaryColor"
 						:min="0.01"
 						:max="50"
@@ -58,7 +58,7 @@
 				<VsSlider
 					v-model="audioModule.wave.frequency"
 					class="ModuleCard__slider"
-					:disabled="disabled"
+					:disabled="audioModule.disabled"
 					label="freq"
 					:max="1000"
 					orientation="vertical"
@@ -72,7 +72,7 @@
 						class="ModuleCard__circle-slider"
 						:default-value="WAVE_DEFAULT_FREQUENCY"
 						:fill-color="primaryColor"
-						:disabled="disabled"
+						:disabled="audioModule.disabled"
 						:min="0.01"
 						:max="1000"
 						@change="onWaveChangeCB"
@@ -85,7 +85,7 @@
 					<VsSelector
 						v-model="audioModule.wave.form"
 						class="ModuleCard__center-slot__selector"
-						:disabled="disabled"
+						:disabled="audioModule.disabled"
 						:items="Object.keys(waveForms)"
 						@change="onWaveChangeCB"
 					></VsSelector>
@@ -93,13 +93,13 @@
 					<VsTextInput
 						v-model="audioModule.name"
 						class="ModuleCard__center-slot__name-input"
-						:disabled="disabled"
+						:disabled="audioModule.disabled"
 					></VsTextInput>
 				</div>
 				<WaveCanvas
 					class="ModuleCard__center-slot__wave-canvas"
 					:wave="audioModule.wave"
-					:paused="disabled"
+					:paused="audioModule.disabled"
 					:canvas-width="zoom"
 					:line-color="primaryColor"
 				></WaveCanvas>
@@ -109,7 +109,7 @@
 					:min="500"
 					:max="1000"
 					:label="zoom"
-					:disabled="disabled"
+					:disabled="audioModule.disabled"
 				></VsSlider>
 			</div>
 
@@ -117,7 +117,7 @@
 				<VsSlider
 					v-model="audioModule.voices"
 					class="ModuleCard__slider"
-					:disabled="disabled"
+					:disabled="audioModule.disabled"
 					label="voices"
 					:max="16"
 					:step="1"
@@ -132,7 +132,7 @@
 						:size="CircleSliderSize"
 						class="ModuleCard__circle-slider"
 						:default-value="10"
-						:disabled="disabled"
+						:disabled="audioModule.disabled"
 						:min="1"
 						:fill-color="primaryColor"
 						:max="16"
@@ -143,7 +143,7 @@
 				<VsSlider
 					v-model="audioModule.voicesDetune"
 					class="ModuleCard__slider"
-					:disabled="disabled"
+					:disabled="audioModule.disabled"
 					label="detune"
 					:max="100"
 					orientation="vertical"
@@ -156,7 +156,7 @@
 						:size="CircleSliderSize"
 						class="ModuleCard__circle-slider"
 						:default-value="20"
-						:disabled="disabled"
+						:disabled="audioModule.disabled"
 						:fill-color="primaryColor"
 						:min="0.01"
 						:max="100"
@@ -199,7 +199,7 @@ import {
 	waveForms,
 } from "@/models/wave";
 import { X } from "lucide-vue-next";
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 
 // const MAX_CARD_HEIGHT = "20rem";
 const MAX_CARD_HEIGHT = "17rem";
@@ -207,7 +207,6 @@ const MIN_CARD_HEIGHT = "17rem";
 
 const primaryColor = "#42d392";
 const audioModule = defineModel<AudioModule>({ required: true });
-const disabled = ref<boolean>(false);
 const zoom = ref<number>(10000);
 const isCtxMenuVisible = ref<boolean>(false);
 const contextMenuPos = ref<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -219,7 +218,7 @@ const emit = defineEmits<{
 }>();
 
 const ModuleCardStyles = computed(() => {
-	return `ModuleCard ${disabled.value ? "ModuleCard--disabled" : null}`;
+	return `ModuleCard ${audioModule.value.disabled ? "ModuleCard--disabled" : null}`;
 });
 
 const CircleSliderSize = computed<number>(() => {
@@ -228,14 +227,6 @@ const CircleSliderSize = computed<number>(() => {
 	}
 
 	return 80;
-});
-
-watch(disabled, () => {
-	if (disabled.value) {
-		audioModule.value?.unplugOscillator();
-	} else {
-		audioModule.value?.plugOscillator();
-	}
 });
 
 function onWaveChangeCB() {
