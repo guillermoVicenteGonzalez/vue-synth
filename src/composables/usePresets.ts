@@ -1,7 +1,8 @@
 import AudioCluster from "@/models/AudioCluster";
 import type { AudioEnvelope } from "@/models/AudioEnvelope";
+import AudioModule from "@/models/AudioModule";
 import FilterHandler from "@/models/FilterHandler";
-import type { LFO } from "@/models/LFO";
+import type LFOHandler from "@/models/LFOHandler";
 import type Wave from "@/models/wave";
 
 //TODO!: This would benefit a lot from UID use
@@ -25,10 +26,10 @@ interface ModulePreset {
 
 interface LFOPreset {
 	wave: Wave;
-	inputType?: "module" | "filter";
-	inputIndex?: number;
-	propertyName?: string;
-	disabled?: boolean;
+	inputType: "module" | "filter" | "general" | null;
+	inputIndex: number | null;
+	propertyName: string | null;
+	disabled: boolean;
 }
 
 interface SynthPreset {
@@ -43,7 +44,7 @@ interface PresetInput {
 	cluster: AudioCluster;
 	envelope: AudioEnvelope;
 	filters: FilterHandler[];
-	lfos: LFO[];
+	lfos: LFOHandler[];
 }
 
 //We define the function redundantly and scale it later if necessary.
@@ -60,8 +61,6 @@ function loadEnvelopePreset(preset: EnvelopePreset): AudioEnvelope {
 // }
 
 function generateClusterPreset(cluster: AudioCluster): ModulePreset[] {
-	console.warn("Saving cluster");
-
 	const modules: ModulePreset[] = cluster.modules.map(module => {
 		return {
 			name: module.name,
@@ -138,14 +137,48 @@ function loadFiltersPreset(
 }
 
 //TODO: Module connection
-function generateLFOPreset(lfos: LFO[]): LFOPreset[] {
-	return lfos.map(lfo => {
+//!!!! This is highly un-scalable. Heavy refactoring will be needed
+function generateLFOPreset(
+	lfos: LFOHandler[],
+	cluster: AudioCluster,
+	filters: FilterHandler[]
+): LFOPreset[] {
+	return lfos.map(handler => {
+		const inputType: LFOPreset["inputType"] = ((
+			module: LFOHandler["inputModule"]
+		) => {
+			if (module instanceof AudioModule) return "module";
+			else if (module instanceof BiquadFilterNode) return "filter";
+			else if (module instanceof AudioCluster) return "general";
+			return null;
+		})(handler.inputModule);
+
+		const inputIndex = (() => {
+			if (inputType == "module") {
+				return cluster.modules.indexOf(handler.inputModule as AudioModule);
+			}
+
+			if (inputType == "filter")
+				return filters
+					.map(f => f.filter)
+					.indexOf(handler.inputModule as BiquadFilterNode);
+
+			if (inputType == "general") return -1;
+
+			return null;
+		})();
+
 		return {
-			wave: lfo.wave,
-			disabled: lfo.disabled,
+			wave: handler.lfo.wave,
+			disabled: handler.lfo.disabled,
+			inputType,
+			inputIndex,
+			propertyName: handler.propertyName,
 		};
 	});
 }
+
+// function loadLFOPreset(preset: LFOPreset[]): LFOHandler[] {}
 
 function generateSynthPreset(
 	name: string,
@@ -156,7 +189,7 @@ function generateSynthPreset(
 		envelope: generateEnvelopePreset(envelope),
 		modules: generateClusterPreset(cluster),
 		filters: generateFiltersPreset(filters, cluster),
-		lfos: generateLFOPreset(lfos),
+		lfos: generateLFOPreset(lfos, cluster, filters),
 	};
 }
 
@@ -165,6 +198,7 @@ export function saveSynthPreset(name: string, input: PresetInput) {
 	const preset = generateSynthPreset(name, input);
 	const presetString = JSON.stringify(preset);
 	localStorage.setItem(name, presetString);
+	console.log(preset);
 }
 
 export function loadSynthPreset(

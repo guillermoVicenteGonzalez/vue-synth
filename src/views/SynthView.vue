@@ -244,7 +244,7 @@ function initializeEffects() {
 
 function test() {
 	saveSynthPreset("test", {
-		lfos: [],
+		lfos: lfos.value,
 		cluster: MainAudioCluster.value,
 		envelope: envelope.value,
 		filters: filters.value as FilterHandler[],
@@ -270,7 +270,6 @@ onMounted(() => {
 	initializeEffects();
 	createNewModule();
 	createFilter();
-	console.log(lfos.value);
 });
 </script>
 

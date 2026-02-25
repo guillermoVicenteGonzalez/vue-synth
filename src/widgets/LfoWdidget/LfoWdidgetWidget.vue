@@ -8,7 +8,7 @@
 			<div class="lfo-widget__selectors">
 				<h3 class="lfo-widget__param-label">Waveform:</h3>
 				<VsSelector
-					v-model="lfo.lfo.waveform"
+					v-model="lfoHandler.lfo.waveform"
 					class="lfo-widget__selector"
 					:items="Object.keys(waveForms)"
 					:disabled="disabled"
@@ -22,7 +22,7 @@
 				/>
 				<h3 class="lfo-widget__param-label">Parameter:</h3>
 				<VsSelector
-					v-model="lfo.propertyName"
+					v-model="lfoHandler.propertyName"
 					class="lfo-widget__selector"
 					:items="connectionOptions"
 					:disabled="disabled"
@@ -55,7 +55,7 @@
 			<!-- <WaveCanvas :wave="lfo.wave"></WaveCanvas> -->
 			<div class="lfo-widget__controls">
 				<CircleSlider
-					v-model="lfo.lfo.frequency"
+					v-model="lfoHandler.lfo.frequency"
 					:size="CircleSliderSize"
 					:fill-color="primaryColor"
 					:disabled="disabled"
@@ -63,7 +63,7 @@
 				></CircleSlider>
 				<VsChip class="lfo-widget__chip">Frequency</VsChip>
 				<CircleSlider
-					v-model="lfo.lfo.amplitude"
+					v-model="lfoHandler.lfo.amplitude"
 					:size="CircleSliderSize"
 					:fill-color="primaryColor"
 					:default-value="100"
@@ -118,7 +118,7 @@ const disabled = ref<boolean>(false);
 // 	propertyName: null,
 // 	lfo: new LFO(context),
 // });
-const lfo = defineModel<LFOHandler>({ required: true });
+const lfoHandler = defineModel<LFOHandler>({ required: true });
 
 const dynamicClass = computed(() => ({
 	"lfo-widget-card--disabled": disabled.value,
@@ -151,16 +151,16 @@ const selectedModuleName = ref<string>();
 watch(selectedModuleName, () => {
 	if (!selectedModuleName.value) return null;
 	const index = sourceNames.value.indexOf(selectedModuleName.value);
-	lfo.value.inputModule = sources[index];
+	lfoHandler.value.inputModule = sources[index];
 });
 
 const connectionOptions = computed(() => {
-	if (!lfo.value.inputModule) return [];
-	if (lfo.value.inputModule instanceof AudioModule)
+	if (!lfoHandler.value.inputModule) return [];
+	if (lfoHandler.value.inputModule instanceof AudioModule)
 		return ["frequency", "amplitude"];
-	else if (lfo.value.inputModule instanceof BiquadFilterNode)
+	else if (lfoHandler.value.inputModule instanceof BiquadFilterNode)
 		return ["cuttof frequency"];
-	else if (lfo.value.inputModule instanceof AudioCluster)
+	else if (lfoHandler.value.inputModule instanceof AudioCluster)
 		return ["global gain"];
 
 	return [];
@@ -172,25 +172,25 @@ const connectionOptions = computed(() => {
  * Handles the disconnection from the previous module and the connection of the new one attending to the type of node it is
  */
 function connectLFO() {
-	lfo.value.lfo.disconnectAll();
+	lfoHandler.value.lfo.disconnectAll();
 
-	if (!lfo.value.propertyName || !lfo.value.inputModule) return;
+	if (!lfoHandler.value.propertyName || !lfoHandler.value.inputModule) return;
 
-	if (lfo.value.inputModule instanceof AudioModule) {
-		lfo.value.lfo.connect(lfo.value.inputModule.gainNode.gain);
+	if (lfoHandler.value.inputModule instanceof AudioModule) {
+		lfoHandler.value.lfo.connect(lfoHandler.value.inputModule.gainNode.gain);
 		return;
 	}
 
-	if (lfo.value.inputModule instanceof BiquadFilterNode) {
-		const filter: BiquadFilterNode = lfo.value.inputModule;
-		lfo.value.lfo.connect(filter.frequency);
+	if (lfoHandler.value.inputModule instanceof BiquadFilterNode) {
+		const filter: BiquadFilterNode = lfoHandler.value.inputModule;
+		lfoHandler.value.lfo.connect(filter.frequency);
 		return;
 	}
 
-	if (lfo.value.inputModule instanceof AudioCluster) {
-		const cluster: AudioCluster = lfo.value.inputModule;
-		lfo.value.lfo.connect(cluster.gain.gain);
-		// lfo.value.connect(merger.);
+	if (lfoHandler.value.inputModule instanceof AudioCluster) {
+		const cluster: AudioCluster = lfoHandler.value.inputModule;
+		lfoHandler.value.lfo.connect(cluster.gain.gain);
+		// lfoHandler.value.connect(merger.);
 		return;
 	}
 }
@@ -200,7 +200,7 @@ function connectLFO() {
  * The modulated parameter should also be taken into account
  */
 const minMaxLFOStrength = computed(() => {
-	if (lfo.value.inputModule instanceof AudioCluster) {
+	if (lfoHandler.value.inputModule instanceof AudioCluster) {
 		return {
 			min: -1,
 			max: 1,
@@ -208,7 +208,7 @@ const minMaxLFOStrength = computed(() => {
 		};
 	}
 
-	if (lfo.value.inputModule instanceof BiquadFilterNode) {
+	if (lfoHandler.value.inputModule instanceof BiquadFilterNode) {
 		return {
 			min: 0,
 			max: 1000,
@@ -216,7 +216,7 @@ const minMaxLFOStrength = computed(() => {
 		};
 	}
 
-	if (lfo.value.inputModule instanceof AudioModule) {
+	if (lfoHandler.value.inputModule instanceof AudioModule) {
 		return {
 			min: 0,
 			max: 100,
@@ -251,51 +251,51 @@ const canvasDynamicDimensions = computed(() => {
 });
 
 const dynamicWave = computed<Wave>(() => {
-	if (lfo.value.inputModule instanceof BiquadFilterNode) {
+	if (lfoHandler.value.inputModule instanceof BiquadFilterNode) {
 		const w = new Wave(
-			lfo.value.lfo.wave.amplitude / 10,
-			lfo.value.lfo.wave.frequency
+			lfoHandler.value.lfo.wave.amplitude / 10,
+			lfoHandler.value.lfo.wave.frequency
 		);
-		w.form = lfo.value.lfo.wave.form;
+		w.form = lfoHandler.value.lfo.wave.form;
 		return w;
 	}
 
 	if (minMaxLFOStrength.value.max <= 1) {
 		const w = new Wave(
-			lfo.value.lfo.wave.amplitude * 100,
-			lfo.value.lfo.wave.frequency
+			lfoHandler.value.lfo.wave.amplitude * 100,
+			lfoHandler.value.lfo.wave.frequency
 		);
-		w.form = lfo.value.lfo.wave.form;
+		w.form = lfoHandler.value.lfo.wave.form;
 		return w;
 	}
 
-	return lfo.value.lfo.wave;
+	return lfoHandler.value.lfo.wave;
 });
 
 function handleClear() {
-	lfo.value.lfo.disconnectAll();
+	lfoHandler.value.lfo.disconnectAll();
 	selectedModuleName.value = "";
-	lfo.value.propertyName = null;
+	lfoHandler.value.propertyName = null;
 }
 
 function handleDisable() {
-	lfo.value.lfo.disabled = disabled.value;
+	lfoHandler.value.lfo.disabled = disabled.value;
 }
 
 watch(disabled, handleDisable);
 
 //If the module we are tracking is null => we should reset.
 watch(
-	() => lfo.value.inputModule,
+	() => lfoHandler.value.inputModule,
 	() => {
-		if (lfo.value.inputModule == null) handleClear();
+		if (lfoHandler.value.inputModule == null) handleClear();
 	}
 );
 
 //If the node we are tracking changes, the old one should be disconnected
 watch(selectedModuleName, (nextVal, oldVal) => {
 	if (nextVal != oldVal) {
-		lfo.value.lfo.disconnectAll();
+		lfoHandler.value.lfo.disconnectAll();
 	}
 });
 </script>
