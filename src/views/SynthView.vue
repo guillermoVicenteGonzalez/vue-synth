@@ -99,6 +99,8 @@ import { ReverbEffect } from "@/models/effects/ReverbEffect";
 import WahEffect from "@/models/effects/WahEffect";
 import FilterHandler from "@/models/FilterHandler";
 import { LFO } from "@/models/LFO";
+import type LFOHandler from "@/models/LFOHandler";
+import { type LfoSource } from "@/models/LFOHandler";
 import ActionsWidget, {
 	type ActionsWidgetOrientation,
 } from "@/widgets/ActionsWidget/ActionsWidget.vue";
@@ -111,10 +113,7 @@ import HeaderControlsWidget, {
 } from "@/widgets/HeaderControls/HeaderControlsWidget.vue";
 import HeaderWidgetWidget from "@/widgets/HeaderWidget/HeaderWidgetWidget.vue";
 import KeyboardWidget from "@/widgets/Keyboard/KeyboardWidget.vue";
-import {
-	type LfoSource,
-	type LFOWidgetVariants,
-} from "@/widgets/LfoWdidget/LfoWdidgetWidget.vue";
+import { type LFOWidgetVariants } from "@/widgets/LfoWdidget/LfoWdidgetWidget.vue";
 import LfoWidgetListWidget from "@/widgets/LfoWidgetList/LfoWidgetListWidget.vue";
 import ModuleCardListWidget from "@/widgets/ModuleCardList/ModuleCardListWidget.vue";
 import { computed, onMounted, provide, ref, type Ref } from "vue";
@@ -169,9 +168,15 @@ const envelope = ref<AudioEnvelope>({
 });
 
 const filters = ref<FilterHandler[]>([]);
-const lfos = ref<LFO[]>(
-	new Array(LFO_COUNT).fill(new LFO(mainContext.value))
-) as Ref<LFO[]>;
+const lfos = ref<LFOHandler[]>(
+	[...Array(LFO_COUNT)].map(() => {
+		return {
+			inputModule: null,
+			propertyName: null,
+			lfo: new LFO(mainContext.value),
+		};
+	})
+) as Ref<LFOHandler[]>;
 
 // const lfoSources = computed<AudioModule[]>(() => new AudioCluster(mainContext.value, merger.value).modules);
 const lfoSources = computed<LfoSource[]>(() => {
@@ -239,7 +244,7 @@ function initializeEffects() {
 
 function test() {
 	saveSynthPreset("test", {
-		lfos: lfos.value,
+		lfos: [],
 		cluster: MainAudioCluster.value,
 		envelope: envelope.value,
 		filters: filters.value as FilterHandler[],
@@ -265,6 +270,7 @@ onMounted(() => {
 	initializeEffects();
 	createNewModule();
 	createFilter();
+	console.log(lfos.value);
 });
 </script>
 

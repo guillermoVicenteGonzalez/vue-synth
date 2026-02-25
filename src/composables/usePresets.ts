@@ -4,6 +4,8 @@ import FilterHandler from "@/models/FilterHandler";
 import type { LFO } from "@/models/LFO";
 import type Wave from "@/models/wave";
 
+//TODO!: This would benefit a lot from UID use
+
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface EnvelopePreset extends AudioEnvelope {}
 interface FilterPreset {
@@ -23,8 +25,10 @@ interface ModulePreset {
 
 interface LFOPreset {
 	wave: Wave;
-	module?: string; //?
-	property?: string;
+	inputType?: "module" | "filter";
+	inputIndex?: number;
+	propertyName?: string;
+	disabled?: boolean;
 }
 
 interface SynthPreset {
@@ -138,6 +142,7 @@ function generateLFOPreset(lfos: LFO[]): LFOPreset[] {
 	return lfos.map(lfo => {
 		return {
 			wave: lfo.wave,
+			disabled: lfo.disabled,
 		};
 	});
 }

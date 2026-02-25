@@ -8,7 +8,7 @@
 			<div class="lfo-widget__selectors">
 				<h3 class="lfo-widget__param-label">Waveform:</h3>
 				<VsSelector
-					v-model="lfo.waveform"
+					v-model="lfo.lfo.waveform"
 					class="lfo-widget__selector"
 					:items="Object.keys(waveForms)"
 					:disabled="disabled"
@@ -22,7 +22,7 @@
 				/>
 				<h3 class="lfo-widget__param-label">Parameter:</h3>
 				<VsSelector
-					v-model="modulableParameterName"
+					v-model="lfo.propertyName"
 					class="lfo-widget__selector"
 					:items="connectionOptions"
 					:disabled="disabled"
@@ -55,7 +55,7 @@
 			<!-- <WaveCanvas :wave="lfo.wave"></WaveCanvas> -->
 			<div class="lfo-widget__controls">
 				<CircleSlider
-					v-model="lfo.frequency"
+					v-model="lfo.lfo.frequency"
 					:size="CircleSliderSize"
 					:fill-color="primaryColor"
 					:disabled="disabled"
@@ -63,7 +63,7 @@
 				></CircleSlider>
 				<VsChip class="lfo-widget__chip">Frequency</VsChip>
 				<CircleSlider
-					v-model="lfo.amplitude"
+					v-model="lfo.lfo.amplitude"
 					:size="CircleSliderSize"
 					:fill-color="primaryColor"
 					:default-value="100"
@@ -90,12 +90,12 @@ import WaveCanvas from "@/components/waves/WaveCanvas/WaveCanvas.vue";
 import { useMonitorSize } from "@/composables/useMonitorSize";
 import AudioCluster from "@/models/AudioCluster";
 import AudioModule from "@/models/AudioModule";
-import { LFO } from "@/models/LFO";
+import type LFOHandler from "@/models/LFOHandler";
+import { type LfoSource } from "@/models/LFOHandler";
 import Wave, { waveForms } from "@/models/wave";
 import { X } from "lucide-vue-next";
 import { computed, ref, watch } from "vue";
 
-export type LfoSource = AudioModule | AudioNode | AudioCluster;
 export type LFOWidgetVariants = "default" | "minimal";
 
 interface LfoWdidgetWidgetProps {
@@ -113,8 +113,12 @@ const {
 	variant = "default",
 } = defineProps<LfoWdidgetWidgetProps>();
 const disabled = ref<boolean>(false);
-// const lfo = ref<LFO>(new LFO(context));
-const lfo = defineModel<LFO>({ required: true });
+// const lfo = ref<LFOHandler>({
+// 	inputModule: null,
+// 	propertyName: null,
+// 	lfo: new LFO(context),
+// });
+const lfo = defineModel<LFOHandler>({ required: true });
 
 const dynamicClass = computed(() => ({
 	"lfo-widget-card--disabled": disabled.value,
@@ -139,47 +143,53 @@ const sourceNames = computed<string[]>(() =>
 );
 
 const selectedModuleName = ref<string>();
-const selectedModule = computed<LfoSource | null>(() => {
+// const selectedModule = computed<LfoSource | null>(() => {
+// 	if (!selectedModuleName.value) return null;
+// 	const index = sourceNames.value.indexOf(selectedModuleName.value);
+// 	return sources[index];
+// });
+watch(selectedModuleName, () => {
 	if (!selectedModuleName.value) return null;
 	const index = sourceNames.value.indexOf(selectedModuleName.value);
-	return sources[index];
+	lfo.value.inputModule = sources[index];
 });
 
 const connectionOptions = computed(() => {
-	if (!selectedModule.value) return [];
-	if (selectedModule.value instanceof AudioModule)
+	if (!lfo.value.inputModule) return [];
+	if (lfo.value.inputModule instanceof AudioModule)
 		return ["frequency", "amplitude"];
-	else if (selectedModule.value instanceof BiquadFilterNode)
+	else if (lfo.value.inputModule instanceof BiquadFilterNode)
 		return ["cuttof frequency"];
-	else if (selectedModule.value instanceof AudioCluster) return ["global gain"];
+	else if (lfo.value.inputModule instanceof AudioCluster)
+		return ["global gain"];
 
 	return [];
 });
 
-const modulableParameterName = ref<string>();
+// const modulableParameterName = ref<string>();
 
 /**
  * Handles the disconnection from the previous module and the connection of the new one attending to the type of node it is
  */
 function connectLFO() {
-	lfo.value.disconnectAll();
+	lfo.value.lfo.disconnectAll();
 
-	if (!modulableParameterName.value || !selectedModule.value) return;
+	if (!lfo.value.propertyName || !lfo.value.inputModule) return;
 
-	if (selectedModule.value instanceof AudioModule) {
-		lfo.value.connect(selectedModule.value.gainNode.gain);
+	if (lfo.value.inputModule instanceof AudioModule) {
+		lfo.value.lfo.connect(lfo.value.inputModule.gainNode.gain);
 		return;
 	}
 
-	if (selectedModule.value instanceof BiquadFilterNode) {
-		const filter: BiquadFilterNode = selectedModule.value;
-		lfo.value.connect(filter.frequency);
+	if (lfo.value.inputModule instanceof BiquadFilterNode) {
+		const filter: BiquadFilterNode = lfo.value.inputModule;
+		lfo.value.lfo.connect(filter.frequency);
 		return;
 	}
 
-	if (selectedModule.value instanceof AudioCluster) {
-		const cluster: AudioCluster = selectedModule.value;
-		lfo.value.connect(cluster.gain.gain);
+	if (lfo.value.inputModule instanceof AudioCluster) {
+		const cluster: AudioCluster = lfo.value.inputModule;
+		lfo.value.lfo.connect(cluster.gain.gain);
 		// lfo.value.connect(merger.);
 		return;
 	}
@@ -190,7 +200,7 @@ function connectLFO() {
  * The modulated parameter should also be taken into account
  */
 const minMaxLFOStrength = computed(() => {
-	if (selectedModule.value instanceof AudioCluster) {
+	if (lfo.value.inputModule instanceof AudioCluster) {
 		return {
 			min: -1,
 			max: 1,
@@ -198,7 +208,7 @@ const minMaxLFOStrength = computed(() => {
 		};
 	}
 
-	if (selectedModule.value instanceof BiquadFilterNode) {
+	if (lfo.value.inputModule instanceof BiquadFilterNode) {
 		return {
 			min: 0,
 			max: 1000,
@@ -206,7 +216,7 @@ const minMaxLFOStrength = computed(() => {
 		};
 	}
 
-	if (selectedModule.value instanceof AudioModule) {
+	if (lfo.value.inputModule instanceof AudioModule) {
 		return {
 			min: 0,
 			max: 100,
@@ -241,45 +251,51 @@ const canvasDynamicDimensions = computed(() => {
 });
 
 const dynamicWave = computed<Wave>(() => {
-	if (selectedModule.value instanceof BiquadFilterNode) {
-		const w = new Wave(lfo.value.wave.amplitude / 10, lfo.value.wave.frequency);
-		w.form = lfo.value.wave.form;
+	if (lfo.value.inputModule instanceof BiquadFilterNode) {
+		const w = new Wave(
+			lfo.value.lfo.wave.amplitude / 10,
+			lfo.value.lfo.wave.frequency
+		);
+		w.form = lfo.value.lfo.wave.form;
 		return w;
 	}
 
 	if (minMaxLFOStrength.value.max <= 1) {
 		const w = new Wave(
-			lfo.value.wave.amplitude * 100,
-			lfo.value.wave.frequency
+			lfo.value.lfo.wave.amplitude * 100,
+			lfo.value.lfo.wave.frequency
 		);
-		w.form = lfo.value.wave.form;
+		w.form = lfo.value.lfo.wave.form;
 		return w;
 	}
 
-	return lfo.value.wave;
+	return lfo.value.lfo.wave;
 });
 
 function handleClear() {
-	lfo.value.disconnectAll();
+	lfo.value.lfo.disconnectAll();
 	selectedModuleName.value = "";
-	modulableParameterName.value = "";
+	lfo.value.propertyName = null;
 }
 
 function handleDisable() {
-	lfo.value.disabled = disabled.value;
+	lfo.value.lfo.disabled = disabled.value;
 }
 
 watch(disabled, handleDisable);
 
 //If the module we are tracking is null => we should reset.
-watch(selectedModule, () => {
-	if (selectedModule.value == null) handleClear();
-});
+watch(
+	() => lfo.value.inputModule,
+	() => {
+		if (lfo.value.inputModule == null) handleClear();
+	}
+);
 
 //If the node we are tracking changes, the old one should be disconnected
 watch(selectedModuleName, (nextVal, oldVal) => {
 	if (nextVal != oldVal) {
-		lfo.value.disconnectAll();
+		lfo.value.lfo.disconnectAll();
 	}
 });
 </script>
