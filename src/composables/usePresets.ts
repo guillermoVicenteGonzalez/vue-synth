@@ -2,8 +2,11 @@ import AudioCluster from "@/models/AudioCluster";
 import type { AudioEnvelope } from "@/models/AudioEnvelope";
 import AudioModule from "@/models/AudioModule";
 import FilterHandler from "@/models/FilterHandler";
+import { LFO } from "@/models/LFO";
 import type LFOHandler from "@/models/LFOHandler";
 import type Wave from "@/models/wave";
+import { ref } from "vue";
+import useSynth from "./useSynth";
 
 //TODO!: This would benefit a lot from UID use
 
@@ -27,12 +30,12 @@ interface ModulePreset {
 interface LFOPreset {
 	wave: Wave;
 	inputType: "module" | "filter" | "general" | null;
-	inputIndex: number | null;
+	inputIndex: number;
 	propertyName: string | null;
 	disabled: boolean;
 }
 
-interface SynthPreset {
+export interface SynthPreset {
 	name: string;
 	modules: ModulePreset[];
 	envelope: EnvelopePreset;
@@ -46,6 +49,10 @@ interface PresetInput {
 	filters: FilterHandler[];
 	lfos: LFOHandler[];
 }
+
+export type PresetList = Record<string, SynthPreset>;
+
+const STORE_NAME = "presetList";
 
 //We define the function redundantly and scale it later if necessary.
 function generateEnvelopePreset(envelope: AudioEnvelope): EnvelopePreset {
@@ -88,11 +95,13 @@ function loadClusterPreset(
 ): AudioCluster {
 	const c = new AudioCluster(ctx, output);
 
-	presets.forEach(({ name, detune, voices }) => {
-		const m = c.createModule(name, "sawtooth");
+	presets.forEach(({ name, detune, voices, wave }) => {
+		const m = c.createModule(name, wave.form);
 		if (m) {
 			m.voices = voices;
 			m.voicesDetune = detune;
+			m.wave.frequency = wave.frequency;
+			m.wave.amplitude = wave.amplitude;
 		}
 	});
 
@@ -163,9 +172,7 @@ function generateLFOPreset(
 					.map(f => f.filter)
 					.indexOf(handler.inputModule as BiquadFilterNode);
 
-			if (inputType == "general") return -1;
-
-			return null;
+			return -1;
 		})();
 
 		return {
@@ -178,7 +185,60 @@ function generateLFOPreset(
 	});
 }
 
-// function loadLFOPreset(preset: LFOPreset[]): LFOHandler[] {}
+//!! This was born deprecated. Heavy refactoring will be needed in the future.
+function loadLFOPreset(
+	preset: LFOPreset[],
+	cluster: AudioCluster,
+	filters: FilterHandler[]
+): LFOHandler[] {
+	return preset.map(
+		({ disabled, inputIndex, inputType, propertyName, wave }) => {
+			const lfo = new LFO(cluster.context);
+
+			const inputModule: LFOHandler["inputModule"] = (() => {
+				if (inputType == "filter") {
+					if (inputIndex < filters.length) return filters[inputIndex].filter;
+				}
+
+				if (inputType == "module") {
+					if (inputIndex < cluster.modules.length)
+						return cluster.modules[inputIndex];
+				}
+
+				if (inputType == "general") {
+					return cluster;
+				}
+
+				return null;
+			})();
+
+			if (inputModule instanceof AudioCluster) {
+				lfo.connect(cluster.gain.gain);
+			}
+
+			if (inputModule instanceof BiquadFilterNode) {
+				lfo.connect(inputModule.frequency);
+			}
+
+			if (inputModule instanceof AudioModule) {
+				lfo.connect(inputModule.gainNode.gain);
+			}
+
+			lfo.frequency = wave.frequency;
+			lfo.amplitude = wave.amplitude;
+			lfo.waveform = wave.form;
+			lfo.disabled = disabled;
+
+			const lfoHandler: LFOHandler = {
+				inputModule,
+				propertyName: propertyName,
+				lfo,
+			};
+
+			return lfoHandler;
+		}
+	);
+}
 
 function generateSynthPreset(
 	name: string,
@@ -194,11 +254,21 @@ function generateSynthPreset(
 }
 
 export function saveSynthPreset(name: string, input: PresetInput) {
-	//check existing presets and change name?
+	//check if presetList exists
+	let rawPreset = localStorage.getItem("presetList");
+	if (!rawPreset) {
+		rawPreset = "{}";
+		localStorage.setItem(STORE_NAME, rawPreset);
+	}
+
+	const presetList: PresetList = JSON.parse(rawPreset);
 	const preset = generateSynthPreset(name, input);
-	const presetString = JSON.stringify(preset);
-	localStorage.setItem(name, presetString);
-	console.log(preset);
+	//check existing presets and change name?
+	presetList[name] = preset;
+
+	rawPreset = JSON.stringify(presetList);
+
+	localStorage.setItem(STORE_NAME, rawPreset);
 }
 
 export function loadSynthPreset(
@@ -206,16 +276,77 @@ export function loadSynthPreset(
 	ctx: AudioContext,
 	output: AudioNode
 ) {
-	const preset = localStorage.getItem(name);
+	const rawPresetList = localStorage.getItem(STORE_NAME);
+	if (!rawPresetList) throw new Error("No preset list");
+
+	const presetList: PresetList = JSON.parse(rawPresetList);
+	const preset = presetList[name];
 	if (!preset) throw new Error("No preset");
 
 	//TODO: Validation
-	const { modules, envelope, filters }: SynthPreset = JSON.parse(preset);
+	const { modules, envelope, filters, lfos }: SynthPreset = preset;
 	const cluster = loadClusterPreset(modules, ctx, output);
+	const filterHandlers = loadFiltersPreset(filters, cluster);
 
 	return {
 		cluster,
 		envelope: loadEnvelopePreset(envelope),
-		filters: loadFiltersPreset(filters, cluster),
+		filters: filterHandlers,
+		lfos: loadLFOPreset(lfos, cluster, filterHandlers),
+	};
+}
+
+export function getPresetList() {
+	const rawPresetList = localStorage.getItem(STORE_NAME);
+	if (!rawPresetList) throw new Error("No preset list");
+
+	const presetList: PresetList = JSON.parse(rawPresetList);
+	return presetList;
+}
+
+export default function usePresets() {
+	const presets = ref<PresetList>(getPresetList());
+
+	function savePreset(name: string) {
+		const { cluster, lfos, envelope, filters } = useSynth();
+
+		saveSynthPreset(name, {
+			cluster: cluster.value,
+			envelope: envelope.value,
+			lfos: lfos.value,
+			filters: filters.value,
+		});
+
+		presets.value = getPresetList();
+	}
+
+	function loadPreset(name: string) {
+		const { cluster, lfos, envelope, filters } = useSynth();
+
+		const preset = loadSynthPreset(
+			name,
+			cluster.value.context,
+			cluster.value.exit
+		);
+
+		// MainAudioCluster.value = null;
+		if (preset.cluster == cluster.value) {
+			console.error("IGUALES");
+			return;
+		}
+
+		cluster.value = preset.cluster;
+		envelope.value = preset.envelope;
+		filters.value = preset.filters;
+		lfos.value = preset.lfos;
+	}
+
+	function uploadPreset() {}
+
+	return {
+		presetList: presets,
+		savePreset,
+		loadPreset,
+		uploadPreset,
 	};
 }

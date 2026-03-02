@@ -9,7 +9,7 @@
 					<WaveAnalyser
 						class="main-analyser"
 						:line-color="primaryColor"
-						:source="merger"
+						:source="MainAudioCluster.exit"
 						:canvas-width="3080"
 						:canvas-height="200"
 						:brush-size="7"
@@ -20,8 +20,6 @@
 
 		<template v-if="currentTab === 'Voice'" #waves>
 			<ModuleCardListWidget v-model="MainAudioCluster"></ModuleCardListWidget>
-			<button @click="test">Test</button>
-			<button @click="test2">Test2</button>
 		</template>
 		<template v-if="currentTab === 'Voice'" #filters>
 			<EffectListWidget
@@ -81,12 +79,11 @@
 <script setup lang="ts">
 import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
 import { useMonitorSize } from "@/composables/useMonitorSize";
-import { loadSynthPreset, saveSynthPreset } from "@/composables/usePresets";
+import useSynth from "@/composables/useSynth";
 import MobileSynthLayout from "@/layouts/synth/MobileSynthLayout.vue";
 import PortraitSynthLayout from "@/layouts/synth/PortraitSynthLayout.vue";
 import SynthLayout from "@/layouts/synth/SynthLayout.vue";
 import AudioCluster from "@/models/AudioCluster";
-import type { AudioEnvelope } from "@/models/AudioEnvelope";
 import AudioModule from "@/models/AudioModule";
 import ChorusEffect from "@/models/effects/ChorusEffect";
 import { CompressionEffect } from "@/models/effects/CompressionEffect";
@@ -98,8 +95,6 @@ import { FlangerEffect } from "@/models/effects/FlangerEffect";
 import { ReverbEffect } from "@/models/effects/ReverbEffect";
 import WahEffect from "@/models/effects/WahEffect";
 import FilterHandler from "@/models/FilterHandler";
-import { LFO } from "@/models/LFO";
-import type LFOHandler from "@/models/LFOHandler";
 import { type LfoSource } from "@/models/LFOHandler";
 import ActionsWidget, {
 	type ActionsWidgetOrientation,
@@ -116,11 +111,10 @@ import KeyboardWidget from "@/widgets/Keyboard/KeyboardWidget.vue";
 import { type LFOWidgetVariants } from "@/widgets/LfoWdidget/LfoWdidgetWidget.vue";
 import LfoWidgetListWidget from "@/widgets/LfoWidgetList/LfoWidgetListWidget.vue";
 import ModuleCardListWidget from "@/widgets/ModuleCardList/ModuleCardListWidget.vue";
-import { computed, onMounted, provide, ref, type Ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 
 const { browserHeight, browserWidth } = useMonitorSize();
 const primaryColor = "#42d392";
-const LFO_COUNT = 4;
 
 const transposeAmount = ref<number>(0);
 const currentTab = ref<TabItem>("Voice");
@@ -153,32 +147,9 @@ const ActionsWidgetOrientation = computed<ActionsWidgetOrientation>(() =>
 
 const MAX_FILTERS = 5;
 
-// const audioModules = ref<AudioModule[]>([]);
-const mainContext = ref<AudioContext>(new AudioContext());
-const merger = ref<ChannelMergerNode>(mainContext.value.createChannelMerger(1));
-const MainAudioCluster: Ref<AudioCluster, AudioCluster> = ref<AudioCluster>(
-	new AudioCluster(mainContext.value, merger.value)
-) as Ref<AudioCluster, AudioCluster>;
-provide("mainCluster", MainAudioCluster);
-const envelope = ref<AudioEnvelope>({
-	attack: 0.2,
-	decay: 0.4,
-	sustain: 0.5,
-	release: 0.2,
-});
+const { cluster: MainAudioCluster, envelope, lfos, filters } = useSynth();
+const mainContext = computed(() => MainAudioCluster.value.context);
 
-const filters = ref<FilterHandler[]>([]);
-const lfos = ref<LFOHandler[]>(
-	[...Array(LFO_COUNT)].map(() => {
-		return {
-			inputModule: null,
-			propertyName: null,
-			lfo: new LFO(mainContext.value),
-		};
-	})
-) as Ref<LFOHandler[]>;
-
-// const lfoSources = computed<AudioModule[]>(() => new AudioCluster(mainContext.value, merger.value).modules);
 const lfoSources = computed<LfoSource[]>(() => {
 	const modules: AudioModule[] = MainAudioCluster.value
 		.modules as AudioModule[];
@@ -242,31 +213,7 @@ function initializeEffects() {
 	MainAudioCluster.value.effects.append(compression);
 }
 
-function test() {
-	saveSynthPreset("test", {
-		lfos: lfos.value,
-		cluster: MainAudioCluster.value,
-		envelope: envelope.value,
-		filters: filters.value as FilterHandler[],
-	});
-}
-
-function test2() {
-	const preset = loadSynthPreset("test", mainContext.value, merger.value);
-
-	// MainAudioCluster.value = null;
-	if (preset.cluster == MainAudioCluster.value) {
-		console.error("IGUALES");
-		return;
-	}
-
-	MainAudioCluster.value = preset.cluster;
-	envelope.value = preset.envelope;
-	filters.value = preset.filters;
-}
-
 onMounted(() => {
-	merger.value.connect(mainContext.value.destination);
 	initializeEffects();
 	createNewModule();
 	createFilter();

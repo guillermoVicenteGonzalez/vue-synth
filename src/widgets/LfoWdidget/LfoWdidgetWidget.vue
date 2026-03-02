@@ -156,8 +156,7 @@ watch(selectedModuleName, () => {
 
 const connectionOptions = computed(() => {
 	if (!lfoHandler.value.inputModule) return [];
-	if (lfoHandler.value.inputModule instanceof AudioModule)
-		return ["frequency", "amplitude"];
+	if (lfoHandler.value.inputModule instanceof AudioModule) return ["frequency"];
 	else if (lfoHandler.value.inputModule instanceof BiquadFilterNode)
 		return ["cuttof frequency"];
 	else if (lfoHandler.value.inputModule instanceof AudioCluster)
@@ -294,9 +293,19 @@ watch(
 
 //If the node we are tracking changes, the old one should be disconnected
 watch(selectedModuleName, (nextVal, oldVal) => {
+	if (!oldVal) return;
+
 	if (nextVal != oldVal) {
 		lfoHandler.value.lfo.disconnectAll();
 	}
+});
+
+//Cuando cambia el handler. Podria ser en el onMounted???
+watch(lfoHandler, () => {
+	if (lfoHandler.value.inputModule == null) return;
+
+	const idx = sources.indexOf(lfoHandler.value.inputModule);
+	selectedModuleName.value = sourceNames.value[idx];
 });
 </script>
 

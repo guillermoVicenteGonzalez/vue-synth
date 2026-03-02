@@ -7,6 +7,8 @@
 			</div>
 			<div class="vsynth-header__actions">
 				<metronome-widget></metronome-widget>
+				<settings-button></settings-button>
+
 				<div class="vsynth-header__midi">
 					<vs-tooltip text="MIDI" orientation="right">
 						<midi-selector></midi-selector>
@@ -24,6 +26,7 @@
 import MidiSelector from "@/components/MIDI/MidiSelector.vue";
 import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
 import MetronomeWidget from "../MetronomeWidget/MetronomeWidget.vue";
+import SettingsButton from "../Settings/SettingsButton.vue";
 
 // interface HeaderWidgetWidgetProps {}
 
@@ -31,6 +34,9 @@ import MetronomeWidget from "../MetronomeWidget/MetronomeWidget.vue";
 </script>
 
 <style lang="scss" scoped>
+$min-title-width: 30rem;
+$base-controls-width: 40rem;
+
 .vsynth-header {
 	background-color: $tertiary-color;
 	width: 100%;
@@ -45,9 +51,12 @@ import MetronomeWidget from "../MetronomeWidget/MetronomeWidget.vue";
 	}
 
 	&__left {
-		display: grid;
-		grid-template-columns: 2fr 2fr 1fr;
-
+		// display: grid;
+		// grid-template-columns: minmax(20rem, 2fr) minmax(30rem, 2fr) minmax(
+		// 		30rem,
+		// 		1fr
+		// 	);
+		display: flex;
 		@include respond(phone) {
 			display: flex;
 		}
@@ -57,6 +66,8 @@ import MetronomeWidget from "../MetronomeWidget/MetronomeWidget.vue";
 		align-self: center;
 		justify-self: center;
 		font-size: 2rem;
+		flex: 0 0 $min-title-width;
+		text-align: center;
 
 		@include respond(phone) {
 			display: none;
@@ -64,17 +75,24 @@ import MetronomeWidget from "../MetronomeWidget/MetronomeWidget.vue";
 	}
 
 	&__controls {
-		flex: 1 1 100%;
+		// flex: 1 1 100%;
+		flex: 1 1 $base-controls-width;
 	}
 
 	&__actions {
+		gap: $gap-df;
+
 		display: flex;
 		align-items: center;
 		height: 100%;
+
+		flex: 0 1 fit-content;
+		padding: 0 $gap-df;
+		border-left: solid 1px $bg-color-1;
 	}
 
 	&__midi {
-		padding: $gap-df;
+		// padding: $gap-df;
 
 		@include respond(tab-land) {
 			padding: 0 $gap-df;

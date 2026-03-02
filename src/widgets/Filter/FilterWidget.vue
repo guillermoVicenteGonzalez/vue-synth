@@ -177,7 +177,6 @@ function preloadFilterModule() {
 
 //!TODO: When i delete this part, everything breaks
 watch(filter, () => {
-	console.error("Executing");
 	preloadFilterModule();
 });
 
