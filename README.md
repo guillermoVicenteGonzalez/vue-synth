@@ -26,13 +26,15 @@ The progress of the project as well as upcoming features can be seen below
 - [x] Refactor wave module disabled to use internal property instead of component ref
 - [ ] Duplicate names in cluster modules
 - [ ] Check for memory leaks or unused lingering modules when loading a preset
-- [ ] All modules loaded up as sawwaves
+- [x] All modules loaded up as sawwaves
 - [ ] Update preset button
 - [ ] Clearable name input
 - [ ] Save effects
 - [ ] Cleanup
-- [ ] Fix out of index LFO widget
-- [ ] Clearable input widget
+- [x] Fix out of index LFO widget
+- [ ] Delete preset
+- [ ] Update preset
+- [ ] Edit preset name
 
 ## Todo
 

@@ -1,7 +1,7 @@
 <template>
 	<input
-		:placeholder="placeholder"
 		v-model="model"
+		:placeholder="placeholder"
 		type="text"
 		class="VsTextInput"
 		:disabled="disabled"

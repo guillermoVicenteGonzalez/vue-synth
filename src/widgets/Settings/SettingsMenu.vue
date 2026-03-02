@@ -10,6 +10,6 @@ import PresetsMenu from "./Presets/PresetsMenu.vue";
 
 <style scoped lang="scss">
 .SettingsMenu {
-	width: 50rem;
+	width: 60rem;
 }
 </style>

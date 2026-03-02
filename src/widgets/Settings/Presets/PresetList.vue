@@ -1,10 +1,12 @@
 <template>
-	<PresetWidget
-		v-for="preset in presetList"
-		:key="preset.name"
-		:preset="preset"
-		@load-preset="handleLoadPreset"
-	></PresetWidget>
+	<div class="PresetList">
+		<PresetWidget
+			v-for="preset in presetList"
+			:key="preset.name"
+			:preset="preset"
+			@load-preset="handleLoadPreset"
+		></PresetWidget>
+	</div>
 </template>
 <script lang="ts" setup>
 import type { PresetList } from "@/composables/usePresets";

@@ -1,8 +1,9 @@
 <template>
 	<section class="PresetsMenu">
-		<section class="PresetList">
-			<h3>Preset List</h3>
+		<section class="PresetsMenu__list">
+			<h3 class="PresetsMenu__list__title">Preset List</h3>
 			<PresetList
+				class="PresetsMenu__list__content"
 				:preset-list="presetList"
 				@load-preset="loadPreset"
 			></PresetList>
@@ -13,8 +14,8 @@
 
 		<div class="PresetsMenu__actions">
 			<VsTextInput
-				placeholder="new preset name"
 				v-model="newPresetName"
+				placeholder="new preset name"
 				class="PresetsMenu__name-input"
 				clearable
 			></VsTextInput>
@@ -47,6 +48,8 @@ function handleSavePreset() {
 </script>
 
 <style lang="scss" scoped>
+$preset-list-max-height: 30rem;
+
 .PresetsMenu {
 	&__button {
 		width: 20rem;
@@ -65,6 +68,20 @@ function handleSavePreset() {
 		flex: 1 1 100%;
 		width: 100%;
 		height: 3rem;
+	}
+
+	&__list {
+		&__title {
+			font-size: 2rem;
+			text-align: center;
+			margin-bottom: $gap-df;
+		}
+
+		&__content {
+			// display: none;
+			max-height: $preset-list-max-height;
+			overflow: auto;
+		}
 	}
 }
 </style>

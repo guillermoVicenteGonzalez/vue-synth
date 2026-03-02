@@ -2,11 +2,16 @@
 	<div class="PresetWidget">
 		<h4 class="PresetWidget__name">{{ preset.name }}</h4>
 		<div class="PresetWidget__actions">
-			<VsButton class="PresetWidget__button" @click="handleLoadPreset"
+			<VsButton class="PresetWidget__button" @click="handleUpdatePreset"
 				>Update</VsButton
 			>
 			<VsButton class="PresetWidget__button" @click="handleLoadPreset"
 				>Load</VsButton
+			>
+			<VsButton
+				class="PresetWidget__button PresetWidget__button--delete-btn"
+				@click="handleLoadPreset"
+				>Delete</VsButton
 			>
 		</div>
 	</div>
@@ -23,10 +28,15 @@ interface PresetWidgetProps {
 const { preset } = defineProps<PresetWidgetProps>();
 const emit = defineEmits<{
 	(e: "loadPreset", name: string): void;
+	(e: "updatePreset", name: string): void;
 }>();
 
 function handleLoadPreset() {
 	emit("loadPreset", preset.name);
+}
+
+function handleUpdatePreset() {
+	emit("updatePreset", preset.name);
 }
 </script>
 
@@ -49,6 +59,10 @@ $item-height: 5rem;
 
 	&__button {
 		height: 100%;
+
+		&--delete-btn {
+			background-color: red;
+		}
 	}
 
 	&__name {
