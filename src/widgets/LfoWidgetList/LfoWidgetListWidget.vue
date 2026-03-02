@@ -3,9 +3,8 @@
 		<VsTab
 			v-for="(_lfo, index) in lfos"
 			:key="index"
-			:active="activeTab == index"
+			:active="activeTab - 1 == index"
 		>
-			<!-- <VsTab v-for="n in WIDGET_N" :key="n" :active="activeTab == n"> -->
 			<LfoWdidgetWidget
 				v-model="lfos[index]"
 				:variant="widgetVariant"
@@ -20,7 +19,9 @@
 				class="lfo-widget-list__tab"
 				:class="n == activeTab ? 'lfo-widget-list__tab--active' : ''"
 				@click="activeTab = n"
-			></li>
+			>
+				{{ n }}
+			</li>
 		</ul>
 	</VsCard>
 </template>

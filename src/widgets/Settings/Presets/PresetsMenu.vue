@@ -13,12 +13,16 @@
 
 		<div class="PresetsMenu__actions">
 			<VsTextInput
+				placeholder="new preset name"
 				v-model="newPresetName"
 				class="PresetsMenu__name-input"
 				clearable
 			></VsTextInput>
 
-			<VsButton class="PresetsMenu__button" @click="handleSavePreset"
+			<VsButton
+				:disabled="!newPresetName"
+				class="PresetsMenu__button"
+				@click="handleSavePreset"
 				>Save Preset</VsButton
 			>
 			<VsButton class="PresetsMenu__button">Upload preset</VsButton>

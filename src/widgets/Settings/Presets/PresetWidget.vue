@@ -1,9 +1,14 @@
 <template>
 	<div class="PresetWidget">
 		<h4 class="PresetWidget__name">{{ preset.name }}</h4>
-		<VsButton class="PresetWidget__button" @click="handleLoadPreset"
-			>Load</VsButton
-		>
+		<div class="PresetWidget__actions">
+			<VsButton class="PresetWidget__button" @click="handleLoadPreset"
+				>Update</VsButton
+			>
+			<VsButton class="PresetWidget__button" @click="handleLoadPreset"
+				>Load</VsButton
+			>
+		</div>
 	</div>
 </template>
 
@@ -32,9 +37,15 @@ $item-height: 5rem;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	border-bottom: solid 1px black;
+	border-bottom: solid 1px $text-color;
 	height: $item-height;
 	padding: $gap-df;
+
+	&__actions {
+		height: 100%;
+		display: flex;
+		gap: $gap-df;
+	}
 
 	&__button {
 		height: 100%;

@@ -32,6 +32,7 @@ The progress of the project as well as upcoming features can be seen below
 - [ ] Save effects
 - [ ] Cleanup
 - [ ] Fix out of index LFO widget
+- [ ] Clearable input widget
 
 ## Todo
 
