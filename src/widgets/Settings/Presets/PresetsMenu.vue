@@ -26,13 +26,21 @@
 				clearable
 			></VsTextInput>
 
-			<VsButton
-				:disabled="!newPresetName"
-				class="PresetsMenu__button"
-				@click="handleSavePreset"
-				>Save Preset</VsButton
-			>
-			<VsButton class="PresetsMenu__button">Upload preset</VsButton>
+			<div class="PresetsMenu__actions__buttons">
+				<VsButton
+					:disabled="!newPresetName"
+					class="PresetsMenu__button"
+					@click="handleSavePreset"
+					>Save Preset</VsButton
+				>
+				<VsButton class="PresetsMenu__button">Upload preset</VsButton>
+
+				<VsButton
+					class="PresetsMenu__button PresetsMenu__button--delete-btn"
+					@click="handleDeleteAll"
+					>Delete all</VsButton
+				>
+			</div>
 		</div>
 	</section>
 </template>
@@ -45,11 +53,13 @@ import usePresets from "@/composables/usePresets";
 import { ref } from "vue";
 import PresetWidget from "./PresetWidget.vue";
 
-const { presetList, savePreset, loadPreset, deletePreset } = usePresets();
-const newPresetName = ref();
+const { presetList, savePreset, loadPreset, deletePreset, clearPresets } =
+	usePresets();
+const newPresetName = ref<string>("");
 
 function handleSavePreset() {
 	savePreset(newPresetName.value);
+	newPresetName.value = "";
 }
 
 function handleUpdatePreset(name: string) {
@@ -63,6 +73,10 @@ function handleLoadPreset(name: string) {
 function handleDeletePreset(name: string) {
 	deletePreset(name);
 }
+
+function handleDeleteAll() {
+	clearPresets();
+}
 </script>
 
 <style lang="scss" scoped>
@@ -71,6 +85,10 @@ $preset-list-max-height: 30rem;
 .PresetsMenu {
 	&__button {
 		width: 20rem;
+
+		&--delete-btn {
+			background-color: red;
+		}
 	}
 
 	&__actions {
@@ -80,6 +98,12 @@ $preset-list-max-height: 30rem;
 		justify-content: center;
 		align-items: center;
 		gap: $gap-df $gap-bg;
+
+		&__buttons {
+			width: 100%;
+			display: flex;
+			gap: $gap-df;
+		}
 	}
 
 	&__name-input {

@@ -53,6 +53,7 @@ interface PresetInput {
 export type PresetList = Record<string, SynthPreset>;
 
 const STORE_NAME = "presetList";
+const MAX_PRESETS = 20;
 
 //We define the function redundantly and scale it later if necessary.
 function generateEnvelopePreset(envelope: AudioEnvelope): EnvelopePreset {
@@ -62,10 +63,6 @@ function generateEnvelopePreset(envelope: AudioEnvelope): EnvelopePreset {
 function loadEnvelopePreset(preset: EnvelopePreset): AudioEnvelope {
 	return preset;
 }
-
-// function loadEnvelopePreset(envPreset: EnvelopePreset): AudioEnvelope {
-// 	return envPreset;
-// }
 
 function generateClusterPreset(cluster: AudioCluster): ModulePreset[] {
 	const modules: ModulePreset[] = cluster.modules.map(module => {
@@ -305,11 +302,19 @@ function deletePresetFromList(name: string) {
 	savePresetList(presetList);
 }
 
+function clearPresetList() {
+	savePresetList({});
+}
+
 export default function usePresets() {
 	const presets = ref<PresetList>(getPresetList());
 
 	function savePreset(name: string) {
 		const { cluster, lfos, envelope, filters } = useSynth();
+
+		if (Object.entries(presets.value).length >= MAX_PRESETS) {
+			throw new Error("Max number of presets reached");
+		}
 
 		saveSynthPreset(name, {
 			cluster: cluster.value,
@@ -347,6 +352,11 @@ export default function usePresets() {
 		presets.value = getPresetList();
 	}
 
+	function clearPresets() {
+		clearPresetList();
+		presets.value = getPresetList();
+	}
+
 	function uploadPreset() {}
 
 	return {
@@ -355,5 +365,6 @@ export default function usePresets() {
 		loadPreset,
 		uploadPreset,
 		deletePreset,
+		clearPresets,
 	};
 }

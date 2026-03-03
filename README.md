@@ -27,13 +27,12 @@ The progress of the project as well as upcoming features can be seen below
 - [ ] Duplicate names in cluster modules
 - [ ] Check for memory leaks or unused lingering modules when loading a preset
 - [x] All modules loaded up as sawwaves
-- [ ] Update preset button
+- [x] Update preset button
 - [ ] Clearable name input
 - [ ] Save effects
 - [ ] Cleanup
 - [x] Fix out of index LFO widget
-- [ ] Delete preset
-- [ ] Update preset
+- [x] Delete preset
 - [ ] Edit preset name
 
 ## Todo
@@ -127,6 +126,7 @@ The progress of the project as well as upcoming features can be seen below
 - [ ] Lighthouse
 - [ ] Dialog
   - [ ] Dialog for naming downloads
+  - [ ] Warnings (delete prests, etc)
 
 ## Bugs
 

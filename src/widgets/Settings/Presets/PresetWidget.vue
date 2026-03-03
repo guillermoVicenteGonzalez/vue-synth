@@ -52,7 +52,7 @@ $item-height: 5rem;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	border-bottom: solid 1px $text-color;
+	border-top: solid 1px $text-color;
 	height: $item-height;
 	padding: $gap-df;
 

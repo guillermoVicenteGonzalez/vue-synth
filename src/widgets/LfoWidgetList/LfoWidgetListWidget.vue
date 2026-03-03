@@ -19,9 +19,7 @@
 				class="lfo-widget-list__tab"
 				:class="n == activeTab ? 'lfo-widget-list__tab--active' : ''"
 				@click="activeTab = n"
-			>
-				{{ n }}
-			</li>
+			></li>
 		</ul>
 	</VsCard>
 </template>
