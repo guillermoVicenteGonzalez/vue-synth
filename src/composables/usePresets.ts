@@ -1,14 +1,24 @@
 import AudioCluster from "@/models/AudioCluster";
 import type { AudioEnvelope } from "@/models/AudioEnvelope";
 import AudioModule from "@/models/AudioModule";
+import type {
+	DistortionFilterPositions,
+	DistortionTypes,
+} from "@/models/effects/DistortionEffect";
+import type { WahTypes } from "@/models/effects/WahEffect";
 import FilterHandler from "@/models/FilterHandler";
 import { LFO } from "@/models/LFO";
 import type LFOHandler from "@/models/LFOHandler";
 import type Wave from "@/models/wave";
+import type { waveForms } from "@/models/wave";
 import { ref } from "vue";
 import useSynth from "./useSynth";
 
 //TODO!: This would benefit a lot from UID use
+
+/******************************************************************
+ * CORE SYNTH PRESET DEFINITIONS
+ ******************************************************************/
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface EnvelopePreset extends AudioEnvelope {}
@@ -41,6 +51,7 @@ export interface SynthPreset {
 	envelope: EnvelopePreset;
 	filters: FilterPreset[];
 	lfos: LFOPreset[];
+	effects?: SynthEffectsPreset;
 }
 
 interface PresetInput {
@@ -50,10 +61,108 @@ interface PresetInput {
 	lfos: LFOHandler[];
 }
 
+/******************************************************************
+ * EFFECTS PRESET DEFINITIONS
+ ******************************************************************/
+interface BaseEffectPreset {
+	disabled: boolean;
+}
+
+interface CompressionEffectPreset extends BaseEffectPreset {
+	attack: number;
+	threshold: number;
+	ratio: number;
+	knee: number;
+}
+
+interface FilterEffectPreset extends BaseEffectPreset {
+	frequency: number;
+	type: BiquadFilterType;
+}
+
+interface DistortionEffectPreset extends BaseEffectPreset {
+	mix: number;
+	cuttoff: number;
+	filterType: BiquadFilterType;
+	filterPosition: DistortionFilterPositions;
+	threshold: number;
+	nBits: number;
+	distortionType: DistortionTypes;
+	drive: number;
+}
+
+interface DelayEffectPreset extends BaseEffectPreset {
+	rate: number;
+	feedback: number;
+	gain: number;
+}
+
+interface FlangerEffectPreset extends BaseEffectPreset {
+	depth: number;
+	delay: number;
+	feedback: number;
+	speed: number;
+}
+
+interface ChorusEffectPreset extends BaseEffectPreset {
+	amount: number;
+	rate: number;
+	delay1: number;
+	delay2: number;
+	filterType: BiquadFilterType;
+	mix: number;
+	voices: number;
+	feedbackDelay: number;
+	feedback: number;
+}
+
+interface ReverbEffectPreset extends BaseEffectPreset {
+	roomSize: number;
+	dampening: number;
+	preDelay: number;
+	preHightCut: number;
+	preLowCut: number;
+	mix: number;
+}
+
+interface WahEffectPreset extends BaseEffectPreset {
+	type: WahTypes;
+	cuttoff: number;
+	speed: number;
+	depth: number;
+	delay: number;
+	mix: number;
+	lfoForm: waveForms;
+}
+
+interface EqualizerEffectPreset extends BaseEffectPreset {
+	lowGain: number;
+	midLowGain: number;
+	midGain: number;
+	midHighGain: number;
+	highGain: number;
+}
+
+interface SynthEffectsPreset {
+	compression: CompressionEffectPreset;
+	filter: FilterEffectPreset;
+	distortion: DistortionEffectPreset;
+	delay: DelayEffectPreset;
+	flanger: FlangerEffectPreset;
+	chorus: ChorusEffectPreset;
+	reverb: ReverbEffectPreset;
+	wah: WahEffectPreset;
+	equalizer: EqualizerEffectPreset;
+}
+
 export type PresetList = Record<string, SynthPreset>;
 
 const STORE_NAME = "presetList";
 const MAX_PRESETS = 20;
+
+/******************************************************************
+ * PRESET MODULE GENERATION
+ ******************************************************************/
 
 //We define the function redundantly and scale it later if necessary.
 function generateEnvelopePreset(envelope: AudioEnvelope): EnvelopePreset {
@@ -250,6 +359,14 @@ function generateSynthPreset(
 	};
 }
 
+/******************************************************************
+ * EFFECTS PRESET GENERATION
+ ******************************************************************/
+
+/******************************************************************
+ * PRESET PERSISTENCE
+ ******************************************************************/
+
 function saveSynthPreset(name: string, input: PresetInput) {
 	//check if presetList exists
 
@@ -305,6 +422,10 @@ function deletePresetFromList(name: string) {
 function clearPresetList() {
 	savePresetList({});
 }
+
+/******************************************************************
+ * COMPOSABLE
+ ******************************************************************/
 
 export default function usePresets() {
 	const presets = ref<PresetList>(getPresetList());

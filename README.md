@@ -34,6 +34,8 @@ The progress of the project as well as upcoming features can be seen below
 - [x] Fix out of index LFO widget
 - [x] Delete preset
 - [ ] Edit preset name
+- [ ] DISTORTION WIDGET VISUAL ERROR
+- [ ] Revisar auto wah
 
 ## Todo
 
