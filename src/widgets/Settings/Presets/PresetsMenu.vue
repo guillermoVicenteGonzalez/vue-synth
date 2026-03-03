@@ -2,11 +2,17 @@
 	<section class="PresetsMenu">
 		<section class="PresetsMenu__list">
 			<h3 class="PresetsMenu__list__title">Preset List</h3>
-			<PresetList
-				class="PresetsMenu__list__content"
-				:preset-list="presetList"
-				@load-preset="loadPreset"
-			></PresetList>
+			<div class="PresetsMenu__list__content">
+				<PresetWidget
+					v-for="preset in presetList"
+					:key="preset.name"
+					:preset="preset"
+					@load-preset="handleLoadPreset"
+					@delete-preset="handleDeletePreset"
+					@update-preset="handleUpdatePreset"
+				></PresetWidget>
+			</div>
+
 			<VsSeparator></VsSeparator>
 		</section>
 
@@ -37,13 +43,25 @@ import VsSeparator from "@/components/common/VsSeparator/VsSeparator.vue";
 import VsTextInput from "@/components/common/VsTextInput/VsTextInput.vue";
 import usePresets from "@/composables/usePresets";
 import { ref } from "vue";
-import PresetList from "./PresetList.vue";
+import PresetWidget from "./PresetWidget.vue";
 
-const { presetList, savePreset, loadPreset } = usePresets();
+const { presetList, savePreset, loadPreset, deletePreset } = usePresets();
 const newPresetName = ref();
 
 function handleSavePreset() {
 	savePreset(newPresetName.value);
+}
+
+function handleUpdatePreset(name: string) {
+	savePreset(name);
+}
+
+function handleLoadPreset(name: string) {
+	loadPreset(name);
+}
+
+function handleDeletePreset(name: string) {
+	deletePreset(name);
 }
 </script>
 

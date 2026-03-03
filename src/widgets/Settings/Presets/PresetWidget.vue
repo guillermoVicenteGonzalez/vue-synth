@@ -10,7 +10,7 @@
 			>
 			<VsButton
 				class="PresetWidget__button PresetWidget__button--delete-btn"
-				@click="handleLoadPreset"
+				@click="handleDeletePreset"
 				>Delete</VsButton
 			>
 		</div>
@@ -29,6 +29,7 @@ const { preset } = defineProps<PresetWidgetProps>();
 const emit = defineEmits<{
 	(e: "loadPreset", name: string): void;
 	(e: "updatePreset", name: string): void;
+	(e: "deletePreset", name: string): void;
 }>();
 
 function handleLoadPreset() {
@@ -37,6 +38,10 @@ function handleLoadPreset() {
 
 function handleUpdatePreset() {
 	emit("updatePreset", preset.name);
+}
+
+function handleDeletePreset() {
+	emit("deletePreset", preset.name);
 }
 </script>
 

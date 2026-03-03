@@ -253,33 +253,19 @@ function generateSynthPreset(
 	};
 }
 
-export function saveSynthPreset(name: string, input: PresetInput) {
+function saveSynthPreset(name: string, input: PresetInput) {
 	//check if presetList exists
-	let rawPreset = localStorage.getItem("presetList");
-	if (!rawPreset) {
-		rawPreset = "{}";
-		localStorage.setItem(STORE_NAME, rawPreset);
-	}
 
-	const presetList: PresetList = JSON.parse(rawPreset);
+	const presetList: PresetList = getPresetList();
 	const preset = generateSynthPreset(name, input);
 	//check existing presets and change name?
 	presetList[name] = preset;
 
-	rawPreset = JSON.stringify(presetList);
-
-	localStorage.setItem(STORE_NAME, rawPreset);
+	savePresetList(presetList);
 }
 
-export function loadSynthPreset(
-	name: string,
-	ctx: AudioContext,
-	output: AudioNode
-) {
-	const rawPresetList = localStorage.getItem(STORE_NAME);
-	if (!rawPresetList) throw new Error("No preset list");
-
-	const presetList: PresetList = JSON.parse(rawPresetList);
+function loadSynthPreset(name: string, ctx: AudioContext, output: AudioNode) {
+	const presetList: PresetList = getPresetList();
 	const preset = presetList[name];
 	if (!preset) throw new Error("No preset");
 
@@ -296,12 +282,27 @@ export function loadSynthPreset(
 	};
 }
 
-export function getPresetList() {
+function getPresetList(): PresetList {
 	const rawPresetList = localStorage.getItem(STORE_NAME);
-	if (!rawPresetList) throw new Error("No preset list");
+	if (!rawPresetList) {
+		localStorage.setItem(STORE_NAME, "{}");
+		return {};
+	}
 
 	const presetList: PresetList = JSON.parse(rawPresetList);
 	return presetList;
+}
+
+function savePresetList(presetList: PresetList) {
+	const rawPreset = JSON.stringify(presetList);
+
+	localStorage.setItem(STORE_NAME, rawPreset);
+}
+
+function deletePresetFromList(name: string) {
+	const presetList = getPresetList();
+	delete presetList[name];
+	savePresetList(presetList);
 }
 
 export default function usePresets() {
@@ -341,6 +342,11 @@ export default function usePresets() {
 		lfos.value = preset.lfos;
 	}
 
+	function deletePreset(name: string) {
+		deletePresetFromList(name);
+		presets.value = getPresetList();
+	}
+
 	function uploadPreset() {}
 
 	return {
@@ -348,5 +354,6 @@ export default function usePresets() {
 		savePreset,
 		loadPreset,
 		uploadPreset,
+		deletePreset,
 	};
 }
