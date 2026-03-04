@@ -14,18 +14,31 @@ import { LFO } from "@/models/LFO";
 import type LFOHandler from "@/models/LFOHandler";
 import { ref, type Ref } from "vue";
 
+export interface SynthEffects {
+	compression: CompressionEffect;
+	filter: FilterEffect;
+	distortion: DistortionEffect;
+	delay: DelayEffect;
+	flanger: FlangerEffect;
+	chorus: ChorusEffect;
+	reverb: ReverbEffect;
+	wah: WahEffect;
+	equalizer: Equalizer;
+}
+
 export interface ReactiveSynth {
 	cluster: Ref<AudioCluster>;
 	filters: Ref<FilterHandler[]>;
 	lfos: Ref<LFOHandler[]>;
 	envelope: Ref<AudioEnvelope>;
+	effects: Ref<SynthEffects>;
 }
 
 const LFO_COUNT = 4;
 // const MAX_FILTERS = 5;
 
 //!ORDER IS IMPORTANT
-function initializeEffects(cluster: AudioCluster) {
+function initializeEffects(cluster: AudioCluster): SynthEffects {
 	const compression = new CompressionEffect(cluster.context);
 	const filter = new FilterEffect(cluster.context);
 	const distortion = new DistortionEffect(cluster.context);
@@ -53,6 +66,18 @@ function initializeEffects(cluster: AudioCluster) {
 	cluster.effects.append(filter);
 	cluster.effects.append(equalizer);
 	cluster.effects.append(compression);
+
+	return {
+		chorus,
+		compression,
+		delay,
+		distortion,
+		equalizer,
+		filter,
+		flanger,
+		reverb,
+		wah,
+	};
 }
 
 const mainContext = ref<AudioContext>(new AudioContext());
@@ -72,7 +97,9 @@ const lfos = ref<LFOHandler[]>(
 ) as Ref<LFOHandler[]>;
 
 mainAudioCluster.value.exit.connect(mainContext.value.destination);
-initializeEffects(mainAudioCluster.value);
+const effects = ref<SynthEffects>(
+	initializeEffects(mainAudioCluster.value)
+) as Ref<SynthEffects>;
 
 const envelope = ref<AudioEnvelope>({
 	attack: 0.2,
@@ -87,5 +114,6 @@ export default function useSynth(): ReactiveSynth {
 		filters: filters,
 		lfos: lfos,
 		envelope: envelope,
+		effects: effects,
 	};
 }

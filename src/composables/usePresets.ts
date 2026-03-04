@@ -1,18 +1,28 @@
 import AudioCluster from "@/models/AudioCluster";
 import type { AudioEnvelope } from "@/models/AudioEnvelope";
 import AudioModule from "@/models/AudioModule";
+import ChorusEffect from "@/models/effects/ChorusEffect";
+import { CompressionEffect } from "@/models/effects/CompressionEffect";
+import DelayEffect from "@/models/effects/DelayEffect";
 import type {
 	DistortionFilterPositions,
+	DistortionFilterTypes,
 	DistortionTypes,
 } from "@/models/effects/DistortionEffect";
+import DistortionEffect from "@/models/effects/DistortionEffect";
+import Equalizer from "@/models/effects/EqualizerEffect";
+import { FilterEffect } from "@/models/effects/FilterEffect";
+import { FlangerEffect } from "@/models/effects/FlangerEffect";
+import { ReverbEffect } from "@/models/effects/ReverbEffect";
 import type { WahTypes } from "@/models/effects/WahEffect";
+import WahEffect from "@/models/effects/WahEffect";
 import FilterHandler from "@/models/FilterHandler";
 import { LFO } from "@/models/LFO";
 import type LFOHandler from "@/models/LFOHandler";
 import type Wave from "@/models/wave";
 import type { waveForms } from "@/models/wave";
 import { ref } from "vue";
-import useSynth from "./useSynth";
+import useSynth, { type SynthEffects } from "./useSynth";
 
 //TODO!: This would benefit a lot from UID use
 
@@ -51,7 +61,7 @@ export interface SynthPreset {
 	envelope: EnvelopePreset;
 	filters: FilterPreset[];
 	lfos: LFOPreset[];
-	effects?: SynthEffectsPreset;
+	effects: SynthEffectsPreset;
 }
 
 interface PresetInput {
@@ -59,11 +69,13 @@ interface PresetInput {
 	envelope: AudioEnvelope;
 	filters: FilterHandler[];
 	lfos: LFOHandler[];
+	effects: SynthEffects;
 }
 
 /******************************************************************
  * EFFECTS PRESET DEFINITIONS
  ******************************************************************/
+
 interface BaseEffectPreset {
 	disabled: boolean;
 }
@@ -83,7 +95,7 @@ interface FilterEffectPreset extends BaseEffectPreset {
 interface DistortionEffectPreset extends BaseEffectPreset {
 	mix: number;
 	cuttoff: number;
-	filterType: BiquadFilterType;
+	filterType: DistortionFilterTypes;
 	filterPosition: DistortionFilterPositions;
 	threshold: number;
 	nBits: number;
@@ -110,6 +122,7 @@ interface ChorusEffectPreset extends BaseEffectPreset {
 	delay1: number;
 	delay2: number;
 	filterType: BiquadFilterType;
+	filterCuttof: number;
 	mix: number;
 	voices: number;
 	feedbackDelay: number;
@@ -120,14 +133,14 @@ interface ReverbEffectPreset extends BaseEffectPreset {
 	roomSize: number;
 	dampening: number;
 	preDelay: number;
-	preHightCut: number;
+	preHighCut: number;
 	preLowCut: number;
 	mix: number;
 }
 
 interface WahEffectPreset extends BaseEffectPreset {
 	type: WahTypes;
-	cuttoff: number;
+	cutoff: number;
 	speed: number;
 	depth: number;
 	delay: number;
@@ -348,7 +361,7 @@ function loadLFOPreset(
 
 function generateSynthPreset(
 	name: string,
-	{ cluster, envelope, filters, lfos }: PresetInput
+	{ cluster, envelope, filters, lfos, effects }: PresetInput
 ): SynthPreset {
 	return {
 		name,
@@ -356,12 +369,333 @@ function generateSynthPreset(
 		modules: generateClusterPreset(cluster),
 		filters: generateFiltersPreset(filters, cluster),
 		lfos: generateLFOPreset(lfos, cluster, filters),
+		effects: generateEffectsPreset(effects),
 	};
 }
 
 /******************************************************************
  * EFFECTS PRESET GENERATION
  ******************************************************************/
+
+function generateCompressionPreset(
+	compression: CompressionEffect
+): CompressionEffectPreset {
+	return {
+		attack: compression.attack,
+		threshold: compression.threshold,
+		disabled: compression.disabled,
+		knee: compression.knee,
+		ratio: compression.ratio,
+	};
+}
+
+function loadCompressionPreset(
+	preset: CompressionEffectPreset,
+	ctx: AudioContext
+): CompressionEffect {
+	const compression = new CompressionEffect(ctx);
+	compression.attack = preset.attack;
+	compression.threshold = preset.threshold;
+	compression.knee = preset.knee;
+	compression.ratio = preset.ratio;
+	compression.disabled = preset.disabled;
+
+	return compression;
+}
+
+function generateFilterEffectPreset(filter: FilterEffect): FilterEffectPreset {
+	return {
+		disabled: filter.disabled,
+		frequency: filter.frequency,
+		type: filter.type,
+	};
+}
+
+function loadFilterEffectPreset(
+	preset: FilterEffectPreset,
+	ctx: AudioContext
+): FilterEffect {
+	const filter = new FilterEffect(ctx);
+	filter.frequency = preset.frequency;
+	filter.type = preset.type;
+	filter.disabled = preset.disabled;
+	return filter;
+}
+
+function generateDistortionPreset(
+	distortion: DistortionEffect
+): DistortionEffectPreset {
+	return {
+		cuttoff: distortion.cutoff,
+		disabled: distortion.disabled,
+		distortionType: distortion.distortionType,
+		drive: distortion.drive,
+		filterPosition: distortion.filterPosition,
+		filterType: distortion.filterType as DistortionFilterTypes,
+		mix: distortion.mix,
+		nBits: distortion.nBits,
+		threshold: distortion.threshold,
+	};
+}
+
+function loadDistortionPreset(
+	preset: DistortionEffectPreset,
+	ctx: AudioContext
+): DistortionEffect {
+	const distortion = new DistortionEffect(ctx);
+	distortion.cutoff = preset.cuttoff;
+	distortion.drive = preset.drive;
+	distortion.threshold = preset.threshold;
+	distortion.mix = preset.mix;
+	distortion.filterType = preset.filterType;
+	distortion.filterPosition = preset.filterPosition;
+	distortion.disabled = preset.disabled;
+
+	return distortion;
+}
+
+function generateDelayPreset(delay: DelayEffect): DelayEffectPreset {
+	return {
+		disabled: delay.disabled,
+		feedback: delay.feedback,
+		gain: delay.gain,
+		rate: delay.rate,
+	};
+}
+
+function loadDelayPreset(
+	preset: DelayEffectPreset,
+	ctx: AudioContext
+): DelayEffect {
+	const delay = new DelayEffect(ctx);
+	delay.feedback = preset.feedback;
+	delay.rate = preset.rate;
+	delay.gain = preset.gain;
+	delay.disabled = preset.disabled;
+
+	return delay;
+}
+
+function generateFlangerPreset(flanger: FlangerEffect): FlangerEffectPreset {
+	const { delay, depth, feedback, speed, disabled } = flanger;
+	return {
+		delay,
+		depth,
+		feedback,
+		speed,
+		disabled,
+	};
+}
+
+function loadFlangerPreset(
+	preset: FlangerEffectPreset,
+	ctx: AudioContext
+): FlangerEffect {
+	const flanger = new FlangerEffect(ctx);
+
+	flanger.depth = preset.depth;
+	flanger.delay = preset.delay;
+	flanger.feedback = preset.feedback;
+	flanger.speed = preset.speed;
+
+	return flanger;
+}
+
+function generateChorusPreset(chorus: ChorusEffect): ChorusEffectPreset {
+	const {
+		amount,
+		rate,
+		delay1,
+		delay2,
+		filterCuttof,
+		filterType,
+		mix,
+		voices,
+		feedback,
+		feedbackDelay,
+		disabled,
+	} = chorus;
+
+	return {
+		amount,
+		rate,
+		delay1,
+		delay2,
+		filterCuttof,
+		filterType,
+		mix,
+		disabled,
+		voices,
+		feedback,
+		feedbackDelay,
+	};
+}
+
+function loadChorusPreset(
+	preset: ChorusEffectPreset,
+	ctx: AudioContext
+): ChorusEffect {
+	const chorus = new ChorusEffect(ctx);
+	chorus.amount = preset.amount;
+	chorus.rate = preset.rate;
+	chorus.delay1 = preset.delay1;
+	chorus.delay2 = preset.delay2;
+	chorus.filterCuttof = preset.filterCuttof;
+	chorus.mix = preset.mix;
+	chorus.voices = preset.voices;
+	chorus.feedback = preset.feedback;
+	chorus.feedbackDelay = preset.feedbackDelay;
+	chorus.disabled = preset.disabled;
+
+	return chorus;
+}
+
+function generateReverbPreset(reverb: ReverbEffect): ReverbEffectPreset {
+	const {
+		dampening,
+		disabled,
+		preDelay,
+		preHighCut,
+		preLowCut,
+		mix,
+		roomSize,
+	} = reverb;
+
+	return {
+		dampening,
+		disabled,
+		preDelay,
+		preHighCut,
+		preLowCut,
+		mix,
+		roomSize,
+	};
+}
+
+function loadReverbPreset(
+	preset: ReverbEffectPreset,
+	ctx: AudioContext
+): ReverbEffect {
+	const reverb = new ReverbEffect(ctx);
+
+	reverb.roomSize = preset.roomSize;
+	reverb.dampening = preset.dampening;
+	reverb.preDelay = preset.preDelay;
+	reverb.preHighCut = preset.preHighCut;
+	reverb.preLowCut = preset.preLowCut;
+	reverb.mix = preset.mix;
+
+	return reverb;
+}
+
+function generateWahPreset(wah: WahEffect): WahEffectPreset {
+	const { type, cutoff, speed, depth, delay, disabled, lfoForm, mix } = wah;
+
+	return {
+		type,
+		cutoff,
+		disabled,
+		speed,
+		delay,
+		depth,
+		lfoForm,
+		mix,
+	};
+}
+
+function loadWahPreset(preset: WahEffectPreset, ctx: AudioContext): WahEffect {
+	const wah = new WahEffect(ctx);
+
+	wah.cutoff = preset.cutoff;
+	wah.type = preset.type;
+	wah.lfoForm = preset.lfoForm;
+	wah.mix = preset.mix;
+	wah.delay = preset.delay;
+	wah.depth = preset.depth;
+	wah.speed = preset.speed;
+	wah.disabled = preset.disabled;
+
+	return wah;
+}
+
+function generateEqualizerPreset(equalizer: Equalizer): EqualizerEffectPreset {
+	const { disabled, lowGain, midGain, midLowGain, midHighGain, highGain } =
+		equalizer;
+
+	return {
+		disabled,
+		lowGain,
+		midGain,
+		midLowGain,
+		midHighGain,
+		highGain,
+	};
+}
+
+function loadEqualizerPreset(
+	preset: EqualizerEffectPreset,
+	ctx: AudioContext
+): Equalizer {
+	const equalizer = new Equalizer(ctx);
+
+	equalizer.disabled = preset.disabled;
+	equalizer.lowGain = preset.lowGain;
+	equalizer.midLowGain = preset.midLowGain;
+	equalizer.midGain = preset.midGain;
+	equalizer.midHighGain = preset.midHighGain;
+	equalizer.highGain = preset.highGain;
+
+	return equalizer;
+}
+
+function generateEffectsPreset({
+	chorus,
+	compression,
+	delay,
+	distortion,
+	equalizer,
+	filter,
+	flanger,
+	reverb,
+	wah,
+}: SynthEffects): SynthEffectsPreset {
+	return {
+		chorus: generateChorusPreset(chorus),
+		compression: generateCompressionPreset(compression),
+		delay: generateDelayPreset(delay),
+		distortion: generateDistortionPreset(distortion),
+		equalizer: generateEqualizerPreset(equalizer),
+		filter: generateFilterEffectPreset(filter),
+		flanger: generateFlangerPreset(flanger),
+		reverb: generateReverbPreset(reverb),
+		wah: generateWahPreset(wah),
+	};
+}
+
+function loadEffectsPreset(preset: SynthEffectsPreset, cluster: AudioCluster) {
+	const compression = loadCompressionPreset(
+		preset.compression,
+		cluster.context
+	);
+	const chorus = loadChorusPreset(preset.chorus, cluster.context);
+	const filter = loadFilterEffectPreset(preset.filter, cluster.context);
+	const distortion = loadDistortionPreset(preset.distortion, cluster.context);
+	const delay = loadDelayPreset(preset.delay, cluster.context);
+	const flanger = loadFlangerPreset(preset.flanger, cluster.context);
+	const reverb = loadReverbPreset(preset.reverb, cluster.context);
+	const wah = loadWahPreset(preset.wah, cluster.context);
+	const equalizer = loadEqualizerPreset(preset.equalizer, cluster.context);
+
+	cluster.effects.append(wah);
+	cluster.effects.append(distortion);
+	cluster.effects.append(flanger);
+	cluster.effects.append(chorus);
+	cluster.effects.append(delay);
+	cluster.effects.append(reverb);
+	cluster.effects.append(filter);
+	cluster.effects.append(equalizer);
+	cluster.effects.append(compression);
+}
 
 /******************************************************************
  * PRESET PERSISTENCE
@@ -384,9 +718,10 @@ function loadSynthPreset(name: string, ctx: AudioContext, output: AudioNode) {
 	if (!preset) throw new Error("No preset");
 
 	//TODO: Validation
-	const { modules, envelope, filters, lfos }: SynthPreset = preset;
+	const { modules, envelope, filters, lfos, effects }: SynthPreset = preset;
 	const cluster = loadClusterPreset(modules, ctx, output);
 	const filterHandlers = loadFiltersPreset(filters, cluster);
+	loadEffectsPreset(effects, cluster);
 
 	return {
 		cluster,
@@ -431,7 +766,7 @@ export default function usePresets() {
 	const presets = ref<PresetList>(getPresetList());
 
 	function savePreset(name: string) {
-		const { cluster, lfos, envelope, filters } = useSynth();
+		const { cluster, lfos, envelope, filters, effects } = useSynth();
 
 		if (Object.entries(presets.value).length >= MAX_PRESETS) {
 			throw new Error("Max number of presets reached");
@@ -442,6 +777,7 @@ export default function usePresets() {
 			envelope: envelope.value,
 			lfos: lfos.value,
 			filters: filters.value,
+			effects: effects.value,
 		});
 
 		presets.value = getPresetList();
@@ -458,7 +794,6 @@ export default function usePresets() {
 
 		// MainAudioCluster.value = null;
 		if (preset.cluster == cluster.value) {
-			console.error("IGUALES");
 			return;
 		}
 
