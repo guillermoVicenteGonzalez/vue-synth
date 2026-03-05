@@ -24,7 +24,7 @@
 		<template v-if="currentTab === 'Voice'" #filters>
 			<EffectListWidget
 				v-if="MainAudioCluster"
-				v-model="filters as FilterHandler[]"
+				v-model="filters"
 				:context="mainContext"
 				:sources="MainAudioCluster"
 			></EffectListWidget>
