@@ -204,6 +204,22 @@ function generateClusterPreset(cluster: AudioCluster): ModulePreset[] {
 	// 		return arr.indexOf(name) != index;
 	// 	});
 
+	const names: string[] = [];
+	for (let i = 0; i < modules.length; i++) {
+		const name = modules[i].name;
+		if (names.includes(name)) {
+			const nameCount = names.reduce((acum, value) => {
+				if (value == name) return acum + 1;
+				else return acum;
+			}, 0);
+			modules[i].name = `${name} (${nameCount})`;
+			names.push(name);
+		} else {
+			names.push(name);
+		}
+	}
+
+	console.log(modules);
 	return modules;
 }
 
