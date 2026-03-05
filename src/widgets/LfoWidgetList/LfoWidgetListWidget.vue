@@ -1,7 +1,12 @@
 <template>
 	<VsCard class="lfo-widget-list" :class="dynamicLayoutStyles">
-		<VsTab v-for="n in WIDGET_N" :key="n" :active="activeTab == n">
+		<VsTab
+			v-for="(_lfo, index) in lfos"
+			:key="index"
+			:active="activeTab - 1 == index"
+		>
 			<LfoWdidgetWidget
+				v-model="lfos[index]"
 				:variant="widgetVariant"
 				:context="context"
 				:sources="sources"
@@ -22,11 +27,10 @@
 <script setup lang="ts">
 import VsCard from "@/components/common/VsCard/VsCard.vue";
 import VsTab from "@/components/common/VsTab/VsTab.vue";
+import type LFOHandler from "@/models/LFOHandler";
+import { type LfoSource } from "@/models/LFOHandler";
 import { computed, ref } from "vue";
-import type {
-	LfoSource,
-	LFOWidgetVariants,
-} from "../LfoWdidget/LfoWdidgetWidget.vue";
+import type { LFOWidgetVariants } from "../LfoWdidget/LfoWdidgetWidget.vue";
 import LfoWdidgetWidget from "../LfoWdidget/LfoWdidgetWidget.vue";
 
 const WIDGET_N = 4;
@@ -47,6 +51,8 @@ const dynamicLayoutStyles = computed(() => {
 		? "lfo-widget-list--horizontal"
 		: "lfo-widget-list--vertical";
 });
+
+const lfos = defineModel<LFOHandler[]>({ required: true });
 
 const {
 	context,

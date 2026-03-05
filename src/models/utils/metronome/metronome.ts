@@ -26,7 +26,6 @@ const workerFunction = () => {
 	let intervalTime: number = 1000;
 
 	function setupInterval(interval: number) {
-		console.warn(`interval ${interval}`);
 		postMessage("tick");
 		timerId = setInterval(() => {
 			postMessage("tick");
@@ -34,16 +33,13 @@ const workerFunction = () => {
 	}
 
 	self.onmessage = (event: MessageEvent<MetronomeWorkerMessage>) => {
-		console.error("MESSAGE RECEIVED???");
 		switch (event.data.type) {
 			case "start":
 				if (timerId) {
-					console.error("Clearing timer");
 					clearInterval(timerId);
 					timerId = null;
 				}
 				if (event.data.interval) intervalTime = event.data.interval;
-				console.error(`interval time ${intervalTime}`);
 				setupInterval(intervalTime);
 				break;
 
@@ -111,7 +107,6 @@ export default class Metronome {
 	set bpm(b: number) {
 		this._bpm = b;
 		this.sendMessageToWorker({ type: "start", interval: this.period * 1000 });
-		console.warn("MEssage sent");
 	}
 
 	get bpm() {

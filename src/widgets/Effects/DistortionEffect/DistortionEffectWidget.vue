@@ -146,6 +146,7 @@ const thresholdEnabled = computed<boolean>(
 
 		&__controls {
 			width: 100%;
+			height: 100%;
 			// background-color: red;
 			display: flex;
 			gap: $gap-bg;

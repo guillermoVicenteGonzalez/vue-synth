@@ -1,6 +1,7 @@
 <template>
 	<input
 		v-model="model"
+		:placeholder="placeholder"
 		type="text"
 		class="VsTextInput"
 		:disabled="disabled"
@@ -19,11 +20,15 @@ interface VsTextInputProps {
 	disabled?: boolean;
 	variant?: VsTextInputVariants;
 	stopPropagation?: boolean;
+	placeholder?: string;
+	//TODO: Implement
+	clearable?: boolean;
 }
 
 const model = defineModel<string>({ default: "" });
 const {
 	disabled,
+	placeholder,
 	variant = "default",
 	stopPropagation = true,
 } = defineProps<VsTextInputProps>();

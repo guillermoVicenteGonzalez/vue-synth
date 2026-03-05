@@ -20,7 +20,7 @@ export default class AudioCluster {
 	modules: AudioModule[];
 	exit: AudioNode;
 	compressor: DynamicsCompressorNode; //links all the audio modules. Is connected to global effects
-	private gain: GainNode; //the gain of the module is connected to the global exit
+	gain: GainNode; //the gain of the module is connected to the global exit
 	context: AudioContext;
 	effects: EffectChain;
 

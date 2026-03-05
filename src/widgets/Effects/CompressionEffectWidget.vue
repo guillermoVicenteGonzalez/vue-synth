@@ -87,16 +87,17 @@
 import CircleSlider from "@/components/common/CircleSlider/CircleSlider.vue";
 import VsChip from "@/components/common/VsChip/VsChip.vue";
 import CompressionAnalyser from "@/components/waves/CompressionAnalyser/CompressionAnalyser.vue";
+import useSynth from "@/composables/useSynth";
 import AudioCluster from "@/models/AudioCluster";
 import { AudioEffect } from "@/models/effects/AudioEffect";
 import { CompressionEffect } from "@/models/effects/CompressionEffect";
 import type { LinkedNode } from "@/models/LinkedList";
-import { inject, ref, type Ref } from "vue";
+import { ref, type Ref } from "vue";
 import EffectCard from "./EffectCard.vue";
 
 const compression = defineModel<CompressionEffect>({ required: true });
 
-const cluster: Ref<AudioCluster> | undefined = inject("mainCluster");
+const cluster: Ref<AudioCluster> = useSynth().cluster;
 const preCompressionSource = ref<AudioNode>();
 
 const primaryColor = "#42d392";

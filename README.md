@@ -20,6 +20,23 @@ It is still in alpha version (although really close to the initial beta release)
 
 The progress of the project as well as upcoming features can be seen below
 
+## Current feature (Presets)
+
+- [x] Refactor LFO widget to use v-model instead of internal model
+- [x] Refactor wave module disabled to use internal property instead of component ref
+- [x] Duplicate names in cluster modules
+- [ ] Check for memory leaks or unused lingering modules when loading a preset
+- [x] All modules loaded up as sawwaves
+- [x] Update preset button
+- [ ] Clearable name input
+- [x] Save effects
+- [ ] Cleanup
+- [x] Fix out of index LFO widget
+- [x] Delete preset
+- [ ] Edit preset name
+- [x] DISTORTION WIDGET VISUAL ERROR
+- [ ] Revisar auto wah
+
 ## Todo
 
 - [x] Loops
@@ -111,6 +128,7 @@ The progress of the project as well as upcoming features can be seen below
 - [ ] Lighthouse
 - [ ] Dialog
   - [ ] Dialog for naming downloads
+  - [ ] Warnings (delete prests, etc)
 
 ## Bugs
 

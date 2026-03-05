@@ -2,10 +2,10 @@
 	<div v-if="sources" class="effectList">
 		<FilterWidget
 			v-for="(_filter, index) in filters"
-			:key="index"
+			:key="index + (_filter.module ? _filter.module.name : '')"
 			v-model="filters[index]"
 			:context="context"
-			:sources="sources as AudioCluster"
+			:sources="sources"
 			@delete="deleteFilter(index)"
 		></FilterWidget>
 	</div>
@@ -14,11 +14,10 @@
 <script setup lang="ts">
 import type AudioCluster from "@/models/AudioCluster";
 import type FilterHandler from "@/models/FilterHandler";
-import type { UnwrapRef } from "vue";
 import FilterWidget from "../Filter/FilterWidget.vue";
 
 interface EffectListWidgetProps {
-	sources: UnwrapRef<AudioCluster>;
+	sources: AudioCluster;
 	context: AudioContext;
 }
 

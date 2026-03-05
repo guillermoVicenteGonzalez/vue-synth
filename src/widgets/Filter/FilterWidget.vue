@@ -102,7 +102,7 @@ import type AudioCluster from "@/models/AudioCluster";
 import type AudioModule from "@/models/AudioModule";
 import FilterHandler, { FilterTypes } from "@/models/FilterHandler";
 import { X } from "lucide-vue-next";
-import { computed, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 
 interface FilterWidgetProps {
 	/**All the waves we can apply filters to*/
@@ -168,6 +168,21 @@ function handleContextMenu(e: MouseEvent) {
 function handleCloseContextMenu() {
 	isCtxMenuVisible.value = false;
 }
+
+function preloadFilterModule() {
+	if (filter.value.module === null) return;
+
+	module.value = filter.value.module;
+}
+
+//!TODO: When i delete this part, everything breaks
+watch(filter, () => {
+	preloadFilterModule();
+});
+
+onMounted(() => {
+	module.value = filter.value.module as AudioModule | undefined;
+});
 </script>
 
 <style lang="scss" scoped>
