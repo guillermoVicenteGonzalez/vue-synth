@@ -33,9 +33,9 @@ The progress of the project as well as upcoming features can be seen below
 - [ ] Cleanup
 - [x] Fix out of index LFO widget
 - [x] Delete preset
-- [ ] Edit preset name
+- [x] Edit preset name
 - [x] DISTORTION WIDGET VISUAL ERROR
-- [ ] Revisar auto wah
+- [x] Revisar auto wah
 
 ## Todo
 
@@ -113,7 +113,7 @@ The progress of the project as well as upcoming features can be seen below
 - [ ] As many MIDI mappings as possible
 - [x] Request midi button + selector disable
 - [ ] Panic button for keyboard + disable midi triggers note off
-- [ ] Save presets
+- [x] Save presets
 
 ## Polish
 
