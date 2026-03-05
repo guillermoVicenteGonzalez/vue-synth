@@ -654,12 +654,12 @@ function loadEqualizerPreset(
 ): Equalizer {
 	const equalizer = new Equalizer(ctx);
 
-	equalizer.disabled = preset.disabled;
 	equalizer.lowGain = preset.lowGain;
 	equalizer.midLowGain = preset.midLowGain;
 	equalizer.midGain = preset.midGain;
 	equalizer.midHighGain = preset.midHighGain;
 	equalizer.highGain = preset.highGain;
+	equalizer.disabled = preset.disabled;
 
 	return equalizer;
 }

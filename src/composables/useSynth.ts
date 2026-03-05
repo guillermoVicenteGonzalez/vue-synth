@@ -57,6 +57,8 @@ function initializeEffects(cluster: AudioCluster): SynthEffects {
 	distortion.disabled = true;
 	wah.disabled = true;
 
+	equalizer.disabled = true;
+
 	cluster.effects.append(wah);
 	cluster.effects.append(distortion);
 	cluster.effects.append(flanger);

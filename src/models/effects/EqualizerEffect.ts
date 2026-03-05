@@ -136,6 +136,8 @@ export default class Equalizer extends AudioEffect {
 			this.inputNode.disconnect(this.exitNode);
 			this.highFilter.connect(this.exitNode);
 		} catch (err) {
+			console.log("Estoy aqui");
+
 			console.error(err);
 		}
 	}

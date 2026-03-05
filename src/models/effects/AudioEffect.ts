@@ -4,6 +4,8 @@ export abstract class AudioEffect {
 	private enabled: boolean = true;
 
 	set disabled(d: boolean) {
+		if (!d == this.enabled) return;
+
 		this.enabled = !d;
 		if (this.enabled) this.onEnable();
 		else this.onDisable();
