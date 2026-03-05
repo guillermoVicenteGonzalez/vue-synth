@@ -181,7 +181,7 @@ const chorus = defineModel<ChorusEffect>({ required: true });
 
 	&__filter-controls {
 		height: 100%;
-		flex: 1 0 10rem;
+		flex: 1 0 8rem;
 
 		display: flex;
 		flex-direction: column;

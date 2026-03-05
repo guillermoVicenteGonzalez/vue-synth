@@ -24,17 +24,17 @@ The progress of the project as well as upcoming features can be seen below
 
 - [x] Refactor LFO widget to use v-model instead of internal model
 - [x] Refactor wave module disabled to use internal property instead of component ref
-- [ ] Duplicate names in cluster modules
+- [x] Duplicate names in cluster modules
 - [ ] Check for memory leaks or unused lingering modules when loading a preset
 - [x] All modules loaded up as sawwaves
 - [x] Update preset button
 - [ ] Clearable name input
-- [ ] Save effects
+- [x] Save effects
 - [ ] Cleanup
 - [x] Fix out of index LFO widget
 - [x] Delete preset
 - [ ] Edit preset name
-- [ ] DISTORTION WIDGET VISUAL ERROR
+- [x] DISTORTION WIDGET VISUAL ERROR
 - [ ] Revisar auto wah
 
 ## Todo

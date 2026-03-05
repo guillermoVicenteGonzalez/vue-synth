@@ -774,6 +774,20 @@ function clearPresetList() {
 	savePresetList({});
 }
 
+function updatePresetName(oldName: string, newName: string) {
+	const presetList = getPresetList();
+	const preset = presetList[oldName];
+
+	if (!preset) {
+		throw new Error(`No preset found with name ${oldName}`);
+	}
+
+	preset.name = newName;
+	delete presetList[oldName];
+	presetList[newName] = preset;
+	savePresetList(presetList);
+}
+
 /******************************************************************
  * COMPOSABLE
  ******************************************************************/
@@ -829,6 +843,11 @@ export default function usePresets() {
 		presets.value = getPresetList();
 	}
 
+	function updateName(oldName: string, newName: string) {
+		updatePresetName(oldName, newName);
+		presets.value = getPresetList();
+	}
+
 	function uploadPreset() {}
 
 	return {
@@ -838,5 +857,6 @@ export default function usePresets() {
 		uploadPreset,
 		deletePreset,
 		clearPresets,
+		updateName,
 	};
 }

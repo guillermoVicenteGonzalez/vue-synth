@@ -2,7 +2,8 @@
 	<DropdownMenu>
 		<template #activator>
 			<VsButton variant="round" class="SettingsButton">
-				<SettingsIcon class="SettingsButton__icon"></SettingsIcon>
+				<!-- <SettingsIcon class="SettingsButton__icon"></SettingsIcon> -->
+				<Save class="SettingsButton__icon"></Save>
 			</VsButton>
 		</template>
 
@@ -12,9 +13,12 @@
 	</DropdownMenu>
 </template>
 <script setup lang="ts">
+/**
+ * In the future this should have more menus. For now just the settings menu
+ */
 import DropdownMenu from "@/components/common/DropdownMenu/DropdownMenu.vue";
 import VsButton from "@/components/common/VsButton/VsButton.vue";
-import { SettingsIcon } from "lucide-vue-next";
+import { Save } from "lucide-vue-next";
 import SettingsMenu from "./SettingsMenu.vue";
 </script>
 

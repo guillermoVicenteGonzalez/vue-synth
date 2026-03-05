@@ -10,6 +10,7 @@
 					@load-preset="handleLoadPreset"
 					@delete-preset="handleDeletePreset"
 					@update-preset="handleUpdatePreset"
+					@update-preset-name="handleUpdateName"
 				></PresetWidget>
 			</div>
 
@@ -33,7 +34,7 @@
 					@click="handleSavePreset"
 					>Save Preset</VsButton
 				>
-				<VsButton class="PresetsMenu__button">Upload preset</VsButton>
+				<!-- <VsButton class="PresetsMenu__button">Upload preset</VsButton> -->
 
 				<VsButton
 					class="PresetsMenu__button PresetsMenu__button--delete-btn"
@@ -53,8 +54,14 @@ import usePresets from "@/composables/usePresets";
 import { ref } from "vue";
 import PresetWidget from "./PresetWidget.vue";
 
-const { presetList, savePreset, loadPreset, deletePreset, clearPresets } =
-	usePresets();
+const {
+	presetList,
+	savePreset,
+	loadPreset,
+	deletePreset,
+	clearPresets,
+	updateName,
+} = usePresets();
 const newPresetName = ref<string>("");
 
 function handleSavePreset() {
@@ -77,6 +84,10 @@ function handleDeletePreset(name: string) {
 function handleDeleteAll() {
 	clearPresets();
 }
+
+function handleUpdateName(oldName: string, newName: string) {
+	updateName(oldName, newName);
+}
 </script>
 
 <style lang="scss" scoped>
@@ -96,6 +107,7 @@ $preset-list-max-height: 30rem;
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: center;
+		width: 100%;
 		align-items: center;
 		gap: $gap-df $gap-bg;
 
@@ -103,6 +115,7 @@ $preset-list-max-height: 30rem;
 			width: 100%;
 			display: flex;
 			gap: $gap-df;
+			justify-content: center;
 		}
 	}
 
