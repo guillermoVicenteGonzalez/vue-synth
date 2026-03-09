@@ -70,6 +70,7 @@ export default function useRecorder(recorder: Recorder) {
 		a.href = recordingRef.value.getRecordingUrl();
 		a.download = name;
 		a.click();
+		URL.revokeObjectURL(a.href);
 	}
 
 	return {

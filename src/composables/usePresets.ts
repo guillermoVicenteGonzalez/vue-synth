@@ -713,6 +713,13 @@ function loadEffectsPreset(preset: SynthEffectsPreset, cluster: AudioCluster) {
 	cluster.effects.append(compression);
 }
 
+function createPresetFile(preset: SynthPreset) {
+	const blob = new Blob([JSON.stringify(preset, null, 2)], {
+		type: "application/json",
+	});
+	return blob;
+}
+
 /******************************************************************
  * PRESET PERSISTENCE
  ******************************************************************/
@@ -822,7 +829,6 @@ export default function usePresets() {
 			cluster.value.exit
 		);
 
-		// MainAudioCluster.value = null;
 		if (preset.cluster == cluster.value) {
 			return;
 		}
@@ -848,6 +854,22 @@ export default function usePresets() {
 		presets.value = getPresetList();
 	}
 
+	function downloadPreset(name: string) {
+		const preset: SynthPreset = presets.value[name];
+		if (!preset) {
+			throw new Error(`No preset found with value ${name}`);
+		}
+
+		const presetFile = createPresetFile(preset);
+		const presetUrl = window.URL.createObjectURL(presetFile);
+		const a: HTMLAnchorElement = document.createElement("a");
+
+		a.href = presetUrl;
+		a.download = `${preset.name}.json`;
+		a.click();
+		URL.revokeObjectURL(presetUrl);
+	}
+
 	function uploadPreset() {}
 
 	return {
@@ -858,5 +880,6 @@ export default function usePresets() {
 		deletePreset,
 		clearPresets,
 		updateName,
+		downloadPreset,
 	};
 }

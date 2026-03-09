@@ -11,6 +11,7 @@
 					@delete-preset="handleDeletePreset"
 					@update-preset="handleUpdatePreset"
 					@update-preset-name="handleUpdateName"
+					@download-preset="handleDownloadPreset"
 				></PresetWidget>
 			</div>
 
@@ -61,6 +62,7 @@ const {
 	deletePreset,
 	clearPresets,
 	updateName,
+	downloadPreset,
 } = usePresets();
 const newPresetName = ref<string>("");
 
@@ -87,6 +89,10 @@ function handleDeleteAll() {
 
 function handleUpdateName(oldName: string, newName: string) {
 	updateName(oldName, newName);
+}
+
+function handleDownloadPreset(name: string) {
+	downloadPreset(name);
 }
 </script>
 
