@@ -35,7 +35,12 @@
 					@click="handleSavePreset"
 					>Save Preset</VsButton
 				>
-				<!-- <VsButton class="PresetsMenu__button">Upload preset</VsButton> -->
+				<VsButton class="PresetsMenu__button" @click="handleUploadPreset">
+					<VsSpinner v-if="vsSpinnerVisible" size="sm"></VsSpinner>
+					<span v-else>Upload Preset</span>
+				</VsButton>
+
+				<!-- <input type="file" @change="handleUploadPreset" /> -->
 
 				<VsButton
 					class="PresetsMenu__button PresetsMenu__button--delete-btn"
@@ -50,6 +55,7 @@
 <script setup lang="ts">
 import VsButton from "@/components/common/VsButton/VsButton.vue";
 import VsSeparator from "@/components/common/VsSeparator/VsSeparator.vue";
+import VsSpinner from "@/components/common/VsSpinner/VsSpinner.vue";
 import VsTextInput from "@/components/common/VsTextInput/VsTextInput.vue";
 import usePresets from "@/composables/usePresets";
 import { ref } from "vue";
@@ -63,8 +69,10 @@ const {
 	clearPresets,
 	updateName,
 	downloadPreset,
+	uploadPreset,
 } = usePresets();
 const newPresetName = ref<string>("");
+const vsSpinnerVisible = ref<boolean>(false);
 
 function handleSavePreset() {
 	savePreset(newPresetName.value);
@@ -93,6 +101,32 @@ function handleUpdateName(oldName: string, newName: string) {
 
 function handleDownloadPreset(name: string) {
 	downloadPreset(name);
+}
+
+async function handleUploadPreset() {
+	const fInput: HTMLInputElement = document.createElement("input");
+	fInput.type = "file";
+	fInput.accept = ".json";
+
+	const file = await new Promise<File>((resolve, reject) => {
+		fInput.onchange = () => {
+			console.log(fInput.files);
+			if (fInput.files && fInput.files.length > 0) resolve(fInput.files[0]);
+			reject();
+		};
+
+		fInput.oncancel = () => {
+			reject();
+		};
+		fInput.click();
+		vsSpinnerVisible.value = true;
+	}).catch(() => {
+		//for future error handling (dialog)
+		return null;
+	});
+
+	if (file) uploadPreset(file);
+	vsSpinnerVisible.value = false;
 }
 </script>
 

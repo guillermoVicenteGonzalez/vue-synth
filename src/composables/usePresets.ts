@@ -4,23 +4,20 @@ import AudioModule from "@/models/AudioModule";
 import ChorusEffect from "@/models/effects/ChorusEffect";
 import { CompressionEffect } from "@/models/effects/CompressionEffect";
 import DelayEffect from "@/models/effects/DelayEffect";
-import type {
+import DistortionEffect, {
 	DistortionFilterPositions,
 	DistortionFilterTypes,
 	DistortionTypes,
 } from "@/models/effects/DistortionEffect";
-import DistortionEffect from "@/models/effects/DistortionEffect";
 import Equalizer from "@/models/effects/EqualizerEffect";
 import { FilterEffect } from "@/models/effects/FilterEffect";
 import { FlangerEffect } from "@/models/effects/FlangerEffect";
 import { ReverbEffect } from "@/models/effects/ReverbEffect";
-import type { WahTypes } from "@/models/effects/WahEffect";
-import WahEffect from "@/models/effects/WahEffect";
+import WahEffect, { WahTypes } from "@/models/effects/WahEffect";
 import FilterHandler from "@/models/FilterHandler";
 import { LFO } from "@/models/LFO";
 import type LFOHandler from "@/models/LFOHandler";
-import type Wave from "@/models/wave";
-import type { waveForms } from "@/models/wave";
+import { waveForms } from "@/models/wave";
 import { ref } from "vue";
 import useSynth, { type SynthEffects } from "./useSynth";
 
@@ -39,16 +36,22 @@ interface FilterPreset {
 	disabled: boolean;
 }
 
+interface WavePreset {
+	amplitude: number;
+	frequency: number;
+	form: waveForms;
+}
+
 interface ModulePreset {
 	name: string;
-	wave: Wave;
+	wave: WavePreset;
 	disabled: boolean;
 	voices: number;
 	detune: number;
 }
 
 interface LFOPreset {
-	wave: Wave;
+	wave: WavePreset;
 	inputType: "module" | "filter" | "general" | null;
 	inputIndex: number;
 	propertyName: string | null;
@@ -172,6 +175,162 @@ export type PresetList = Record<string, SynthPreset>;
 
 const STORE_NAME = "presetList";
 const MAX_PRESETS = 20;
+const MAX_PRESET_FILE_SIZE = 10000; //10kbytes
+
+const DEFAULT_PRESET: SynthPreset = {
+	name: "default",
+	envelope: {
+		attack: 0.2,
+		decay: 0.4,
+		sustain: 0.5,
+		release: 0.2,
+	},
+	modules: [
+		{
+			name: "wave 0",
+			wave: {
+				amplitude: 10,
+				frequency: 440,
+				form: waveForms.sine,
+			},
+			disabled: false,
+			detune: 0,
+			voices: 1,
+		},
+	],
+	filters: [
+		{
+			frequency: 200,
+			type: "lowpass",
+			moduleIndex: -1,
+			disabled: false,
+		},
+	],
+	lfos: [
+		{
+			wave: {
+				amplitude: 1,
+				frequency: 1,
+				form: waveForms.sine,
+			},
+			disabled: false,
+			inputType: null,
+			inputIndex: -1,
+			propertyName: null,
+		},
+		{
+			wave: {
+				amplitude: 1,
+				frequency: 1,
+				form: waveForms.sine,
+			},
+			disabled: false,
+			inputType: null,
+			inputIndex: -1,
+			propertyName: null,
+		},
+		{
+			wave: {
+				amplitude: 1,
+				frequency: 1,
+				form: waveForms.sine,
+			},
+			disabled: false,
+			inputType: null,
+			inputIndex: -1,
+			propertyName: null,
+		},
+		{
+			wave: {
+				amplitude: 1,
+				frequency: 1,
+				form: waveForms.sine,
+			},
+			disabled: false,
+			inputType: null,
+			inputIndex: -1,
+			propertyName: null,
+		},
+	],
+	effects: {
+		chorus: {
+			amount: 0.008,
+			rate: 0.014,
+			delay1: 0.003,
+			delay2: 0.013,
+			filterCuttof: 350,
+			filterType: "allpass",
+			mix: 50,
+			disabled: true,
+			voices: 6,
+			feedback: 0.05000000074505806,
+			feedbackDelay: 0.25,
+		},
+		compression: {
+			attack: 0.003000000026077032,
+			threshold: -24,
+			disabled: false,
+			knee: 30,
+			ratio: 12,
+		},
+		delay: {
+			disabled: true,
+			feedback: 0.4000000059604645,
+			gain: 1,
+			rate: 0.30000001192092896,
+		},
+		distortion: {
+			cuttoff: 350,
+			disabled: true,
+			distortionType: DistortionTypes.hardClip,
+			drive: 1,
+			filterPosition: DistortionFilterPositions.none,
+			filterType: DistortionFilterTypes.highpass,
+			mix: 50,
+			nBits: 8,
+			threshold: 0.1,
+		},
+		equalizer: {
+			disabled: true,
+			lowGain: 0,
+			midGain: 0,
+			midLowGain: 0,
+			midHighGain: 0,
+			highGain: 0,
+		},
+		filter: {
+			disabled: true,
+			frequency: 350,
+			type: "lowpass",
+		},
+		flanger: {
+			delay: 0.004999999888241291,
+			depth: 0.002,
+			feedback: 0.5,
+			speed: 0.25,
+			disabled: true,
+		},
+		reverb: {
+			dampening: 350,
+			disabled: true,
+			preDelay: 0,
+			preHighCut: 0,
+			preLowCut: 10000,
+			mix: 50,
+			roomSize: 0.699999988079071,
+		},
+		wah: {
+			type: WahTypes.auto,
+			cutoff: 2000,
+			disabled: true,
+			speed: 1,
+			delay: 0,
+			depth: 2500,
+			lfoForm: waveForms.sine,
+			mix: 50,
+		},
+	},
+} as const;
 
 /******************************************************************
  * PRESET MODULE GENERATION
@@ -713,32 +872,72 @@ function loadEffectsPreset(preset: SynthEffectsPreset, cluster: AudioCluster) {
 	cluster.effects.append(compression);
 }
 
-function createPresetFile(preset: SynthPreset) {
-	const blob = new Blob([JSON.stringify(preset, null, 2)], {
-		type: "application/json",
-	});
-	return blob;
+/******************************************************************
+ * PERSISTENCE API
+ ******************************************************************/
+
+/**
+ * Searches the preset list for a preset with the provided name
+ * If it isn't found it throws an error.
+ * TODO: Should maybe just return null?
+ * @param name
+ * @returns
+ */
+function getPreset(name: string): SynthPreset {
+	const presetList = getPresetList();
+	const p = presetList[name];
+	if (!p) throw new Error(`There is no preset with name ${name}`);
+	return p;
+}
+
+/**
+ * Adds a preset to the preset list.
+ * If a preset with the same name already existed, it is overwriten
+ * @param preset
+ */
+function addPreset(preset: SynthPreset) {
+	const presetList = getPresetList();
+	presetList[preset.name] = preset;
+	savePresetList(presetList);
 }
 
 /******************************************************************
  * PRESET PERSISTENCE
  ******************************************************************/
 
-function saveSynthPreset(name: string, input: PresetInput) {
-	//check if presetList exists
+/**
+ * Checks that the provided object is a SynthParam by comparing its content with DEFAULT_PRESET
+ * @param preset - the raw preset object whose type is yet unknown
+ * @returns - boolean
+ */
+function validatePresetObject(preset: Record<string, unknown>): boolean {
+	for (const [key, value] of Object.entries(DEFAULT_PRESET)) {
+		if (!preset.hasOwnProperty(key)) {
+			console.warn(`No key ${key} on preset`);
+			return false;
+		}
 
-	const presetList: PresetList = getPresetList();
-	const preset = generateSynthPreset(name, input);
-	//check existing presets and change name?
-	presetList[name] = preset;
+		if (typeof value != typeof preset[key]) {
+			console.warn(
+				`type of key ${key} with value ${value} is ${typeof value}, which is different from ${preset[key]} ${typeof preset[key]}`
+			);
+			return false;
+		}
+	}
 
-	savePresetList(presetList);
+	return true;
 }
 
+/**
+ * returns a initialized Synth as a result of loading the preset with the specified name
+ * @param name - The name of the preset to be loaded
+ * @param ctx - The audio context that wraps everything
+ * @param output - The audio node that is directly connected to the ctx oputput
+ * @returns
+ */
 function loadSynthPreset(name: string, ctx: AudioContext, output: AudioNode) {
-	const presetList: PresetList = getPresetList();
-	const preset = presetList[name];
-	if (!preset) throw new Error("No preset");
+	const preset = getPreset(name);
+	if (!preset) return null;
 
 	//TODO: Validation
 	const { modules, envelope, filters, lfos, effects }: SynthPreset = preset;
@@ -795,6 +994,13 @@ function updatePresetName(oldName: string, newName: string) {
 	savePresetList(presetList);
 }
 
+function createPresetFile(preset: SynthPreset) {
+	const blob = new Blob([JSON.stringify(preset, null, 2)], {
+		type: "application/json",
+	});
+	return blob;
+}
+
 /******************************************************************
  * COMPOSABLE
  ******************************************************************/
@@ -809,13 +1015,14 @@ export default function usePresets() {
 			throw new Error("Max number of presets reached");
 		}
 
-		saveSynthPreset(name, {
+		const preset = generateSynthPreset(name, {
 			cluster: cluster.value,
 			envelope: envelope.value,
 			lfos: lfos.value,
 			filters: filters.value,
 			effects: effects.value,
 		});
+		addPreset(preset);
 
 		presets.value = getPresetList();
 	}
@@ -828,6 +1035,8 @@ export default function usePresets() {
 			cluster.value.context,
 			cluster.value.exit
 		);
+
+		if (preset == null) return;
 
 		if (preset.cluster == cluster.value) {
 			return;
@@ -870,7 +1079,34 @@ export default function usePresets() {
 		URL.revokeObjectURL(presetUrl);
 	}
 
-	function uploadPreset() {}
+	async function uploadPreset(file: File) {
+		if (file.type != "application/json")
+			throw new Error("The provided preset is not a JSON file");
+
+		if (file.size > MAX_PRESET_FILE_SIZE)
+			throw new Error("The provided preset file is too big");
+
+		const fr = new FileReader();
+		const preset = await new Promise<SynthPreset>((resolve, reject) => {
+			fr.onloadend = () => {
+				const rawObject = JSON.parse(fr.result as string);
+				if (!validatePresetObject(rawObject)) {
+					console.warn("Rejecting");
+					reject();
+					return;
+				}
+				resolve(rawObject as SynthPreset);
+			};
+			fr.readAsText(file, "UTF-8");
+		}).catch(() => {
+			return null;
+		});
+
+		//Add error handling
+		if (!preset) return null;
+		addPreset(preset);
+		presets.value = getPresetList();
+	}
 
 	return {
 		presetList: presets,
