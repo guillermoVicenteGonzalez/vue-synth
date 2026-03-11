@@ -1,21 +1,50 @@
 <template>
 	<div class="ToastContainer">
 		<ToastCard
-			v-for="message in messages"
-			:key="message.title"
-			:message="message"
+			v-for="event in events"
+			:key="event.message.content"
+			:message="event.message"
+			:variant="applyToastVariant(event)"
+			@close-toast="handleCloseToast(event)"
 		></ToastCard>
 	</div>
 </template>
 
 <script setup lang="ts">
-import useToast from "@/composables/useToast";
-import ToastCard from "./ToastCard.vue";
+import useToast, { type ToastEvent } from "@/composables/useToast";
+import ToastCard, { type ToastCardVariant } from "./ToastCard.vue";
 
-const { messages } = useToast();
+const { events, removeMessage } = useToast();
+
+function applyToastVariant(toast: ToastEvent): ToastCardVariant {
+	switch (toast.severity) {
+		case "error":
+			return "error";
+
+		case "warning":
+			return "warning";
+
+		default:
+			return "default";
+	}
+}
+
+function handleCloseToast(toast: ToastEvent) {
+	removeMessage(toast);
+}
 </script>
 
 <style lang="scss" scoped>
+.fade-enter-active,
+.fade-leave-active {
+	transition: opacity 1s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+	opacity: 0;
+}
+
 .ToastContainer {
 	position: absolute;
 	top: 0;

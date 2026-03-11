@@ -1,33 +1,32 @@
 <template>
-	<dialog class="ToastCard" open :class="dynamicToastClass">
-		<VsCard class="ToastCard__container">
-			<div class="ToastCard__content">
-				<h4 class="ToastCard__title">{{ message.title }}</h4>
-				<span v-if="message.content" class="ToastCard__message">{{
-					message.content
-				}}</span>
-			</div>
-			<div class="ToastCard__actions">
-				<VsButton
-					@click="handleCloseToast"
-					variant="outlined"
-					class="ToastCard__button"
-					>close</VsButton
-				>
-			</div>
-		</VsCard>
-	</dialog>
+	<Transition name="fade">
+		<dialog v-if="message" class="ToastCard" open :class="dynamicToastClass">
+			<VsCard class="ToastCard__container">
+				<div class="ToastCard__content">
+					<h4 class="ToastCard__title">{{ message.title }}</h4>
+					<span v-if="message.content" class="ToastCard__message">{{
+						message.content
+					}}</span>
+				</div>
+				<div class="ToastCard__actions">
+					<VsButton
+						variant="outlined"
+						class="ToastCard__button"
+						@click="handleCloseToast"
+						>close</VsButton
+					>
+				</div>
+			</VsCard>
+		</dialog>
+	</Transition>
 </template>
 
 <script lang="ts" setup>
-import useToast from "@/composables/useToast";
 import { computed, onBeforeUnmount } from "vue";
 import VsButton from "../VsButton/VsButton.vue";
 import VsCard from "../VsCard/VsCard.vue";
 
-const { removeMessage } = useToast();
-
-type ToastCardVariant = "default" | "warning" | "error";
+export type ToastCardVariant = "default" | "warning" | "error";
 
 interface ToastCardProps {
 	message: ToastMessage;
@@ -39,14 +38,17 @@ export interface ToastMessage {
 	title: string;
 }
 
-const { message, variant = "error" } = defineProps<ToastCardProps>();
+const { message, variant } = defineProps<ToastCardProps>();
 
 const dynamicToastClass = computed(() => ({
 	[`ToastCard--${variant}`]: variant,
 }));
 
+const emit = defineEmits<(e: "closeToast") => void>();
+
 function handleCloseToast() {
-	removeMessage(message);
+	// removeMessage(message);
+	emit("closeToast");
 }
 
 onBeforeUnmount(() => {});
@@ -148,6 +150,16 @@ $toast-actions-width: 1rem;
 	}
 }
 
+.fade-enter-active,
+.fade-leave-active {
+	transition: opacity 1s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+	opacity: 0;
+}
+
 @keyframes fade-in {
 	0% {
 		opacity: 0;
@@ -155,6 +167,16 @@ $toast-actions-width: 1rem;
 
 	100% {
 		opacity: 100%;
+	}
+}
+
+@keyframes fade-out {
+	0% {
+		opacity: 100%;
+	}
+
+	100% {
+		opacity: 0%;
 	}
 }
 

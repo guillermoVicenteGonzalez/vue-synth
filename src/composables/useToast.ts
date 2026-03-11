@@ -1,42 +1,41 @@
 import type { ToastMessage } from "@/components/common/Toast/ToastCard.vue";
 import { ref } from "vue";
 
-interface ToastOptions {
+export interface ToastEvent {
+	message: ToastMessage;
 	lifetime?: number;
+	severity?: "success" | "warning" | "info" | "error";
 }
 
-const toastMessages = ref<ToastMessage[]>([]);
+const toastEvents = ref<ToastEvent[]>([]);
 export default function useToast() {
-	function addToast(message: ToastMessage, options?: ToastOptions) {
-		toastMessages.value.push(message);
+	function addToast(toast: ToastEvent) {
+		toastEvents.value.push(toast);
 
-		if (!options) return;
-
-		if (options.lifetime) {
-			console.error("Setting lifetime");
+		if (toast.lifetime) {
 			setTimeout(() => {
-				const idx = toastMessages.value.indexOf(message);
+				const idx = toastEvents.value.indexOf(toast);
 
 				if (idx > -1) {
-					toastMessages.value.splice(idx, 1);
+					toastEvents.value.splice(idx, 1);
 				}
-			}, options.lifetime);
+			}, toast.lifetime);
 		}
 	}
 
-	function addMultiple(messages: ToastMessage[], options: ToastOptions) {
+	function addMultiple(messages: ToastEvent[]) {
 		messages.forEach(m => {
-			addToast(m, options);
+			addToast(m);
 		});
 	}
 
-	function removeMessage(message: ToastMessage) {
-		const idx = toastMessages.value.indexOf(message);
-		if (idx > -1) toastMessages.value.splice(idx, 1);
+	function removeMessage(toast: ToastEvent) {
+		const idx = toastEvents.value.indexOf(toast);
+		if (idx > -1) toastEvents.value.splice(idx, 1);
 	}
 
 	return {
-		messages: toastMessages,
+		events: toastEvents,
 		addToast,
 		addMultiple,
 		removeMessage,
