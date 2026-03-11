@@ -41,6 +41,9 @@
 			<VsButton class="PresetWidget__button" @click="handleLoadPreset"
 				>Load</VsButton
 			>
+			<VsButton class="PresetWidget__button" @click="handleDownloadPreset"
+				>Download</VsButton
+			>
 			<VsButton
 				class="PresetWidget__button PresetWidget__button--delete-btn"
 				@click="handleDeletePreset"
@@ -68,6 +71,8 @@ const emit = defineEmits<{
 	(e: "loadPreset", name: string): void;
 	(e: "updatePreset", name: string): void;
 	(e: "deletePreset", name: string): void;
+	(e: "downloadPreset", name: string): void;
+
 	(e: "updatePresetName", oldName: string, newName: string): void;
 }>();
 
@@ -84,6 +89,10 @@ function handleUpdatePreset() {
 
 function handleDeletePreset() {
 	emit("deletePreset", preset.name);
+}
+
+function handleDownloadPreset() {
+	emit("downloadPreset", preset.name);
 }
 
 function toggleEdit() {

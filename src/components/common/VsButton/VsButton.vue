@@ -33,6 +33,7 @@ const classObject = computed(() => {
 <style lang="scss" scoped>
 $hover-scale: 1.05;
 $active-scale: 0.98;
+$outlined-border-size: 0.1rem;
 
 .vs-button {
 	// min-width: 100px;
@@ -51,9 +52,11 @@ $active-scale: 0.98;
 	color: $text-color;
 
 	&--outlined {
-		background-color: red;
-		color: #fff;
+		background-color: transparent;
+		// color: #fff;
 		border-radius: 1rem;
+		border: solid $outlined-border-size $tertiary-color;
+		color: $tertiary-color;
 	}
 
 	&--round {

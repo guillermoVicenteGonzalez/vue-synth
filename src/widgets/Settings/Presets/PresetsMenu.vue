@@ -11,6 +11,7 @@
 					@delete-preset="handleDeletePreset"
 					@update-preset="handleUpdatePreset"
 					@update-preset-name="handleUpdateName"
+					@download-preset="handleDownloadPreset"
 				></PresetWidget>
 			</div>
 
@@ -34,7 +35,12 @@
 					@click="handleSavePreset"
 					>Save Preset</VsButton
 				>
-				<!-- <VsButton class="PresetsMenu__button">Upload preset</VsButton> -->
+				<VsButton class="PresetsMenu__button" @click="handleUploadPreset">
+					<VsSpinner v-if="vsSpinnerVisible" size="sm"></VsSpinner>
+					<span v-else>Upload Preset</span>
+				</VsButton>
+
+				<!-- <input type="file" @change="handleUploadPreset" /> -->
 
 				<VsButton
 					class="PresetsMenu__button PresetsMenu__button--delete-btn"
@@ -49,10 +55,14 @@
 <script setup lang="ts">
 import VsButton from "@/components/common/VsButton/VsButton.vue";
 import VsSeparator from "@/components/common/VsSeparator/VsSeparator.vue";
+import VsSpinner from "@/components/common/VsSpinner/VsSpinner.vue";
 import VsTextInput from "@/components/common/VsTextInput/VsTextInput.vue";
 import usePresets from "@/composables/usePresets";
+import useToast from "@/composables/useToast";
 import { ref } from "vue";
 import PresetWidget from "./PresetWidget.vue";
+
+const { addToast } = useToast();
 
 const {
 	presetList,
@@ -61,8 +71,11 @@ const {
 	deletePreset,
 	clearPresets,
 	updateName,
+	downloadPreset,
+	uploadPreset,
 } = usePresets();
 const newPresetName = ref<string>("");
+const vsSpinnerVisible = ref<boolean>(false);
 
 function handleSavePreset() {
 	savePreset(newPresetName.value);
@@ -87,6 +100,38 @@ function handleDeleteAll() {
 
 function handleUpdateName(oldName: string, newName: string) {
 	updateName(oldName, newName);
+}
+
+function handleDownloadPreset(name: string) {
+	downloadPreset(name);
+}
+
+async function handleUploadPreset() {
+	const fInput: HTMLInputElement = document.createElement("input");
+	fInput.type = "file";
+	fInput.accept = ".json";
+
+	const file = await new Promise<File>((resolve, reject) => {
+		fInput.onchange = () => {
+			if (fInput.files && fInput.files.length > 0) resolve(fInput.files[0]);
+			reject();
+		};
+
+		fInput.oncancel = () => {
+			reject();
+		};
+		fInput.click();
+		vsSpinnerVisible.value = true;
+	}).catch(err => {
+		addToast({ title: "Upload preset", content: err }, { lifetime: 5000 });
+		return null;
+	});
+
+	if (file)
+		await uploadPreset(file).catch(err => {
+			addToast({ title: "upload preset", content: err }, { lifetime: 5000 });
+			vsSpinnerVisible.value = false;
+		});
 }
 </script>
 
