@@ -110,7 +110,6 @@ async function handleUploadPreset() {
 
 	const file = await new Promise<File>((resolve, reject) => {
 		fInput.onchange = () => {
-			console.log(fInput.files);
 			if (fInput.files && fInput.files.length > 0) resolve(fInput.files[0]);
 			reject();
 		};
@@ -120,8 +119,9 @@ async function handleUploadPreset() {
 		};
 		fInput.click();
 		vsSpinnerVisible.value = true;
-	}).catch(() => {
+	}).catch(err => {
 		//for future error handling (dialog)
+		console.warn(err);
 		return null;
 	});
 

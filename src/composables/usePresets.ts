@@ -356,13 +356,6 @@ function generateClusterPreset(cluster: AudioCluster): ModulePreset[] {
 		};
 	});
 
-	//check duplicate names
-	// const duplicateNames = modules
-	// 	.map(module => module.name)
-	// 	.filter((name, index, arr) => {
-	// 		return arr.indexOf(name) != index;
-	// 	});
-
 	const names: string[] = [];
 	for (let i = 0; i < modules.length; i++) {
 		const name = modules[i].name;
@@ -378,7 +371,6 @@ function generateClusterPreset(cluster: AudioCluster): ModulePreset[] {
 		}
 	}
 
-	console.log(modules);
 	return modules;
 }
 
@@ -672,6 +664,7 @@ function loadFlangerPreset(
 	flanger.delay = preset.delay;
 	flanger.feedback = preset.feedback;
 	flanger.speed = preset.speed;
+	flanger.disabled = preset.disabled;
 
 	return flanger;
 }
@@ -759,6 +752,7 @@ function loadReverbPreset(
 	reverb.preHighCut = preset.preHighCut;
 	reverb.preLowCut = preset.preLowCut;
 	reverb.mix = preset.mix;
+	reverb.disabled = preset.disabled;
 
 	return reverb;
 }
@@ -913,14 +907,14 @@ function addPreset(preset: SynthPreset) {
 function validatePresetObject(preset: Record<string, unknown>): boolean {
 	for (const [key, value] of Object.entries(DEFAULT_PRESET)) {
 		if (!preset.hasOwnProperty(key)) {
-			console.warn(`No key ${key} on preset`);
+			// console.warn(`No key ${key} on preset`);
 			return false;
 		}
 
 		if (typeof value != typeof preset[key]) {
-			console.warn(
-				`type of key ${key} with value ${value} is ${typeof value}, which is different from ${preset[key]} ${typeof preset[key]}`
-			);
+			// console.warn(
+			// 	`type of key ${key} with value ${value} is ${typeof value}, which is different from ${preset[key]} ${typeof preset[key]}`
+			// );
 			return false;
 		}
 	}
@@ -1091,7 +1085,6 @@ export default function usePresets() {
 			fr.onloadend = () => {
 				const rawObject = JSON.parse(fr.result as string);
 				if (!validatePresetObject(rawObject)) {
-					console.warn("Rejecting");
 					reject();
 					return;
 				}
