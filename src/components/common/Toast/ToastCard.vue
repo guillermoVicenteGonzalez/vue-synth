@@ -9,9 +9,9 @@
 			</div>
 			<div class="ToastCard__actions">
 				<VsButton
-					@click="handleCloseToast"
 					variant="outlined"
 					class="ToastCard__button"
+					@click="handleCloseToast"
 					>close</VsButton
 				>
 			</div>

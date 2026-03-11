@@ -13,7 +13,6 @@ export default function useToast() {
 		if (!options) return;
 
 		if (options.lifetime) {
-			console.error("Setting lifetime");
 			setTimeout(() => {
 				const idx = toastMessages.value.indexOf(message);
 

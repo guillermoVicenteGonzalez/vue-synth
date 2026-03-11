@@ -905,6 +905,8 @@ function addPreset(preset: SynthPreset) {
  * @returns - boolean
  */
 function validatePresetObject(preset: Record<string, unknown>): boolean {
+	if (typeof preset != "object") return false;
+
 	for (const [key, value] of Object.entries(DEFAULT_PRESET)) {
 		if (!preset.hasOwnProperty(key)) {
 			// console.warn(`No key ${key} on preset`);
@@ -1083,7 +1085,14 @@ export default function usePresets() {
 		const fr = new FileReader();
 		const preset = await new Promise<SynthPreset>((resolve, reject) => {
 			fr.onloadend = () => {
-				const rawObject = JSON.parse(fr.result as string);
+				let rawObject;
+				try {
+					rawObject = JSON.parse(fr.result as string);
+				} catch (err) {
+					reject(err);
+					console.error(err);
+				}
+
 				if (!validatePresetObject(rawObject)) {
 					reject();
 					return;
@@ -1091,8 +1100,8 @@ export default function usePresets() {
 				resolve(rawObject as SynthPreset);
 			};
 			fr.readAsText(file, "UTF-8");
-		}).catch(() => {
-			return null;
+		}).catch(err => {
+			throw new Error(err);
 		});
 
 		//Add error handling

@@ -58,8 +58,11 @@ import VsSeparator from "@/components/common/VsSeparator/VsSeparator.vue";
 import VsSpinner from "@/components/common/VsSpinner/VsSpinner.vue";
 import VsTextInput from "@/components/common/VsTextInput/VsTextInput.vue";
 import usePresets from "@/composables/usePresets";
+import useToast from "@/composables/useToast";
 import { ref } from "vue";
 import PresetWidget from "./PresetWidget.vue";
+
+const { addToast } = useToast();
 
 const {
 	presetList,
@@ -120,13 +123,15 @@ async function handleUploadPreset() {
 		fInput.click();
 		vsSpinnerVisible.value = true;
 	}).catch(err => {
-		//for future error handling (dialog)
-		console.warn(err);
+		addToast({ title: "Upload preset", content: err }, { lifetime: 5000 });
 		return null;
 	});
 
-	if (file) uploadPreset(file);
-	vsSpinnerVisible.value = false;
+	if (file)
+		await uploadPreset(file).catch(err => {
+			addToast({ title: "upload preset", content: err }, { lifetime: 5000 });
+			vsSpinnerVisible.value = false;
+		});
 }
 </script>
 
