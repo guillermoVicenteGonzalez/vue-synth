@@ -132,6 +132,8 @@ async function handleUploadPreset() {
 			addToast({ title: "upload preset", content: err }, { lifetime: 5000 });
 			vsSpinnerVisible.value = false;
 		});
+
+	vsSpinnerVisible.value = false;
 }
 </script>
 
