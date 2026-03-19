@@ -77,12 +77,6 @@ $request-btn-size-sm: 3rem;
 			color: $tertiary-color;
 			color: black;
 		}
-
-		@include respond(tab-port) {
-			width: $request-btn-size-sm;
-			height: $request-btn-size-sm;
-			padding: 0.5rem;
-		}
 	}
 }
 </style>

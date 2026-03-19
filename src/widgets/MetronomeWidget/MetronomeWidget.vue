@@ -7,7 +7,7 @@
 					:class="dynamicMetronomeClass"
 					variant="round"
 					@click="toggleMetronome"
-					><Timer class="MetronomeWidget__icon"></Timer
+					><Metronome_icon class="MetronomeWidget__icon"></Metronome_icon
 				></VsButton>
 			</VsTooltip>
 		</template>
@@ -76,7 +76,7 @@ import Metronome, {
 	MIN_METRONOME_PITCH,
 } from "@/models/utils/metronome/metronome";
 import { waveForms } from "@/models/wave";
-import { Timer } from "lucide-vue-next";
+import { Metronome as Metronome_icon } from "lucide-vue-next";
 import { computed, onUnmounted, ref } from "vue";
 
 const metronome = ref<Metronome>(new Metronome());
