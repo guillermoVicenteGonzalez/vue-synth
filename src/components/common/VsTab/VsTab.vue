@@ -23,7 +23,8 @@ const tabDynamicClass = computed(() => ({
 	width: 0;
 	height: 0;
 	visibility: hidden;
-	// overflow: hidden;
+	// Esto estaba comentado?
+	overflow: hidden;
 
 	&--active {
 		width: 100%;

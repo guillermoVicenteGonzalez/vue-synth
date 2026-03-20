@@ -259,8 +259,10 @@ function handleCloseContextMenu() {
 $handle-bg-color: black;
 $handle-padding: 1rem;
 $disabled-color: gray;
+$min-card-width: 40rem;
 
 .ModuleCard {
+	// min-width: $min-card-width;
 	width: 100%;
 	height: 100%;
 

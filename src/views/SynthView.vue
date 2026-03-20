@@ -44,10 +44,10 @@
 				v-model:volume="MainAudioCluster.volume"
 				:source="MainAudioCluster"
 				orientation="horizontal"
+				:variant="variant"
 				@create-wave="createNewModule"
 				@create-filter="createFilter"
 				@delete-all="deleteAll"
-				:variant="variant"
 			></ActionsWidget>
 		</template>
 		<template #envelope>

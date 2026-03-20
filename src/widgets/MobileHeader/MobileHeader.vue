@@ -2,18 +2,42 @@
 	<header class="mobile-header">
 		<div class="mobile-header__title">VSYNTH</div>
 		<div class="mobile-header__tabs">
-			<VsButton variant="round" class="mobile-header__button">
+			<VsButton
+				variant="round"
+				class="mobile-header__button"
+				@click="changeTab('piano')"
+			>
+				<KeyboardMusic class="mobile-header__button__icon"></KeyboardMusic>
+			</VsButton>
+
+			<VsButton
+				variant="round"
+				class="mobile-header__button"
+				@click="changeTab('voices')"
+			>
 				<AudioLines class="movile-header__button__icon"></AudioLines>
 			</VsButton>
-			<VsButton variant="round" class="mobile-header__button">
+			<VsButton
+				variant="round"
+				class="mobile-header__button"
+				@click="changeTab('effects')"
+			>
 				<Sparkles class="mobile-header__button__icon"> </Sparkles>
 			</VsButton>
 
-			<VsButton variant="round" class="mobile-header__button">
+			<VsButton
+				variant="round"
+				class="mobile-header__button"
+				@click="changeTab('envelope')"
+			>
 				<Mail class="mobile-header__button__icon"></Mail>
 			</VsButton>
 
-			<VsButton variant="round" class="mobile-header__button">
+			<VsButton
+				variant="round"
+				class="mobile-header__button"
+				@click="changeTab('lfo')"
+			>
 				<Activity class="mobile-header__button__icon"></Activity>
 			</VsButton>
 		</div>
@@ -44,14 +68,28 @@ import VsButton from "@/components/common/VsButton/VsButton.vue";
 import MidiSelector from "@/components/MIDI/MidiSelector.vue";
 import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
 import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
-import { Activity, AudioLines, Mail, Sparkles } from "lucide-vue-next";
+import {
+	Activity,
+	AudioLines,
+	KeyboardMusic,
+	Mail,
+	Sparkles,
+} from "lucide-vue-next";
 import MetronomeWidget from "../MetronomeWidget/MetronomeWidget.vue";
 import SettingsButton from "../Settings/SettingsButton.vue";
 
 import useSynth from "@/composables/useSynth";
+import type { MobileTabs } from "@/layouts/synth/PortraitSynthLayout.vue";
+
+const currentTab = defineModel<MobileTabs>({ default: "voices" });
 
 const primaryColor = "#42d392";
 const { cluster } = useSynth();
+
+function changeTab(newTab: MobileTabs) {
+	currentTab.value = newTab;
+	// alert(`change tab to ${newTab}`);
+}
 </script>
 
 <style scoped lang="scss">

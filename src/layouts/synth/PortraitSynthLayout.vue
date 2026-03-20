@@ -1,31 +1,35 @@
 <template>
 	<div class="portrait-layout">
 		<div class="portrait-layout__header">
-			<MobileHeader></MobileHeader>
+			<MobileHeader v-model="activeTab"></MobileHeader>
 		</div>
 
 		<div class="portrait-layout__body">
-			<VsTab :active="activeTab == 0" class="portrait-layout__voices">
+			<VsTab :active="activeTab == 'voices'" class="portrait-layout__voices">
 				<slot name="waves"></slot>
 				<slot name="filters"></slot>
 			</VsTab>
 
-			<VsTab :active="activeTab == 1">
+			<VsTab :active="activeTab == 'envelope'">
 				<slot name="envelope" variant="minimal"></slot>
 			</VsTab>
 
-			<VsTab :active="activeTab == 2" class="portrait-layout__piano">
-				<slot name="piano"></slot>
+			<VsTab :active="activeTab == 'lfo'">
+				<slot name="lfo"></slot>
 			</VsTab>
 
-			<VsTab :active="activeTab == 3">
-				<slot name="lfo"></slot>
+			<VsTab :active="activeTab == 'effects'">
+				<slot name="effects"></slot>
 			</VsTab>
 		</div>
 
 		<div class="portrait-layout__actions">
 			<slot name="actions" variant="block"></slot>
 		</div>
+
+		<VsTab :active="activeTab == 'piano'">
+			<slot name="piano" class="pianoContainer"></slot>
+		</VsTab>
 	</div>
 </template>
 <script setup lang="ts">
@@ -34,8 +38,10 @@ import type { ActionsWidgetVariants } from "@/widgets/ActionsWidget/ActionsWidge
 import MobileHeader from "@/widgets/MobileHeader/MobileHeader.vue";
 import { ref } from "vue";
 
+export type MobileTabs = "voices" | "envelope" | "lfo" | "effects" | "piano";
+
 // const tabItems = ["envelope", "piano", "LFO"];
-const activeTab = ref<number>(0);
+const activeTab = ref<MobileTabs>("voices");
 defineSlots<{
 	actions(props: { variant: ActionsWidgetVariants }): void;
 	envelope(): void;
@@ -43,6 +49,7 @@ defineSlots<{
 	filters(): void;
 	lfo(): void;
 	piano(): void;
+	effects(): void;
 }>();
 </script>
 
@@ -75,29 +82,32 @@ $max-filters-w: 4fr;
 	max-width: 100dvw;
 	max-height: 100dvh;
 
-	overflow: hidden !important;
+	overflow: hidden;
+
 	display: flex;
 	flex-direction: column;
-
-	// display: grid;
-	// position: relative;
-
-	grid-template-rows: 1fr 1fr 1fr;
-	grid-template-columns: 1fr;
+	gap: $gap-sm;
 
 	&__header {
-		height: 10rem;
 	}
 
 	&__body {
-		height: 100%;
 		// background-color: red;
+		overflow: auto;
+		flex: 1 1 100%;
+	}
+
+	&__voices {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
 	}
 
 	&__actions {
+		flex: 1 1 10rem;
+
 		width: 100%;
 		height: fit-content;
-		position: absolute;
+		// position: absolute;
 		bottom: 0;
 		left: 0;
 		// padding: $gap-df;
@@ -107,6 +117,10 @@ $max-filters-w: 4fr;
 		// 	border-radius: 0 !important;
 		// }
 	}
+}
+
+.pianoContainer {
+	flex: 1 1 100%;
 }
 
 // .portrait-layout {
