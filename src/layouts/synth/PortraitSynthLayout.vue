@@ -15,7 +15,7 @@
 			</VsTab>
 
 			<VsTab :active="activeTab == 'lfo'">
-				<slot name="lfo"></slot>
+				<slot name="lfo" listVariant="vertical" widgetVariant="default"></slot>
 			</VsTab>
 
 			<VsTab :active="activeTab == 'effects'">
@@ -35,6 +35,8 @@
 <script setup lang="ts">
 import VsTab from "@/components/common/VsTab/VsTab.vue";
 import type { ActionsWidgetVariants } from "@/widgets/ActionsWidget/ActionsWidget.vue";
+import type { LFOWidgetVariants } from "@/widgets/LfoWdidget/LfoWdidgetWidget.vue";
+import type { LfoWidgetListVariants } from "@/widgets/LfoWidgetList/LfoWidgetListWidget.vue";
 import MobileHeader from "@/widgets/MobileHeader/MobileHeader.vue";
 import { ref } from "vue";
 
@@ -47,7 +49,10 @@ defineSlots<{
 	envelope(): void;
 	waves(): void;
 	filters(): void;
-	lfo(): void;
+	lfo(props: {
+		listVariant: LfoWidgetListVariants;
+		widgetVariant: LFOWidgetVariants;
+	}): void;
 	piano(): void;
 	effects(): void;
 }>();

@@ -30,7 +30,11 @@
 			>
 				<div class="mobile-layout__controls__content">
 					<VsTab :active="controlsTab == 0">
-						<slot name="lfo"></slot>
+						<slot
+							name="lfo"
+							listVariant="horizontal"
+							widgetVariant="minimal"
+						></slot>
 					</VsTab>
 
 					<VsTab :active="controlsTab == 1">
@@ -50,6 +54,8 @@
 import VsTab from "@/components/common/VsTab/VsTab.vue";
 import VsTabs from "@/components/common/VsTabs/VsTabs.vue";
 import type { ActionsWidgetVariants } from "@/widgets/ActionsWidget/ActionsWidget.vue";
+import type { LFOWidgetVariants } from "@/widgets/LfoWdidget/LfoWdidgetWidget.vue";
+import type { LfoWidgetListVariants } from "@/widgets/LfoWidgetList/LfoWidgetListWidget.vue";
 import { ref } from "vue";
 
 const activeTab = ref<number>(0);
@@ -63,7 +69,10 @@ defineSlots<{
 	envelope(): void;
 	waves(): void;
 	filters(): void;
-	lfo(): void;
+	lfo(props: {
+		listVariant: LfoWidgetListVariants;
+		widgetVariant: LFOWidgetVariants;
+	}): void;
 	piano(): void;
 	effects(): void;
 	header(): void;

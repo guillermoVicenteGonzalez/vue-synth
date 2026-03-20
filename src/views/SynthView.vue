@@ -53,11 +53,11 @@
 		<template #envelope>
 			<EnvelopeControlWidget v-model="envelope" />
 		</template>
-		<template #lfo>
+		<template #lfo="{ listVariant, widgetVariant }">
 			<LfoWidgetListWidget
 				v-model="lfos"
-				:widget-variant="LFOlWidgetVariant"
-				:variant="lfoListVariant"
+				:widget-variant="widgetVariant"
+				:variant="listVariant"
 				:context="mainContext"
 				:sources="lfoSources"
 			></LfoWidgetListWidget>
@@ -98,7 +98,6 @@ import HeaderControlsWidget, {
 } from "@/widgets/HeaderControls/HeaderControlsWidget.vue";
 import HeaderWidgetWidget from "@/widgets/HeaderWidget/HeaderWidgetWidget.vue";
 import KeyboardWidget from "@/widgets/Keyboard/KeyboardWidget.vue";
-import { type LFOWidgetVariants } from "@/widgets/LfoWdidget/LfoWdidgetWidget.vue";
 import LfoWidgetListWidget from "@/widgets/LfoWidgetList/LfoWidgetListWidget.vue";
 import ModuleCardListWidget from "@/widgets/ModuleCardList/ModuleCardListWidget.vue";
 import { computed, onMounted, ref } from "vue";
@@ -121,14 +120,6 @@ const currentLayout = computed(() => {
 	}
 
 	return SynthLayout;
-});
-
-const LFOlWidgetVariant = computed<LFOWidgetVariants>(() =>
-	currentLayout.value == PortraitSynthLayout ? "minimal" : "default"
-);
-
-const lfoListVariant = computed(() => {
-	return browserWidth.value < 800 ? "horizontal" : "vertical";
 });
 
 const MAX_FILTERS = 5;
