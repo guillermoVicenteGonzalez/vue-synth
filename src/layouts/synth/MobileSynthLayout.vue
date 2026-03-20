@@ -19,7 +19,7 @@
 		</div>
 
 		<div class="mobile-layout__actions">
-			<slot name="actions"></slot>
+			<slot name="actions" variant="rounded"></slot>
 		</div>
 
 		<div class="mobile-layout__controls">
@@ -49,6 +49,7 @@
 <script setup lang="ts">
 import VsTab from "@/components/common/VsTab/VsTab.vue";
 import VsTabs from "@/components/common/VsTabs/VsTabs.vue";
+import type { ActionsWidgetVariants } from "@/widgets/ActionsWidget/ActionsWidget.vue";
 import { ref } from "vue";
 
 const activeTab = ref<number>(0);
@@ -56,6 +57,17 @@ const controlsTab = ref<number>(0);
 
 const tabItems: string[] = ["waves", "filters"];
 const controlsTabItems = ["LFO", "enveloppe"];
+
+defineSlots<{
+	actions(props: { variant: ActionsWidgetVariants }): void;
+	envelope(): void;
+	waves(): void;
+	filters(): void;
+	lfo(): void;
+	piano(): void;
+	effects(): void;
+	header(): void;
+}>();
 </script>
 
 <style lang="scss" scoped>

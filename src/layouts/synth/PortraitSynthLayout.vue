@@ -5,7 +5,7 @@
 		</div>
 
 		<div class="portrait-layout__body">
-			<VsTab :active="activeTab == 0">
+			<VsTab :active="activeTab == 0" class="portrait-layout__voices">
 				<slot name="waves"></slot>
 				<slot name="filters"></slot>
 			</VsTab>
@@ -21,28 +21,29 @@
 			<VsTab :active="activeTab == 3">
 				<slot name="lfo"></slot>
 			</VsTab>
-
-			<!-- <VsTab :active="activeTab == 0">
-				<slot name="effects" class="effects"> </slot>
-			</VsTab> -->
-			<!-- 
-			<div v-if="$slots.effects" class="portrait-layout__effects">
-				<slot name="effects" class="effects"> </slot>
-			</div> -->
 		</div>
 
-		<!-- <div class="portrait-layout__actions">
-			<slot name="actions"></slot>
-		</div> -->
+		<div class="portrait-layout__actions">
+			<slot name="actions" variant="block"></slot>
+		</div>
 	</div>
 </template>
 <script setup lang="ts">
 import VsTab from "@/components/common/VsTab/VsTab.vue";
+import type { ActionsWidgetVariants } from "@/widgets/ActionsWidget/ActionsWidget.vue";
 import MobileHeader from "@/widgets/MobileHeader/MobileHeader.vue";
 import { ref } from "vue";
 
 // const tabItems = ["envelope", "piano", "LFO"];
 const activeTab = ref<number>(0);
+defineSlots<{
+	actions(props: { variant: ActionsWidgetVariants }): void;
+	envelope(): void;
+	waves(): void;
+	filters(): void;
+	lfo(): void;
+	piano(): void;
+}>();
 </script>
 
 <style lang="scss" scoped>
@@ -68,11 +69,43 @@ $min-filters-w: 3.5rem;
 $max-filters-w: 4fr;
 
 .portrait-layout {
-	display: grid;
+	width: 100vw;
+	height: 100dvh;
+
+	max-width: 100dvw;
+	max-height: 100dvh;
+
+	overflow: hidden !important;
+	display: flex;
+	flex-direction: column;
+
+	// display: grid;
+	// position: relative;
+
+	grid-template-rows: 1fr 1fr 1fr;
+	grid-template-columns: 1fr;
+
+	&__header {
+		height: 10rem;
+	}
+
+	&__body {
+		height: 100%;
+		// background-color: red;
+	}
 
 	&__actions {
 		width: 100%;
+		height: fit-content;
 		position: absolute;
+		bottom: 0;
+		left: 0;
+		// padding: $gap-df;
+		z-index: 3;
+
+		// > * {
+		// 	border-radius: 0 !important;
+		// }
 	}
 }
 

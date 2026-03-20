@@ -38,15 +38,16 @@
 			></VsEffectsWidget>
 		</template>
 
-		<template #actions>
+		<template #actions="{ variant }">
 			<ActionsWidget
 				v-model:transpose="transposeAmount"
 				v-model:volume="MainAudioCluster.volume"
 				:source="MainAudioCluster"
-				:orientation="ActionsWidgetOrientation"
+				orientation="horizontal"
 				@create-wave="createNewModule"
 				@create-filter="createFilter"
 				@delete-all="deleteAll"
+				:variant="variant"
 			></ActionsWidget>
 		</template>
 		<template #envelope>
@@ -87,9 +88,7 @@ import AudioCluster from "@/models/AudioCluster";
 import AudioModule from "@/models/AudioModule";
 import FilterHandler from "@/models/FilterHandler";
 import { type LfoSource } from "@/models/LFOHandler";
-import ActionsWidget, {
-	type ActionsWidgetOrientation,
-} from "@/widgets/ActionsWidget/ActionsWidget.vue";
+import ActionsWidget from "@/widgets/ActionsWidget/ActionsWidget.vue";
 import EffectListWidget from "@/widgets/EffectList/EffectListWidget.vue";
 import VsEffectsWidget from "@/widgets/Effects/VsEffectsWidget.vue";
 import EnvelopeControlWidget from "@/widgets/EnvelopeControl/EnvelopeControlWidget.vue";
@@ -131,10 +130,6 @@ const LFOlWidgetVariant = computed<LFOWidgetVariants>(() =>
 const lfoListVariant = computed(() => {
 	return browserWidth.value < 800 ? "horizontal" : "vertical";
 });
-
-const ActionsWidgetOrientation = computed<ActionsWidgetOrientation>(() =>
-	currentLayout.value == PortraitSynthLayout ? "vertical" : "horizontal"
-);
 
 const MAX_FILTERS = 5;
 

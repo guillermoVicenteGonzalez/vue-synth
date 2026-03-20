@@ -11,7 +11,7 @@
 				<slot name="effects" class="effects"> </slot>
 			</div>
 			<div class="synth-layout__components__actions">
-				<slot name="actions"></slot>
+				<slot name="actions" variant="rounded"></slot>
 			</div>
 		</div>
 
@@ -30,7 +30,21 @@
 	</div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import type { ActionsWidgetVariants } from "@/widgets/ActionsWidget/ActionsWidget.vue";
+
+defineSlots<{
+	actions(props: { variant: ActionsWidgetVariants }): void;
+	envelope(): void;
+	waves(): void;
+	filters(): void;
+	lfo(): void;
+	piano(): void;
+	effects(): void;
+	footer(): void;
+	header(): void;
+}>();
+</script>
 
 <style lang="scss" scoped>
 $global-bg-color: $bg-color-1;
