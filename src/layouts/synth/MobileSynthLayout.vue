@@ -19,7 +19,7 @@
 		</div>
 
 		<div class="mobile-layout__actions">
-			<slot name="actions"></slot>
+			<slot name="actions" variant="rounded"></slot>
 		</div>
 
 		<div class="mobile-layout__controls">
@@ -30,7 +30,11 @@
 			>
 				<div class="mobile-layout__controls__content">
 					<VsTab :active="controlsTab == 0">
-						<slot name="lfo"></slot>
+						<slot
+							name="lfo"
+							list-variant="horizontal"
+							widget-variant="default"
+						></slot>
 					</VsTab>
 
 					<VsTab :active="controlsTab == 1">
@@ -49,6 +53,9 @@
 <script setup lang="ts">
 import VsTab from "@/components/common/VsTab/VsTab.vue";
 import VsTabs from "@/components/common/VsTabs/VsTabs.vue";
+import type { ActionsWidgetVariants } from "@/widgets/ActionsWidget/ActionsWidget.vue";
+import type { LFOWidgetVariants } from "@/widgets/LfoWdidget/LfoWdidgetWidget.vue";
+import type { LfoWidgetListVariants } from "@/widgets/LfoWidgetList/LfoWidgetListWidget.vue";
 import { ref } from "vue";
 
 const activeTab = ref<number>(0);
@@ -56,6 +63,20 @@ const controlsTab = ref<number>(0);
 
 const tabItems: string[] = ["waves", "filters"];
 const controlsTabItems = ["LFO", "enveloppe"];
+
+defineSlots<{
+	actions(props: { variant: ActionsWidgetVariants }): void;
+	envelope(): void;
+	waves(): void;
+	filters(): void;
+	lfo(props: {
+		listVariant: LfoWidgetListVariants;
+		widgetVariant: LFOWidgetVariants;
+	}): void;
+	piano(): void;
+	effects(): void;
+	header(): void;
+}>();
 </script>
 
 <style lang="scss" scoped>

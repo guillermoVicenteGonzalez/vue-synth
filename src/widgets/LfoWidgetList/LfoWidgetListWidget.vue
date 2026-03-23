@@ -37,12 +37,12 @@ const WIDGET_N = 4;
 
 const activeTab = ref<number>(1);
 
-type lfoWidgetListVariants = "horizontal" | "vertical";
+export type LfoWidgetListVariants = "horizontal" | "vertical";
 
 interface LfoWidgetListWidgetProps {
 	context: AudioContext;
 	sources: LfoSource[];
-	variant?: lfoWidgetListVariants;
+	variant?: LfoWidgetListVariants;
 	widgetVariant?: LFOWidgetVariants;
 }
 

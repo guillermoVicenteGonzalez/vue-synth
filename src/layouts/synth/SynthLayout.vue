@@ -11,13 +11,13 @@
 				<slot name="effects" class="effects"> </slot>
 			</div>
 			<div class="synth-layout__components__actions">
-				<slot name="actions"></slot>
+				<slot name="actions" variant="rounded"></slot>
 			</div>
 		</div>
 
 		<div class="synth-layout__display">
 			<slot name="envelope"></slot>
-			<slot name="lfo"></slot>
+			<slot name="lfo" list-variant="vertical" widget-variant="default"></slot>
 		</div>
 
 		<div class="synth-layout__piano">
@@ -30,7 +30,26 @@
 	</div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import type { ActionsWidgetVariants } from "@/widgets/ActionsWidget/ActionsWidget.vue";
+import type { LFOWidgetVariants } from "@/widgets/LfoWdidget/LfoWdidgetWidget.vue";
+import type { LfoWidgetListVariants } from "@/widgets/LfoWidgetList/LfoWidgetListWidget.vue";
+
+defineSlots<{
+	actions(props: { variant: ActionsWidgetVariants }): void;
+	envelope(): void;
+	waves(): void;
+	filters(): void;
+	lfo(props: {
+		listVariant: LfoWidgetListVariants;
+		widgetVariant: LFOWidgetVariants;
+	}): void;
+	piano(): void;
+	effects(): void;
+	footer(): void;
+	header(): void;
+}>();
+</script>
 
 <style lang="scss" scoped>
 $global-bg-color: $bg-color-1;
@@ -59,7 +78,7 @@ $max-footer-h: 0.3fr;
 $min-enveloppe-h: 20rem;
 $max-enveloppe-h: 2.5fr;
 
-$min-lfo-h: 30rem;
+$min-lfo-h: 27rem;
 $max-lfo-h: 2fr;
 
 $min-actions-h: 10rem;

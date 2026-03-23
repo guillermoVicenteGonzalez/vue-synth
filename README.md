@@ -20,6 +20,20 @@ It is still in alpha version (although really close to the initial beta release)
 
 The progress of the project as well as upcoming features can be seen below
 
+## Mobile responsive
+
+### bugs and issues
+
+- [ ] uncentered preset list
+  - variant that is positioned absolutely
+- [ ] wrong text color preset list
+- [ ] weird flex behaviour envelope
+- [ ] Fix effects tab shenannigans
+- [ ] Lfo canvas overflow
+- [ ] Circle sliders responsive size
+- [ ] Fix layout breakpoints (Ipad air, etc)
+- [ ] (unrelated) ad onUnmount to useSynth composable
+
 ## Current feature (Presets)
 
 - [x] Refactor LFO widget to use v-model instead of internal model

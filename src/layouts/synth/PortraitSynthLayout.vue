@@ -1,70 +1,73 @@
 <template>
 	<div class="portrait-layout">
-		<VsButton
-			variant="round"
-			class="portrait-layout__drawer-btn"
-			@click="handleOpenDrawer"
-		>
-			<VsHamburgerIcon v-model="isDrawerActive"></VsHamburgerIcon>
-		</VsButton>
-
 		<div class="portrait-layout__header">
-			<slot name="header"> </slot>
-			<VsDrawer v-model="isDrawerActive" class="portrait-layout__drawer">
-				<slot name="actions"></slot>
-				<VsSeparator></VsSeparator>
-				<VsTabs
-					v-model="activeTab"
-					orientation="vertical"
-					:items="tabItems"
-					class="portrait-layout__tabs"
-				></VsTabs>
-			</VsDrawer>
+			<MobileHeader v-model="activeTab"></MobileHeader>
 		</div>
 
-		<div class="portrait-layout__components">
-			<slot name="waves"></slot>
-			<slot name="filters"></slot>
-			<div v-if="$slots.effects" class="portrait-layout__effects">
-				<slot name="effects" class="effects"> </slot>
-			</div>
-		</div>
-
-		<div class="portrait-layout__display">
-			<VsTab :active="activeTab == 0">
-				<slot name="envelope" variant="minimal"></slot>
+		<div class="portrait-layout__body" :style="dynamicBodyStyle">
+			<VsTab :active="activeTab == 'voices'" class="portrait-layout__voices">
+				<slot name="waves"></slot>
+				<slot name="filters"></slot>
 			</VsTab>
 
-			<VsTab :active="activeTab == 1" class="portrait-layout__piano">
+			<VsTab :active="activeTab == 'envelope'">
+				<div class="portrait-layout__spaced-container">
+					<slot name="envelope" variant="minimal"></slot>
+				</div>
+			</VsTab>
+
+			<VsTab :active="activeTab == 'lfo'">
+				<div class="portrait-layout__spaced-container">
+					<slot
+						name="lfo"
+						list-variant="vertical"
+						widget-variant="default"
+					></slot>
+				</div>
+			</VsTab>
+
+			<VsTab :active="activeTab == 'effects'">
+				<slot name="effects"></slot>
+			</VsTab>
+
+			<VsTab :active="activeTab == 'piano'">
 				<slot name="piano"></slot>
 			</VsTab>
-
-			<VsTab :active="activeTab == 2">
-				<slot name="lfo"></slot>
-			</VsTab>
 		</div>
-		<!-- 
-		<div class="portrait-layout__footer">
-			<slot name="footer"></slot>
-		</div> -->
+
+		<div class="portrait-layout__actions">
+			<slot name="actions" variant="block"></slot>
+		</div>
 	</div>
 </template>
 <script setup lang="ts">
-import VsButton from "@/components/common/VsButton/VsButton.vue";
-import VsDrawer from "@/components/common/VsDrawer/VsDrawer.vue";
-import VsHamburgerIcon from "@/components/common/VsHamburgerIcon/VsHamburgerIcon.vue";
-import VsSeparator from "@/components/common/VsSeparator/VsSeparator.vue";
 import VsTab from "@/components/common/VsTab/VsTab.vue";
-import VsTabs from "@/components/common/VsTabs/VsTabs.vue";
-import { ref } from "vue";
+import type { ActionsWidgetVariants } from "@/widgets/ActionsWidget/ActionsWidget.vue";
+import type { LFOWidgetVariants } from "@/widgets/LfoWdidget/LfoWdidgetWidget.vue";
+import type { LfoWidgetListVariants } from "@/widgets/LfoWidgetList/LfoWidgetListWidget.vue";
+import MobileHeader from "@/widgets/MobileHeader/MobileHeader.vue";
+import { computed, ref, type HtmlHTMLAttributes } from "vue";
 
-const tabItems = ["envelope", "piano", "LFO"];
-const activeTab = ref<number>(0);
-const isDrawerActive = ref<boolean>(false);
+export type MobileTabs = "voices" | "envelope" | "lfo" | "effects" | "piano";
 
-function handleOpenDrawer() {
-	isDrawerActive.value = !isDrawerActive.value;
-}
+// const tabItems = ["envelope", "piano", "LFO"];
+const activeTab = ref<MobileTabs>("voices");
+defineSlots<{
+	actions(props: { variant: ActionsWidgetVariants }): void;
+	envelope(): void;
+	waves(): void;
+	filters(): void;
+	lfo(props: {
+		listVariant: LfoWidgetListVariants;
+		widgetVariant: LFOWidgetVariants;
+	}): void;
+	piano(): void;
+	effects(): void;
+}>();
+
+const dynamicBodyStyle = computed<HtmlHTMLAttributes["style"]>(() => ({
+	order: activeTab.value == "piano" ? 3 : "unset",
+}));
 </script>
 
 <style lang="scss" scoped>
@@ -79,7 +82,7 @@ $max-components-h: 5.2fr;
 $min-display-h: 9rem;
 $max-display-h: 4.5fr;
 
-$header-h: 4rem;
+$header-h: 7rem;
 $header-min-h: 4rem;
 $header-max-h: 4rem;
 
@@ -90,81 +93,136 @@ $min-filters-w: 3.5rem;
 $max-filters-w: 4fr;
 
 .portrait-layout {
-	background-color: $global-bg-color;
-	color: $text-color;
-
 	width: 100vw;
-	height: 100%;
+	height: 100dvh;
 
 	max-width: 100dvw;
 	max-height: 100dvh;
 
-	overflow: hidden !important;
+	overflow: hidden;
 
-	display: grid;
-	grid-template-rows:
-		[header-start] minmax($header-min-h, $header-h)
-		[header-end cards-start] minmax($min-components-h, $max-components-h)
-		[cards-end display-start] minmax($min-display-h, $max-display-h);
-
-	&__drawer-btn {
-		--drawer-btn-dimensions: calc(#{$header-h} - #{$gap-df});
-		top: $gap-sm;
-		left: $gap-sm;
-		position: absolute;
-		width: var(--drawer-btn-dimensions);
-		height: var(--drawer-btn-dimensions);
-
-		background-color: $primary-color;
-		color: $text-color;
-		overflow: hidden;
-	}
+	display: flex;
+	flex-direction: column;
+	gap: $gap-sm;
 
 	&__header {
-		// max-height: 7rem;
-
-		overflow: hidden;
+		height: $header-h;
 	}
 
-	&__components {
-		min-height: $min-components-h;
-		height: 100%;
-
-		display: grid;
-		grid-template-columns: minmax($min-waves-w, $max-waves-w) minmax(
-				$min-filters-w,
-				$max-filters-w
-			);
-		// grid-template-rows: minmax($min-waves-w, 10fr) minmax(3.5rem, 1fr);
-		// gap: 0.5rem;
-	}
-
-	&__effects {
-		grid-column: 1 / -1;
-		height: 100%;
+	&__body {
+		// background-color: red;
 		overflow: auto;
+		flex: 1 1 100%;
 	}
 
-	&__display {
+	&__voices {
+		display: grid;
+		grid-template-columns: 1.2fr 1fr;
+	}
+
+	&__actions {
+		flex: 1 1 10rem;
+
+		width: 100%;
+		height: fit-content;
+		// position: absolute;
+		bottom: 0;
+		left: 0;
+		// padding: $gap-df;
+		z-index: 3;
+
+		// > * {
+		// 	border-radius: 0 !important;
+		// }
+	}
+
+	&__spaced-container {
 		height: 100%;
 		width: 100%;
-	}
-
-	&__tabs {
-	}
-
-	// &__footer {
-	// 	overflow: hidden;
-	// 	display: none;
-	// }
-
-	&__drawer {
-		height: calc(100dvh - #{$header-h});
-	}
-
-	&__piano {
-		max-width: 100dvw;
-		overflow: hidden;
+		padding: $gap-df;
 	}
 }
+
+.pianoContainer {
+	flex: 1 1 100%;
+}
+
+// .portrait-layout {
+// 	background-color: $global-bg-color;
+// 	color: $text-color;
+
+// 	width: 100vw;
+// 	height: 100%;
+
+// 	max-width: 100dvw;
+// 	max-height: 100dvh;
+
+// 	overflow: hidden !important;
+
+// 	display: grid;
+// 	grid-template-rows:
+// 		[header-start] minmax($header-min-h, $header-h)
+// 		[header-end cards-start] minmax($min-components-h, $max-components-h)
+// 		[cards-end display-start] minmax($min-display-h, $max-display-h);
+
+// 	&__drawer-btn {
+// 		--drawer-btn-dimensions: calc(#{$header-h} - #{$gap-df});
+// 		top: $gap-sm;
+// 		left: $gap-sm;
+// 		position: absolute;
+// 		width: var(--drawer-btn-dimensions);
+// 		height: var(--drawer-btn-dimensions);
+
+// 		background-color: $primary-color;
+// 		color: $text-color;
+// 		overflow: hidden;
+// 	}
+
+// 	&__header {
+// 		// max-height: 7rem;
+
+// 		overflow: hidden;
+// 	}
+
+// 	&__components {
+// 		min-height: $min-components-h;
+// 		height: 100%;
+
+// 		display: grid;
+// 		grid-template-columns: minmax($min-waves-w, $max-waves-w) minmax(
+// 				$min-filters-w,
+// 				$max-filters-w
+// 			);
+// 		// grid-template-rows: minmax($min-waves-w, 10fr) minmax(3.5rem, 1fr);
+// 		// gap: 0.5rem;
+// 	}
+
+// 	&__effects {
+// 		grid-column: 1 / -1;
+// 		height: 100%;
+// 		overflow: auto;
+// 	}
+
+// 	&__display {
+// 		height: 100%;
+// 		width: 100%;
+// 	}
+
+// 	&__tabs {
+// 	}
+
+// 	// &__footer {
+// 	// 	overflow: hidden;
+// 	// 	display: none;
+// 	// }
+
+// 	&__drawer {
+// 		height: calc(100dvh - #{$header-h});
+// 	}
+
+// 	&__piano {
+// 		max-width: 100dvw;
+// 		overflow: hidden;
+// 	}
+// }
 </style>

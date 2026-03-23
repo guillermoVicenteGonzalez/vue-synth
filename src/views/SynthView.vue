@@ -38,12 +38,13 @@
 			></VsEffectsWidget>
 		</template>
 
-		<template #actions>
+		<template #actions="{ variant }">
 			<ActionsWidget
 				v-model:transpose="transposeAmount"
 				v-model:volume="MainAudioCluster.volume"
 				:source="MainAudioCluster"
-				:orientation="ActionsWidgetOrientation"
+				orientation="horizontal"
+				:variant="variant"
 				@create-wave="createNewModule"
 				@create-filter="createFilter"
 				@delete-all="deleteAll"
@@ -52,11 +53,11 @@
 		<template #envelope>
 			<EnvelopeControlWidget v-model="envelope" />
 		</template>
-		<template #lfo>
+		<template #lfo="{ listVariant, widgetVariant }">
 			<LfoWidgetListWidget
 				v-model="lfos"
-				:widget-variant="LFOlWidgetVariant"
-				:variant="lfoListVariant"
+				:widget-variant="widgetVariant"
+				:variant="listVariant"
 				:context="mainContext"
 				:sources="lfoSources"
 			></LfoWidgetListWidget>
@@ -87,9 +88,7 @@ import AudioCluster from "@/models/AudioCluster";
 import AudioModule from "@/models/AudioModule";
 import FilterHandler from "@/models/FilterHandler";
 import { type LfoSource } from "@/models/LFOHandler";
-import ActionsWidget, {
-	type ActionsWidgetOrientation,
-} from "@/widgets/ActionsWidget/ActionsWidget.vue";
+import ActionsWidget from "@/widgets/ActionsWidget/ActionsWidget.vue";
 import EffectListWidget from "@/widgets/EffectList/EffectListWidget.vue";
 import VsEffectsWidget from "@/widgets/Effects/VsEffectsWidget.vue";
 import EnvelopeControlWidget from "@/widgets/EnvelopeControl/EnvelopeControlWidget.vue";
@@ -99,7 +98,6 @@ import HeaderControlsWidget, {
 } from "@/widgets/HeaderControls/HeaderControlsWidget.vue";
 import HeaderWidgetWidget from "@/widgets/HeaderWidget/HeaderWidgetWidget.vue";
 import KeyboardWidget from "@/widgets/Keyboard/KeyboardWidget.vue";
-import { type LFOWidgetVariants } from "@/widgets/LfoWdidget/LfoWdidgetWidget.vue";
 import LfoWidgetListWidget from "@/widgets/LfoWidgetList/LfoWidgetListWidget.vue";
 import ModuleCardListWidget from "@/widgets/ModuleCardList/ModuleCardListWidget.vue";
 import { computed, onMounted, ref } from "vue";
@@ -123,18 +121,6 @@ const currentLayout = computed(() => {
 
 	return SynthLayout;
 });
-
-const LFOlWidgetVariant = computed<LFOWidgetVariants>(() =>
-	currentLayout.value == PortraitSynthLayout ? "minimal" : "default"
-);
-
-const lfoListVariant = computed(() => {
-	return browserWidth.value < 800 ? "horizontal" : "vertical";
-});
-
-const ActionsWidgetOrientation = computed<ActionsWidgetOrientation>(() =>
-	currentLayout.value == PortraitSynthLayout ? "vertical" : "horizontal"
-);
 
 const MAX_FILTERS = 5;
 

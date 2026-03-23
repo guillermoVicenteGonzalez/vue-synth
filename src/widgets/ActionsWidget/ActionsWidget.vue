@@ -88,17 +88,20 @@ const MIN_TRANSPOSE = -24;
 
 export type ActionsWidgetSize = "default" | "minimal";
 export type ActionsWidgetOrientation = "vertical" | "horizontal";
+export type ActionsWidgetVariants = "rounded" | "block";
 
 interface ActionsWidgetProps {
 	size?: ActionsWidgetSize;
 	orientation?: ActionsWidgetOrientation;
 	source: AudioCluster;
+	variant?: ActionsWidgetVariants;
 }
 
 const {
 	size = "minimal",
 	orientation = "vertical",
 	source,
+	variant = "rounded",
 } = defineProps<ActionsWidgetProps>();
 
 const transpose = defineModel<number>("transpose");
@@ -110,6 +113,7 @@ const buttonsVariant = computed<VSButtonVariants>(() => {
 
 const ActionsWidgetDynamicClass = computed(() => ({
 	[`ActionsWidget--${orientation}`]: orientation,
+	[`ActionsWidget--${variant}`]: variant,
 }));
 
 const volumeString = computed<string>(() => {
@@ -200,6 +204,10 @@ $action-size: 5rem;
 				min-height: 0;
 			}
 		}
+	}
+
+	&--block {
+		border-radius: 0;
 	}
 }
 </style>

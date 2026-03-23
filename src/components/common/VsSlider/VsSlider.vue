@@ -72,15 +72,6 @@ $slider-min-length: 5rem;
 	align-items: center;
 	gap: 0.5rem;
 
-	@include respond(tab-port) {
-		flex-wrap: wrap;
-		gap: 1rem;
-	}
-
-	// @include respond(phone) {
-	// 	flex-wrap: nowrap;
-	// }
-
 	&__input {
 		--track-color: #{$bg-color-black};
 		--thumb-color: #{$primary-color};
