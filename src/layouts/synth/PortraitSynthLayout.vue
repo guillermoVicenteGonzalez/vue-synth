@@ -4,7 +4,7 @@
 			<MobileHeader v-model="activeTab"></MobileHeader>
 		</div>
 
-		<div class="portrait-layout__body">
+		<div class="portrait-layout__body" :style="dynamicBodyStyle">
 			<VsTab :active="activeTab == 'voices'" class="portrait-layout__voices">
 				<slot name="waves"></slot>
 				<slot name="filters"></slot>
@@ -29,6 +29,10 @@
 			<VsTab :active="activeTab == 'effects'">
 				<slot name="effects"></slot>
 			</VsTab>
+
+			<VsTab :active="activeTab == 'piano'">
+				<slot name="piano"></slot>
+			</VsTab>
 		</div>
 
 		<div class="portrait-layout__actions">
@@ -42,7 +46,7 @@ import type { ActionsWidgetVariants } from "@/widgets/ActionsWidget/ActionsWidge
 import type { LFOWidgetVariants } from "@/widgets/LfoWdidget/LfoWdidgetWidget.vue";
 import type { LfoWidgetListVariants } from "@/widgets/LfoWidgetList/LfoWidgetListWidget.vue";
 import MobileHeader from "@/widgets/MobileHeader/MobileHeader.vue";
-import { ref } from "vue";
+import { computed, ref, type HtmlHTMLAttributes } from "vue";
 
 export type MobileTabs = "voices" | "envelope" | "lfo" | "effects" | "piano";
 
@@ -60,6 +64,10 @@ defineSlots<{
 	piano(): void;
 	effects(): void;
 }>();
+
+const dynamicBodyStyle = computed<HtmlHTMLAttributes["style"]>(() => ({
+	order: activeTab.value == "piano" ? 3 : "unset",
+}));
 </script>
 
 <style lang="scss" scoped>
