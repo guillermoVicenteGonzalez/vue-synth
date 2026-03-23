@@ -11,11 +11,19 @@
 			</VsTab>
 
 			<VsTab :active="activeTab == 'envelope'">
-				<slot name="envelope" variant="minimal"></slot>
+				<div class="portrait-layout__spaced-container">
+					<slot name="envelope" variant="minimal"></slot>
+				</div>
 			</VsTab>
 
 			<VsTab :active="activeTab == 'lfo'">
-				<slot name="lfo" listVariant="vertical" widgetVariant="default"></slot>
+				<div class="portrait-layout__spaced-container">
+					<slot
+						name="lfo"
+						listVariant="vertical"
+						widgetVariant="default"
+					></slot>
+				</div>
 			</VsTab>
 
 			<VsTab :active="activeTab == 'effects'">
@@ -26,10 +34,6 @@
 		<div class="portrait-layout__actions">
 			<slot name="actions" variant="block"></slot>
 		</div>
-
-		<VsTab :active="activeTab == 'piano'">
-			<slot name="piano" class="pianoContainer"></slot>
-		</VsTab>
 	</div>
 </template>
 <script setup lang="ts">
@@ -121,6 +125,12 @@ $max-filters-w: 4fr;
 		// > * {
 		// 	border-radius: 0 !important;
 		// }
+	}
+
+	&__spaced-container {
+		height: 100%;
+		width: 100%;
+		padding: $gap-df;
 	}
 }
 

@@ -33,7 +33,7 @@
 						<slot
 							name="lfo"
 							listVariant="horizontal"
-							widgetVariant="minimal"
+							widgetVariant="default"
 						></slot>
 					</VsTab>
 

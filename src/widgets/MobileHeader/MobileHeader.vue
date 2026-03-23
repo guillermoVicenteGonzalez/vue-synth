@@ -1,6 +1,18 @@
 <template>
 	<header class="mobile-header">
-		<div class="mobile-header__title">VSYNTH</div>
+		<div class="mobile-header__visualizer-container">
+			<WaveAnalyser
+				class="mobile-header__visualizer"
+				:line-color="primaryColor"
+				:source="cluster.exit"
+				:canvas-width="3080"
+				:canvas-height="200"
+				:brush-size="7"
+			></WaveAnalyser>
+		</div>
+
+		<!-- <div class="mobile-header__title">VSYNTH</div> -->
+
 		<div class="mobile-header__tabs">
 			<VsButton
 				variant="round"
@@ -51,15 +63,6 @@
 				</VsTooltip>
 			</div>
 		</div>
-
-		<WaveAnalyser
-			class="mobile-header__visualizer"
-			:line-color="primaryColor"
-			:source="cluster.exit"
-			:canvas-width="3080"
-			:canvas-height="200"
-			:brush-size="7"
-		></WaveAnalyser>
 	</header>
 </template>
 
@@ -125,7 +128,7 @@ $visualizer-height: 7rem;
 	// 		$max-visualizer-size
 	// 	);
 	display: flex;
-	flex-wrap: wrap;
+	// flex-wrap: wrap;
 
 	&__actions,
 	&__tabs,
@@ -133,8 +136,9 @@ $visualizer-height: 7rem;
 		padding: $gap-df 0;
 	}
 
-	&__visualizer {
+	&__visualizer-container {
 		height: $visualizer-height;
+		flex: 0 1 100%;
 	}
 
 	&__actions {
@@ -146,7 +150,6 @@ $visualizer-height: 7rem;
 	}
 
 	&__visualizer {
-		flex: 1 1 $min-visualizer-size;
 		background-color: $bg-color-1;
 	}
 
