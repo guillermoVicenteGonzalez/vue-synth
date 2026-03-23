@@ -32,8 +32,8 @@
 					<VsTab :active="controlsTab == 0">
 						<slot
 							name="lfo"
-							listVariant="horizontal"
-							widgetVariant="default"
+							list-variant="horizontal"
+							widget-variant="default"
 						></slot>
 					</VsTab>
 

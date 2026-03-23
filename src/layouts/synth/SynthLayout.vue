@@ -17,7 +17,7 @@
 
 		<div class="synth-layout__display">
 			<slot name="envelope"></slot>
-			<slot name="lfo" listVariant="vertical" widgetVariant="default"></slot>
+			<slot name="lfo" list-variant="vertical" widget-variant="default"></slot>
 		</div>
 
 		<div class="synth-layout__piano">

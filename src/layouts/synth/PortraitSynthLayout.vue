@@ -20,8 +20,8 @@
 				<div class="portrait-layout__spaced-container">
 					<slot
 						name="lfo"
-						listVariant="vertical"
-						widgetVariant="default"
+						list-variant="vertical"
+						widget-variant="default"
 					></slot>
 				</div>
 			</VsTab>
@@ -74,7 +74,7 @@ $max-components-h: 5.2fr;
 $min-display-h: 9rem;
 $max-display-h: 4.5fr;
 
-$header-h: 4rem;
+$header-h: 7rem;
 $header-min-h: 4rem;
 $header-max-h: 4rem;
 
@@ -98,6 +98,7 @@ $max-filters-w: 4fr;
 	gap: $gap-sm;
 
 	&__header {
+		height: $header-h;
 	}
 
 	&__body {
@@ -108,7 +109,7 @@ $max-filters-w: 4fr;
 
 	&__voices {
 		display: grid;
-		grid-template-columns: 1fr 1fr;
+		grid-template-columns: 1.2fr 1fr;
 	}
 
 	&__actions {
