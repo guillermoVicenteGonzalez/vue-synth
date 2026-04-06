@@ -53,13 +53,14 @@
 		<template #envelope>
 			<EnvelopeControlWidget v-model="envelope" />
 		</template>
-		<template #lfo="{ listVariant, widgetVariant }">
+		<template #lfo="{ listVariant, widgetVariant, widgetOrientationVariant }">
 			<LfoWidgetListWidget
 				v-model="lfos"
 				:widget-variant="widgetVariant"
 				:variant="listVariant"
 				:context="mainContext"
 				:sources="lfoSources"
+				:widget-orientation-variant="widgetOrientationVariant"
 			></LfoWidgetListWidget>
 		</template>
 		<template #piano>

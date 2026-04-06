@@ -117,7 +117,6 @@ onMounted(() => {
 	width: 100%;
 	height: 100%;
 	min-height: 10rem;
-	background-color: $tertiary-color;
 	display: flex;
 	overflow-x: scroll;
 	justify-content: center;

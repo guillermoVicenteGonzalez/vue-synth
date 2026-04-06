@@ -22,6 +22,7 @@
 						name="lfo"
 						list-variant="vertical"
 						widget-variant="default"
+						widget-orientation-variant="horizontal"
 					></slot>
 				</div>
 			</VsTab>
@@ -43,7 +44,10 @@
 <script setup lang="ts">
 import VsTab from "@/components/common/VsTab/VsTab.vue";
 import type { ActionsWidgetVariants } from "@/widgets/ActionsWidget/ActionsWidget.vue";
-import type { LFOWidgetVariants } from "@/widgets/LfoWdidget/LfoWdidgetWidget.vue";
+import type {
+	LFOWidgetOrientation,
+	LFOWidgetVariants,
+} from "@/widgets/LfoWdidget/LfoWdidgetWidget.vue";
 import type { LfoWidgetListVariants } from "@/widgets/LfoWidgetList/LfoWidgetListWidget.vue";
 import MobileHeader from "@/widgets/MobileHeader/MobileHeader.vue";
 import { computed, ref, type HtmlHTMLAttributes } from "vue";
@@ -60,6 +64,7 @@ defineSlots<{
 	lfo(props: {
 		listVariant: LfoWidgetListVariants;
 		widgetVariant: LFOWidgetVariants;
+		widgetOrientationVariant: LFOWidgetOrientation;
 	}): void;
 	piano(): void;
 	effects(): void;

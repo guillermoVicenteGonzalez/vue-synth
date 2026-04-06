@@ -10,6 +10,7 @@
 				:variant="widgetVariant"
 				:context="context"
 				:sources="sources"
+				:orientation="widgetOrientationVariant"
 			></LfoWdidgetWidget>
 		</VsTab>
 		<ul class="lfo-widget-list__tabs">
@@ -30,7 +31,10 @@ import VsTab from "@/components/common/VsTab/VsTab.vue";
 import type LFOHandler from "@/models/LFOHandler";
 import { type LfoSource } from "@/models/LFOHandler";
 import { computed, ref } from "vue";
-import type { LFOWidgetVariants } from "../LfoWdidget/LfoWdidgetWidget.vue";
+import type {
+	LFOWidgetOrientation,
+	LFOWidgetVariants,
+} from "../LfoWdidget/LfoWdidgetWidget.vue";
 import LfoWdidgetWidget from "../LfoWdidget/LfoWdidgetWidget.vue";
 
 const WIDGET_N = 4;
@@ -44,6 +48,7 @@ interface LfoWidgetListWidgetProps {
 	sources: LfoSource[];
 	variant?: LfoWidgetListVariants;
 	widgetVariant?: LFOWidgetVariants;
+	widgetOrientationVariant?: LFOWidgetOrientation;
 }
 
 const dynamicLayoutStyles = computed(() => {
@@ -59,6 +64,7 @@ const {
 	sources,
 	variant = "vertical",
 	widgetVariant = "default",
+	widgetOrientationVariant = "vertical",
 } = defineProps<LfoWidgetListWidgetProps>();
 </script>
 

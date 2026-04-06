@@ -54,25 +54,29 @@
 			</div>
 			<!-- <WaveCanvas :wave="lfo.wave"></WaveCanvas> -->
 			<div class="lfo-widget__controls">
-				<CircleSlider
-					v-model="lfoHandler.lfo.frequency"
-					:size="CircleSliderSize"
-					:fill-color="primaryColor"
-					:disabled="disabled"
-					:step="0.1"
-				></CircleSlider>
-				<VsChip class="lfo-widget__chip">Frequency</VsChip>
-				<CircleSlider
-					v-model="lfoHandler.lfo.amplitude"
-					:size="CircleSliderSize"
-					:fill-color="primaryColor"
-					:default-value="100"
-					:max="minMaxLFOStrength.max"
-					:min="minMaxLFOStrength.min"
-					:step="minMaxLFOStrength.step"
-					:disabled="disabled"
-				></CircleSlider>
-				<VsChip class="lfo-widget__chip">Amplitude</VsChip>
+				<div class="lfo-widget__control">
+					<CircleSlider
+						v-model="lfoHandler.lfo.frequency"
+						:size="CircleSliderSize"
+						:fill-color="primaryColor"
+						:disabled="disabled"
+						:step="0.1"
+					></CircleSlider>
+					<VsChip class="lfo-widget__chip">Frequency</VsChip>
+				</div>
+				<div class="lfo-widget__control">
+					<CircleSlider
+						v-model="lfoHandler.lfo.amplitude"
+						:size="CircleSliderSize"
+						:fill-color="primaryColor"
+						:default-value="100"
+						:max="minMaxLFOStrength.max"
+						:min="minMaxLFOStrength.min"
+						:step="minMaxLFOStrength.step"
+						:disabled="disabled"
+					></CircleSlider>
+					<VsChip class="lfo-widget__chip">Amplitude</VsChip>
+				</div>
 			</div>
 		</div>
 	</VsCard>
@@ -97,11 +101,13 @@ import { X } from "lucide-vue-next";
 import { computed, ref, watch } from "vue";
 
 export type LFOWidgetVariants = "default" | "minimal";
+export type LFOWidgetOrientation = "vertical" | "horizontal";
 
 interface LfoWdidgetWidgetProps {
 	context: AudioContext;
 	sources: LfoSource[];
 	variant?: LFOWidgetVariants;
+	orientation?: LFOWidgetOrientation;
 }
 const { browserWidth } = useMonitorSize();
 
@@ -110,19 +116,17 @@ const primaryColor = "#42d392";
 const {
 	context,
 	sources,
+	orientation = "vertical",
 	variant = "default",
 } = defineProps<LfoWdidgetWidgetProps>();
+
 const disabled = ref<boolean>(false);
-// const lfo = ref<LFOHandler>({
-// 	inputModule: null,
-// 	propertyName: null,
-// 	lfo: new LFO(context),
-// });
 const lfoHandler = defineModel<LFOHandler>({ required: true });
 
 const dynamicClass = computed(() => ({
 	"lfo-widget-card--disabled": disabled.value,
 	[`lfo-widget--${variant}`]: variant,
+	"lfo-widget--horizontal": orientation == "horizontal",
 }));
 
 const CircleSliderSize = computed<number>(() => {
@@ -143,11 +147,7 @@ const sourceNames = computed<string[]>(() =>
 );
 
 const selectedModuleName = ref<string>();
-// const selectedModule = computed<LfoSource | null>(() => {
-// 	if (!selectedModuleName.value) return null;
-// 	const index = sourceNames.value.indexOf(selectedModuleName.value);
-// 	return sources[index];
-// });
+
 watch(selectedModuleName, () => {
 	if (!selectedModuleName.value) return null;
 	const index = sourceNames.value.indexOf(selectedModuleName.value);
@@ -316,7 +316,13 @@ $disabled-color: gray;
 
 $selectors-height: 3rem;
 $display-height: 100%;
-$controls-width: 10rem;
+
+$min-display-width: 50%;
+$display-width: 70%;
+$max-display-width: 100%;
+
+$min-controls-width: 10rem;
+$controls-width: min-content;
 
 .lfo-widget-card {
 	width: 100%;
@@ -379,7 +385,9 @@ $controls-width: 10rem;
 	gap: $gap-df;
 
 	display: grid;
-	grid-template-columns: [display-start] 1fr [display-end controls-start] $controls-width;
+	grid-template-columns:
+		[display-start] minmax($min-display-width, $max-display-width)
+		[display-end controls-start] minmax($min-controls-width, $controls-width);
 	grid-template-rows: [selectors-start] $selectors-height [selectors-end display-start] 1fr;
 
 	&__selectors {
@@ -406,41 +414,30 @@ $controls-width: 10rem;
 	}
 
 	&__selector {
-		@include respond(tab-port) {
-			flex-basis: 2rem;
-			min-width: auto;
-		}
 	}
 
 	&__display {
-		// height: max-content;
-		flex: 1 1 70%;
-		// max-width: 80%;
-		@include respond(tab-port) {
-			flex: 1 1 50%;
-		}
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
 	}
 
 	&__controls {
-		// height: max-content;
-		min-width: 10rem;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-around;
 		align-items: center;
+	}
 
-		flex: 1 1 10rem;
-
-		@include respond(tab-port) {
-			// flex: 1 1 40%;
-		}
+	&__control {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
 	}
 
 	&__canvas {
-		flex-grow: 0;
-		flex-shrink: 1;
 		max-height: 100%;
-		// aspect-ratio: 3;
 		background-color: $bg-color-1;
 		border-radius: $border-radius-df;
 	}
@@ -451,6 +448,16 @@ $controls-width: 10rem;
 	}
 
 	&--disabled {
+	}
+
+	&--horizontal {
+		.lfo-widget {
+			&__controls {
+				flex-direction: row;
+				flex-wrap: nowrap;
+				gap: $gap-df;
+			}
+		}
 	}
 
 	&--minimal {
@@ -473,7 +480,5 @@ $controls-width: 10rem;
 			}
 		}
 	}
-
-	// grid-template-rows: 1fr 2fr 1fr;
 }
 </style>
