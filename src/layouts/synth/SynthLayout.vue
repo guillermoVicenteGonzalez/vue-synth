@@ -1,15 +1,36 @@
 <template>
 	<div class="synth-layout">
 		<div class="synth-layout__header">
-			<slot name="header"> </slot>
+			<HeaderWidgetWidget>
+				<template #controls>
+					<HeaderControlsWidget v-model="currentTab"></HeaderControlsWidget>
+				</template>
+				<template #visualizer>
+					<WaveAnalyser
+						class="main-analyser"
+						:line-color="primaryColor"
+						:source="cluster.exit"
+						:canvas-width="3080"
+						:canvas-height="200"
+						:brush-size="7"
+					></WaveAnalyser>
+				</template>
+			</HeaderWidgetWidget>
 		</div>
 
 		<div class="synth-layout__components">
-			<slot name="waves"></slot>
-			<slot name="filters"></slot>
-			<div v-if="$slots.effects" class="synth-layout__effects">
-				<slot name="effects" class="effects"> </slot>
+			<div v-if="currentTab == 'Voice'" class="synth-layout__voices">
+				<slot name="waves"></slot>
+				<slot name="filters"></slot>
 			</div>
+
+			<VsTab
+				:active="currentTab === 'Effects'"
+				v-if="$slots.effects && currentTab === 'Effects'"
+				class="synth-layout__effects"
+			>
+				<slot name="effects" class="effects"> </slot>
+			</VsTab>
 			<div class="synth-layout__components__actions">
 				<slot name="actions" variant="rounded"></slot>
 			</div>
@@ -31,9 +52,21 @@
 </template>
 
 <script setup lang="ts">
+import VsTab from "@/components/common/VsTab/VsTab.vue";
+import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
+import useSynth from "@/composables/useSynth";
 import type { ActionsWidgetVariants } from "@/widgets/ActionsWidget/ActionsWidget.vue";
+import HeaderControlsWidget, {
+	type TabItem,
+} from "@/widgets/HeaderControls/HeaderControlsWidget.vue";
+import HeaderWidgetWidget from "@/widgets/HeaderWidget/HeaderWidgetWidget.vue";
 import type { LFOWidgetVariants } from "@/widgets/LfoWdidget/LfoWdidgetWidget.vue";
 import type { LfoWidgetListVariants } from "@/widgets/LfoWidgetList/LfoWidgetListWidget.vue";
+import { ref } from "vue";
+
+const { cluster } = useSynth();
+const primaryColor = "#42d392";
+const currentTab = ref<TabItem>("Voice");
 
 defineSlots<{
 	actions(props: { variant: ActionsWidgetVariants }): void;
@@ -106,7 +139,7 @@ $min-actions-h: 10rem;
 		[piano-end footer-start] minmax($min-footer-h, $max-footer-h);
 
 	&__header {
-		background-color: $header-color;
+		//	background-color: $header-color;
 		color: $header-text-color;
 		grid-column: 1 / -1;
 		grid-row: header-start / header-end;
@@ -128,7 +161,7 @@ $min-actions-h: 10rem;
 		width: 100%;
 
 		display: grid;
-		grid-template-columns: 4fr 3fr;
+		/* grid-template-columns: 4fr 3fr; */
 		grid-template-rows: minmax(75%, 10fr) minmax($min-actions-h, 1.5fr);
 		// gap: $gap-bg;
 		// padding: $gap-bg;
@@ -138,6 +171,18 @@ $min-actions-h: 10rem;
 			padding: $gap-df;
 			// // gap: 2rem;
 		}
+	}
+
+	&__voices {
+		width: 100%;
+		height: 100%;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+	}
+
+	&__effects {
+		width: 100%;
+		height: 100%;
 	}
 
 	&__display {
@@ -200,10 +245,22 @@ $min-actions-h: 10rem;
 
 			height: 100%;
 			width: 100%;
+			// display: grid;
+			// grid-template-columns: 4fr 3fr;
+			// grid-template-rows: minmax(80%, 10fr) minmax(10%, 1fr);
+			// gap: 0.5rem;
+		}
+
+		&__voices {
+			width: 100%;
+			height: 100%;
 			display: grid;
-			grid-template-columns: 4fr 3fr;
-			grid-template-rows: minmax(80%, 10fr) minmax(10%, 1fr);
-			gap: 0.5rem;
+			grid-template-rows: 1fr 1fr;
+		}
+
+		&__effects {
+			width: 100%;
+			height: 100%;
 		}
 
 		&__display {
@@ -274,5 +331,9 @@ $min-actions-h: 10rem;
 			background-color: rgb(48, 48, 48);
 		}
 	}
+}
+
+.main-analyser {
+	background-color: $bg-color-1;
 }
 </style>
