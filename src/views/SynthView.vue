@@ -1,27 +1,9 @@
 <template>
 	<component :is="currentLayout">
-		<template #header>
-			<HeaderWidgetWidget>
-				<template #controls>
-					<HeaderControlsWidget v-model="currentTab"></HeaderControlsWidget>
-				</template>
-				<template #visualizer>
-					<WaveAnalyser
-						class="main-analyser"
-						:line-color="primaryColor"
-						:source="MainAudioCluster.exit"
-						:canvas-width="3080"
-						:canvas-height="200"
-						:brush-size="7"
-					></WaveAnalyser>
-				</template>
-			</HeaderWidgetWidget>
-		</template>
-
-		<template v-if="currentTab === 'Voice'" #waves>
+		<template #waves>
 			<ModuleCardListWidget v-model="MainAudioCluster"></ModuleCardListWidget>
 		</template>
-		<template v-if="currentTab === 'Voice'" #filters>
+		<template #filters>
 			<EffectListWidget
 				v-if="MainAudioCluster"
 				v-model="filters"
@@ -30,9 +12,8 @@
 			></EffectListWidget>
 		</template>
 
-		<template v-if="currentTab === 'Effects'" #effects>
+		<template #effects>
 			<VsEffectsWidget
-				v-if="currentTab === 'Effects'"
 				v-model="MainAudioCluster.effects"
 				class="effects"
 			></VsEffectsWidget>
@@ -79,7 +60,6 @@
 </template>
 
 <script setup lang="ts">
-import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
 import { useMonitorSize } from "@/composables/useMonitorSize";
 import useSynth from "@/composables/useSynth";
 import MobileSynthLayout from "@/layouts/synth/MobileSynthLayout.vue";
@@ -94,20 +74,14 @@ import EffectListWidget from "@/widgets/EffectList/EffectListWidget.vue";
 import VsEffectsWidget from "@/widgets/Effects/VsEffectsWidget.vue";
 import EnvelopeControlWidget from "@/widgets/EnvelopeControl/EnvelopeControlWidget.vue";
 import VSFooter from "@/widgets/Footer/VSFooter.vue";
-import HeaderControlsWidget, {
-	type TabItem,
-} from "@/widgets/HeaderControls/HeaderControlsWidget.vue";
-import HeaderWidgetWidget from "@/widgets/HeaderWidget/HeaderWidgetWidget.vue";
 import KeyboardWidget from "@/widgets/Keyboard/KeyboardWidget.vue";
 import LfoWidgetListWidget from "@/widgets/LfoWidgetList/LfoWidgetListWidget.vue";
 import ModuleCardListWidget from "@/widgets/ModuleCardList/ModuleCardListWidget.vue";
 import { computed, onMounted, ref } from "vue";
 
 const { browserHeight, browserWidth } = useMonitorSize();
-const primaryColor = "#42d392";
 
 const transposeAmount = ref<number>(0);
-const currentTab = ref<TabItem>("Voice");
 
 const currentLayout = computed(() => {
 	if (browserWidth.value <= 600) return MobileSynthLayout;
@@ -199,9 +173,5 @@ onMounted(() => {
 	background-color: red;
 	height: 20px;
 	width: 100px;
-}
-
-.main-analyser {
-	background-color: $bg-color-1;
 }
 </style>

@@ -55,7 +55,7 @@
 		</div>
 		<div class="mobile-header__actions">
 			<metronome-widget></metronome-widget>
-			<settings-button></settings-button>
+			<settings-button :dropdown-mode="'centered'"></settings-button>
 
 			<div class="vsynth-header__midi">
 				<VsTooltip>

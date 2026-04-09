@@ -17,7 +17,12 @@
 import useClickOutside from "@/composables/useClickOutside";
 import { computed, ref } from "vue";
 
-type DropdownMenuOrientation = "top" | "bot" | "left" | "right";
+export type DropdownMenuOrientation =
+	| "top"
+	| "bot"
+	| "left"
+	| "right"
+	| "centered";
 type DropDownMenuActivation = "leftClick" | "dbClick" | "rightCLick";
 
 interface DropdownMenuProps {
@@ -60,6 +65,8 @@ $animation-duration: 0.1s;
 $animation-timing-function: ease-in;
 $content-max-width: 500rem;
 
+$centered-margin: 5rem;
+
 .DropdownMenu {
 	position: relative;
 
@@ -89,6 +96,14 @@ $content-max-width: 500rem;
 		max-width: $content-max-width;
 		height: auto;
 		width: auto;
+
+		&--centered {
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			position: fixed;
+			max-height: 100dvh;
+		}
 
 		&--bot {
 			top: 100%;
