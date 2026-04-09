@@ -25,8 +25,8 @@
 			</div>
 
 			<VsTab
-				:active="currentTab === 'Effects'"
 				v-if="$slots.effects && currentTab === 'Effects'"
+				:active="currentTab === 'Effects'"
 				class="synth-layout__effects"
 			>
 				<slot name="effects" class="effects"> </slot>

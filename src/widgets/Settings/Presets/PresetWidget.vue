@@ -155,6 +155,7 @@ $button-height: 3rem;
 		// justify-content: flex-start;
 		justify-content: left;
 		gap: $gap-df;
+		color: $text-color;
 	}
 
 	&__name-edit {

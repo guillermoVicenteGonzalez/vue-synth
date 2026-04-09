@@ -1,21 +1,20 @@
 <template>
 	<section class="PresetsMenu">
-		<section class="PresetsMenu__list">
-			<h3 class="PresetsMenu__list__title">Preset List</h3>
-			<div class="PresetsMenu__list__content">
-				<PresetWidget
-					v-for="preset in presetList"
-					:key="preset.name"
-					:preset="preset"
-					@load-preset="handleLoadPreset"
-					@delete-preset="handleDeletePreset"
-					@update-preset="handleUpdatePreset"
-					@update-preset-name="handleUpdateName"
-					@download-preset="handleDownloadPreset"
-				></PresetWidget>
-			</div>
+		<h3 class="PresetsMenu__title">Preset List</h3>
 
-			<VsSeparator></VsSeparator>
+		<section class="PresetsMenu__list">
+			<PresetWidget
+				v-for="preset in presetList"
+				:key="preset.name"
+				:preset="preset"
+				@load-preset="handleLoadPreset"
+				@delete-preset="handleDeletePreset"
+				@update-preset="handleUpdatePreset"
+				@update-preset-name="handleUpdateName"
+				@download-preset="handleDownloadPreset"
+			></PresetWidget>
+
+			<!-- <VsSeparator></VsSeparator> -->
 		</section>
 
 		<VsSeparator></VsSeparator>
@@ -139,24 +138,32 @@ async function handleUploadPreset() {
 
 <style lang="scss" scoped>
 $preset-list-max-height: 30rem;
+$title-height: 3rem;
+$actions-height: auto;
 
 .PresetsMenu {
-	&__button {
-		width: 20rem;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	height: 100%;
+	overflow: hidden;
 
-		&--delete-btn {
-			background-color: red;
-		}
+	&__title {
+		color: $text-color;
+		flex: 0 0 $title-height !important;
+		font-size: 2rem;
+		text-align: center;
+		margin-bottom: $gap-df;
 	}
 
 	&__actions {
-		margin-top: 1rem;
+		margin-top: $gap-df;
 		display: flex;
 		flex-wrap: wrap;
-		justify-content: center;
 		width: 100%;
 		align-items: center;
 		gap: $gap-df $gap-bg;
+		flex: 0 1 4rem;
 
 		&__buttons {
 			width: 100%;
@@ -166,24 +173,23 @@ $preset-list-max-height: 30rem;
 		}
 	}
 
+	&__list {
+		flex: 1 1 auto;
+		overflow: auto;
+	}
+
+	&__button {
+		flex: 1 1 100%;
+
+		&--delete-btn {
+			background-color: $error-color;
+		}
+	}
+
 	&__name-input {
 		flex: 1 1 100%;
 		width: 100%;
 		height: 3rem;
-	}
-
-	&__list {
-		&__title {
-			font-size: 2rem;
-			text-align: center;
-			margin-bottom: $gap-df;
-		}
-
-		&__content {
-			// display: none;
-			max-height: $preset-list-max-height;
-			overflow: auto;
-		}
 	}
 }
 </style>
