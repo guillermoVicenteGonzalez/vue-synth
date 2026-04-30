@@ -6,6 +6,7 @@
 					<div class="DelayEffect__control">
 						<VsChip class="DelayEffect__chip">Rate</VsChip>
 						<CircleSlider
+							:size="circleSliderSize"
 							v-model="delayEffect.rate"
 							:disabled="delayEffect.disabled"
 							class="DelayEffect__circle-slider"
@@ -18,6 +19,7 @@
 					<div class="DelayEffect__control">
 						<VsChip class="DelayEffect__chip">Feedback</VsChip>
 						<CircleSlider
+							:size="circleSliderSize"
 							v-model="delayEffect.feedback"
 							:disabled="delayEffect.disabled"
 							class="DelayEffect__circle-slider"
@@ -30,6 +32,7 @@
 					<div class="DelayEffect__control">
 						<VsChip class="DelayEffect__chip">Gain</VsChip>
 						<CircleSlider
+							:size="circleSliderSize"
 							v-model="delayEffect.gain"
 							:disabled="delayEffect.disabled"
 							class="DelayEffect__circle-slider"
@@ -61,12 +64,14 @@
 import CircleSlider from "@/components/common/CircleSlider/CircleSlider.vue";
 import VsChip from "@/components/common/VsChip/VsChip.vue";
 import DelayDisplay from "@/components/waves/DelayDisplay/DelayDisplay.vue";
+import useCircleSliderSize from "@/composables/useCircleSliderSize";
 import DelayEffect from "@/models/effects/DelayEffect";
 import EffectCard from "./EffectCard.vue";
 
 const primaryColor = "#42d392";
 
 const delayEffect = defineModel<DelayEffect>({ required: true });
+const circleSliderSize = useCircleSliderSize();
 </script>
 
 <style lang="scss" scoped>

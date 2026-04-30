@@ -34,6 +34,7 @@
 							<VsChip class="DistortionEffect__chip">Cutoff</VsChip>
 
 							<CircleSlider
+								:size="circleSliderSize"
 								v-model="distortion.cutoff"
 								:disabled="distortion.disabled"
 								:max="MAX_DISTORTION_CUTOFF"
@@ -44,6 +45,7 @@
 						<div class="DistortionEffect__control">
 							<VsChip class="DistortionEffect__chip">Threshold</VsChip>
 							<CircleSlider
+								:size="circleSliderSize"
 								v-model="distortion.threshold"
 								:disabled="!thresholdEnabled"
 								:step="0.01"
@@ -55,6 +57,7 @@
 						<div class="DistortionEffect__control">
 							<VsChip class="DistortionEffect__chip">nBits</VsChip>
 							<CircleSlider
+								:size="circleSliderSize"
 								v-model="distortion.nBits"
 								:disabled="!nBitsEnabled"
 								:min="MIN_DISTORTION_NBITS"
@@ -65,6 +68,7 @@
 						<div class="DistortionEffect__control">
 							<VsChip class="DistortionEffect__chip">Drive</VsChip>
 							<CircleSlider
+								:size="circleSliderSize"
 								v-model="distortion.drive"
 								:disabled="!driveEnabled"
 								:step="0.1"
@@ -76,6 +80,7 @@
 						<div class="DistortionEffect__control">
 							<VsChip class="DistortionEffect__chip">Mix</VsChip>
 							<CircleSlider
+								:size="circleSliderSize"
 								v-model="distortion.mix"
 								:disabled="distortion.disabled"
 							></CircleSlider>
@@ -105,6 +110,7 @@
 import CircleSlider from "@/components/common/CircleSlider/CircleSlider.vue";
 import VsChip from "@/components/common/VsChip/VsChip.vue";
 import VsSelector from "@/components/common/VsSelector/VsSelector.vue";
+import useCircleSliderSize from "@/composables/useCircleSliderSize";
 import DistortionEffect, {
 	DistortionFilterPositions,
 	DistortionFilterTypes,
@@ -136,6 +142,8 @@ const thresholdEnabled = computed<boolean>(
 		distortion.value.distortionType == DistortionTypes.hardClip &&
 		!distortion.value.disabled
 );
+
+const circleSliderSize = useCircleSliderSize();
 </script>
 
 <style lang="scss" scoped>

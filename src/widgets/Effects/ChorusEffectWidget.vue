@@ -6,6 +6,7 @@
 					<div class="ChorusEffect__control">
 						<VsChip class="ChorusEffect__chip">amount</VsChip>
 						<CircleSlider
+							:size="circleSliderSize"
 							v-model="chorus.amount"
 							:disabled="chorus.disabled"
 							class="ChorusEffect__circle-slider"
@@ -20,6 +21,7 @@
 						<VsChip class="ChorusEffect__chip">rate</VsChip>
 
 						<CircleSlider
+							:size="circleSliderSize"
 							v-model="chorus.rate"
 							:disabled="chorus.disabled"
 							class="ChorusEffect__circle-slider"
@@ -34,6 +36,7 @@
 						<VsChip class="ChorusEffect__chip">Delay 1</VsChip>
 
 						<CircleSlider
+							:size="circleSliderSize"
 							v-model="chorus.delay1"
 							:disabled="chorus.disabled"
 							class="ChorusEffect__circle-slider"
@@ -48,6 +51,7 @@
 						<VsChip class="ChorusEffect__chip">Delay 2</VsChip>
 
 						<CircleSlider
+							:size="circleSliderSize"
 							v-model="chorus.delay2"
 							:disabled="chorus.disabled"
 							class="ChorusEffect__circle-slider"
@@ -62,6 +66,7 @@
 						<VsChip class="ChorusEffect__chip">MIX</VsChip>
 
 						<CircleSlider
+							:size="circleSliderSize"
 							v-model="chorus.mix"
 							:disabled="chorus.disabled"
 							class="ChorusEffect__circle-slider"
@@ -75,6 +80,7 @@
 					<div class="ChorusEffect__control">
 						<VsChip class="ChorusEffect__chip">voices</VsChip>
 						<CircleSlider
+							:size="circleSliderSize"
 							v-model="chorus.voices"
 							:disabled="chorus.disabled"
 							class="ChorusEffect__circle-slider"
@@ -88,6 +94,7 @@
 						<VsChip class="ChorusEffect__chip">Feedback delay</VsChip>
 
 						<CircleSlider
+							:size="circleSliderSize"
 							v-model="chorus.feedbackDelay"
 							:disabled="chorus.disabled"
 							class="ChorusEffect__circle-slider"
@@ -102,6 +109,7 @@
 						<VsChip class="ChorusEffect__chip">Feedback</VsChip>
 
 						<CircleSlider
+							:size="circleSliderSize"
 							v-model="chorus.feedback"
 							:disabled="chorus.disabled"
 							class="ChorusEffect__circle-slider"
@@ -121,6 +129,7 @@
 							:items="filterTypes"
 						></VsSelector>
 						<CircleSlider
+							:size="circleSliderSize"
 							v-model="chorus.filterCuttof"
 							:disabled="chorus.disabled"
 							class="ChorusEffect__circle-slider"
@@ -147,6 +156,7 @@
 import CircleSlider from "@/components/common/CircleSlider/CircleSlider.vue";
 import VsChip from "@/components/common/VsChip/VsChip.vue";
 import VsSelector from "@/components/common/VsSelector/VsSelector.vue";
+import useCircleSliderSize from "@/composables/useCircleSliderSize";
 import type ChorusEffect from "@/models/effects/ChorusEffect";
 import {
 	MAX_AMOUNT,
@@ -169,6 +179,7 @@ const primaryColor = "#42d392";
 
 const filterTypes = ["lowpass", "highpass", "allpass", "bandpass"];
 const chorus = defineModel<ChorusEffect>({ required: true });
+const circleSliderSize = useCircleSliderSize();
 </script>
 
 <style lang="scss" scoped>

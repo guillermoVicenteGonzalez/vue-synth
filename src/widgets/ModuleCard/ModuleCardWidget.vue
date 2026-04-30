@@ -44,7 +44,7 @@
 				<VsTooltip text="Amplitude" orientation="right">
 					<CircleSlider
 						v-model="audioModule.wave.amplitude"
-						:size="CircleSliderSize"
+						:size="circleSliderSize"
 						class="ModuleCard__circle-slider"
 						:default-value="WAVE_DEFAULT_AMPLITUDE"
 						:disabled="audioModule.disabled"
@@ -68,7 +68,7 @@
 				<VsTooltip text="frequency" orientation="right">
 					<CircleSlider
 						v-model="audioModule.wave.frequency"
-						:size="CircleSliderSize"
+						:size="circleSliderSize"
 						class="ModuleCard__circle-slider"
 						:default-value="WAVE_DEFAULT_FREQUENCY"
 						:fill-color="primaryColor"
@@ -129,7 +129,7 @@
 				<VsTooltip text="voices" orientation="left">
 					<CircleSlider
 						v-model="audioModule.voices"
-						:size="CircleSliderSize"
+						:size="circleSliderSize"
 						class="ModuleCard__circle-slider"
 						:default-value="10"
 						:disabled="audioModule.disabled"
@@ -153,7 +153,7 @@
 				<VsTooltip text="voices" orientation="left">
 					<CircleSlider
 						v-model="audioModule.voicesDetune"
-						:size="CircleSliderSize"
+						:size="circleSliderSize"
 						class="ModuleCard__circle-slider"
 						:default-value="20"
 						:disabled="audioModule.disabled"
@@ -191,7 +191,7 @@ import VsSlider from "@/components/common/VsSlider/VsSlider.vue";
 import VsTextInput from "@/components/common/VsTextInput/VsTextInput.vue";
 import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
 import WaveCanvas from "@/components/waves/WaveCanvas/WaveCanvas.vue";
-import { useMonitorSize } from "@/composables/useMonitorSize";
+import useCircleSliderSize from "@/composables/useCircleSliderSize";
 import AudioModule from "@/models/AudioModule";
 import {
 	WAVE_DEFAULT_AMPLITUDE,
@@ -211,8 +211,6 @@ const zoom = ref<number>(10000);
 const isCtxMenuVisible = ref<boolean>(false);
 const contextMenuPos = ref<{ x: number; y: number }>({ x: 0, y: 0 });
 
-const { browserWidth } = useMonitorSize();
-
 const emit = defineEmits<{
 	(e: "delete", module: AudioModule | undefined): void;
 }>();
@@ -221,13 +219,7 @@ const ModuleCardStyles = computed(() => {
 	return `ModuleCard ${audioModule.value.disabled ? "ModuleCard--disabled" : null}`;
 });
 
-const CircleSliderSize = computed<number>(() => {
-	if (browserWidth.value < 800) {
-		return 70;
-	}
-
-	return 80;
-});
+const circleSliderSize = useCircleSliderSize();
 
 function onWaveChangeCB() {
 	audioModule.value?.updateModule();
