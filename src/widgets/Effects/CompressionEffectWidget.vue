@@ -11,8 +11,8 @@
 						<VsChip class="CompressionEffect__chip">Threshold</VsChip>
 
 						<CircleSlider
-							:size="circleSliderSize"
 							v-model="compression.threshold"
+							:size="circleSliderSize"
 							class="CompressionEffect__circle-slider"
 							:min="-100"
 							:max="0"
@@ -26,8 +26,8 @@
 						<VsChip class="CompressionEffect__chip">Knee</VsChip>
 
 						<CircleSlider
-							:size="circleSliderSize"
 							v-model="compression.knee"
+							:size="circleSliderSize"
 							class="CompressionEffect__circle-slider"
 							:min="0"
 							:max="40"
@@ -49,8 +49,8 @@
 						<VsChip class="CompressionEffect__chip">Attack</VsChip>
 
 						<CircleSlider
-							:size="circleSliderSize"
 							v-model="compression.attack"
+							:size="circleSliderSize"
 							class="CompressionEffect__circle-slider"
 							:min="0"
 							:max="1"
@@ -63,8 +63,8 @@
 					<div class="CompressionEffect__body__control">
 						<VsChip class="CompressionEffect__chip">Ratio</VsChip>
 						<CircleSlider
-							:size="circleSliderSize"
 							v-model="compression.ratio"
+							:size="circleSliderSize"
 							class="CompressionEffect__circle-slider"
 							:min="1"
 							:max="20"

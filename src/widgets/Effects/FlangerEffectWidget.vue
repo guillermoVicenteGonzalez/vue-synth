@@ -6,8 +6,8 @@
 					<div class="FlangerEffect__control">
 						<VsChip class="FlangerEffect__chip">Delay</VsChip>
 						<CircleSlider
-							:size="circleSliderSize"
 							v-model="flanger.delay"
+							:size="circleSliderSize"
 							:disabled="flanger.disabled"
 							:fill-color="primaryColor"
 							:min="0"
@@ -19,8 +19,8 @@
 					<div class="FlangerEffect__control">
 						<VsChip class="FlangerEffect__chip">Depth</VsChip>
 						<CircleSlider
-							:size="circleSliderSize"
 							v-model="flanger.depth"
+							:size="circleSliderSize"
 							:disabled="flanger.disabled"
 							:fill-color="primaryColor"
 							:min="0"
@@ -32,8 +32,8 @@
 					<div class="FlangerEffect__control">
 						<VsChip class="FlangerEffect__chip">Feedback</VsChip>
 						<CircleSlider
-							:size="circleSliderSize"
 							v-model="flanger.feedback"
+							:size="circleSliderSize"
 							:disabled="flanger.disabled"
 							:fill-color="primaryColor"
 							:min="0"
@@ -45,8 +45,8 @@
 					<div class="FlangerEffect__control">
 						<VsChip class="FlangerEffect__chip">Speed</VsChip>
 						<CircleSlider
-							:size="circleSliderSize"
 							v-model="flanger.speed"
+							:size="circleSliderSize"
 							:disabled="flanger.disabled"
 							:fill-color="primaryColor"
 							:min="0"

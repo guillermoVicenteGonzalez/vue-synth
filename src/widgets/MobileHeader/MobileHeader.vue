@@ -111,7 +111,7 @@ $max-visualizer-size: 100%;
 $btn-size: 4rem;
 $btn-size-sm: 3rem;
 
-$visualizer-height: 7rem;
+$visualizer-height: 100%;
 
 .mobile-header {
 	background-color: $tertiary-color;
