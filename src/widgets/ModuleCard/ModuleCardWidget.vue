@@ -223,6 +223,14 @@ const ModuleCardStyles = computed(() => {
 
 const CircleSliderSize = computed<number>(() => {
 	if (browserWidth.value < 800) {
+		return 60;
+	}
+
+	if (browserWidth.value < 800) {
+		return 65;
+	}
+
+	if (browserWidth.value < 1200) {
 		return 70;
 	}
 
