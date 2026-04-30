@@ -178,6 +178,13 @@ const circleSliderSize = useCircleSliderSize();
 		gap: $gap-df;
 	}
 
+	&__right-controls,
+	&__left-controls {
+		@include respond(tab-port) {
+			gap: $gap-sm $gap-df;
+		}
+	}
+
 	&__visualization {
 		flex: 1 1 100%;
 

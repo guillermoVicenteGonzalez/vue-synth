@@ -156,6 +156,9 @@ $handle-width: 4rem;
 			width: 100%;
 			align-items: center;
 			padding: $gap-sm;
+			@include respond(tab-port) {
+				gap: $gap-sm;
+			}
 		}
 
 		&__visualization {

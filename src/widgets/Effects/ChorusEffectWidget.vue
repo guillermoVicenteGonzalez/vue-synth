@@ -219,6 +219,10 @@ const circleSliderSize = useCircleSliderSize();
 		flex-direction: column;
 		flex-wrap: wrap;
 		justify-content: space-between;
+
+		@include respond(tab-port) {
+			gap: $gap-sm $gap-df;
+		}
 	}
 
 	&__control {
