@@ -153,6 +153,10 @@ $max-wave-width: 10rem;
 			display: grid;
 			grid-template-columns: repeat(2, 1fr);
 			grid-template-rows: repeat(2, 1fr);
+
+			@include respond(tab-port) {
+				gap: $gap-sm $gap-df;
+			}
 		}
 
 		&__display {

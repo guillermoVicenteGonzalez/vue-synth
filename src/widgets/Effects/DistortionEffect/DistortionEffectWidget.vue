@@ -186,6 +186,9 @@ const circleSliderSize = useCircleSliderSize();
 		// align-items: center;
 		// justify-items: baseline;
 		// align-content: space-around;
+		@include respond(tab-port) {
+			gap: $gap-sm $gap-df;
+		}
 	}
 
 	&__control {

@@ -94,6 +94,10 @@ const circleSliderSize = useCircleSliderSize();
 			justify-content: space-between;
 
 			gap: $gap-df;
+
+			@include respond(tab-port) {
+				gap: $gap-sm $gap-df;
+			}
 		}
 
 		&__visualization {
