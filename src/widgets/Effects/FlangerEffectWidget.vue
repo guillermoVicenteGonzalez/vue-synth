@@ -6,6 +6,7 @@
 					<div class="FlangerEffect__control">
 						<VsChip class="FlangerEffect__chip">Delay</VsChip>
 						<CircleSlider
+							:size="circleSliderSize"
 							v-model="flanger.delay"
 							:disabled="flanger.disabled"
 							:fill-color="primaryColor"
@@ -18,6 +19,7 @@
 					<div class="FlangerEffect__control">
 						<VsChip class="FlangerEffect__chip">Depth</VsChip>
 						<CircleSlider
+							:size="circleSliderSize"
 							v-model="flanger.depth"
 							:disabled="flanger.disabled"
 							:fill-color="primaryColor"
@@ -30,6 +32,7 @@
 					<div class="FlangerEffect__control">
 						<VsChip class="FlangerEffect__chip">Feedback</VsChip>
 						<CircleSlider
+							:size="circleSliderSize"
 							v-model="flanger.feedback"
 							:disabled="flanger.disabled"
 							:fill-color="primaryColor"
@@ -42,6 +45,7 @@
 					<div class="FlangerEffect__control">
 						<VsChip class="FlangerEffect__chip">Speed</VsChip>
 						<CircleSlider
+							:size="circleSliderSize"
 							v-model="flanger.speed"
 							:disabled="flanger.disabled"
 							:fill-color="primaryColor"
@@ -98,6 +102,7 @@ import ToggleButton from "@/components/common/VsRadioButton/VsRadioButton.vue";
 import MultiWaveAnalyser, {
 	type analyserSource,
 } from "@/components/waves/MultiWaveAnnalyser/MultiWaveAnalyser.vue";
+import useCircleSliderSize from "@/composables/useCircleSliderSize";
 import type { FlangerEffect } from "@/models/effects/FlangerEffect";
 import { ref } from "vue";
 import EffectCard from "./EffectCard.vue";
@@ -122,6 +127,8 @@ const flangerSources = ref<flangerEffectSources[]>([
 	{ node: flanger.value.exitNode, color: complementaryColor, name: "exit" },
 	{ node: flanger.value.getDelayNode(), color: tertiaryColor, name: "delay" },
 ]);
+
+const circleSliderSize = useCircleSliderSize();
 </script>
 
 <style lang="scss" scoped>

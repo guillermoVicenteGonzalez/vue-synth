@@ -11,6 +11,7 @@
 						<VsChip class="CompressionEffect__chip">Threshold</VsChip>
 
 						<CircleSlider
+							:size="circleSliderSize"
 							v-model="compression.threshold"
 							class="CompressionEffect__circle-slider"
 							:min="-100"
@@ -25,6 +26,7 @@
 						<VsChip class="CompressionEffect__chip">Knee</VsChip>
 
 						<CircleSlider
+							:size="circleSliderSize"
 							v-model="compression.knee"
 							class="CompressionEffect__circle-slider"
 							:min="0"
@@ -47,6 +49,7 @@
 						<VsChip class="CompressionEffect__chip">Attack</VsChip>
 
 						<CircleSlider
+							:size="circleSliderSize"
 							v-model="compression.attack"
 							class="CompressionEffect__circle-slider"
 							:min="0"
@@ -60,6 +63,7 @@
 					<div class="CompressionEffect__body__control">
 						<VsChip class="CompressionEffect__chip">Ratio</VsChip>
 						<CircleSlider
+							:size="circleSliderSize"
 							v-model="compression.ratio"
 							class="CompressionEffect__circle-slider"
 							:min="1"
@@ -87,6 +91,7 @@
 import CircleSlider from "@/components/common/CircleSlider/CircleSlider.vue";
 import VsChip from "@/components/common/VsChip/VsChip.vue";
 import CompressionAnalyser from "@/components/waves/CompressionAnalyser/CompressionAnalyser.vue";
+import useCircleSliderSize from "@/composables/useCircleSliderSize";
 import useSynth from "@/composables/useSynth";
 import AudioCluster from "@/models/AudioCluster";
 import { AudioEffect } from "@/models/effects/AudioEffect";
@@ -120,6 +125,7 @@ function getSourcePreCompression() {
 }
 
 getSourcePreCompression();
+const circleSliderSize = useCircleSliderSize();
 </script>
 
 <style scoped lang="scss">

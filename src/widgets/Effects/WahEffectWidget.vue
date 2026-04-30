@@ -7,7 +7,7 @@
 						<VsChip class="WahEffect__chip">Speed</VsChip>
 						<CircleSlider
 							v-model="wah.speed"
-							:size="CircleSliderSize"
+							:size="circleSliderSize"
 							class="WahEffect__slider"
 							:disabled="isSpeedDisabled"
 							:step="0.1"
@@ -19,7 +19,7 @@
 						<VsChip class="WahEffect__chip">Depth</VsChip>
 						<CircleSlider
 							v-model="wah.depth"
-							:size="CircleSliderSize"
+							:size="circleSliderSize"
 							class="WahEffect__slider"
 							:disabled="isDepthDisabled"
 							:min="MIN_WAH_DEPTH"
@@ -30,7 +30,7 @@
 						<VsChip class="WahEffect__chip">Cutoff</VsChip>
 						<CircleSlider
 							v-model="wah.cutoff"
-							:size="CircleSliderSize"
+							:size="circleSliderSize"
 							:disabled="wah.disabled"
 							class="WahEffect__slider"
 							:min="MIN_WAH_CUTOFF"
@@ -41,7 +41,7 @@
 						<VsChip class="WahEffect__chip">Delay</VsChip>
 						<CircleSlider
 							v-model="wah.delay"
-							:size="CircleSliderSize"
+							:size="circleSliderSize"
 							:disabled="wah.disabled"
 							class="WahEffect__slider"
 							:min="MIN_WAH_DELAY"
@@ -53,7 +53,7 @@
 						<VsChip class="WahEffect__chip">Mix</VsChip>
 						<CircleSlider
 							v-model="wah.mix"
-							:size="CircleSliderSize"
+							:size="circleSliderSize"
 							:disabled="wah.disabled"
 							class="WahEffect__slider"
 							:min="MIN_WAH_MIX"
@@ -116,11 +116,10 @@ import WahEffect, {
 
 import VsSelector from "@/components/common/VsSelector/VsSelector.vue";
 import WaveCanvas from "@/components/waves/WaveCanvas/WaveCanvas.vue";
-import { useMonitorSize } from "@/composables/useMonitorSize";
+import useCircleSliderSize from "@/composables/useCircleSliderSize";
 import { waveForms } from "@/models/wave";
 import { computed } from "vue";
 import EffectCard from "./EffectCard.vue";
-const { browserWidth } = useMonitorSize();
 
 const lineColor = "#F20BC6";
 
@@ -132,13 +131,7 @@ const isSpeedDisabled = computed(
 	() => wah.value.disabled || wah.value.type == WahTypes.tremolo
 );
 
-const CircleSliderSize = computed<number>(() => {
-	if (browserWidth.value < 1000) {
-		return 70;
-	}
-
-	return 80;
-});
+const circleSliderSize = useCircleSliderSize();
 </script>
 
 <style lang="scss" scoped>

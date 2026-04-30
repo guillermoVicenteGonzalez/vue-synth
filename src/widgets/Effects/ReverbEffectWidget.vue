@@ -6,6 +6,7 @@
 					<div class="ReverbEffect__control">
 						<VsChip class="ReverbEffect__chip">Room size</VsChip>
 						<CircleSlider
+							:size="circleSliderSize"
 							v-model="reverb.roomSize"
 							:disabled="reverb.disabled"
 							class="ReverbEffect__circle-slider"
@@ -17,6 +18,7 @@
 					<div class="ReverbEffect__control">
 						<VsChip class="ReverbEffect__chip">Dampening</VsChip>
 						<CircleSlider
+							:size="circleSliderSize"
 							v-model="reverb.dampening"
 							:disabled="reverb.disabled"
 							class="ReverbEffect__circle-slider"
@@ -51,6 +53,7 @@
 					<div class="ReverbEffect__control">
 						<VsChip class="ReverbEffect__chip">Pre Delay</VsChip>
 						<CircleSlider
+							:size="circleSliderSize"
 							v-model="reverb.preDelay"
 							:disabled="reverb.disabled"
 							class="ReverbEffect__circle-slider"
@@ -62,6 +65,7 @@
 					<div class="ReverbEffect__control">
 						<VsChip class="ReverbEffect__chip">Pre High Cut</VsChip>
 						<CircleSlider
+							:size="circleSliderSize"
 							v-model="reverb.preHighCut"
 							:disabled="reverb.disabled"
 							:max="10000"
@@ -71,6 +75,7 @@
 					<div class="ReverbEffect__control">
 						<VsChip class="ReverbEffect__chip">Pre Low Cut</VsChip>
 						<CircleSlider
+							:size="circleSliderSize"
 							v-model="reverb.preLowCut"
 							:disabled="reverb.disabled"
 							:max="10000"
@@ -80,6 +85,7 @@
 					<div class="ReverbEffect__control">
 						<VsChip class="ReverbEffect__chip">Mix</VsChip>
 						<CircleSlider
+							:size="circleSliderSize"
 							v-model="reverb.mix"
 							:disabled="reverb.disabled"
 							:min="0"
@@ -107,6 +113,7 @@ import VsChip from "@/components/common/VsChip/VsChip.vue";
 import MultiWaveAnalyser, {
 	type analyserSource,
 } from "@/components/waves/MultiWaveAnnalyser/MultiWaveAnalyser.vue";
+import useCircleSliderSize from "@/composables/useCircleSliderSize";
 import {
 	MAX_REVERB_DAMPENING,
 	MAX_REVERB_PRE_DELAY,
@@ -143,6 +150,8 @@ const multiAnalyserSources = computed<ReverbEffectSource[]>(() => {
 		},
 	];
 });
+
+const circleSliderSize = useCircleSliderSize();
 </script>
 
 <style scoped lang="scss">
