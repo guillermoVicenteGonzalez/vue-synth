@@ -87,8 +87,8 @@ $max-components-h: 5.2fr;
 $min-display-h: 9rem;
 $max-display-h: 4.5fr;
 
-$header-h: 7rem;
-$header-min-h: 4rem;
+$header-h: 8rem;
+$header-min-h: 7rem;
 $header-max-h: 4rem;
 
 $min-waves-w: 45rem;
@@ -112,6 +112,8 @@ $max-filters-w: 4fr;
 
 	&__header {
 		height: $header-h;
+		// flex: 0 1 $header-min-h;
+		// height: $header-min-h;
 	}
 
 	&__body {

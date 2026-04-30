@@ -6,8 +6,8 @@
 					<div class="ChorusEffect__control">
 						<VsChip class="ChorusEffect__chip">amount</VsChip>
 						<CircleSlider
-							:size="circleSliderSize"
 							v-model="chorus.amount"
+							:size="circleSliderSize"
 							:disabled="chorus.disabled"
 							class="ChorusEffect__circle-slider"
 							:fill-color="primaryColor"
@@ -21,8 +21,8 @@
 						<VsChip class="ChorusEffect__chip">rate</VsChip>
 
 						<CircleSlider
-							:size="circleSliderSize"
 							v-model="chorus.rate"
+							:size="circleSliderSize"
 							:disabled="chorus.disabled"
 							class="ChorusEffect__circle-slider"
 							:fill-color="primaryColor"
@@ -36,8 +36,8 @@
 						<VsChip class="ChorusEffect__chip">Delay 1</VsChip>
 
 						<CircleSlider
-							:size="circleSliderSize"
 							v-model="chorus.delay1"
+							:size="circleSliderSize"
 							:disabled="chorus.disabled"
 							class="ChorusEffect__circle-slider"
 							:fill-color="primaryColor"
@@ -51,8 +51,8 @@
 						<VsChip class="ChorusEffect__chip">Delay 2</VsChip>
 
 						<CircleSlider
-							:size="circleSliderSize"
 							v-model="chorus.delay2"
+							:size="circleSliderSize"
 							:disabled="chorus.disabled"
 							class="ChorusEffect__circle-slider"
 							:fill-color="primaryColor"
@@ -66,8 +66,8 @@
 						<VsChip class="ChorusEffect__chip">MIX</VsChip>
 
 						<CircleSlider
-							:size="circleSliderSize"
 							v-model="chorus.mix"
+							:size="circleSliderSize"
 							:disabled="chorus.disabled"
 							class="ChorusEffect__circle-slider"
 							:fill-color="primaryColor"
@@ -80,8 +80,8 @@
 					<div class="ChorusEffect__control">
 						<VsChip class="ChorusEffect__chip">voices</VsChip>
 						<CircleSlider
-							:size="circleSliderSize"
 							v-model="chorus.voices"
+							:size="circleSliderSize"
 							:disabled="chorus.disabled"
 							class="ChorusEffect__circle-slider"
 							:fill-color="primaryColor"
@@ -94,8 +94,8 @@
 						<VsChip class="ChorusEffect__chip">Feedback delay</VsChip>
 
 						<CircleSlider
-							:size="circleSliderSize"
 							v-model="chorus.feedbackDelay"
+							:size="circleSliderSize"
 							:disabled="chorus.disabled"
 							class="ChorusEffect__circle-slider"
 							:fill-color="primaryColor"
@@ -109,8 +109,8 @@
 						<VsChip class="ChorusEffect__chip">Feedback</VsChip>
 
 						<CircleSlider
-							:size="circleSliderSize"
 							v-model="chorus.feedback"
+							:size="circleSliderSize"
 							:disabled="chorus.disabled"
 							class="ChorusEffect__circle-slider"
 							:fill-color="primaryColor"
@@ -129,8 +129,8 @@
 							:items="filterTypes"
 						></VsSelector>
 						<CircleSlider
-							:size="circleSliderSize"
 							v-model="chorus.filterCuttof"
+							:size="circleSliderSize"
 							:disabled="chorus.disabled"
 							class="ChorusEffect__circle-slider"
 							:fill-color="primaryColor"

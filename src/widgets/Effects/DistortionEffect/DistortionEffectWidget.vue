@@ -34,8 +34,8 @@
 							<VsChip class="DistortionEffect__chip">Cutoff</VsChip>
 
 							<CircleSlider
-								:size="circleSliderSize"
 								v-model="distortion.cutoff"
+								:size="circleSliderSize"
 								:disabled="distortion.disabled"
 								:max="MAX_DISTORTION_CUTOFF"
 								:min="MIN_DISTORTION_CUTOFF"
@@ -45,8 +45,8 @@
 						<div class="DistortionEffect__control">
 							<VsChip class="DistortionEffect__chip">Threshold</VsChip>
 							<CircleSlider
-								:size="circleSliderSize"
 								v-model="distortion.threshold"
+								:size="circleSliderSize"
 								:disabled="!thresholdEnabled"
 								:step="0.01"
 								:min="MIN_DISTORTION_THRESHOLD"
@@ -57,8 +57,8 @@
 						<div class="DistortionEffect__control">
 							<VsChip class="DistortionEffect__chip">nBits</VsChip>
 							<CircleSlider
-								:size="circleSliderSize"
 								v-model="distortion.nBits"
+								:size="circleSliderSize"
 								:disabled="!nBitsEnabled"
 								:min="MIN_DISTORTION_NBITS"
 								:max="MAX_DISTORTION_NBITS"
@@ -68,8 +68,8 @@
 						<div class="DistortionEffect__control">
 							<VsChip class="DistortionEffect__chip">Drive</VsChip>
 							<CircleSlider
-								:size="circleSliderSize"
 								v-model="distortion.drive"
+								:size="circleSliderSize"
 								:disabled="!driveEnabled"
 								:step="0.1"
 								:min="0"
@@ -80,8 +80,8 @@
 						<div class="DistortionEffect__control">
 							<VsChip class="DistortionEffect__chip">Mix</VsChip>
 							<CircleSlider
-								:size="circleSliderSize"
 								v-model="distortion.mix"
+								:size="circleSliderSize"
 								:disabled="distortion.disabled"
 							></CircleSlider>
 						</div>
