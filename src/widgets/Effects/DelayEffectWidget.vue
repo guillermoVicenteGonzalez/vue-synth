@@ -115,6 +115,10 @@ const circleSliderSize = useCircleSliderSize();
 		justify-content: center;
 		align-items: center;
 		gap: $gap-df;
+
+		@include respond(tab-port) {
+			gap: $gap-sm;
+		}
 	}
 
 	&__circle-slider {
@@ -125,6 +129,10 @@ const circleSliderSize = useCircleSliderSize();
 		width: 100%;
 		font-size: 1.6rem;
 		text-align: center;
+
+		@include respond(tab-port) {
+			font-size: 1.3rem;
+		}
 	}
 
 	&__context-menu {

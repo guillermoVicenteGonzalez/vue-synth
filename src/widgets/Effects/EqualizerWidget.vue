@@ -146,6 +146,9 @@ const equalizer = defineModel<Equalizer>({ required: true });
 			color: $text-color;
 			font-size: 1.6rem;
 			text-transform: uppercase;
+			@include respond(tab-port) {
+				font-size: 1.3rem;
+			}
 		}
 	}
 
@@ -154,6 +157,9 @@ const equalizer = defineModel<Equalizer>({ required: true });
 		flex: 1;
 		font-size: 1.6rem;
 		text-align: center;
+		@include respond(tab-port) {
+			font-size: 1.3rem;
+		}
 	}
 
 	&__context-menu {

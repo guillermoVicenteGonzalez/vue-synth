@@ -198,6 +198,10 @@ const circleSliderSize = useCircleSliderSize();
 		gap: $gap-df;
 		justify-content: center;
 		align-items: center;
+
+		@include respond(tab-port) {
+			gap: $gap-sm;
+		}
 	}
 
 	&__chip {

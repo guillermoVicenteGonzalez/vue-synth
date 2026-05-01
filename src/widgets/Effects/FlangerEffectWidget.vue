@@ -186,6 +186,10 @@ $max-wave-width: 10rem;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
+
+		@include respond(tab-port) {
+			gap: $gap-sm;
+		}
 	}
 
 	&__chip {
