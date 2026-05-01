@@ -65,6 +65,7 @@ function handleRightClick(e: MouseEvent) {
 
 <style scoped lang="scss">
 $effect-card-height: 25rem;
+$effect-card-height-portrait: 23.5rem;
 $handle-bg-color: black;
 $handle-padding: 1rem;
 $disabled-color: $disabled-color-2;
@@ -78,6 +79,10 @@ $handle-width: 4rem;
 	background-color: $bg-color-2;
 	display: flex;
 	position: relative;
+
+	@include respond(tab-port) {
+		height: $effect-card-height-portrait;
+	}
 
 	&__handle {
 		display: flex;

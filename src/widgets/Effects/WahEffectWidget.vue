@@ -65,13 +65,13 @@
 				<div class="WahEffect__right">
 					<div class="WahEffect__selectors">
 						<VsSelector
-							class="WahEffect__selector"
 							v-model="wah.type"
+							class="WahEffect__selector"
 							:items="Object.values(WahTypes)"
 						></VsSelector>
 						<VsSelector
-							class="WahEffect__selector"
 							v-model="wah.lfoForm"
+							class="WahEffect__selector"
 							:items="Object.values(waveForms)"
 						></VsSelector>
 					</div>
