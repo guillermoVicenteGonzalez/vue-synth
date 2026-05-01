@@ -66,10 +66,12 @@
 					<div class="WahEffect__selectors">
 						<VsSelector
 							v-model="wah.type"
+							class="WahEffect__selector"
 							:items="Object.values(WahTypes)"
 						></VsSelector>
 						<VsSelector
 							v-model="wah.lfoForm"
+							class="WahEffect__selector"
 							:items="Object.values(waveForms)"
 						></VsSelector>
 					</div>
@@ -169,6 +171,10 @@ const circleSliderSize = useCircleSliderSize();
 		flex-direction: column;
 		gap: $gap-df;
 		align-items: center;
+
+		@include respond(tab-port) {
+			gap: $gap-sm;
+		}
 	}
 
 	&__selectors {
@@ -196,6 +202,13 @@ const circleSliderSize = useCircleSliderSize();
 		width: 100%;
 		text-align: center;
 	}
+
+	// &__selector > *,
+	// &__chip {
+	// 	@include respond(tab-port) {
+	// 		font-size: 1.3rem;
+	// 	}
+	// }
 
 	&__slider {
 		color: $text-color;

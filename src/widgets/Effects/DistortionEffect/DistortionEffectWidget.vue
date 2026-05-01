@@ -11,12 +11,14 @@
 						<VsChip class="DistortionEffect__chip">Filter Position</VsChip>
 
 						<VsSelector
+							class="DistortionEffect__selector"
 							v-model="distortion.filterPosition"
 							:items="Object.values(DistortionFilterPositions)"
 						></VsSelector>
 						<VsChip class="DistortionEffect__chip">Filter type</VsChip>
 
 						<VsSelector
+							class="DistortionEffect__selector"
 							v-model.number="distortion.filterType"
 							:items="Object.values(DistortionFilterTypes)"
 						></VsSelector>
@@ -24,6 +26,7 @@
 						<VsChip class="DistortionEffect__chip">Distortion type</VsChip>
 
 						<VsSelector
+							class="DistortionEffect__selector"
 							v-model.number="distortion.distortionType"
 							:items="Object.values(DistortionTypes)"
 						></VsSelector>
@@ -147,10 +150,14 @@ const circleSliderSize = useCircleSliderSize();
 </script>
 
 <style lang="scss" scoped>
+$responsive-font-size: 1.3rem;
+$responsive-selector-height: 2rem;
+
 .DistortionEffect {
 	&__body {
 		display: flex;
 		gap: $gap-bg;
+		height: 100%;
 
 		&__controls {
 			width: 100%;
@@ -173,6 +180,18 @@ const circleSliderSize = useCircleSliderSize();
 		display: flex;
 		gap: $gap-df;
 		flex-direction: column;
+		justify-content: space-around;
+
+		@include respond(tab-port) {
+			.DistortionEffect__chip .DistortionEffect__selector {
+				font-size: $responsive-font-size;
+				height: $responsive-selector-height;
+			}
+
+			.DistortionEffect__selector > * {
+				font-size: $responsive-font-size;
+			}
+		}
 	}
 
 	&__sliders {
@@ -198,6 +217,10 @@ const circleSliderSize = useCircleSliderSize();
 		gap: $gap-df;
 		justify-content: center;
 		align-items: center;
+
+		@include respond(tab-port) {
+			gap: $gap-sm;
+		}
 	}
 
 	&__chip {

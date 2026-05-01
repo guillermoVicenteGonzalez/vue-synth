@@ -115,6 +115,10 @@ const circleSliderSize = useCircleSliderSize();
 		justify-content: center;
 		align-items: center;
 		gap: $gap-df;
+
+		@include respond(tab-port) {
+			gap: $gap-sm;
+		}
 	}
 
 	&__circle-slider {

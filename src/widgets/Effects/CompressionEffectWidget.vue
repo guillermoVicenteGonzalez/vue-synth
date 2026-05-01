@@ -172,6 +172,10 @@ $handle-width: 4rem;
 		font-size: 1.6rem;
 		width: 70%;
 		text-align: center;
+
+		@include respond(tab-port) {
+			font-size: 1.3rem;
+		}
 	}
 
 	&__circle-slider {

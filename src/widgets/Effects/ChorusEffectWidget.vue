@@ -183,6 +183,8 @@ const circleSliderSize = useCircleSliderSize();
 </script>
 
 <style lang="scss" scoped>
+$responsive-chip-font-size: 1.4rem;
+
 .ChorusEffect {
 	&__body {
 		display: flex;
@@ -230,12 +232,20 @@ const circleSliderSize = useCircleSliderSize();
 		flex-direction: column;
 		gap: $gap-df;
 		align-items: center;
+
+		@include respond(tab-port) {
+			gap: $gap-sm;
+		}
 	}
 
 	&__chip {
 		width: 100%;
 		font-size: 1.6rem;
 		text-align: center;
+
+		@include respond(tab-port) {
+			font-size: $responsive-chip-font-size;
+		}
 	}
 
 	&__circle-slider {
