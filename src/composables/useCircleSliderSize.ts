@@ -5,6 +5,10 @@ const { browserWidth } = useMonitorSize();
 
 export default function useCircleSliderSize() {
 	return computed(() => {
+		if (browserWidth.value < 500) {
+			return 55;
+		}
+
 		if (browserWidth.value < 700) {
 			return 60;
 		}
