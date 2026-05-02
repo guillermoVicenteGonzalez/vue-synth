@@ -27,7 +27,7 @@
 				class="mobile-header__button"
 				@click="changeTab('voices')"
 			>
-				<AudioLines class="movile-header__button__icon"></AudioLines>
+				<AudioLines class="mobile-header__button__icon"></AudioLines>
 			</VsButton>
 			<VsButton
 				variant="round"
@@ -128,6 +128,7 @@ $visualizer-height: 100%;
 	// 		$max-visualizer-size
 	// 	);
 	display: flex;
+
 	// flex-wrap: wrap;
 
 	&__actions,
@@ -175,7 +176,6 @@ $visualizer-height: 100%;
 
 		&__icon {
 			@include iconButton();
-			color: $tertiary-color;
 			color: black;
 		}
 	}
@@ -187,6 +187,24 @@ $visualizer-height: 100%;
 		flex: 1 0 $min-title-width;
 		text-align: center;
 		color: $text-color;
+	}
+
+	@include respond(phone) {
+		display: grid;
+		grid-template-rows: 1fr 1fr;
+		grid-template-columns: 1fr 1fr;
+
+		&__visualizer-container {
+			background-color: blue;
+			grid-row: 1 / 1;
+			grid-column: 1/-1;
+			width: 100%;
+		}
+
+		&__tabs,
+		&__actions {
+			grid-row: 2/3;
+		}
 	}
 }
 </style>

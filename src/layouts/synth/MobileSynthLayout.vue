@@ -1,48 +1,25 @@
 <template>
 	<div class="mobile-layout">
 		<div class="mobile-layout__header">
-			<slot name="header"> </slot>
+			<MobileLandHeader></MobileLandHeader>
 		</div>
-		<div class="mobile-layout__components">
-			<VsTabs v-model="activeTab" :items="tabItems" class="mobile-layout__tabs">
-				<VsTab :active="activeTab == 0">
-					<slot name="waves"></slot>
-				</VsTab>
+		<div class="mobile-layout__body">
+			<VsTab :active="activeTab == 'voices'" class="mobile-layout__voices">
+				<slot name="waves"></slot>
+				<VsSeparator></VsSeparator>
+				<slot name="filters"></slot>
+			</VsTab>
 
-				<VsTab :active="activeTab == 1">
-					<slot name="filters" :active="true"> </slot>
-				</VsTab>
-			</VsTabs>
-			<div v-if="$slots.effects" class="mobile-layout__effects">
-				<slot name="effects" class="effects"> </slot>
-			</div>
+			<VsTab :active="activeTab == 'effects'">
+				<slot name="effects"></slot>
+			</VsTab>
 		</div>
 
 		<div class="mobile-layout__actions">
 			<slot name="actions" variant="rounded"></slot>
 		</div>
 
-		<div class="mobile-layout__controls">
-			<VsTabs
-				v-model="controlsTab"
-				:items="controlsTabItems"
-				class="mobile-layout__controls__tabs"
-			>
-				<div class="mobile-layout__controls__content">
-					<VsTab :active="controlsTab == 0">
-						<slot
-							name="lfo"
-							list-variant="horizontal"
-							widget-variant="default"
-						></slot>
-					</VsTab>
-
-					<VsTab :active="controlsTab == 1">
-						<slot name="envelope"></slot>
-					</VsTab>
-				</div>
-			</VsTabs>
-		</div>
+		<div class="mobile-layout__controls"></div>
 
 		<div class="mobile-layout__piano">
 			<slot name="piano"></slot>
@@ -51,18 +28,17 @@
 </template>
 
 <script setup lang="ts">
+import VsSeparator from "@/components/common/VsSeparator/VsSeparator.vue";
 import VsTab from "@/components/common/VsTab/VsTab.vue";
-import VsTabs from "@/components/common/VsTabs/VsTabs.vue";
 import type { ActionsWidgetVariants } from "@/widgets/ActionsWidget/ActionsWidget.vue";
 import type { LFOWidgetVariants } from "@/widgets/LfoWdidget/LfoWdidgetWidget.vue";
 import type { LfoWidgetListVariants } from "@/widgets/LfoWidgetList/LfoWidgetListWidget.vue";
+import MobileLandHeader from "@/widgets/MobileLandHeader/MobileLandHeader.vue";
 import { ref } from "vue";
+import type { MobileTabs } from "./PortraitSynthLayout.vue";
 
-const activeTab = ref<number>(0);
-const controlsTab = ref<number>(0);
-
-const tabItems: string[] = ["waves", "filters"];
-const controlsTabItems = ["LFO", "enveloppe"];
+// const tabItems = ["envelope", "piano", "LFO"];
+const activeTab = ref<MobileTabs>("voices");
 
 defineSlots<{
 	actions(props: { variant: ActionsWidgetVariants }): void;
@@ -97,10 +73,10 @@ $base-enveloppe-h: 25%;
 $base-analyser-h: 10%;
 
 $min-header-h: 4rem;
-$max-header-h: 5rem;
+$max-header-h: 12.2rem;
 
 $min-body-h: 7rem;
-$max-body-h: 7fr;
+$max-body-h: 100%;
 
 $max-piano-h: 15rem;
 $min-piano-h: 0;
@@ -120,60 +96,18 @@ $min-piano-h: 0;
 	flex-direction: column;
 
 	&__header {
-		color: $header-text-color;
-
-		flex: 1 0 $min-header-h;
-		max-height: $max-header-h;
-		width: 100%;
+		flex: 0 0 $max-header-h;
+		height: $max-header-h;
 	}
 
-	&__components {
-		flex: 1 1 $base-components-h;
-		max-height: $base-components-h;
-		min-height: $min-components-h;
-
-		display: grid;
-
-		overflow: hidden;
+	&__body {
+		flex: 1 1 $max-body-h;
+		max-height: 100%;
+		overflow: auto;
 	}
 
 	&__actions {
-		// position: absolute;
-		gap: $gap-df;
-		display: flex;
-		justify-content: space-around;
-		align-items: center;
-
-		flex: 0 0 $base-actions-h;
-		padding: $gap-df;
-	}
-
-	&__envelope {
-		// max-height: 25%;
 		// height: 100%;
-		// flex: 0 0 $base-enveloppe-h;
-		height: 100%;
-	}
-
-	&__lfo {
-		height: 100%;
-	}
-
-	// LFO + enveloppe
-	&__controls {
-		height: 100%;
-		flex: 1 0 $base-controls-h;
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-
-		&__tabs {
-			gap: 1rem;
-		}
-
-		&__content {
-			height: 100%;
-		}
 	}
 
 	&__piano {
@@ -183,6 +117,15 @@ $min-piano-h: 0;
 
 		background-color: green;
 		flex: 1 0 $max-piano-h;
+	}
+
+	&__voices {
+		// max-height: 100%;
+
+		gap: $gap-df;
+
+		display: flex;
+		flex-direction: column;
 	}
 
 	&__effects {
