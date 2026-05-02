@@ -209,5 +209,61 @@ $action-size: 5rem;
 	&--block {
 		border-radius: 0;
 	}
+
+	// @include respond(tab-land) {
+	// 	flex-wrap: wrap;
+	// 	display: grid;
+
+	// 	grid-template-columns: 1fr 1fr;
+	// 	grid-template-rows: 1fr 1fr;
+
+	// 	justify-items: center;
+	// 	justify-content: center;
+
+	// 	&__separator {
+	// 		display: none;
+	// 	}
+
+	// 	&__voices {
+	// 		width: 100%;
+	// 		justify-content: center;
+	// 	}
+
+	// 	&__sliders {
+	// 		width: 100%;
+	// 		padding: 0 $gap-bg;
+	// 		grid-column: 1 / -1;
+	// 	}
+	// }
+
+	@include respond(tab-land) {
+		flex-wrap: wrap;
+		gap: 0;
+
+		&__voices,
+		&__recording {
+			flex: 0 1 49.5%;
+			justify-content: center;
+			padding: 0;
+			margin: 0;
+			padding-bottom: $gap-df;
+			// width: 100%;
+		}
+
+		&__separator {
+			height: auto;
+			flex: 0 0 0.5%;
+
+			&:nth-of-type(2) {
+				display: none;
+			}
+		}
+
+		&__sliders {
+			// border-top: solid 1px;
+			flex: 1 0 100%;
+			padding: 0 $gap-df;
+		}
+	}
 }
 </style>

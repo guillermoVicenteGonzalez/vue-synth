@@ -172,7 +172,6 @@ $visualizer-height: 100%;
 		padding: $gap-df;
 		display: flex;
 		align-items: center;
-		padding: $gap-df;
 
 		&__icon {
 			@include iconButton();

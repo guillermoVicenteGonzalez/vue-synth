@@ -1,7 +1,7 @@
 <template>
 	<div class="mobile-layout">
 		<div class="mobile-layout__header">
-			<MobileLandHeader></MobileLandHeader>
+			<MobileLandHeader v-model="activeTab"></MobileLandHeader>
 		</div>
 		<div class="mobile-layout__body">
 			<VsTab :active="activeTab == 'voices'" class="mobile-layout__voices">
@@ -12,6 +12,20 @@
 
 			<VsTab :active="activeTab == 'effects'">
 				<slot name="effects"></slot>
+			</VsTab>
+			<VsTab :active="activeTab == 'envelope'">
+				<slot name="envelope" variant="minimal"></slot>
+			</VsTab>
+
+			<VsTab :active="activeTab == 'lfo'">
+				<div class="mobile-layout__spaced-container">
+					<slot
+						name="lfo"
+						list-variant="horizontal"
+						widget-variant="default"
+						widget-orientation-variant="vertical"
+					></slot>
+				</div>
 			</VsTab>
 		</div>
 
@@ -31,14 +45,18 @@
 import VsSeparator from "@/components/common/VsSeparator/VsSeparator.vue";
 import VsTab from "@/components/common/VsTab/VsTab.vue";
 import type { ActionsWidgetVariants } from "@/widgets/ActionsWidget/ActionsWidget.vue";
-import type { LFOWidgetVariants } from "@/widgets/LfoWdidget/LfoWdidgetWidget.vue";
+import type {
+	LFOWidgetOrientation,
+	LFOWidgetVariants,
+} from "@/widgets/LfoWdidget/LfoWdidgetWidget.vue";
 import type { LfoWidgetListVariants } from "@/widgets/LfoWidgetList/LfoWidgetListWidget.vue";
-import MobileLandHeader from "@/widgets/MobileLandHeader/MobileLandHeader.vue";
+import MobileLandHeader, {
+	type MobileLandHeaderTabs,
+} from "@/widgets/MobileLandHeader/MobileLandHeader.vue";
 import { ref } from "vue";
-import type { MobileTabs } from "./PortraitSynthLayout.vue";
 
 // const tabItems = ["envelope", "piano", "LFO"];
-const activeTab = ref<MobileTabs>("voices");
+const activeTab = ref<MobileLandHeaderTabs>("voices");
 
 defineSlots<{
 	actions(props: { variant: ActionsWidgetVariants }): void;
@@ -48,6 +66,7 @@ defineSlots<{
 	lfo(props: {
 		listVariant: LfoWidgetListVariants;
 		widgetVariant: LFOWidgetVariants;
+		widgetOrientationVariant: LFOWidgetOrientation;
 	}): void;
 	piano(): void;
 	effects(): void;
@@ -94,6 +113,7 @@ $min-piano-h: 0;
 	overflow: hidden;
 	display: flex;
 	flex-direction: column;
+	// gap: $gap-sm;
 
 	&__header {
 		flex: 0 0 $max-header-h;
@@ -108,6 +128,7 @@ $min-piano-h: 0;
 
 	&__actions {
 		// height: 100%;
+		padding: $gap-df;
 	}
 
 	&__piano {
@@ -131,6 +152,10 @@ $min-piano-h: 0;
 	&__effects {
 		height: 100%;
 		overflow: auto;
+	}
+
+	&__envelope-container {
+		padding: $gap-df;
 	}
 }
 </style>

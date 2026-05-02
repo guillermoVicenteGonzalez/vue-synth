@@ -45,9 +45,9 @@
 			</nav>
 			<div class="mobile-land-header__tools">
 				<MetronomeWidget></MetronomeWidget>
-				<SettingsButton></SettingsButton>
+				<SettingsButton :dropdown-mode="'centered'"></SettingsButton>
 
-				<div class="vsynth-header__midi">
+				<div class="mobile-land-header__midi">
 					<VsTooltip>
 						<midi-selector></midi-selector>
 					</VsTooltip>
@@ -111,7 +111,7 @@ $border-color: black;
 	&__tools,
 	&__tabs {
 		flex: 1 1 100%;
-		justify-content: space-around;
+		justify-content: center;
 		display: flex;
 		padding: $gap-df;
 		gap: $gap-bg;
@@ -119,6 +119,11 @@ $border-color: black;
 
 	&__tools {
 		border-left: solid $border-size $border-color;
+	}
+
+	&__midi {
+		display: flex;
+		align-items: center;
 	}
 
 	&__button {

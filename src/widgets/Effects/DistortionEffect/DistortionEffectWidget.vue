@@ -11,23 +11,23 @@
 						<VsChip class="DistortionEffect__chip">Filter Position</VsChip>
 
 						<VsSelector
-							class="DistortionEffect__selector"
 							v-model="distortion.filterPosition"
+							class="DistortionEffect__selector"
 							:items="Object.values(DistortionFilterPositions)"
 						></VsSelector>
 						<VsChip class="DistortionEffect__chip">Filter type</VsChip>
 
 						<VsSelector
-							class="DistortionEffect__selector"
 							v-model.number="distortion.filterType"
+							class="DistortionEffect__selector"
 							:items="Object.values(DistortionFilterTypes)"
 						></VsSelector>
 
 						<VsChip class="DistortionEffect__chip">Distortion type</VsChip>
 
 						<VsSelector
-							class="DistortionEffect__selector"
 							v-model.number="distortion.distortionType"
+							class="DistortionEffect__selector"
 							:items="Object.values(DistortionTypes)"
 						></VsSelector>
 					</div>
