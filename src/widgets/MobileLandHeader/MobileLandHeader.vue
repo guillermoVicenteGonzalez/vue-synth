@@ -19,6 +19,16 @@
 				>
 					<AudioLines class="mobile-land-header__button__icon"></AudioLines>
 				</VsButton>
+
+				<VsButton
+					variant="round"
+					class="mobile-land-header__button"
+					@click="changeTab('filters ')"
+				>
+					<SquareActivity
+						class="mobile-land-header__button__icon"
+					></SquareActivity>
+				</VsButton>
 				<VsButton
 					variant="round"
 					class="mobile-land-header__button"
@@ -30,17 +40,9 @@
 				<VsButton
 					variant="round"
 					class="mobile-land-header__button"
-					@click="changeTab('envelope')"
+					@click="changeTab('env-lfo')"
 				>
 					<Mail class="mobile-land-header__button__icon"></Mail>
-				</VsButton>
-
-				<VsButton
-					variant="round"
-					class="mobile-land-header__button"
-					@click="changeTab('lfo')"
-				>
-					<Activity class="mobile-land-header__button__icon"></Activity>
 				</VsButton>
 			</nav>
 			<div class="mobile-land-header__tools">
@@ -63,11 +65,15 @@ import MidiSelector from "@/components/MIDI/MidiSelector.vue";
 import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
 import WaveAnalyser from "@/components/waves/WaveAnalyser/WaveAnalyser.vue";
 import useSynth from "@/composables/useSynth";
-import { Activity, AudioLines, Mail, Sparkles } from "lucide-vue-next";
+import { AudioLines, Mail, Sparkles, SquareActivity } from "lucide-vue-next";
 import MetronomeWidget from "../MetronomeWidget/MetronomeWidget.vue";
 import SettingsButton from "../Settings/SettingsButton.vue";
 
-export type MobileLandHeaderTabs = "voices" | "effects" | "envelope" | "lfo";
+export type MobileLandHeaderTabs =
+	| "voices"
+	| "filters "
+	| "effects"
+	| "env-lfo";
 const currentTab = defineModel<MobileLandHeaderTabs>({ default: "voices" });
 
 const primaryColor = "#42d392";

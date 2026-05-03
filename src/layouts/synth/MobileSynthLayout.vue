@@ -6,19 +6,18 @@
 		<div class="mobile-layout__body">
 			<VsTab :active="activeTab == 'voices'" class="mobile-layout__voices">
 				<slot name="waves"></slot>
-				<VsSeparator></VsSeparator>
+			</VsTab>
+
+			<VsTab :active="activeTab == 'filters '">
 				<slot name="filters"></slot>
 			</VsTab>
 
 			<VsTab :active="activeTab == 'effects'">
 				<slot name="effects"></slot>
 			</VsTab>
-			<VsTab :active="activeTab == 'envelope'">
-				<slot name="envelope" variant="minimal"></slot>
-			</VsTab>
-
-			<VsTab :active="activeTab == 'lfo'">
-				<div class="mobile-layout__spaced-container">
+			<VsTab :active="activeTab == 'env-lfo'">
+				<div class="mobile-layout__env-lfo">
+					<slot name="envelope" variant="minimal"></slot>
 					<slot
 						name="lfo"
 						list-variant="horizontal"
@@ -42,7 +41,6 @@
 </template>
 
 <script setup lang="ts">
-import VsSeparator from "@/components/common/VsSeparator/VsSeparator.vue";
 import VsTab from "@/components/common/VsTab/VsTab.vue";
 import type { ActionsWidgetVariants } from "@/widgets/ActionsWidget/ActionsWidget.vue";
 import type {
@@ -129,6 +127,17 @@ $min-piano-h: 0;
 	&__actions {
 		// height: 100%;
 		padding: $gap-df;
+	}
+
+	&__env-lfo {
+		max-width: 100%;
+		height: 100%;
+		max-height: 100%;
+
+		display: flex;
+		flex-direction: column;
+		padding: $gap-df;
+		gap: $gap-df;
 	}
 
 	&__piano {

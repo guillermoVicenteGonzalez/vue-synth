@@ -15,7 +15,7 @@
 		</div>
 
 		<div class="EffectCard__body">
-			<slot name="body"></slot>
+			<slot name="body" :mode="layout"></slot>
 		</div>
 
 		<ContextMenu
@@ -34,16 +34,28 @@
 import ContextMenu from "@/components/common/ContextMenu/ContextMenu.vue";
 import VsCard from "@/components/common/VsCard/VsCard.vue";
 import ToggleButton from "@/components/common/VsRadioButton/VsRadioButton.vue";
-import { computed, ref } from "vue";
+import { computed, inject, ref } from "vue";
 
+const layout = inject<EffectCardLayouts>("effectCardLayout") || "default";
+console.log(layout);
+
+console.log(layout);
 interface EffectCardProps {
 	title?: string;
 }
 
+export type EffectCardLayouts = "horizontal" | "vertical" | "default";
+
 const { title } = defineProps<EffectCardProps>();
 const dynamicClass = computed(() => ({
 	"EffectCard--disabled": disabled.value,
+	[`EffectCard--${layout}`]: layout,
 }));
+
+defineSlots<{
+	"context-menu": void;
+	body(props: { mode: EffectCardLayouts }): void;
+}>();
 
 const primaryColor = "#42d392";
 const disabled = defineModel<boolean>();
@@ -65,7 +77,9 @@ function handleRightClick(e: MouseEvent) {
 
 <style scoped lang="scss">
 $effect-card-height: 25rem;
+$effect-card-height-horizontal: 28rem;
 $effect-card-height-portrait: 23.5rem;
+
 $handle-bg-color: black;
 $handle-padding: 1rem;
 $disabled-color: $disabled-color-2;
@@ -151,6 +165,10 @@ $handle-width: 4rem;
 				backdrop-filter: blur(1.5px);
 			}
 		}
+	}
+
+	&--horizontal {
+		height: $effect-card-height-horizontal;
 	}
 }
 </style>

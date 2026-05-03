@@ -97,6 +97,8 @@ $centered-margin: 5rem;
 		height: auto;
 		width: auto;
 
+		max-width: 100dvw;
+
 		&--centered {
 			top: 50%;
 			left: 50%;

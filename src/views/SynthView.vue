@@ -71,13 +71,14 @@ import FilterHandler from "@/models/FilterHandler";
 import { type LfoSource } from "@/models/LFOHandler";
 import ActionsWidget from "@/widgets/ActionsWidget/ActionsWidget.vue";
 import EffectListWidget from "@/widgets/EffectList/EffectListWidget.vue";
+import type { EffectCardLayouts } from "@/widgets/Effects/EffectCard.vue";
 import VsEffectsWidget from "@/widgets/Effects/VsEffectsWidget.vue";
 import EnvelopeControlWidget from "@/widgets/EnvelopeControl/EnvelopeControlWidget.vue";
 import VSFooter from "@/widgets/Footer/VSFooter.vue";
 import KeyboardWidget from "@/widgets/Keyboard/KeyboardWidget.vue";
 import LfoWidgetListWidget from "@/widgets/LfoWidgetList/LfoWidgetListWidget.vue";
 import ModuleCardListWidget from "@/widgets/ModuleCardList/ModuleCardListWidget.vue";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, provide, ref, watchEffect } from "vue";
 
 const { browserHeight, browserWidth } = useMonitorSize();
 
@@ -95,6 +96,17 @@ const currentLayout = computed(() => {
 	}
 
 	return SynthLayout;
+});
+
+//TODO: Encapsular esto y el computed de arriba en un useLayout
+watchEffect(() => {
+	if (currentLayout.value == MobileSynthLayout)
+		provide<EffectCardLayouts>("effectCardLayout", "horizontal");
+
+	if (currentLayout.value == PortraitSynthLayout)
+		provide<EffectCardLayouts>("effectCardLayout", "vertical");
+	if (currentLayout.value == SynthLayout)
+		provide<EffectCardLayouts>("effectCardLayout", "default");
 });
 
 const MAX_FILTERS = 5;
