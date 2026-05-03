@@ -46,6 +46,7 @@ $centered-margin: 7rem;
 
 .SettingsMenu--centered {
 	height: calc(100dvh - #{$centered-margin});
+	max-width: 50dvw;
 }
 
 .SettingsButton {
