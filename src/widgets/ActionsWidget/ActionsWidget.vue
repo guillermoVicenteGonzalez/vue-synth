@@ -236,7 +236,7 @@ $action-size: 5rem;
 	// 	}
 	// }
 
-	@include respond(tab-land) {
+	@include respond(phone) {
 		flex-wrap: wrap;
 		gap: 0;
 

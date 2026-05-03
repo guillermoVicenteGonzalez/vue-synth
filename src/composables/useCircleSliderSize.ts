@@ -17,8 +17,12 @@ export default function useCircleSliderSize() {
 			return 65;
 		}
 
-		if (browserWidth.value < 1200) {
+		if (browserWidth.value < 1600) {
 			return 70;
+		}
+
+		if (browserWidth.value < 1800) {
+			return 75;
 		}
 
 		return 80;
