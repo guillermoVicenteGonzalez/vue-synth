@@ -45,10 +45,12 @@
 				>Download</VsButton
 			>
 			<VsButton
-				class="PresetWidget__button PresetWidget__button--delete-btn"
+				variant="round"
+				class="PresetWidget__icon-btn PresetWidget__icon-btn--delete-btn"
 				@click="handleDeletePreset"
-				>Delete</VsButton
 			>
+				<Trash2 class="PresetWidget__icon-btn__icon"></Trash2>
+			</VsButton>
 		</div>
 	</div>
 </template>
@@ -58,7 +60,7 @@ import VsButton from "@/components/common/VsButton/VsButton.vue";
 import VsTextInput from "@/components/common/VsTextInput/VsTextInput.vue";
 import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
 import { type SynthPreset } from "@/composables/usePresets";
-import { Check, Pencil, X } from "lucide-vue-next";
+import { Check, Pencil, Trash2, X } from "lucide-vue-next";
 import { ref } from "vue";
 
 interface PresetWidgetProps {
@@ -134,10 +136,6 @@ $button-height: 3rem;
 
 	&__button {
 		height: 100%;
-
-		&--delete-btn {
-			background-color: red;
-		}
 	}
 
 	&__name {
@@ -173,9 +171,15 @@ $button-height: 3rem;
 		padding: 0.7rem;
 		margin: 0;
 
+		&--delete-btn {
+			background-color: $error-color;
+		}
+
 		&__icon {
 			color: $tertiary-color;
-			color: $text-color;
+			@include iconButton;
+
+			// color: $text-color;
 		}
 	}
 }

@@ -154,7 +154,7 @@ $actions-height: auto;
 
 	&__title {
 		color: $text-color;
-		flex: 0 0 $title-height !important;
+		flex: 0 0 $title-height;
 		font-size: 2rem;
 		text-align: center;
 		margin-bottom: $gap-df;

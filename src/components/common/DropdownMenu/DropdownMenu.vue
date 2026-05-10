@@ -9,10 +9,10 @@
 		</div>
 		<div class="DropdownMenu__content" :class="dynamicContentClass">
 			<vs-button
+				v-if="closeBtn"
 				class="DropdownMenu__close-btn"
 				variant="round"
 				@click="handleClose"
-				v-if="closeBtn"
 			>
 				<x class="DropdownMenu__close-btn__icon"></x>
 			</vs-button>
