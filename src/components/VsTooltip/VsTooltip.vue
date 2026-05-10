@@ -45,6 +45,7 @@ $animation-time: 0.5s;
 	position: relative;
 	width: fit-content;
 	height: fit-content;
+	user-select: none;
 
 	&__content {
 		visibility: hidden;

@@ -146,6 +146,10 @@ $actions-height: auto;
 	flex-direction: column;
 	flex-wrap: nowrap;
 	height: 100%;
+	max-height: 100dvh;
+	max-height: 80dvh;
+
+	width: 100%;
 	overflow: hidden;
 
 	&__title {
