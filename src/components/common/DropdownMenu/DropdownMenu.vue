@@ -8,6 +8,14 @@
 			<slot name="activator"> </slot>
 		</div>
 		<div class="DropdownMenu__content" :class="dynamicContentClass">
+			<vs-button
+				v-if="closeBtn"
+				class="DropdownMenu__close-btn"
+				variant="round"
+				@click="handleClose"
+			>
+				<x class="DropdownMenu__close-btn__icon"></x>
+			</vs-button>
 			<slot name="content"> </slot>
 		</div>
 	</div>
@@ -15,7 +23,9 @@
 
 <script setup lang="ts">
 import useClickOutside from "@/composables/useClickOutside";
+import { X } from "lucide-vue-next";
 import { computed, ref } from "vue";
+import VsButton from "../VsButton/VsButton.vue";
 
 export type DropdownMenuOrientation =
 	| "top"
@@ -28,10 +38,14 @@ type DropDownMenuActivation = "leftClick" | "dbClick" | "rightCLick";
 interface DropdownMenuProps {
 	orientation?: DropdownMenuOrientation;
 	activation?: DropDownMenuActivation;
+	closeBtn?: boolean;
 }
 
-const { orientation = "bot", activation = "leftClick" } =
-	defineProps<DropdownMenuProps>();
+const {
+	orientation = "bot",
+	activation = "leftClick",
+	closeBtn = true,
+} = defineProps<DropdownMenuProps>();
 const active = ref<boolean>();
 const selfRef = ref();
 
@@ -58,6 +72,10 @@ function handleRightClick(e: MouseEvent) {
 function toggleDropdown() {
 	active.value = !active.value;
 }
+
+function handleClose() {
+	active.value = false;
+}
 </script>
 
 <style lang="scss" scoped>
@@ -66,6 +84,9 @@ $animation-timing-function: ease-in;
 $content-max-width: 500rem;
 
 $centered-margin: 5rem;
+$close-btn-size: 3rem;
+
+$close-btn-padding: $gap-df;
 
 .DropdownMenu {
 	position: relative;
@@ -75,6 +96,27 @@ $centered-margin: 5rem;
 		height: fit-content;
 		// position: relative;
 		// overflow: visible;
+	}
+
+	&__close-btn-container {
+		display: flex;
+		justify-content: end;
+		align-items: center;
+	}
+
+	&__close-btn {
+		height: $close-btn-size;
+		width: $close-btn-size;
+
+		position: absolute;
+		top: $close-btn-padding;
+		right: $close-btn-padding;
+
+		&__icon {
+			padding: 0.2rem;
+			@include iconButton;
+			float: left;
+		}
 	}
 
 	&__content {
@@ -97,14 +139,16 @@ $centered-margin: 5rem;
 		height: auto;
 		width: auto;
 
-		max-width: 100dvw;
-
 		&--centered {
 			top: 50%;
 			left: 50%;
 			transform: translate(-50%, -50%);
 			position: fixed;
-			max-height: 100dvh;
+
+			max-width: calc(100dvw - #{$centered-margin});
+			max-height: calc(100dvh - #{$centered-margin});
+
+			// overflow: auto;
 		}
 
 		&--bot {

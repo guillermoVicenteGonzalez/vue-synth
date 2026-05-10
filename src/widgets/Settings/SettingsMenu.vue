@@ -9,7 +9,7 @@ import PresetsMenu from "./Presets/PresetsMenu.vue";
 </script>
 
 <style scoped lang="scss">
-$menu-min-width: 60rem;
+$menu-min-width: 80rem;
 $menu-max-width: 100rem;
 
 // Dimensions should really be defined by its children

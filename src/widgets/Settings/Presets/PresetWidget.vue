@@ -45,10 +45,12 @@
 				>Download</VsButton
 			>
 			<VsButton
-				class="PresetWidget__button PresetWidget__button--delete-btn"
+				variant="round"
+				class="PresetWidget__icon-btn PresetWidget__icon-btn--delete-btn"
 				@click="handleDeletePreset"
-				>Delete</VsButton
 			>
+				<Trash2 class="PresetWidget__icon-btn__icon"></Trash2>
+			</VsButton>
 		</div>
 	</div>
 </template>
@@ -58,7 +60,7 @@ import VsButton from "@/components/common/VsButton/VsButton.vue";
 import VsTextInput from "@/components/common/VsTextInput/VsTextInput.vue";
 import VsTooltip from "@/components/VsTooltip/VsTooltip.vue";
 import { type SynthPreset } from "@/composables/usePresets";
-import { Check, Pencil, X } from "lucide-vue-next";
+import { Check, Pencil, Trash2, X } from "lucide-vue-next";
 import { ref } from "vue";
 
 interface PresetWidgetProps {
@@ -125,6 +127,7 @@ $button-height: 3rem;
 	height: $item-height;
 	padding: $gap-df;
 	width: 100%;
+	gap: $gap-df;
 
 	&__actions {
 		height: 100%;
@@ -134,22 +137,22 @@ $button-height: 3rem;
 
 	&__button {
 		height: 100%;
-
-		&--delete-btn {
-			background-color: red;
-		}
 	}
 
 	&__name {
 		font-size: 1.6rem;
 		margin: 0;
 		padding: 0;
-		text-align: center;
+		text-align: left;
+		display: block;
+		flex: 1 1 auto;
+
+		@include truncateText();
 	}
 
 	&__title {
 		flex: 1 1 100%;
-		width: 100%;
+		overflow: hidden;
 		display: flex;
 		align-items: center;
 		// justify-content: flex-start;
@@ -173,9 +176,15 @@ $button-height: 3rem;
 		padding: 0.7rem;
 		margin: 0;
 
+		&--delete-btn {
+			background-color: $error-color;
+		}
+
 		&__icon {
 			color: $tertiary-color;
-			color: $text-color;
+			@include iconButton;
+
+			// color: $text-color;
 		}
 	}
 }

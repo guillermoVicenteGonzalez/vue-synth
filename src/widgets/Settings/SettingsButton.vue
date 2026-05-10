@@ -39,14 +39,16 @@ const dynamicSettingsMenuClass = computed(() => ({
 $btn-size: 4rem;
 $btn-size-sm: 3rem;
 $menu-min-width: 20rem;
-$menu-max-width: 30rem;
+$menu-max-width: 80dvw; //TODO: Bad fix. Be careful with this
 $menu-max-height: 30rem;
 $item-height: 2rem;
 $centered-margin: 7rem;
 
 .SettingsMenu--centered {
-	height: calc(100dvh - #{$centered-margin});
-	max-width: 50dvw;
+	width: 100%;
+	//Bad fix, but....
+	width: $menu-max-width;
+	min-width: $menu-min-width;
 }
 
 .SettingsButton {
