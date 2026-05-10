@@ -216,6 +216,7 @@ $max-wave-width: 10rem;
 
 		&__toggle-btn {
 			// flex: 1 1 100%;
+			flex-shrink: 0;
 		}
 	}
 
