@@ -127,6 +127,7 @@ $button-height: 3rem;
 	height: $item-height;
 	padding: $gap-df;
 	width: 100%;
+	gap: $gap-df;
 
 	&__actions {
 		height: 100%;
@@ -142,12 +143,16 @@ $button-height: 3rem;
 		font-size: 1.6rem;
 		margin: 0;
 		padding: 0;
-		text-align: center;
+		text-align: left;
+		display: block;
+		flex: 1 1 auto;
+
+		@include truncateText();
 	}
 
 	&__title {
 		flex: 1 1 100%;
-		width: 100%;
+		overflow: hidden;
 		display: flex;
 		align-items: center;
 		// justify-content: flex-start;
